@@ -1,0 +1,20 @@
+---
+title: "Installation"
+description: ""
+weight: 1
+pre: "<i class='fa fa-wrench' style='margin-right:5px' ></i> "
+---
+
+The following steps are here to help you to install Advanced Slides Plugin for Obsidian. If you never installed a plugin at all, we strongly suggest you to read the guideline on Community Plugins. [Obsidian Documentation on Community Plugins](https://help.obsidian.md/Extending+Obsidian/Community+plugins).
+
+## With Community Plugins
+
+* Search for `Advanced Slides` in Community Plugins and hit `install` and `enable`
+
+> [!WARNING]
+> Advanced Slides will download the runtime to create & display Slide Presentations. 
+> Make sure that your VPN/Proxy allows https connections to `github.com`.
+
+## Configuration
+
+[Follow instructions here](./settings.md)
