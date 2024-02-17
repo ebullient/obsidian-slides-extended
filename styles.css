@@ -21,14 +21,14 @@ div.reveal-preview-view {
     padding-right: 5px;
     margin-right: -5px;
     user-select: text;
-  }
-  
-  .releaseNotes .modal {
+}
+
+.releaseNotes .modal {
     max-height: 90%;
     width: auto;
     max-width: 70ch;
-  }
+}
 
-  .releaseNotes p>a>img {
+.releaseNotes p>a>img {
     width: 100%
-  }
+}

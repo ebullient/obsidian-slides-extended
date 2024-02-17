@@ -1,56 +1,131 @@
-name: release
-
+name: Release Obsidian Plugin
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
 on:
-  push:
-    tags:
-    - '*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version or major, minor, patch'
+        default: 'patch'
+        required: true
+      update_manifest:
+        description: 'Update manifest.json'
+        default: true
+        required: true
+        type: boolean
+      update_brat:
+        description: 'Update brat manifest'
+        default: true
+        required: true
+        type: boolean
+      retry:
+        description: "Retry release (clear created tag)"
+        default: false
+        required: true
+        type: boolean
+
+env:
+  GH_BOT_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+  GH_BOT_NAME: "GitHub Action"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.build.outputs.version }}
     steps:
-      - uses: actions/checkout@v2
-      - name: "Build Changelog"
-        id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          configuration: "./.github/workflows/release_changelog.json"
-          commitMode: "true"
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '17'
-      - name: Setup yarn
-        run: npm install -g yarn
-      - name: set config
-        id: config-1
-        run: git config --global url."https://github.com".insteadOf git://github.com
-      - name: set config 2
-        id: config-2
-        run: git config --global url."https://".insteadOf git://
-      - name: set config 3
-        id: config-3
-        run: git config --global url."https://github.com/".insteadOf ssh://git@github.com
-      - name: Setup dependencies
-        run: yarn
-      - name: Build advanced slides
-        run: npm run build
-      - name: Test advanced slides
-        run: npm test
-      - uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-manager: yarn
-      - name: Archive Release
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          filename: 'obsidian-advanced-slides.zip'
-          directory: 'test-vault/.obsidian/plugins/obsidian-advanced-slides/'
-      - name: Create Release
-        uses: ncipollo/release-action@v1.9.0
-        with:
-          artifacts: "test-vault/.obsidian/plugins/obsidian-advanced-slides/obsidian-advanced-slides.zip, test-vault/.obsidian/plugins/obsidian-advanced-slides/main.js, test-vault/.obsidian/plugins/obsidian-advanced-slides/manifest.json, test-vault/.obsidian/plugins/obsidian-advanced-slides/styles.css"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: ${{steps.build_changelog.outputs.changelog}}
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+
+    - uses: pnpm/action-setup@v3
+      with:
+          version: 8
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+          node-version: '18.5'
+          cache: 'pnpm'
+
+    # Build the plugin
+    - name: Build and Tag
+      id: build
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "version: ${{ github.event.inputs.version }}"
+        echo "retry: ${{ github.event.inputs.retry }}"
+        echo "update_manifest: ${{ github.event.inputs.update_manifest }}"
+        echo "update_brat: ${{ github.event.inputs.update_brat }}"
+
+        git config user.name ${{ env.GH_BOT_NAME }}
+        git config user.email ${{ env.GH_BOT_EMAIL }}
+
+        pnpm it
+        if [[ "${{ github.event.inputs.retry }}" = "true" ]]; then
+          npm run preversion
+        else
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+        fi
+        VERSION=$(grep '^  "version"' package.json | cut -d'"' -f4)
+        echo $VERSION
+
+        if git rev-parse "refs/tags/$VERSION" > /dev/null 2>&1; then
+          if [[ "${{ github.event.inputs.retry }}" = "true" ]]; then
+            gh release delete $VERSION --cleanup-tag --yes
+          else
+            echo "🛑 Tag $VERSION already exists"
+            exit 1
+          fi
+        fi
+
+        sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' distVersion.json
+        if [ "${{ github.event.inputs.update_manifest }}" = "true" ]; then
+          sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest.json
+        fi
+        if [ "${{ github.event.inputs.update_brat }}" = "true" ]; then
+          sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest-beta.json
+        fi
+
+        git add .
+        git status
+        git commit -m "🔖 $VERSION"
+        git push
+
+        git tag $VERSION
+        git push --tags
+
+        pnpm run brat-notes -- ${VERSION}
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+    # Package the required files into a zip
+    - name: Package
+      run: |
+        mkdir ${{ github.event.repository.name }}
+        cp ./build/* ${{ github.event.repository.name }}
+        zip -r ${{ github.event.repository.name }}-${{ steps.build.outputs.version }}.zip ${{ github.event.repository.name }}
+
+    # Create the release on github
+    - name: Create Release
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        prerelease=true
+        if [ ${{ github.event.inputs.update_manifest }} ]; then
+            prerelease=false
+        fi
+
+        gh release create "${{ steps.build.outputs.version }}" \
+            -F ./release-notes.md \
+            --title "Release ${{ steps.build.outputs.version }}" \
+            --verify-tag \
+            --prerelease=${prerelease}
+
+        gh release upload "${{ steps.build.outputs.version }}" --clobber \
+            ${{ github.event.repository.name }}-${{ steps.build.outputs.version }}.zip \
+            './build/main.js#main.js' \
+            './build/styles.css#styles.css' \
+            './manifest.json' \
+            './manifest-beta.json'

@@ -1,10 +1,10 @@
-import { ObsidianMarkdownPreprocessor } from 'src/obsidianMarkdownPreprocessor';
+import { MarkdownProcessor } from 'src/obsidian/markdownProcessor';
 import { when } from 'ts-mockito';
 import { prepare } from './testUtils';
 import { MockedObsidianUtils, obsidianUtils as utilsInstance } from './__mocks__/mockObsidianUtils';
 
 test('Extended Markdown Syntax > Horizontal / Vertical Slides', () => {
-	const input = `# Slide 1
+    const input = `# Slide 1
 
 ---
 
@@ -15,28 +15,30 @@ test('Extended Markdown Syntax > Horizontal / Vertical Slides', () => {
 # Slide 2.2
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Element Annotations', () => {
-	const input = `text with border <!-- element class="with-border" -->
+    const input = `text with border <!-- element class="with-border" -->
 
 text with background <!-- element style="background:blue" -->
 
 text with attribute <!-- element data-toggle="modal" -->
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Slide Annotations', () => {
-	const input = `<!-- slide style="background-color: coral;" -->
+    const input = `<!-- slide style="background-color: coral;" -->
 
 # Header with coral background color
 
@@ -51,14 +53,15 @@ Paragraph has coral background color, too!
 - background color
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Block Comments', () => {
-	const input = `::: block
+    const input = `::: block
 
 #### Header
 _and_
@@ -88,14 +91,15 @@ red
 no color
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Fragments', () => {
-	const input = `Fade in <!-- element class="fragment" -->
+    const input = `Fade in <!-- element class="fragment" -->
 
 Fade out <!-- element class="fragment fade-out" -->
 
@@ -114,35 +118,37 @@ Slide up while fading in <!-- element class="fragment fade-up" -->
 - Appear First <!-- element class="fragment" data-fragment-index="1" -->
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Inline Styling', () => {
-	const input = `<style>
+    const input = `<style>
 .with-border{
-	border: 1px solid red;
+    border: 1px solid red;
 }
 </style>
 
 styled text <!-- element class="with-border" -->
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Slide Backgrounds', () => {
 
-	when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
-		return '/documentation/Image.jpg';
-	});
+    when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+        return '/documentation/Image.jpg';
+    });
 
-	const input = `<!-- slide data-background="aquamarine" -->
+    const input = `<!-- slide data-background="aquamarine" -->
 ## Slide with text based background
 ---
 
@@ -187,23 +193,24 @@ test('Extended Markdown Syntax >  Slide Backgrounds', () => {
 See [reveal backgrounds](https://revealjs.com/backgrounds/)
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Default Background', () => {
 
-	when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
-		return '/documentation/Image.jpg';
-	});
+    when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+        return '/documentation/Image.jpg';
+    });
 
-	when(MockedObsidianUtils.findFile('Slide.jpg')).thenCall(arg => {
-		return '/documentation/Slide.jpg';
-	});
+    when(MockedObsidianUtils.findFile('Slide.jpg')).thenCall(arg => {
+        return '/documentation/Slide.jpg';
+    });
 
-	const input = `
+    const input = `
 ## Slide with default Background
 
 ---
@@ -220,16 +227,17 @@ test('Extended Markdown Syntax >  Default Background', () => {
 
 `;
 
-	const { options, markdown } = prepare(input);
-	options.bg = '[[Image.jpg]]'
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    options.bg = '[[Image.jpg]]'
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 
 test('Extended Markdown Syntax >  Speaker Notes', () => {
-	const input = `## My Slide
+    const input = `## My Slide
 
 This is part of my Presentation
 
@@ -242,14 +250,15 @@ note: this is not! Only the speaker might see this text.
 ![](https://picsum.photos/id/1005/250/250)
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Fragmented list', () => {
-	const input = `# Unordered list
+    const input = `# Unordered list
 
 - First
 - Second
@@ -294,38 +303,40 @@ test('Extended Markdown Syntax >  Fragmented list', () => {
 4) Fourth
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Excalidraw support', () => {
-	when(MockedObsidianUtils.findFile('Sample.excalidraw')).thenCall(arg => {
-		return 'Sample.excalidraw.svg';
-	});
+    when(MockedObsidianUtils.findFile('Sample.excalidraw')).thenCall(arg => {
+        return 'Sample.excalidraw.svg';
+    });
 
-	when(MockedObsidianUtils.findFile('Sample.excalidraw.svg')).thenCall(arg => {
-		return 'path/to/Sample.excalidraw.svg';
-	});
+    when(MockedObsidianUtils.findFile('Sample.excalidraw.svg')).thenCall(arg => {
+        return 'path/to/Sample.excalidraw.svg';
+    });
 
-	const input = `#### Excalidraw support
+    const input = `#### Excalidraw support
 
 ![[Sample.excalidraw|100]]
 
 ![[Sample.excalidraw]] <!-- element style="width:300px; height:400px" -->`;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Chart support', () => {
 
-	const input = `
-	
-	\`\`\`chart
+    const input = `
+
+    \`\`\`chart
     type: bar
     labels: [Monday,Tuesday,Wednesday,Thursday,Friday, Saturday, Sunday, "next Week", "next Month"]
     series:
@@ -335,19 +346,20 @@ test('Extended Markdown Syntax >  Chart support', () => {
         data: [5,4,3,2,1,0,-1,-2,-3]
 \`\`\`
 
-	`;
+    `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Chart support > Illegal Input', () => {
 
-	const input = `
-	
-	\`\`\`chart
+    const input = `
+
+    \`\`\`chart
     type: bar
     labels: [Monday,Tuesday,Wednesday,Thursday,Friday, Saturday, Sunday, "next Week", "next Month"]
     series:
@@ -357,19 +369,20 @@ test('Extended Markdown Syntax >  Chart support > Illegal Input', () => {
         data: [5,4,3,2,1,0,-1,-2,-3]
 \`
 
-	`;
+    `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Extended Markdown Syntax >  Chart support > Extended Settings', () => {
 
-	const input = `
-	
-	\`\`\`chart
+    const input = `
+
+    \`\`\`chart
     type: bar
     labels: [Monday,Tuesday,Wednesday,Thursday,Friday, Saturday, Sunday, "next Week", "next Month"]
     series:
@@ -377,32 +390,34 @@ test('Extended Markdown Syntax >  Chart support > Extended Settings', () => {
         data: [1,2,3,4,5,6,7,8,9]
       - title: Title 2
         data: [5,4,3,2,1,0,-1,-2,-3]
-	spanGaps: true
-	tension: 0.5
-	beginAtZero: true
-	legend: false
-	legendPosition: left
-	stacked: true
+    spanGaps: true
+    tension: 0.5
+    beginAtZero: true
+    legend: false
+    legendPosition: left
+    stacked: true
 \`\`\`
 
-	`;
+    `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Advanced Slides Feature >  Show Debug Grid', () => {
-	const input = `## My Slide
+    const input = `## My Slide
 
 This slide shows the debug view feature
 
 `;
 
-	const { options, markdown } = prepare(input);
-	options.showGrid = true;
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    options.showGrid = true;
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });

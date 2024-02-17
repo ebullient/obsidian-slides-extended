@@ -1,4 +1,4 @@
-import { ObsidianUtils } from 'src/obsidianUtils';
+import { ObsidianUtils } from 'src/obsidian/obsidianUtils';
 import { anyString, anything, instance, mock, when } from 'ts-mockito';
 
 export const MockedObsidianUtils = mock(ObsidianUtils);
@@ -15,7 +15,7 @@ when(MockedObsidianUtils.parseFile(anyString(), anything())).thenCall((arg1, arg
 	throw new Error('ObsidianUtils.parseFile->Parameter not mocked: ' + arg1 + ' - ' + arg2);
 });
 
-when(MockedObsidianUtils.getVaultName()).thenReturn('test-vault');
+when(MockedObsidianUtils.vaultName).thenReturn('test-vault');
 
 when(MockedObsidianUtils.findFile('template.md')).thenReturn('templateMock');
 

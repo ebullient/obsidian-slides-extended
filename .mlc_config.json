@@ -1,0 +1,15 @@
+{
+  "_replacementPatternsComment": "",
+  "replacementPatterns": [
+    {
+      "pattern": "#/\\d/\\d",
+      "replacement": "{{BASEURL}}/"
+    }
+  ],
+  "_aliveComment": "Some sites return 403 from GH Actions check",
+  "aliveStatusCodes": [
+    200,
+    206,
+    403
+  ]
+}

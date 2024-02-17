@@ -1,24 +1,25 @@
-import { ObsidianMarkdownPreprocessor } from 'src/obsidianMarkdownPreprocessor';
+import { MarkdownProcessor } from 'src/obsidian/markdownProcessor';
 import { when } from 'ts-mockito';
 import { MockedObsidianUtils, obsidianUtils as utilsInstance } from './__mocks__/mockObsidianUtils';
 import { prepare } from './testUtils';
 
 test('Basic Markdown Syntax > Headers', () => {
-	const input = `# This is a heading 1
+    const input = `# This is a heading 1
 ## This is a heading 2
-### This is a heading 3 
+### This is a heading 3
 #### This is a heading 4
 ##### This is a heading 5
 ###### This is a heading 6`;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Text style', () => {
-	const input = `*This text will be italic*
+    const input = `*This text will be italic*
 
 _This will also be italic_
 
@@ -36,14 +37,15 @@ Any word wrapped with two tildes (like ~~this~~) will appear crossed out.
 
 Any word wrapped with two equal signs (like ==this==) will appear as highlighted.`;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Lists', () => {
-	const input = `- Item 1
+    const input = `- Item 1
 - Item 2
 	- Item 2a
 	- Item 2b
@@ -57,31 +59,32 @@ test('Basic Markdown Syntax > Lists', () => {
    1. Item 3b
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Images', () => {
-	//TODO: bugfix getAbsolutePath
-	when(MockedObsidianUtils.getAbsolutePath('Image.jpg.md')).thenCall(arg => {
-		return null;
-	});
+    //TODO: bugfix getAbsolutePath
+    when(MockedObsidianUtils.getAbsolutePath('Image.jpg.md')).thenCall(arg => {
+        return null;
+    });
 
-	when(MockedObsidianUtils.getAbsolutePath('Image.jpg|100.md')).thenCall(arg => {
-		return null;
-	});
+    when(MockedObsidianUtils.getAbsolutePath('Image.jpg|100.md')).thenCall(arg => {
+        return null;
+    });
 
-	when(MockedObsidianUtils.getAbsolutePath('Image.jpg|300x100 <!-- element style="object-fit: cover" -->.md')).thenCall(arg => {
-		return null;
-	});
+    when(MockedObsidianUtils.getAbsolutePath('Image.jpg|300x100 <!-- element style="object-fit: cover" -->.md')).thenCall(arg => {
+        return null;
+    });
 
-	when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
-		return '/documentation/Image.jpg';
-	});
+    when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+        return '/documentation/Image.jpg';
+    });
 
-	const input = `
+    const input = `
 Insert image with standard markdown syntax
 
 ![Image](https://picsum.photos/id/1006/500/300)
@@ -112,14 +115,15 @@ Scale image to a width of 300x100 px
 
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Links', () => {
-	const input = `External Links
+    const input = `External Links
 
 http://obsidian.md - automatic!
 
@@ -143,14 +147,15 @@ This [[Internal link|Link]] will use its alias for displaying
 
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Links', () => {
-	const input = `---
+    const input = `---
 enableLinks: true
 ---
 
@@ -162,118 +167,126 @@ This [[Internal link|Link]] will use its alias for displaying
 
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Embeds', () => {
 
-	when(MockedObsidianUtils.parseFile('Obsidian.md', 'Link')).thenCall(arg => {
-		return 'Link to Obsidian Homepage: http://obsidian.md';
-	});
+    when(MockedObsidianUtils.parseFile('Obsidian.md', 'Link')).thenCall(arg => {
+        return 'Link to Obsidian Homepage: http://obsidian.md';
+    });
 
-	when(MockedObsidianUtils.parseFile('Obsidian.md', null)).thenCall(arg => {
-		return `# Notes about Obsidian
+    when(MockedObsidianUtils.parseFile('Obsidian.md', null)).thenCall(arg => {
+        return `# Notes about Obsidian
 A knowledge base that works on local Markdown files
 
 # Link
 Link to Obsidian Homepage: http://obsidian.md`;
-	});
+    });
 
-	const input = `![[Obsidian]]
+    const input = `![[Obsidian]]
 
 ---
 
 ![[Obsidian#Link]]
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Blockquotes', () => {
-	const input = `> Human beings face ever more complex and urgent problems, and their effectiveness in dealing with these problems is a matter that is critical to the stability and continued progress of society.
+    const input = `> Human beings face ever more complex and urgent problems, and their effectiveness in dealing with these problems is a matter that is critical to the stability and continued progress of society.
 
 - Doug Engelbart, 1961
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Inline Code', () => {
-	const input = `### Text inside \`backticks\` on a line will be formatted like code.
+    const input = `### Text inside \`backticks\` on a line will be formatted like code.
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Tables', () => {
-	const input = `First Header | Second Header
+    const input = `First Header | Second Header
 ------------ | ------------
 Content from cell 1 | Content from cell 2
 Content in the first column | Content in the second column
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Footnotes', () => {
-	const input = `Here's a simple footnote[^1]
+    const input = `Here's a simple footnote[^1]
 
 [^1]: meaningful!
 
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Footnotes in Tables', () => {
-	const input = `| Table     | Col 1 | Col 2 | Col 3 |
-	| --------- | ----- | ----- | ----- |
-	| Footnotes | [^1]  | [^2]  | [^3]  | 
-	
-	[^1]: fn1
-	[^2]: fn2
-	[^3]: fn3
+    const input = `| Table     | Col 1 | Col 2 | Col 3 |
+    | --------- | ----- | ----- | ----- |
+    | Footnotes | [^1]  | [^2]  | [^3]  |
+
+    [^1]: fn1
+    [^2]: fn2
+    [^3]: fn3
 `;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Math', () => {
-	const input = `$$\begin{vmatrix}a & b\\
+    const input = `$$\begin{vmatrix}a & b\\
 c & d
 end{vmatrix}=ad-bc$$
 
 You can also do inline math like $s^{-2}_{n}sum_{i=1}^{n}$`;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Mermaid', () => {
-	const input = `---
+    const input = `---
 theme: beige
 highlightTheme: css/vs2015.css
 
@@ -287,39 +300,41 @@ sequenceDiagram
     John-->>-Alice: I feel great!
 \`\`\``;
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });
 
 test('Basic Markdown Syntax > Callouts', () => {
-	const input = `> [!tip] This tip has a custom Header
-	> This is an Tip with a custom Title
-	<!-- element style="width:40%"-->
-	
-	> [!warning] 
-	> This warning is aligned left
-	<!-- element style="width:20%;font-size:24px" align="left"-->
-	
-	<br>
-	
-	> [!error] 
-	> Callouts support manipulation through annotations
-	<!-- element style="width:20%;font-size:24px" rotate="15"-->
-	
-	<grid drag="30 30" drop="11 68" style="font-size:36px">
-	> [!example]
-	> Here is an Example for an Callout in a Slide. Callouts support dark and white backgrounds and could be sized by annotations
-	</grid>
-	
-	<grid drag="50 100" drop="50 0" bg="white" pad="50px" style="font-size:36px">
-	> [!cite]
-	> Here is an Cite for an Callout in a Slide. Callouts support dark and white backgrounds and could be sized by annotations
-	</grid>`;
+    const input = `> [!tip] This tip has a custom Header
+    > This is an Tip with a custom Title
+    <!-- element style="width:40%"-->
 
-	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+    > [!warning]
+    > This warning is aligned left
+    <!-- element style="width:20%;font-size:24px" align="left"-->
 
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
+    <br>
+
+    > [!error]
+    > Callouts support manipulation through annotations
+    <!-- element style="width:20%;font-size:24px" rotate="15"-->
+
+    <grid drag="30 30" drop="11 68" style="font-size:36px">
+    > [!example]
+    > Here is an Example for an Callout in a Slide. Callouts support dark and white backgrounds and could be sized by annotations
+    </grid>
+
+    <grid drag="50 100" drop="50 0" bg="white" pad="50px" style="font-size:36px">
+    > [!cite]
+    > Here is an Cite for an Callout in a Slide. Callouts support dark and white backgrounds and could be sized by annotations
+    </grid>`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
 });

@@ -1,4 +1,4 @@
-import { ObsidianMarkdownPreprocessor } from 'src/obsidianMarkdownPreprocessor';
+import { MarkdownProcessor } from 'src/obsidian/markdownProcessor';
 import { when } from 'ts-mockito';
 import { prepare } from './testUtils';
 import { MockedObsidianUtils, obsidianUtils as utilsInstance } from './__mocks__/mockObsidianUtils';
@@ -17,7 +17,7 @@ test('Grid Component > Basic Syntax', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -36,7 +36,7 @@ test('Grid Component > Basic Syntax', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -55,7 +55,7 @@ test('Grid Component > Position by Name', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -78,7 +78,7 @@ test('Grid Component > Position Coordinates', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -99,7 +99,7 @@ test('Grid Component > Column Flow', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -120,7 +120,7 @@ test('Grid Component > Row Flow', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -139,7 +139,7 @@ test('Grid Component > Attributes > Background', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -158,7 +158,7 @@ thick dotted blue
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -181,7 +181,7 @@ Text is too blurry
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -196,7 +196,7 @@ World!
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -219,7 +219,7 @@ test('Grid Component > Attributes > Padding', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -240,7 +240,7 @@ Bottom Grid
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -253,7 +253,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -266,7 +266,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -279,7 +279,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -292,7 +292,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -305,7 +305,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -318,7 +318,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -331,7 +331,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -344,7 +344,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -357,7 +357,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -370,7 +370,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -383,7 +383,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -396,7 +396,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -409,7 +409,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -422,7 +422,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -435,7 +435,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -448,7 +448,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -461,7 +461,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -474,7 +474,7 @@ test('Grid Component > Attributes > Alignment', () => {
 </grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -487,7 +487,7 @@ test('Grid Component > Attributes > Alignment > Stretch > Row', () => {
 	</grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
@@ -499,7 +499,7 @@ test('Grid Component > Attributes > Alignment > Stretch > Col', () => {
 	</grid>`;
 
 	const { options, markdown } = prepare(input);
-	const sut = new ObsidianMarkdownPreprocessor(utilsInstance);
+	const sut = new MarkdownProcessor(utilsInstance);
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });

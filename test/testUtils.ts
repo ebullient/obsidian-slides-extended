@@ -1,6 +1,6 @@
 import { loadFront } from 'yaml-front-matter';
-import { omit, defaults as def } from 'lodash';
-import { Options } from 'src/options';
+import { omit } from 'src/util';
+import { Options } from '../src/@types';
 
 export function prepare(input: string): { options: Options; markdown: string } {
 	const { yamlOptions, markdown } = parseYamlFrontMatter(input);
@@ -14,13 +14,13 @@ function parseYamlFrontMatter(input: string): {
 } {
 	const document = loadFront(input.replace(/^\uFEFF/, ''));
 	return {
-		yamlOptions: omit(document, '__content'),
+		yamlOptions: omit(document, ['__content']),
 		markdown: document.__content || input,
 	};
 }
 
 export function getSlideOptions(options: any): Options {
-	return def({}, options, {
+	return Object.assign({}, {
 		theme: 'black',
 		highlightTheme: 'zenburn',
 		template: 'template/reveal.html',
@@ -30,5 +30,5 @@ export function getSlideOptions(options: any): Options {
 		width: 960,
 		height: 700,
 		margin: 0.04,
-	});
+	}, options);
 }

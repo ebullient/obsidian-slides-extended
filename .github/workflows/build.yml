@@ -1,0 +1,43 @@
+name: CI Test
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.ts'
+      - '**.json'
+      - '**.scss'
+      - '**.css'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**.ts'
+      - '**.json'
+      - '**.scss'
+      - '**.css'
+
+permissions: read-all
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: pnpm/action-setup@v3
+      with:
+          version: 8
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+          node-version: '18.5'
+          cache: 'pnpm'
+
+    - name: Build and Test
+      id: build
+      run: |
+        pnpm it
+        pnpm run build

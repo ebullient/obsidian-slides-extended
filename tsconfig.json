@@ -1,21 +1,32 @@
 {
-	"extends": "@tsconfig/node16/tsconfig.json",
-	"compilerOptions": {
-		"strict": false,
-		"baseUrl": ".",
-		"inlineSourceMap": true,
-		"inlineSources": true,
-		"allowJs": true,
-		"noImplicitAny": true,
-		"resolveJsonModule": true,
-		"lib": [
-			"DOM",
-			"ES2021"
-		]
-	},
-	"exclude": [
-		"node_modules",
-		"docs",
-		"test-vault"
-	]
+    "compilerOptions": {
+        "outDir": "./build",
+        "baseUrl": ".",
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "module": "ESNext",
+        "target": "es6",
+        "allowJs": true,
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "importHelpers": true,
+        "lib": [
+            "DOM",
+            "es2021"
+        ],
+        "types": [
+            "node",
+            "jest"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "docs",
+        "build"
+    ],
+    "include": [
+        "**/*.ts"
+    ]
 }
