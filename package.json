@@ -14,7 +14,7 @@
         "prettier": "prettier -w 'src/**/*.ts'",
         "test": "jest",
         "coverage": "jest --coverage",
-        "preversion": "pnpm run test && pnpm run build",
+        "preversion": "pnpm run test && node esbuild.config.mjs production",
         "version": "auto-changelog -p",
         "brat-notes": "run() { auto-changelog --stdout --hide-credit --hide-empty-releases --template .github/changelog.hbs -v $1 --starting-version $1  > release-notes.md; }; run"
     },

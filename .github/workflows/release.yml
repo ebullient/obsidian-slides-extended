@@ -53,67 +53,96 @@ jobs:
       id: build
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RETRY: ${{ github.event.inputs.retry }}
+        VERSION: ${{ github.event.inputs.version }}
+        MANIFEST: ${{ github.event.inputs.update_manifest }}
+        BRAT: ${{ github.event.inputs.update_brat }}
       run: |
-        echo "version: ${{ github.event.inputs.version }}"
-        echo "retry: ${{ github.event.inputs.retry }}"
-        echo "update_manifest: ${{ github.event.inputs.update_manifest }}"
-        echo "update_brat: ${{ github.event.inputs.update_brat }}"
+        echo "version: $VERSION"
+        echo "retry: $RETRY"
+        echo "update_manifest: $MANIFEST"
+        echo "update_brat: $BRAT"
 
         git config user.name ${{ env.GH_BOT_NAME }}
         git config user.email ${{ env.GH_BOT_EMAIL }}
 
-        pnpm it
-        if [[ "${{ github.event.inputs.retry }}" = "true" ]]; then
+        pnpm install
+        if [[ "$VERSION" == "test" ]]; then
+          RETRY=true
           npm run preversion
         else
-          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          if [[ "$RETRY" = "true" ]]; then
+            npm run preversion
+          else
+            npm version $VERSION --no-git-tag-version
+          fi
+          VERSION=$(grep '^    "version"' package.json | cut -d'"' -f4)
+          echo next version is $VERSION
         fi
-        VERSION=$(grep '^  "version"' package.json | cut -d'"' -f4)
-        echo $VERSION
 
-        if git rev-parse "refs/tags/$VERSION" > /dev/null 2>&1; then
-          if [[ "${{ github.event.inputs.retry }}" = "true" ]]; then
-            gh release delete $VERSION --cleanup-tag --yes
+        TAG_EXISTS=$(git rev-parse "refs/tags/$VERSION" > /dev/null 2>&1; echo $?)
+        if [[ "$TAG_EXISTS" = "0" ]]; then
+          if [[ "$RETRY" = "true" ]]; then
+            gh release delete $VERSION --yes > /dev/null 2>&1 || true
+            git tag -d $VERSION > /dev/null 2>&1 || true
+            if git push --delete origin $VERSION
+            then
+              echo "🔥 Tag $VERSION deleted"
+            else
+              echo "🛑 Failed to delete $VERSION"
+              exit 1
+            fi
           else
             echo "🛑 Tag $VERSION already exists"
             exit 1
           fi
         fi
 
-        sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' distVersion.json
-        if [ "${{ github.event.inputs.update_manifest }}" = "true" ]; then
-          sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest.json
-        fi
-        if [ "${{ github.event.inputs.update_brat }}" = "true" ]; then
-          sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest-beta.json
-        fi
+        if [[ "$VERSION" != "test" ]]; then
+          sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' distVersion.json
+          if [ "$MANIFEST" = "true" ]; then
+            sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest.json
+          fi
+          if [ "$BRAT" = "true" ]; then
+            sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest-beta.json
+          fi
 
-        git add .
-        git status
-        git commit -m "🔖 $VERSION"
-        git push
+          git add .
+          git status
+          git commit -m "🔖 $VERSION"
+          git push
+        fi
 
         git tag $VERSION
         git push --tags
 
-        pnpm run brat-notes -- ${VERSION}
+        if [[ "$VERSION" == "test" ]]; then
+            touch release-notes.md
+        else
+            npm run brat-notes -- ${VERSION}
+        fi
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
 
     # Package the required files into a zip
     - name: Package
       run: |
-        mkdir ${{ github.event.repository.name }}
-        cp ./build/* ${{ github.event.repository.name }}
-        zip -r ${{ github.event.repository.name }}-${{ steps.build.outputs.version }}.zip ${{ github.event.repository.name }}
+        mkdir tmp
+        cp -r ./build/css ./build/dist ./build/plugin ./build/template distVersion.json tmp/
+        cd tmp
+        zip -r ../${{ github.event.repository.name }}.zip *
+        cd ..
 
     # Create the release on github
     - name: Create Release
       id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MANIFEST: ${{ github.event.inputs.update_manifest }}
+        BRAT: ${{ github.event.inputs.update_brat }}
       run: |
         prerelease=true
-        if [ ${{ github.event.inputs.update_manifest }} ]; then
+        if [ "$MANIFEST" ]; then
             prerelease=false
         fi
 
@@ -124,7 +153,7 @@ jobs:
             --prerelease=${prerelease}
 
         gh release upload "${{ steps.build.outputs.version }}" --clobber \
-            ${{ github.event.repository.name }}-${{ steps.build.outputs.version }}.zip \
+            ${{ github.event.repository.name }}.zip \
             './build/main.js#main.js' \
             './build/styles.css#styles.css' \
             './manifest.json' \
