@@ -32,11 +32,16 @@ export class AdvancedSlidesPlugin extends Plugin {
 
         const version = this.manifest.version;
         const distribution = new AdvancedSlidesDistribution(this);
+
         console.log(
             'Advanced Slides v%s, needsReload=%s',
             version,
             distribution.isOutdated(),
         );
+        if (distribution.isOutdated()) {
+            await distribution.update();
+            console.log('Advanced Slides updated to v%s', version);
+        }
 
         try {
             this.configureServer();
@@ -209,8 +214,9 @@ export class AdvancedSlidesPlugin extends Plugin {
     };
 
     stopServer = async () => {
-        await this.revealServer.stop();
-
+        if (this.revealServer) {
+            await this.revealServer.stop();
+        }
         const instance = this.getViewInstance();
         if (instance) {
             await instance.onClose();
@@ -265,13 +271,6 @@ export class AdvancedSlidesPlugin extends Plugin {
     }
 
     async update(newSettings: AdvancedSlidesSettings) {
-        if (
-            newSettings.themeDirectory &&
-            this.settings.themeDirectory != newSettings.themeDirectory
-        ) {
-            const distribution = new AdvancedSlidesDistribution(this);
-            distribution.copyThemes(newSettings.themeDirectory);
-        }
         this.settings = newSettings;
         await this.saveSettings();
     }

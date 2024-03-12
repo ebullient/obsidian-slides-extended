@@ -1,23 +1,27 @@
-import { existsSync, readFileSync } from 'fs-extra';
+import { existsSync, mkdir, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { AdvancedSlidesPlugin } from './advancedSlides-Plugin';
+import JSZip from 'jszip';
+import { requestUrl, RequestUrlResponse } from 'obsidian';
 
 export class AdvancedSlidesDistribution {
     plugin: AdvancedSlidesPlugin;
+    pluginDirectory: string;
+    distDirectory: string;
 
     constructor(plugin: AdvancedSlidesPlugin) {
         this.plugin = plugin;
+        this.pluginDirectory = this.plugin.obsidianUtils.pluginDirectory;
+        this.distDirectory = this.plugin.obsidianUtils.distDirectory;
     }
 
     isOutdated(): boolean {
-        const pluginDirectory = this.plugin.obsidianUtils.pluginDirectory;
-        const distDirectory = this.plugin.obsidianUtils.distDirectory;
-
-        return !existsSync(distDirectory) || this.isOldVersion(pluginDirectory);
+        return true;
+        //return !existsSync(this.distDirectory) || this.isOldVersion();
     }
 
-    isOldVersion(dir: string) {
-        const versionFile = path.join(dir, 'distVersion.json');
+    isOldVersion(): boolean {
+        const versionFile = path.join(this.pluginDirectory, 'distVersion.json');
         if (!existsSync(versionFile)) {
             return true;
         } else {
@@ -27,50 +31,30 @@ export class AdvancedSlidesDistribution {
         }
     }
 
-    // async thing() {
-    //     const version = this.plugin.manifest.version;
-    //     const pluginDirectory = this.plugin.obsidianUtils.getPluginDirectory();
-    //     const distDirectory = this.plugin.obsidianUtils.getDistDirectory();
-    //
-    //     if (!existsSync(distDirectory) || this.isOldVersion(pluginDirectory)) {
-    //         //Download binary
-    //         const downloadUrl = `https://github.com/MSzturc/obsidian-advanced-slides/releases/download/${version}/obsidian-advanced-slides.zip`;
-    //
-    //         const bufs: Uint8Array[] = [];
-    //         let buf: Uint8Array;
-    //         request
-    //             .get(downloadUrl)
-    //             .on('end', () => {
-    //                 buf = Buffer.concat(bufs);
-    //                 const zip = new JSZip();
-    //                 zip
-    //                     .loadAsync(buf)
-    //                     .then(contents => {
-    //                         Object.keys(contents.files).forEach(function(filename) {
-    //                             if (!contents.files[filename].dir) {
-    //                                 zip
-    //                                     .file(filename)
-    //                                     .async('nodebuffer')
-    //                                     .then(function(content) {
-    //                                         const dest = path.join(pluginDirectory, filename);
-    //                                         outputFileSync(dest, content);
-    //                                     });
-    //                             }
-    //                         });
-    //                     })
-    //                     .catch(error => {
-    //                         console.log(error);
-    //                     });
-    //             })
-    //             .on('error', error => {
-    //                 console.log(error);
-    //             })
-    //             .on('data', d => {
-    //                 // @ts-ignore
-    //                 bufs.push(d);
-    //             });
-    //     }
-    // }
+    async update() {
+        const version = this.plugin.manifest.version;
+        const downloadUrl = `https://github.com/ebullient/obsidian-advanced-slides/releases/download/${version}/obsidian-advanced-slides.zip`;
+        const response = await requestUrl(downloadUrl);
+        if (response.status != 200) {
+            console.error(`Failed to download ${downloadUrl}`);
+            return;
+        }
 
-    copyThemes(themeDirectory: string) {}
+        const zip = new JSZip();
+        const contents = await zip.loadAsync(response.arrayBuffer);
+        const pluginDirectory = this.pluginDirectory;
+
+        Object.keys(contents.files).forEach(function (filename) {
+            if (!contents.files[filename].dir) {
+                zip.file(filename)
+                    .async('nodebuffer')
+                    .then(function (content) {
+                        const dest = path.join(pluginDirectory, filename);
+                        const dir = path.dirname(dest);
+                        mkdirSync(dir, { recursive: true });
+                        writeFileSync(dest, content);
+                    });
+            }
+        });
+    }
 }
