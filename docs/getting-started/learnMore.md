@@ -5,7 +5,7 @@ weight: 4
 pre: "<i class='fa fa-leanpub' style='margin-right:5px' ></i> "
 ---
 
-Learn more about the Advanced Slides from the following pages:
+Learn more about the Slides Extended from the following pages:
 
 ### Advanced Slides Basics
 

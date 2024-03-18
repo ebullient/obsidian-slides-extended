@@ -106,7 +106,7 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
         new Setting(containerEl)
             .setName('Export directory')
             .setDesc(
-                'Specify the directory where Advanced Slides should export presentations.',
+                'Specify the directory where Slides Extended should export presentations.',
             )
             .addSearch(cb => {
                 new FolderSuggest(this.app, cb.inputEl);

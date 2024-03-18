@@ -113,7 +113,7 @@ export class RevealServer {
     async start() {
         if (this.running) {
             console.debug(
-                'Advanced Slides server is already running',
+                'Slides Extended server is already running',
                 this._server.listeningOrigin,
             );
             return;
@@ -121,7 +121,7 @@ export class RevealServer {
         try {
             await this._server.listen({ host: '127.0.0.1', port: this._port });
             console.info(
-                'Advanced Slides is ready to go.',
+                'Slides Extended is ready to go.',
                 this._server.listeningOrigin,
             );
         } catch (err) {
@@ -134,10 +134,10 @@ export class RevealServer {
 
     async stop() {
         if (this.running) {
-            console.log('stopping Advanced Slides server', this.running);
+            console.log('stopping Slides Extended server', this.running);
             await this._server.close();
         } else {
-            console.debug('Advanced Slides server is not running');
+            console.debug('Slides Extended server is not running');
         }
     }
 }

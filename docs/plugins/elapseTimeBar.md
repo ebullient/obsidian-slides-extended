@@ -9,4 +9,4 @@ A plugin adding a progress bar based on the elapsed time, that helps you keeping
 To set the time for presentation add a `timeForPresentation` property into your slides frontmatter with the time you want to present in seconds.
 
 > [!WARNING]
-> To enable Elapsed Time Bar you have to enable the Plugin in Advanced Slides Settings
+> To enable Elapsed Time Bar you have to enable the Plugin in Slides Extended Settings

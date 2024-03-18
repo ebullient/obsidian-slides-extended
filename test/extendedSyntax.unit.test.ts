@@ -407,7 +407,7 @@ test('Extended Markdown Syntax >  Chart support > Extended Settings', () => {
     return expect(result).toMatchSnapshot();
 });
 
-test('Advanced Slides Feature >  Show Debug Grid', () => {
+test('Slides Extended Feature >  Show Debug Grid', () => {
     const input = `## My Slide
 
 This slide shows the debug view feature

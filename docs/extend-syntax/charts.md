@@ -4,7 +4,7 @@ description: ""
 weight: 14
 ---
 
-Advanced Slides allows to add charts using [Obsidian Charts](https://charts.phibr0.de/) plugin syntax or [Reveal.js Charts](https://github.com/rajgoel/reveal.js-plugins/tree/master/chart#usage) syntax.
+Slides Extended allows to add charts using [Obsidian Charts](https://charts.phibr0.de/) plugin syntax or [Reveal.js Charts](https://github.com/rajgoel/reveal.js-plugins/tree/master/chart#usage) syntax.
 
 #### Obsidian Charts Example:
 

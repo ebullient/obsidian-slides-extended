@@ -1,10 +1,12 @@
-# Advanced Slides for Obsidian
+# Obsidian Slides Extended
 
 🚧 Fork in progress, there will be some dust 🚧
 
+Docs, especially, are pretty borked. ;)
+
 <img src="https://raw.githubusercontent.com/ebullient/obsidian-slides-extended/main/imgs/demo.gif">
 
-Advanced Slides is the perfect slide deck extension for <a href="https://obsidian.md">Obsidian</a>
+Slides Extended is the perfect slide deck extension for <a href="https://obsidian.md">Obsidian</a>
 
 ## Features
 - Embed your notes into your slides

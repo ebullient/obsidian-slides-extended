@@ -34,13 +34,13 @@ export class AdvancedSlidesPlugin extends Plugin {
         const distribution = new AdvancedSlidesDistribution(this);
 
         console.log(
-            'Advanced Slides v%s, needsReload=%s',
+            'Slides Extended v%s, needsReload=%s',
             version,
             distribution.isOutdated(),
         );
         if (distribution.isOutdated()) {
             await distribution.update();
-            console.log('Advanced Slides updated to v%s', version);
+            console.log('Slides Extended updated to v%s', version);
         }
 
         try {
@@ -112,7 +112,7 @@ export class AdvancedSlidesPlugin extends Plugin {
                 this.obsidianUtils.markdownProcessor.postProcess,
             );
         } catch (err) {
-            console.debug('Advanced Slides caught an error', err);
+            console.debug('Slides Extended caught an error', err);
         }
     }
 
@@ -240,7 +240,7 @@ export class AdvancedSlidesPlugin extends Plugin {
     }
 
     async onunload() {
-        console.debug('unloading Advanced Slides');
+        console.debug('unloading Slides Extended');
         await this.stopServer();
 
         this.app.workspace
@@ -258,7 +258,7 @@ export class AdvancedSlidesPlugin extends Plugin {
 
     async saveSettings() {
         await this.saveData(this.settings);
-        console.debug('Advanced Slides: settings saved');
+        console.debug('Slides Extended: settings saved');
 
         await this.stopServer();
         this.obsidianUtils = new ObsidianUtils(this.app, this.settings);

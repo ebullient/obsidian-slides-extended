@@ -4,7 +4,7 @@ description: ""
 weight: 8
 ---
 
-Advanced Slides comes with a speaker notes function which can be used to present per-slide notes in a speaker view.
+Slides Extended comes with a speaker notes function which can be used to present per-slide notes in a speaker view.
 
 To access the speaker view you have to open `Slide Preview` and click on the `Open in Browser` Button in the top right corner. Your Slide will open in your default web browser. Press the »S« key on your keyboard to open the notes window.
 
