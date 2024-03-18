@@ -28,7 +28,7 @@
     "auto-changelog": {
         "backfillLimit": false,
         "commitLimit": false,
-        "ignoreCommitPattern": "(🔖|🔨|changelog|.* README\\.).*",
+        "ignoreCommitPattern": "(🔖|👷|changelog|.* README\\.).*",
         "startingDate": "2024-02-17"
     },
     "devDependencies": {
