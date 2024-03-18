@@ -1,7 +1,7 @@
 {
-    "name": "obsidian-advanced-slides",
+    "name": "obsidian-slides-extended",
     "version": "1.20.9",
-    "description": "Create markdown-based presentations in Obsidian",
+    "description": "Create markdown-based presentations with reveal.js in Obsidian",
     "author": "Erin Schnabel",
     "license": "MIT",
     "homepage": "https://github.com/ebullient",

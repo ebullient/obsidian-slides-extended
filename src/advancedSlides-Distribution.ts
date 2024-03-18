@@ -16,8 +16,7 @@ export class AdvancedSlidesDistribution {
     }
 
     isOutdated(): boolean {
-        return true;
-        //return !existsSync(this.distDirectory) || this.isOldVersion();
+        return !existsSync(this.distDirectory) || this.isOldVersion();
     }
 
     isOldVersion(): boolean {
@@ -33,7 +32,7 @@ export class AdvancedSlidesDistribution {
 
     async update() {
         const version = this.plugin.manifest.version;
-        const downloadUrl = `https://github.com/ebullient/obsidian-advanced-slides/releases/download/${version}/obsidian-advanced-slides.zip`;
+        const downloadUrl = `https://github.com/ebullient/obsidian-slides-extended/releases/download/${version}/obsidian-slides-extended.zip`;
         const response = await requestUrl(downloadUrl);
         if (response.status != 200) {
             console.error(`Failed to download ${downloadUrl}`);

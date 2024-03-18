@@ -27,6 +27,9 @@ export class ObsidianUtils implements ImageCollector {
     private readonly highlightSearchPath;
     private readonly themeSearchPath;
 
+    private images = new Set<string>();
+    private isCollecting = false;
+
     private yamlRegex = /^---.*?---\n(.*?)($|---)/s;
 
     constructor(app: App, settings: AdvancedSlidesSettings) {
@@ -37,7 +40,7 @@ export class ObsidianUtils implements ImageCollector {
         this.pluginDir = path.join(
             this.vaultDir,
             this.app.vault.configDir,
-            'plugins/obsidian-advanced-slides/',
+            'plugins/obsidian-slides-extended/',
         );
         this.distDir = path.join(this.pluginDir, 'dist/');
         this.exportDir = path.join(
@@ -330,20 +333,26 @@ export class ObsidianUtils implements ImageCollector {
     }
 
     resetImageCollection() {
-        // reset and enable
+        console.log('enable image collection for exported slides');
+        this.images.clear();
+        this.isCollecting = true;
     }
 
-    disableImageCollection() {}
+    disableImageCollection() {
+        console.log('stop collecting images');
+        this.isCollecting = false;
+    }
 
     // ImageCollector
-
-    addImage(value: string): void {}
+    addImage(filePath: string): void {
+        this.images.add(filePath);
+    }
 
     getAll(): string[] {
-        return [];
+        return Array.of(...this.images);
     }
 
     shouldCollect(): boolean {
-        return false;
+        return this.isCollecting;
     }
 }

@@ -4,6 +4,11 @@ import fs from 'fs';
 import { TextInputSuggest } from './Suggest';
 import { ObsidianUtils } from '../obsidianUtils';
 
+const highlightCss = (basename: string): boolean => {
+    return basename.contains('highlight') || basename.contains('hljs');
+};
+const themeCss = (basename: string) => !highlightCss(basename);
+
 export class ThemeSuggest extends TextInputSuggest<string> {
     readonly utils: ObsidianUtils;
     readonly themeFiles: string[];
@@ -23,14 +28,11 @@ export class ThemeSuggest extends TextInputSuggest<string> {
 
         // ==> hljs or highlight
         this.themeFiles = Array.of(
-            ...this.getFiles(searchPath, (dir: string, basename: string) => {
+            ...this.getFiles(searchPath, (_: string, basename: string) => {
                 if (basename.endsWith('.css')) {
                     return type == 'highlight'
-                        ? dir.contains('highlight') ||
-                              basename.contains('highlight') ||
-                              basename.contains('hljs')
-                        : !basename.contains('highlight') &&
-                              !basename.contains('hljs');
+                        ? highlightCss(basename)
+                        : themeCss(basename);
                 }
                 return false;
             }),

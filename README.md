@@ -2,7 +2,7 @@
 
 🚧 Fork in progress, there will be some dust 🚧
 
-<img src="https://raw.githubusercontent.com/ebullient/obsidian-advanced-slides/main/imgs/demo.gif">
+<img src="https://raw.githubusercontent.com/ebullient/obsidian-slides-extended/main/imgs/demo.gif">
 
 Advanced Slides is the perfect slide deck extension for <a href="https://obsidian.md">Obsidian</a>
 

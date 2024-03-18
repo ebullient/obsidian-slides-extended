@@ -71,14 +71,14 @@ export class AdvancedSlidesPlugin extends Plugin {
             });
 
             this.addCommand({
-                id: 'open-advanced-slides-preview',
+                id: 'open-slides-extended-preview',
                 name: 'Show Slide Preview',
                 hotkeys: [{ modifiers: ['Mod', 'Shift'], key: 'E' }],
                 callback: async () => this.toggleView(),
             });
 
             this.addCommand({
-                id: 'reload-advanced-slides-preview',
+                id: 'reload-slides-extended-preview',
                 name: 'Reload Slide Preview',
                 hotkeys: [{ modifiers: ['Mod', 'Shift'], key: 'R' }],
                 callback: () => {
@@ -90,12 +90,12 @@ export class AdvancedSlidesPlugin extends Plugin {
                 },
             });
             this.addCommand({
-                id: 'stop-server-advanced-slides-preview',
+                id: 'stop-server-slides-extended-preview',
                 name: 'Stop Slide Preview Server',
                 callback: async () => this.revealServer.stop(),
             });
             this.addCommand({
-                id: 'start-server-advanced-slides-preview',
+                id: 'start-server-slides-extended-preview',
                 name: 'Start Slide Preview Server',
                 callback: async () => this.revealServer.start(),
             });
