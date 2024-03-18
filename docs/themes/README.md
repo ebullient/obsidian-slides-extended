@@ -22,7 +22,7 @@ Advanced Slides comes with a varity of diffrent themes built in:
 - consult
 - mattropolis
 
-The source for these built in themes is found in `.obsidian/plugins/obsidian-advanced-slides/dist/theme`
+The source for these built in themes is found in `.obsidian/plugins/obsidian-slides-extended/dist/theme`
 
 To activate a theme simply add a theme property in the frontmatter section of your slides:
 
@@ -40,7 +40,7 @@ Open the settings for Advanced Slides Plugin, and choose a folder to use as your
 - Name your theme uniquely. 
 - If you reference pre-packaged fonts or want to import from existing themes, use `/dist/theme/...` as the path.
 - The theme suggester will list all themes from your theme directory,
-  `.obsidian/plugins/obsidian-advanced-slides/css` and `.obsidian/plugins/obsidian-advanced-slides/dist/theme`.
+  `.obsidian/plugins/obsidian-slides-extended/css` and `.obsidian/plugins/obsidian-slides-extended/dist/theme`.
 
 **Example:** 
 

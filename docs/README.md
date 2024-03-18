@@ -5,7 +5,7 @@ description: ""
 # Create Awesome Presentations in Obsidian
 
 
-[Advanced Slides](https://github.com/ebullient/obsidian-advanced-slides) is an open source plugin for [Obsidian](https://obsidian.md/) that allows you to create [reveal.js](https://revealjs.com/) based presentations in Obsidian. With this tool anyone who is able to create a note in Obsidian can also create a beautiful presentation. 
+[Advanced Slides](https://github.com/ebullient/obsidian-slides-extended) is an open source plugin for [Obsidian](https://obsidian.md/) that allows you to create [reveal.js](https://revealjs.com/) based presentations in Obsidian. With this tool anyone who is able to create a note in Obsidian can also create a beautiful presentation. 
 
 > [!NOTE] 
 > We follow the philosophy of `convention over configuration`.
