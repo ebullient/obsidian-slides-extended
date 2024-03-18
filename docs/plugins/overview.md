@@ -9,5 +9,5 @@ Press the `»ESC«` or `»O«` keys to toggle the overview mode on and off. Whil
 ![Overview](../images/overview.gif)
 
 > [!WARNING]
-> To enable Overview you have to enable the Plugin in Advanced Slides Settings
+> To enable Overview you have to enable the Plugin in Slides Extended Settings
 

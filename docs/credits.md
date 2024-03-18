@@ -1,6 +1,6 @@
 ---
 title: "Credits"
-description: "contributors and packages used by Advanced Slides"
+description: "contributors and packages used by Slides Extended"
 ---
 
 

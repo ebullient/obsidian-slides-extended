@@ -6,7 +6,7 @@ alwaysopen: false
 pre: "<i class='fa fa-code' ></i> "
 ---
 
-Advanced Slides allows you to design individual slides based on slide templates. Each slide template can have a unique layout and structure that you can draw upon repeatedly over the presentation. Using slide templates makes creating presentations that use different layout formats across different slides easy and fast. Also, slide templates reduce redundant code (aka boilerplate code) in your md presentation document. 
+Slides Extended allows you to design individual slides based on slide templates. Each slide template can have a unique layout and structure that you can draw upon repeatedly over the presentation. Using slide templates makes creating presentations that use different layout formats across different slides easy and fast. Also, slide templates reduce redundant code (aka boilerplate code) in your md presentation document. 
 
 ### Example: Using a simple slide template
 

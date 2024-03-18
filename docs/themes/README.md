@@ -6,7 +6,7 @@ alwaysopen: false
 pre: "<i class='fa fa-paint-brush' ></i> "
 ---
 
-Advanced Slides comes with a varity of diffrent themes built in:
+Slides Extended comes with a varity of diffrent themes built in:
 
 - black (default)
 - white
@@ -35,7 +35,7 @@ To activate a theme simply add a theme property in the frontmatter section of yo
 
 If you want to use a custom theme you can do that, but please keep your themes in your vault.
 
-Open the settings for Advanced Slides Plugin, and choose a folder to use as your "Theme Directory".
+Open the settings for Slides Extended Plugin, and choose a folder to use as your "Theme Directory".
 
 - Name your theme uniquely. 
 - If you reference pre-packaged fonts or want to import from existing themes, use `/dist/theme/...` as the path.
@@ -47,7 +47,7 @@ Open the settings for Advanced Slides Plugin, and choose a folder to use as your
 If you create a directory in your vault called `assets/themes`, and create a 
 CSS file called **my-theme.css** in that directory:
 
-1. Open settings for Advanced Slides Plugin, and choose `assets/themes` as the "Theme Directory"
+1. Open settings for Slides Extended Plugin, and choose `assets/themes` as the "Theme Directory"
 2. You should be able to select `my-theme.css` as the default theme in slide settings (suggester)
 3. Alternatively, you can specify the theme as a property in your slides markdown file: 
 
@@ -75,7 +75,7 @@ To activate a highlight theme simply add a highlightTheme property in the frontm
 
 	---
 
-By default advanced slides comes with a variety of different highlight themes:
+By default Slides Extended comes with a variety of different highlight themes:
 
 - zenburn (default)
 - monokai

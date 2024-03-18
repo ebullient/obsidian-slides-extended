@@ -14,4 +14,4 @@ The main use case in mind when implementing the plugin is classroom usage in whi
 ![Chalkboard](../images/chalkboard.gif)
 
 > [!WARNING] 
-> To enable Chalkboard you have to enable the Plugin in Advanced Slides Settings
+> To enable Chalkboard you have to enable the Plugin in Slides Extended Settings

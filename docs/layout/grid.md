@@ -16,7 +16,7 @@ Grid layouts drag-and-drop is used to size and position content of your slides.
 
 ### Basic Syntax
 
-The following syntax is used to drag-and-drop a grid in Advanced Slides:
+The following syntax is used to drag-and-drop a grid in Slides Extended:
 
 	<grid drag="width height" drop="x y">
 

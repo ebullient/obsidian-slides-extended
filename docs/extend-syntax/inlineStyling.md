@@ -38,4 +38,4 @@ css: [css/layout.css,css/customFonts.css]
 ```
 
 These files will be found relative to either the configured custom Theme Directory or 
-the Advanced Slides plugin folder.
+the Slides Extended plugin folder.

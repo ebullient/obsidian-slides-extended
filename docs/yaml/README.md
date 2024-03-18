@@ -62,5 +62,5 @@ markdown:
   smartypants: false
 ```
 
-Other marked options exist, but should not be used with the Advanced Slides plugin.
+Other marked options exist, but should not be used with the Slides Extended plugin.
 
