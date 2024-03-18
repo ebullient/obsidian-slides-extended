@@ -1,4 +1,4 @@
-import { emptyDir, copy, writeFile } from 'fs-extra';
+import { emptyDir, copy, writeFile, existsSync } from 'fs-extra';
 import path from 'path';
 import { ObsidianUtils } from '../obsidian/obsidianUtils';
 
@@ -17,10 +17,13 @@ export class RevealExporter {
         const ext = path.extname(filePath);
         const folderName = path.basename(filePath).replaceAll(ext, '');
         const folderDir = path.join(this.exportDirectory, folderName);
+        const sourceDir = path.dirname(filePath);
 
         await emptyDir(folderDir);
         await writeFile(path.join(folderDir, 'index.html'), html);
 
+        // TODO: let's track what css, scripts, and plugins are actually used
+        // rather than copying everything.
         await copy(
             path.join(this.pluginDirectory, 'css'),
             path.join(folderDir, 'css'),
@@ -38,10 +41,14 @@ export class RevealExporter {
             if (img.startsWith('http')) {
                 continue;
             }
-            await copy(
-                path.join(this.vaultDirectory, img),
-                path.join(folderDir, img),
-            );
+            let imgPath = path.join(this.vaultDirectory, img);
+            if (sourceDir != this.vaultDirectory) {
+                const relative = path.join(sourceDir, img);
+                if (existsSync(relative)) {
+                    imgPath = relative;
+                }
+            }
+            await copy(imgPath, path.join(folderDir, img));
         }
 
         window.open('file://' + folderDir);
