@@ -27,6 +27,7 @@ on:
 env:
   GH_BOT_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
   GH_BOT_NAME: "GitHub Action"
+  ZIP_ARTIFACT: slides-extended.zip
 
 jobs:
   build:
@@ -130,7 +131,7 @@ jobs:
         mkdir tmp
         cp -r ./build/css ./build/dist ./build/plugin ./build/template distVersion.json tmp/
         cd tmp
-        zip -r ../${{ github.event.repository.name }}.zip *
+        zip -r ../${{ env.ZIP_ARTIFACT }} *
         cd ..
 
     # Create the release on github
@@ -153,7 +154,7 @@ jobs:
             --prerelease=${prerelease}
 
         gh release upload "${{ steps.build.outputs.version }}" --clobber \
-            ${{ github.event.repository.name }}.zip \
+            "./${{ env.ZIP_ARTIFACT }}" \
             './build/main.js#main.js' \
             './build/styles.css#styles.css' \
             './manifest.json' \

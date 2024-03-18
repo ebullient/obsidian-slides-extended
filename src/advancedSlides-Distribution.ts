@@ -32,7 +32,7 @@ export class AdvancedSlidesDistribution {
 
     async update() {
         const version = this.plugin.manifest.version;
-        const downloadUrl = `https://github.com/ebullient/obsidian-slides-extended/releases/download/${version}/obsidian-slides-extended.zip`;
+        const downloadUrl = `https://github.com/ebullient/obsidian-slides-extended/releases/download/${version}/slides-extended.zip`;
         const response = await requestUrl(downloadUrl);
         if (response.status != 200) {
             console.error(`Failed to download ${downloadUrl}`);

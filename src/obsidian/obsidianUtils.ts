@@ -40,7 +40,7 @@ export class ObsidianUtils implements ImageCollector {
         this.pluginDir = path.join(
             this.vaultDir,
             this.app.vault.configDir,
-            'plugins/obsidian-slides-extended/',
+            'plugins/slides-extended/',
         );
         this.distDir = path.join(this.pluginDir, 'dist/');
         this.exportDir = path.join(
