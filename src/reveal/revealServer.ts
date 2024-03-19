@@ -134,7 +134,7 @@ export class RevealServer {
 
     async stop() {
         if (this.running) {
-            console.log('stopping Slides Extended server', this.running);
+            console.info('stopping Slides Extended server', this.running);
             await this._server.close();
         } else {
             console.debug('Slides Extended server is not running');

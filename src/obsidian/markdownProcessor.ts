@@ -99,7 +99,9 @@ export class MarkdownProcessor {
             options.defaultTemplate = null;
 
             if (circuitCounter > 9) {
-                console.log('WARNING: Circuit in template hierarchy detected!');
+                console.warn(
+                    'WARNING: Circuit in template hierarchy detected!',
+                );
                 break;
             }
         }
@@ -322,7 +324,7 @@ export class MarkdownProcessor {
 
     log(name: string, before: string, after: string) {
         if (before != after) {
-            console.log(`${name}: ${after}`);
+            console.debug(`${name}: ${after}`);
         }
     }
 }

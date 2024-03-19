@@ -76,7 +76,7 @@ export class CommentParser {
 
             return new Comment(type, attributes);
         } catch (ex) {
-            console.log('ERROR: Cannot parse comment: ' + comment);
+            console.error('ERROR: Cannot parse comment: ' + comment);
             return null;
         }
     }

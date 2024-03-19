@@ -96,7 +96,7 @@ export class TemplateProcessor {
                                     md = this.transformSlide(md);
 
                                     if (circuitCounter > 9) {
-                                        console.log(
+                                        console.warn(
                                             'WARNING: Circuit in template hierarchy detected!',
                                         );
                                         break;
@@ -114,7 +114,7 @@ export class TemplateProcessor {
                                 output = output.split(slide).join(md);
                                 return md;
                             } catch (error) {
-                                console.log(
+                                console.error(
                                     'Cannot process template: ' + error,
                                 );
                                 return slide;

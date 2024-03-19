@@ -49,7 +49,7 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
                         ) {
                             this.newSettings.paneMode = value;
                         } else {
-                            console.log('Invalid pane mode', value);
+                            console.debug('Invalid pane mode', value);
                         }
                     });
             });
