@@ -20,8 +20,9 @@ const dir = process.env.OUTDIR ? process.env.OUTDIR : "./build";
 
 const map = {
     'src/main.ts': 'main',
+    'src/scss/styles.scss': 'styles',
     'src/scss/layout/slides-extended.scss': 'css/slides-extended',
-    'plugin/reveal.js-elapsed-time-bar/elapsed-time-bar.js': 'plugin/elapsed-time-bar/elapsed-time-bar',
+    'src/plugin/reveal.js-elapsed-time-bar/elapsed-time-bar.js': 'plugin/elapsed-time-bar/elapsed-time-bar',
 };
 
 const themeDir = 'src/scss/theme/';
@@ -65,10 +66,10 @@ const parameters = {
         '.svg': 'dataurl',
     },
     format: 'cjs',
-   // minify: prod,
+    minify: prod,
     target: 'es2020',
     logLevel: "info",
-    // sourcemap: prod ? false : 'inline',
+    sourcemap: prod ? false : 'inline',
     sourcemap: 'inline',
     treeShaking: true,
     outdir: dir,
@@ -93,12 +94,6 @@ const parameters = {
         }),
         copy({
             assets: {
-                from: ['styles.css'],
-                to: ['./styles.css']
-            }
-        }),
-        copy({
-            assets: {
                 from: ['distVersion.json'],
                 to: ['./distVersion.json']
             }
@@ -113,6 +108,13 @@ const parameters = {
             assets: {
                 from: ['node_modules/reveal.js/dist/**/*'],
                 to: ['./dist/'],
+            }
+        }),
+        copy({
+            assets: {
+                from: ['node_modules/reveal.js/css/**/*'],
+                to: ['./dist/css/'],
+                keepStructure: true
             }
         }),
         copy({

@@ -1,0 +1,31 @@
+/* Styles */
+
+.workspace-split.mod-right-split .workspace-leaf-content[data-type="reveal-preview-view"] {
+    .view-header {
+        display: flex;
+    }
+    .view-content.reveal-preview-view {
+        position: relative;
+        height: calc(100% - var(--header-height) - 1px);
+    }
+}
+
+.view-content.reveal-preview-view {
+    padding: 0;
+    overflow: hidden;
+}
+
+div.reveal-preview-view {
+    aspect-ratio: 16/9;
+    padding: 0;
+    overflow: hidden;
+}
+
+.view-content.reveal-preview-view>iframe,
+div.reveal-preview-view>iframe {
+    border-style: none;
+    width: 100%;
+    height: 100%;
+}
+
+
