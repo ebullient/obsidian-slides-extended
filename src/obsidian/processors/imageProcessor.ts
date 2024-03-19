@@ -1,5 +1,3 @@
-/* eslint-disable no-var */
-
 import { CommentParser } from '../comment';
 import { ObsidianUtils } from '../obsidianUtils';
 
@@ -88,10 +86,11 @@ export class ImageProcessor {
             : this.parser.buildComment('element');
 
         if (ext) {
+            let width, height;
             if (ext.includes('x')) {
-                var [width, height] = ext.split('x');
+                [width, height] = ext.split('x');
             } else {
-                var width = ext;
+                width = ext;
             }
             comment.addStyle('width', `${width}px`);
 
