@@ -1,4 +1,4 @@
-var ElapsedTimeBar = {
+const ElapsedTimeBar = {
     id: 'elapsed-time-bar',
 
     // default value
@@ -18,7 +18,7 @@ var ElapsedTimeBar = {
      * initialize elements
      */
     handleReady() {
-        var config = Reveal.getConfig();
+        const config = Reveal.getConfig();
 
         // activate this plugin if config.allottedTime exists.
         if (!config.allottedTime) {
@@ -31,8 +31,8 @@ var ElapsedTimeBar = {
         this.pausedBarColor = config.pausedBarColor || this.pausedBarColor;
 
         // calc barHeight from config.barHeight or page-progress container
-        var barHeight;
-        var pageProgressContainer = document.querySelector('.progress');
+        let barHeight;
+        const pageProgressContainer = document.querySelector('.progress');
         if (config.progressBarHeight) {
             barHeight = parseInt(config.progressBarHeight, 10) + 'px';
 
@@ -47,7 +47,7 @@ var ElapsedTimeBar = {
         }
 
         // create container of time-progress
-        var timeProgressContainer = document.createElement('div');
+        const timeProgressContainer = document.createElement('div');
         timeProgressContainer.classList.add('progress');
         Object.entries({
             display: 'block',
@@ -79,8 +79,8 @@ var ElapsedTimeBar = {
      */
     loop() {
         if (this.isPaused) return;
-        var now = +new Date();
-        var elapsedTime = now - this.startTime - this.pauseTimeDuration;
+        const now = +new Date();
+        const elapsedTime = now - this.startTime - this.pauseTimeDuration;
         if (elapsedTime > this.allottedTime) {
             this.timeProgressBar.style.width = '100%';
             this.isFinished = true;

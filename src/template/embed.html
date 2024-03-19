@@ -26,7 +26,7 @@
             const itemsToFit = document.getElementsByClassName('fitText');
             for (const item in itemsToFit) {
                 if (Object.hasOwnProperty.call(itemsToFit, item)) {
-                    var element = itemsToFit[item];
+                    const element = itemsToFit[item];
                     fitElement(element, 1, 1000);
                     element.classList.remove('fitText');
                 }
@@ -78,10 +78,10 @@
 
     <script>
         function extend() {
-            var target = {};
-            for (var i = 0; i < arguments.length; i++) {
-                var source = arguments[i];
-                for (var key in source) {
+            const target = {};
+            for (let i = 0; i < arguments.length; i++) {
+                const source = arguments[i];
+                for (const key in source) {
                     if (source.hasOwnProperty(key)) {
                         target[key] = source[key];
                     }
@@ -105,7 +105,7 @@
             return brightness > 155;
         }
 
-        var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+        const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
 
         if (isLight(bgColor)) {
             document.body.classList.add('has-light-background');
@@ -114,7 +114,7 @@
         }
 
         // default options to init reveal.js
-        var defaultOptions = {
+        const defaultOptions = {
             controls: false,
             progress: false,
             history: false,
@@ -136,9 +136,9 @@
         };
 
         // options from URL query string
-        var queryOptions = Reveal().getQueryHash() || {};
+        const queryOptions = Reveal().getQueryHash() || {};
 
-        var options = extend(defaultOptions, {{{ revealOptionsStr }}}, queryOptions);
+        const options = extend(defaultOptions, {{{ revealOptionsStr }}}, queryOptions);
         options.controls = false;
         options.progress = false;
         options.history = false;
