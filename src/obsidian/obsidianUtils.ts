@@ -333,13 +333,13 @@ export class ObsidianUtils implements ImageCollector {
     }
 
     resetImageCollection() {
-        console.log('enable image collection for exported slides');
+        console.debug('enable image collection for exported slides');
         this.images.clear();
         this.isCollecting = true;
     }
 
     disableImageCollection() {
-        console.log('stop collecting images');
+        console.debug('stop collecting images');
         this.isCollecting = false;
     }
 
