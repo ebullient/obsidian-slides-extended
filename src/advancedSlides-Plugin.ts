@@ -73,14 +73,12 @@ export class AdvancedSlidesPlugin extends Plugin {
             this.addCommand({
                 id: 'open-slides-extended-preview',
                 name: 'Show Slide Preview',
-                hotkeys: [{ modifiers: ['Mod', 'Shift'], key: 'E' }],
                 callback: async () => this.toggleView(),
             });
 
             this.addCommand({
                 id: 'reload-slides-extended-preview',
                 name: 'Reload Slide Preview',
-                hotkeys: [{ modifiers: ['Mod', 'Shift'], key: 'R' }],
                 callback: () => {
                     const instance = this.getViewInstance();
                     if (!instance) {
