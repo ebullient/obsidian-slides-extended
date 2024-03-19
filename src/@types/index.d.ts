@@ -28,7 +28,7 @@ export interface AdvancedSlidesSettings {
     slideNumber: boolean;
     showGrid: boolean;
     autoComplete: string;
-    paneMode: PaneType;
+    paneMode: 'split' | 'tab' | 'sidebar';
     themeDirectory: string;
     center: boolean;
 }

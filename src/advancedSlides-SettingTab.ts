@@ -40,12 +40,13 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
             .addDropdown(cb => {
                 cb.addOption('tab', 'as Tab')
                     .addOption('split', 'split Workspace')
+                    .addOption('sidebar', 'right sidebar')
                     .setValue(this.newSettings.paneMode)
                     .onChange(value => {
                         if (
                             value == 'tab' ||
-                            value == 'window' ||
-                            value == 'split'
+                            value == 'split' ||
+                            value == 'sidebar'
                         ) {
                             this.newSettings.paneMode = value;
                         } else {
