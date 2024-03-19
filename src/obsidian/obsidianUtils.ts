@@ -34,7 +34,11 @@ export class ObsidianUtils implements ImageCollector {
 
     constructor(app: App, settings: AdvancedSlidesSettings) {
         this.app = app;
-        this.fileSystem = this.app.vault.adapter as FileSystemAdapter;
+        if (!(this.app.vault.adapter instanceof FileSystemAdapter)) {
+            throw new Error('Slides Extended is only supported on the desktop');
+        }
+
+        this.fileSystem = this.app.vault.adapter;
         this.settings = settings;
         this.vaultDir = this.fileSystem.getBasePath() + '/';
         this.pluginDir = path.join(
