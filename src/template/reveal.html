@@ -252,6 +252,10 @@
             {{/enableMenu}}
         };
 
+        if ( pageInIframe() ) {
+            defaultOptions.scrollActivationWidth = 5;
+        }
+
         // options from URL query string
         const queryOptions = Reveal().getQueryHash() || {};
 
