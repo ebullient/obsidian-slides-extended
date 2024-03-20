@@ -32,7 +32,6 @@ export const getThemeFiles = (
         type == 'highlight'
             ? utils.getHighlightSearchPath()
             : utils.getThemeSearchPath();
-    console.log('🚀 ~ file: ThemeSuggester.ts:32 ~ searchPath:', searchPath);
 
     // ==> hljs or highlight
     return [
