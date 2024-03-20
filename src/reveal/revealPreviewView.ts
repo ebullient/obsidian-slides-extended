@@ -23,16 +23,16 @@ export class RevealPreviewView extends ItemView {
         this.yaml = new YamlParser(settings);
         this.onCloseListener = onCloseListener;
 
-        this.addAction('slides', 'Open in Browser', () => {
+        this.addAction('slides', 'Open in browser', () => {
             window.open(home);
         });
 
-        this.addAction('grid', 'Show Grid', () => {
+        this.addAction('grid', 'Show grid', () => {
             settings.showGrid = !settings.showGrid;
             this.reloadIframe();
         });
 
-        this.addAction('refresh', 'Refresh Slides', () => {
+        this.addAction('refresh', 'Refresh slides', () => {
             this.reloadIframe();
         });
 
@@ -52,7 +52,7 @@ export class RevealPreviewView extends ItemView {
         menu.addSeparator();
         menu.addItem(item => {
             item.setIcon('document')
-                .setTitle('Print Presentation')
+                .setTitle('Print presentation')
                 .onClick(() => {
                     window.open(this.home.toString() + '?print-pdf');
                 });
@@ -226,7 +226,7 @@ export class RevealPreviewView extends ItemView {
     }
 
     getDisplayText() {
-        return 'Slide Preview';
+        return 'Slide preview';
     }
 
     setUrl(url: string, rerender = true) {

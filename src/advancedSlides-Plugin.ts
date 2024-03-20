@@ -66,19 +66,19 @@ export class AdvancedSlidesPlugin extends Plugin {
             addIcon('slides', ICON_DATA);
             addIcon('refresh', REFRESH_ICON);
 
-            this.addRibbonIcon('slides', 'Show Slide Preview', async () => {
+            this.addRibbonIcon('slides', 'Show slide preview', async () => {
                 await this.showView();
             });
 
             this.addCommand({
-                id: 'open-slides-extended-preview',
-                name: 'Show Slide Preview',
+                id: 'open-preview',
+                name: 'Show slide preview',
                 callback: async () => this.toggleView(),
             });
 
             this.addCommand({
-                id: 'reload-slides-extended-preview',
-                name: 'Reload Slide Preview',
+                id: 'reload-preview',
+                name: 'Reload slide preview',
                 callback: () => {
                     const instance = this.getViewInstance();
                     if (!instance) {
@@ -88,13 +88,13 @@ export class AdvancedSlidesPlugin extends Plugin {
                 },
             });
             this.addCommand({
-                id: 'stop-server-slides-extended-preview',
-                name: 'Stop Slide Preview Server',
+                id: 'stop-server-preview',
+                name: 'Stop slide preview server',
                 callback: async () => this.revealServer.stop(),
             });
             this.addCommand({
-                id: 'start-server-slides-extended-preview',
-                name: 'Start Slide Preview Server',
+                id: 'start-server-preview',
+                name: 'Start slide preview server',
                 callback: async () => this.revealServer.start(),
             });
 
@@ -249,10 +249,6 @@ export class AdvancedSlidesPlugin extends Plugin {
     async onunload() {
         console.debug('unloading Slides Extended');
         await this.stopServer();
-
-        this.app.workspace
-            .getLeavesOfType(REVEAL_PREVIEW_VIEW)
-            .forEach(leaf => leaf.detach());
     }
 
     async loadSettings() {

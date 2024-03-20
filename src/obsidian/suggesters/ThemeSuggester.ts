@@ -1,7 +1,6 @@
 // Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
-import { App } from 'obsidian';
+import { AbstractInputSuggest, App } from 'obsidian';
 import fs from 'fs';
-import { TextInputSuggest } from './Suggest';
 import { ObsidianUtils } from '../obsidianUtils';
 
 const highlightCss = (basename: string): boolean => {
@@ -9,17 +8,20 @@ const highlightCss = (basename: string): boolean => {
 };
 const themeCss = (basename: string) => !highlightCss(basename);
 
-export class ThemeSuggest extends TextInputSuggest<string> {
+export class ThemeSuggest extends AbstractInputSuggest<string> {
     readonly utils: ObsidianUtils;
     readonly themeFiles: string[];
+    inputEl: HTMLInputElement;
+
     constructor(
         type: string,
         app: App,
-        inputEl: HTMLInputElement | HTMLTextAreaElement,
+        inputEl: HTMLInputElement,
         utils: ObsidianUtils,
     ) {
         super(app, inputEl);
         this.utils = utils;
+        this.inputEl = inputEl;
 
         const searchPath =
             type == 'highlight'

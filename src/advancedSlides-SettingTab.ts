@@ -32,7 +32,6 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
         const { containerEl } = this;
 
         containerEl.empty();
-        containerEl.createEl('h2', { text: 'General settings' });
 
         new Setting(containerEl)
             .setName('Slide preview mode')
@@ -96,7 +95,7 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
             .setDesc('Do you want to auto-complete inputs?')
             .addDropdown(cb => {
                 cb.addOption('always', 'Always')
-                    .addOption('inPreview', 'only in Slide Preview')
+                    .addOption('inPreview', 'only in slide preview')
                     .addOption('never', 'Never')
                     .setValue(this.newSettings.autoComplete)
                     .onChange(value => {
@@ -146,7 +145,7 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
                     });
             });
 
-        containerEl.createEl('h2', { text: 'Slide Settings' });
+        new Setting(containerEl).setName('Slides').setHeading();
 
         themeSettings['slide'] = new Setting(containerEl)
             .setName('Default slide theme')
