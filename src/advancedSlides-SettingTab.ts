@@ -1,9 +1,22 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
-import { FolderSuggest } from './obsidian/suggesters/FolderSuggester';
-import { ThemeSuggest } from './obsidian/suggesters/ThemeSuggester';
+import {
+    App,
+    PluginSettingTab,
+    Setting,
+    TAbstractFile,
+    TFolder,
+} from 'obsidian';
+import { FolderInputSuggest } from 'obsidian-utilities';
+import {
+    ThemeInputSuggest,
+    getThemeFiles,
+} from './obsidian/suggesters/ThemeSuggester';
 import { AdvancedSlidesPlugin } from './advancedSlides-Plugin';
 import { AdvancedSlidesSettings } from './@types';
 
+/** This is because TypeScript's filters are dumb. */
+function isFolder(file: TAbstractFile): file is TFolder {
+    return file instanceof TFolder;
+}
 export class AdvancedSlidesSettingTab extends PluginSettingTab {
     plugin: AdvancedSlidesPlugin;
     newSettings: AdvancedSlidesSettings;
@@ -109,7 +122,15 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
                 'Specify the directory where Slides Extended should export presentations.',
             )
             .addSearch(cb => {
-                new FolderSuggest(this.app, cb.inputEl);
+                const folders: TFolder[] = this.app.vault
+                    .getAllLoadedFiles()
+                    .filter<TFolder>(isFolder);
+                const modal = new FolderInputSuggest(this.app, cb, folders);
+                modal.onSelect(({ item }) => {
+                    cb.setValue(item.path);
+                    cb.inputEl.trigger('input');
+                    modal.close();
+                });
                 cb.setPlaceholder('Folder')
                     .setValue(this.newSettings.exportDirectory)
                     .onChange(value => {
@@ -134,7 +155,15 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
                 'Specify the vault directory for custom themes. Highlight themes should include "highlight" or "hljs" in their name.',
             )
             .addSearch(cb => {
-                new FolderSuggest(this.app, cb.inputEl);
+                const folders: TFolder[] = this.app.vault
+                    .getAllLoadedFiles()
+                    .filter<TFolder>(isFolder);
+                const modal = new FolderInputSuggest(this.app, cb, folders);
+                modal.onSelect(({ item }) => {
+                    cb.setValue(item.path);
+                    cb.inputEl.trigger('input');
+                    modal.close();
+                });
                 cb.setPlaceholder('Folder')
                     .setValue(this.newSettings.themeDirectory)
                     .onChange(value => {
@@ -151,12 +180,15 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
             .setName('Default slide theme')
             .setDesc(themeDesc('slide', this.newSettings.themeDirectory))
             .addSearch(cb => {
-                new ThemeSuggest(
-                    'theme',
+                const modal = new ThemeInputSuggest(
                     this.app,
-                    cb.inputEl,
-                    this.plugin.obsidianUtils,
-                );
+                    cb,
+                    getThemeFiles(this.plugin.obsidianUtils, 'theme'),
+                ).onSelect(({ item }) => {
+                    cb.setValue(item);
+                    cb.inputEl.trigger('input');
+                    modal.close();
+                });
                 cb.setPlaceholder('black')
                     .setValue(this.newSettings.theme)
                     .onChange(value => {
@@ -168,12 +200,15 @@ export class AdvancedSlidesSettingTab extends PluginSettingTab {
             .setName('Default highlight theme')
             .setDesc(themeDesc('highlight', this.newSettings.themeDirectory))
             .addSearch(cb => {
-                new ThemeSuggest(
-                    'highlight',
+                const modal = new ThemeInputSuggest(
                     this.app,
-                    cb.inputEl,
-                    this.plugin.obsidianUtils,
-                );
+                    cb,
+                    getThemeFiles(this.plugin.obsidianUtils, 'highlight'),
+                ).onSelect(({ item }) => {
+                    cb.setValue(item);
+                    cb.inputEl.trigger('input');
+                    modal.close();
+                });
                 cb.setPlaceholder('zenburn')
                     .setValue(this.newSettings.highlightTheme)
                     .onChange(value => {
