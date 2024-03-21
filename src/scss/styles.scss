@@ -3,6 +3,11 @@
 .workspace-split.mod-right-split .workspace-leaf-content[data-type="reveal-preview-view"] {
     .view-header {
         display: flex;
+
+        .view-header-nav-buttons,
+        .view-header-title-container {
+            display: none;
+        }
     }
     .view-content.reveal-preview-view {
         position: relative;
