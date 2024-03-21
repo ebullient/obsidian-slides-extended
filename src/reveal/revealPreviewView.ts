@@ -36,6 +36,12 @@ export class RevealPreviewView extends ItemView {
             this.reloadIframe();
         });
 
+        if (settings.paneMode === 'sidebar') {
+            this.addAction('monitor-x', 'Close preview', () => {
+                this.leaf.detach();
+            });
+        }
+
         window.addEventListener('message', this.onMessage.bind(this));
     }
 
