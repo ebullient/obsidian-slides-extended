@@ -229,10 +229,12 @@ export class AdvancedSlidesPlugin extends Plugin {
     async activateView() {
         this.app.workspace.detachLeavesOfType(REVEAL_PREVIEW_VIEW);
         if (this.settings.paneMode == 'sidebar') {
-            await this.app.workspace.getRightLeaf(true).setViewState({
-                type: REVEAL_PREVIEW_VIEW,
-                active: true,
-            });
+            await this.app.workspace
+                .getRightLeaf(true)
+                .setViewState({
+                    type: REVEAL_PREVIEW_VIEW,
+                    active: true,
+                });
         } else {
             await this.app.workspace
                 .getLeaf(this.settings.paneMode)

@@ -23,7 +23,7 @@ export class RevealPreviewView extends ItemView {
         this.yaml = new YamlParser(settings);
         this.onCloseListener = onCloseListener;
 
-        this.addAction('slides', 'Open in browser', () => {
+        this.addAction('globe', 'Open in browser', () => {
             window.open(home);
         });
 
@@ -227,6 +227,10 @@ export class RevealPreviewView extends ItemView {
 
     getDisplayText() {
         return 'Slide preview';
+    }
+
+    getIcon() {
+        return 'slides';
     }
 
     setUrl(url: string, rerender = true) {
