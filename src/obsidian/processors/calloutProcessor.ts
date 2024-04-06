@@ -1,5 +1,5 @@
 export class CalloutProcessor {
-    private regex = />\s\[!([^\]]+)\]-* *(.*)/;
+    private regex = />\s?\[!([^\]]+)\]-* *(.*)/;
 
     process(markdown: string) {
         const lineArray = markdown.split('\n');
@@ -55,14 +55,16 @@ export class CalloutProcessor {
             result.push('</div>');
             result.push('</div>');
 
-            result.push('<div class="callout-content">');
-            for (let i = start + 1; i <= end; i++) {
+            if (start != end) {
+                result.push('<div class="callout-content">');
+                for (let i = start + 1; i <= end; i++) {
+                    result.push('');
+                    const line = lines[i].trim().substring(1).trim();
+                    result.push(line);
+                }
                 result.push('');
-                const line = lines[i].trim().substring(1).trim();
-                result.push(line);
+                result.push('</div>');
             }
-            result.push('');
-            result.push('</div>');
             result.push('</div>');
         } else {
             for (let i = start; i <= end; i++) {
