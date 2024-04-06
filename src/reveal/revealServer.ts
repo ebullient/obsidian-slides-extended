@@ -6,6 +6,7 @@ import { Notice, TAbstractFile } from 'obsidian';
 import { fastifyStatic, ListDir, ListFile } from '@fastify/static';
 import path from 'path';
 import { QueryString } from '../@types';
+import { existsSync } from 'fs';
 
 export class RevealServer {
     private _server: FastifyInstance;
@@ -83,7 +84,15 @@ export class RevealServer {
                     this.filePath = path.join(utils.vaultDirectory, file);
                     await renderMarkdown(this.filePath);
                 } else {
-                    reply.sendFile(file);
+                    let fetch = file;
+                    const sourceDir = path.dirname(this.filePath);
+                    if (sourceDir != utils.vaultDirectory) {
+                        const srcPath = path.join(sourceDir, file);
+                        if (existsSync(srcPath)) {
+                            fetch = srcPath.replace(utils.vaultDirectory, '');
+                        }
+                    }
+                    reply.sendFile(fetch);
                 }
                 return reply;
             },
