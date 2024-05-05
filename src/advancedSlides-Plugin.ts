@@ -1,5 +1,5 @@
 import { addIcon, Plugin, TAbstractFile } from 'obsidian';
-import { AdvancedSlidesSettings } from './@types';
+import { SlidesExtendedSettings } from './@types';
 import { RevealServer } from './reveal/revealServer';
 import { ObsidianUtils } from './obsidian/obsidianUtils';
 import { AutoCompleteSuggest } from './obsidian/suggesters/AutoCompleteSuggester';
@@ -18,7 +18,7 @@ import { EmbeddedSlideProcessor } from './obsidian/embeddedSlideProcessor';
 import { AdvancedSlidesDistribution } from './advancedSlides-Distribution';
 
 export class AdvancedSlidesPlugin extends Plugin {
-    settings: AdvancedSlidesSettings;
+    settings: SlidesExtendedSettings;
     obsidianUtils: ObsidianUtils;
 
     private revealServer: RevealServer;
@@ -273,7 +273,7 @@ export class AdvancedSlidesPlugin extends Plugin {
         }
     }
 
-    async update(newSettings: AdvancedSlidesSettings) {
+    async update(newSettings: SlidesExtendedSettings) {
         this.settings = newSettings;
         await this.saveSettings();
     }

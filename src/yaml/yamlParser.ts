@@ -1,13 +1,13 @@
 import { loadFront } from 'yaml-front-matter';
 
 import { isEmpty, isNil, omit, omitBy, pick } from '../util';
-import { AdvancedSlidesSettings, Options } from '../@types';
+import { SlidesExtendedSettings, Options } from '../@types';
 import { DEFAULTS } from '../advancedSlides-constants';
 
 export class YamlParser {
-    private settings: AdvancedSlidesSettings;
+    private settings: SlidesExtendedSettings;
 
-    constructor(settings: AdvancedSlidesSettings) {
+    constructor(settings: SlidesExtendedSettings) {
         this.settings = settings;
     }
 

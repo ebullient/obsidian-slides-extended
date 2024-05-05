@@ -1,6 +1,6 @@
 import { ItemView, MarkdownView, Menu, WorkspaceLeaf } from 'obsidian';
 import { YamlParser } from '../yaml/yamlParser';
-import { AdvancedSlidesSettings, Options } from '../@types';
+import { SlidesExtendedSettings, Options } from '../@types';
 
 export const REVEAL_PREVIEW_VIEW = 'reveal-preview-view';
 
@@ -15,7 +15,7 @@ export class RevealPreviewView extends ItemView {
     constructor(
         leaf: WorkspaceLeaf,
         home: URL,
-        settings: AdvancedSlidesSettings,
+        settings: SlidesExtendedSettings,
         onCloseListener: () => void,
     ) {
         super(leaf);

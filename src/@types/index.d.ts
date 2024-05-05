@@ -9,7 +9,7 @@ interface QueryString {
     embed: boolean;
     export: boolean;
 }
-export interface AdvancedSlidesSettings {
+export interface SlidesExtendedSettings {
     port: string;
     autoReload: boolean;
     autoStart: boolean;

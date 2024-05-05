@@ -11,7 +11,7 @@ import {
     getThemeFiles,
 } from './obsidian/suggesters/ThemeSuggester';
 import { AdvancedSlidesPlugin } from './advancedSlides-Plugin';
-import { AdvancedSlidesSettings } from './@types';
+import { SlidesExtendedSettings } from './@types';
 
 /** This is because TypeScript's filters are dumb. */
 function isFolder(file: TAbstractFile): file is TFolder {
@@ -19,7 +19,7 @@ function isFolder(file: TAbstractFile): file is TFolder {
 }
 export class AdvancedSlidesSettingTab extends PluginSettingTab {
     plugin: AdvancedSlidesPlugin;
-    newSettings: AdvancedSlidesSettings;
+    newSettings: SlidesExtendedSettings;
 
     constructor(app: App, plugin: AdvancedSlidesPlugin) {
         super(app, plugin);

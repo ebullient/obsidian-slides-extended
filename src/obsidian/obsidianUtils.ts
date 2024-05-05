@@ -1,7 +1,10 @@
 import { readFileSync } from 'fs-extra';
 import { App, FileSystemAdapter, resolveSubpath, TFile } from 'obsidian';
 import path from 'path';
-import { AdvancedSlidesSettings, ImageCollector } from '../@types';
+import {
+    SlidesExtendedSettings as SlidesExtendedSettings,
+    ImageCollector,
+} from '../@types';
 import { DISABLED_IMAGE_COLLECTOR } from '../advancedSlides-constants';
 import { MarkdownProcessor } from './markdownProcessor';
 
@@ -17,7 +20,7 @@ function setImageCollector(newInstance: ImageCollector) {
 export class ObsidianUtils implements ImageCollector {
     private app: App;
     private fileSystem: FileSystemAdapter;
-    private settings: AdvancedSlidesSettings;
+    private settings: SlidesExtendedSettings;
     private readonly processor: MarkdownProcessor;
     private readonly vaultDir;
     private readonly pluginDir;
@@ -32,7 +35,7 @@ export class ObsidianUtils implements ImageCollector {
 
     private yamlRegex = /^---.*?---\n(.*?)($|---)/s;
 
-    constructor(app: App, settings: AdvancedSlidesSettings) {
+    constructor(app: App, settings: SlidesExtendedSettings) {
         this.app = app;
         if (!(this.app.vault.adapter instanceof FileSystemAdapter)) {
             throw new Error('Slides Extended is only supported on the desktop');
@@ -112,7 +115,7 @@ export class ObsidianUtils implements ImageCollector {
         return this.highlightSearchPath;
     }
 
-    getSettings(): AdvancedSlidesSettings {
+    getSettings(): SlidesExtendedSettings {
         return this.settings;
     }
 
