@@ -7,7 +7,7 @@ import { RevealExporter } from './revealExporter';
 import { YamlParser } from '../yaml/yamlParser';
 import { glob } from 'glob';
 import { md } from './markdown';
-import { readFile } from 'fs-extra';
+import { exists, readFile } from 'fs-extra';
 import { has, isEmpty } from '../util';
 import { DEFAULTS } from '../advancedSlides-constants';
 import { QueryString } from '../@types';
@@ -128,7 +128,7 @@ export class RevealRenderer {
             revealOptionsStr: JSON.stringify(revealOptions),
         });
 
-        const template = await this.getTemplate(renderEmbedded);
+        const template = await this.getPageTemplate(renderEmbedded);
         return Mustache.render(template, context);
     }
 
@@ -178,11 +178,21 @@ export class RevealRenderer {
             .replace(this.utils.vaultDirectory, '');
     }
 
-    private async getTemplate(embed = false) {
-        const relativePath = embed ? 'template/embed.html' : DEFAULTS.template;
-        const templateFile = join(this.utils.pluginDirectory, relativePath);
+    private async getPageTemplate(embed = false) {
+        const relativePath = embed ? 'embed.html' : DEFAULTS.template;
 
-        return (await readFile(templateFile.toString())).toString();
+        const searchPath = this.utils.getHtmlTemplateSearchPath();
+        for (const dir of searchPath) {
+            const templateFile = join(dir, relativePath);
+            if (await exists(templateFile)) {
+                return (await readFile(templateFile.toString())).toString();
+            }
+        }
+
+        console.error(
+            `Template file ${relativePath} not found in search path: ${searchPath}.`,
+        );
+        return '';
     }
 
     private slidify(markdown: string, slidifyOptions: unknown) {

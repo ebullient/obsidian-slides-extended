@@ -29,6 +29,7 @@ export class ObsidianUtils implements ImageCollector {
     private readonly cssSearchPath;
     private readonly highlightSearchPath;
     private readonly themeSearchPath;
+    private readonly htmlTemplateSearchPath;
 
     private images = new Set<string>();
     private isCollecting = false;
@@ -65,6 +66,7 @@ export class ObsidianUtils implements ImageCollector {
             path.join(this.pluginDir, 'css'), // plugin layouts
             path.join(this.distDir, 'theme'), // reveal.js themes
         ];
+        this.htmlTemplateSearchPath = [path.join(this.pluginDir, 'template')];
 
         if (this.settings.themeDirectory) {
             const vaultThemeDir = path.join(
@@ -74,6 +76,7 @@ export class ObsidianUtils implements ImageCollector {
             this.cssSearchPath.unshift(vaultThemeDir);
             this.highlightSearchPath.unshift(vaultThemeDir);
             this.themeSearchPath.unshift(vaultThemeDir);
+            this.htmlTemplateSearchPath.unshift(vaultThemeDir + '/html');
         }
 
         setImageCollector(this);
@@ -110,9 +113,11 @@ export class ObsidianUtils implements ImageCollector {
     getThemeSearchPath(): string[] {
         return this.themeSearchPath;
     }
-
     getHighlightSearchPath(): string[] {
         return this.highlightSearchPath;
+    }
+    getHtmlTemplateSearchPath(): string[] {
+        return this.htmlTemplateSearchPath;
     }
 
     getSettings(): SlidesExtendedSettings {

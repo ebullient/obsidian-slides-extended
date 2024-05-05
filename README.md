@@ -16,7 +16,7 @@ Slides Extended is the perfect slide deck extension for [Obsidian](https://obsid
 - Themes allow you to change the appearance of your slides
 - Annotations allow you to change the style of your slides
 - Export slides as PDF Documents or as HTML Presentations
-- **Full support of the Obsidian Markdown Syntax**
+- **Support for most of the Obsidian Markdown Syntax**
 
 ## Installation
 

@@ -44,7 +44,7 @@ export const DEFAULTS: Options = {
     remoteCSS: '',
     separator: '\r?\n---\r?\n',
     showGrid: false,
-    template: 'template/reveal.html',
+    template: 'reveal.html',
     theme: 'black',
     timeForPresentation: 120,
     title: '',
