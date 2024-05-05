@@ -15,7 +15,8 @@ export class TemplateProcessor {
 
     private slideCommentRegex = /<!--\s*(?:\.)?slide.*-->/;
 
-    private optionalRegex = /<%\?.*%>/g;
+    private variableRegex = /<%\??(.*?)%>/g;
+    private optionalRegex = /<%\?.*?%>/g;
 
     private utils: ObsidianUtils;
     private parser = new CommentParser();
@@ -107,7 +108,7 @@ export class TemplateProcessor {
                                     '',
                                 );
                                 md = md.trim();
-                                md = this.computeVariables(md);
+                                md = this.computeVariables(md, options);
                                 if (notes.length > 0) {
                                     md += '\n\n' + notes;
                                 }
@@ -162,7 +163,7 @@ export class TemplateProcessor {
         }
     }
 
-    computeVariables(slide: string): string {
+    computeVariables(slide: string, options: Options): string {
         let result = slide;
         this.propertyRegex.lastIndex = 0;
 
@@ -192,6 +193,15 @@ export class TemplateProcessor {
             result = result.replaceAll(match, '');
         }
         result = this.footnoteProcessor.transformFootNotes(result);
+
+        while ((m = this.variableRegex.exec(result)) !== null) {
+            const key = m[1].trim();
+            const optionsAny = options as any;
+            if (optionsAny[key] != null) {
+                result = result.replaceAll(m[0], optionsAny[key] + '');
+            }
+        }
+
         //Remove optional template variables
         while ((m = this.optionalRegex.exec(result)) !== null) {
             if (m.index === this.optionalRegex.lastIndex) {

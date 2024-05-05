@@ -98,3 +98,30 @@ test('Template with variable set', () => {
     const result = JSON.stringify(sut.process(markdown, options));
     return expect(result).toMatchSnapshot();
 });
+
+test('Template with variable in frontmatter', () => {
+
+    when(MockedObsidianUtils.parseFile('template.md', null)).thenCall(arg => {
+        return `
+    <% content %>
+    # After<grid drag="100 6" drop="bottom">
+    <% footer %>
+    </grid>
+    `;
+    });
+
+    const input = `---
+footer: "### And then..."
+---
+
+<!-- slide template="[[template]]" -->
+
+# MyContent
+`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
+});
