@@ -1,4 +1,5 @@
-# Obsidian Slides Extended
+# Slides Extended (for Obsidian)
+
 ![GitHub all releases](https://img.shields.io/github/downloads/ebullient/obsidian-slides-extended/total?color=success)
 
 🚧 Fork in progress, there will be some dust 🚧
@@ -20,7 +21,15 @@ Slides Extended is the perfect slide deck extension for [Obsidian](https://obsid
 
 ## Installation
 
-Since Obsidian Slides Extended is not yet an official community plugin, it requires manual installation or installation using BRAT (Bundled Resources Action Tools). Here's how you can do it:
+Slides Extended is an official community plugin. Here's how you can install it:
+
+1. Open Obsidian and go to `Settings`.
+2. Click on `Community Plugins`.
+3. Make sure "Safe Mode" is turned off.
+4. Click on `Browse`.
+5. Search for `Slides Extended`.
+6. Click `Install` on the `Slides Extended` plugin.
+7. After installation, make sure to enable the plugin by toggling it on in the `Installed Plugins` section.
 
 ### Manual Installation
 
@@ -40,8 +49,6 @@ If you prefer to use BRAT for plugin management:
 2. In Obsidian, open the command palette (`Ctrl/Cmd + P`) and search for "BRAT: Add a Beta Plugin".
 3. Enter `ebullient/obsidian-slides-extended` as the GitHub repository.
 4. BRAT will handle the installation. Once complete, restart or reload your vault for changes to take effect.
-
-Remember, as this plugin forks an existing project, there may be changes or improvements over time. Keep an eye on the [GitHub repository](https://github.com/ebullient/obsidian-slides-extended) for updates and information on future official community plugin status.
 
 ## Acknowledgements
 
