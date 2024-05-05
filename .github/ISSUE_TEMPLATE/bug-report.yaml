@@ -1,0 +1,111 @@
+name: Bug Report
+description: File a bug report
+title: "🐛 "
+labels: ["type: bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Before you start
+
+        - Check for plugin updates and make sure you're running the latest version of the plugin.
+        - Restart Obsidian and see if the issue persists.
+        - Look at existing bug reports to see if your issue has already been reported.
+        - Is this actually a bug? If this is something that you wish the plugin could do, please submit a feature request instead.
+
+  - type: textarea
+    id: input-data
+    attributes:
+      label: Input data (markdown source)
+      description: |
+        Include a sample markdown snippet that triggers the issue. Use backticks to format the code snippet.
+
+        - ⚠️ Don't include personal or sensitive information
+        - 🚀 Use the Obsidian sandbox vault + this plugin and that snippet to ensure the issue is reproducible.
+      placeholder: |
+        I am trying to use this markdown to ...
+
+        ```markdown
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Current behaviour
+      description: |
+        Describe what actually happened.
+
+        Screenshots or short recordings help, especially if the issue is visual.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Which exact steps can a developer take to reproduce the issue?
+        The more detail you provide, the easier it will be to narrow down and fix the bug.
+      placeholder: |
+        1. Launch Obsidian Sandbox via the `Open Sandbox Vault` command.
+        2. Install the plugin.
+        3. Create a note with the above markdown snippet
+        4. ...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: operating-systems
+    attributes:
+      label: Which Operating Systems are you using?
+      description: You may select more than one.
+      options:
+        - label: Android
+        - label: iPhone/iPad
+        - label: Linux
+        - label: macOS
+        - label: Windows
+
+  - type: input
+    id: obsidian-version
+    attributes:
+      label: Obsidian Version
+      description: Which Obsidian version are you using?
+      placeholder: 0.15.9
+    validations:
+      required: true
+
+  - type: input
+    id: tasks-version
+    attributes:
+      label: Tasks Plugin Version
+      description: Which plugin version are you using?
+      placeholder: 1.11.0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: other-plugins-disabled
+    attributes:
+      label: Checks
+      description: Please confirm
+      options:
+        - label: I have tried it in the sandbox vault with only this plugin enabled
+          required: false
+
+  - type: textarea
+    id: possible-solution
+    attributes:
+      label: Possible solution
+      description: |
+        Not obligatory, but please suggest a fix or reason for the bug, if you have an idea.
