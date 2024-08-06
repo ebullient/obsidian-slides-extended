@@ -5,7 +5,7 @@ import {
     SlidesExtendedSettings as SlidesExtendedSettings,
     ImageCollector,
 } from '../@types';
-import { DISABLED_IMAGE_COLLECTOR } from '../advancedSlides-constants';
+import { DISABLED_IMAGE_COLLECTOR } from '../slidesExtended-constants';
 import { MarkdownProcessor } from './markdownProcessor';
 
 let instance: ImageCollector = DISABLED_IMAGE_COLLECTOR;

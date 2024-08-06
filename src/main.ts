@@ -1,3 +1,3 @@
-import { AdvancedSlidesPlugin } from './advancedSlides-Plugin';
+import { SlidesExtendedPlugin } from './slidesExtended-Plugin';
 
-export default AdvancedSlidesPlugin;
+export default SlidesExtendedPlugin;

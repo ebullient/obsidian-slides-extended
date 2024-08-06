@@ -10,18 +10,18 @@ import {
     ThemeInputSuggest,
     getThemeFiles,
 } from './obsidian/suggesters/ThemeSuggester';
-import { AdvancedSlidesPlugin } from './advancedSlides-Plugin';
+import { SlidesExtendedPlugin } from './slidesExtended-Plugin';
 import { SlidesExtendedSettings } from './@types';
 
 /** This is because TypeScript's filters are dumb. */
 function isFolder(file: TAbstractFile): file is TFolder {
     return file instanceof TFolder;
 }
-export class AdvancedSlidesSettingTab extends PluginSettingTab {
-    plugin: AdvancedSlidesPlugin;
+export class SlidesExtendedSettingTab extends PluginSettingTab {
+    plugin: SlidesExtendedPlugin;
     newSettings: SlidesExtendedSettings;
 
-    constructor(app: App, plugin: AdvancedSlidesPlugin) {
+    constructor(app: App, plugin: SlidesExtendedPlugin) {
         super(app, plugin);
         this.plugin = plugin;
     }

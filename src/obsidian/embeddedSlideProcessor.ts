@@ -1,10 +1,10 @@
-import { AdvancedSlidesPlugin } from '../advancedSlides-Plugin';
+import { SlidesExtendedPlugin } from '../slidesExtended-Plugin';
 import { EmbeddedSlideParameters } from '../@types';
 import { load } from 'js-yaml';
 
 export class EmbeddedSlideProcessor {
-    private plugin: AdvancedSlidesPlugin;
-    constructor(plugin: AdvancedSlidesPlugin) {
+    private plugin: SlidesExtendedPlugin;
+    constructor(plugin: SlidesExtendedPlugin) {
         this.plugin = plugin;
     }
 

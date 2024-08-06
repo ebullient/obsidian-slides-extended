@@ -1,15 +1,15 @@
-import { existsSync, mkdir, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
-import { AdvancedSlidesPlugin } from './advancedSlides-Plugin';
+import { SlidesExtendedPlugin } from './slidesExtended-Plugin';
 import JSZip from 'jszip';
-import { requestUrl, RequestUrlResponse } from 'obsidian';
+import { requestUrl } from 'obsidian';
 
-export class AdvancedSlidesDistribution {
-    plugin: AdvancedSlidesPlugin;
+export class SlidesExtendedDistribution {
+    plugin: SlidesExtendedPlugin;
     pluginDirectory: string;
     distDirectory: string;
 
-    constructor(plugin: AdvancedSlidesPlugin) {
+    constructor(plugin: SlidesExtendedPlugin) {
         this.plugin = plugin;
         this.pluginDirectory = this.plugin.obsidianUtils.pluginDirectory;
         this.distDirectory = this.plugin.obsidianUtils.distDirectory;

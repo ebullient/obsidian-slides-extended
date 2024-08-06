@@ -6,7 +6,7 @@ import {
     EditorSuggestTriggerInfo,
     TFile,
 } from 'obsidian';
-import { dict } from './dict/AdvancedSlidesDictionary';
+import { dict } from './dict/SlidesExtendedDictionary';
 import { byInput, DictionaryEntry } from './dict/Dictionary';
 
 type Parameters = {
@@ -172,7 +172,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
                     `${element.value}`,
                     this.context.start,
                     this.context.end,
-                    'advancedSlides',
+                    'slidesExtended',
                 );
                 if (element.offset) {
                     this.context.editor.setCursor(
@@ -186,7 +186,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
                 `${element.value}`,
                 this.context.start,
                 this.context.end,
-                'advancedSlides',
+                'slidesExtended',
             );
             if (element.offset) {
                 this.context.editor.setCursor(

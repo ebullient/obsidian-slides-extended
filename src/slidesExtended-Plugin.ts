@@ -12,12 +12,12 @@ import {
     DEFAULT_SETTINGS,
     ICON_DATA,
     REFRESH_ICON,
-} from './advancedSlides-constants';
-import { AdvancedSlidesSettingTab } from './advancedSlides-SettingTab';
+} from './slidesExtended-constants';
+import { SlidesExtendedSettingTab } from './slidesExtended-SettingTab';
 import { EmbeddedSlideProcessor } from './obsidian/embeddedSlideProcessor';
-import { AdvancedSlidesDistribution } from './advancedSlides-Distribution';
+import { SlidesExtendedDistribution } from './slidesExtended-Distribution';
 
-export class AdvancedSlidesPlugin extends Plugin {
+export class SlidesExtendedPlugin extends Plugin {
     settings: SlidesExtendedSettings;
     obsidianUtils: ObsidianUtils;
 
@@ -31,7 +31,7 @@ export class AdvancedSlidesPlugin extends Plugin {
         this.obsidianUtils = new ObsidianUtils(this.app, this.settings);
 
         const version = this.manifest.version;
-        const distribution = new AdvancedSlidesDistribution(this);
+        const distribution = new SlidesExtendedDistribution(this);
 
         console.log(
             'Slides Extended v%s, needsReload=%s',
@@ -98,7 +98,7 @@ export class AdvancedSlidesPlugin extends Plugin {
                 callback: async () => this.revealServer.start(),
             });
 
-            this.addSettingTab(new AdvancedSlidesSettingTab(this.app, this));
+            this.addSettingTab(new SlidesExtendedSettingTab(this.app, this));
             this.app.workspace.onLayoutReady(this.layoutReady);
 
             this.slideProcessor = new EmbeddedSlideProcessor(this);

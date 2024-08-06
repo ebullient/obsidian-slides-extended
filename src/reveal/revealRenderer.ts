@@ -9,7 +9,7 @@ import { glob } from 'glob';
 import { md } from './markdown';
 import { exists, readFile } from 'fs-extra';
 import { has, isEmpty } from '../util';
-import { DEFAULTS } from '../advancedSlides-constants';
+import { DEFAULTS } from '../slidesExtended-constants';
 import { QueryString } from '../@types';
 
 export class RevealRenderer {
