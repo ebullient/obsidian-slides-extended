@@ -86,9 +86,9 @@ body:
       required: true
 
   - type: input
-    id: tasks-version
+    id: plugin-version
     attributes:
-      label: Tasks Plugin Version
+      label: Slides Extended Plugin Version
       description: Which plugin version are you using?
       placeholder: 1.11.0
     validations:
