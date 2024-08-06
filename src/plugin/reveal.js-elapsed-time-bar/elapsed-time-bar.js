@@ -1,5 +1,27 @@
+
+window.ElapsedTimeBar = window.ElapsedTimeBar || {
+    id: 'ElapsedTimeBar',
+    start: function(allottedTime, elapsedTime) {
+        ElapsedTimeBar.start(allottedTime, elapsedTime);
+    },
+    reset: function() {
+        ElapsedTimeBar.reset();
+    },
+    pause: function() {
+        ElapsedTimeBar.pause();
+    },
+    resume: function() {
+        ElapsedTimeBar.resume();
+    }
+};
+if (Reveal.isReady()) {
+    ElapsedTimeBar.handleReady();
+} else {
+    Reveal.addEventListener('ready', () => ElapsedTimeBar.handleReady());
+}
+
 const ElapsedTimeBar = {
-    id: 'elapsed-time-bar',
+    id: 'ElapsedTimeBar',
 
     // default value
     barColor: 'rgb(200,0,0)',
@@ -138,9 +160,3 @@ const ElapsedTimeBar = {
         this.loop();
     }
 };
-
-if (Reveal.isReady()) {
-    ElapsedTimeBar.handleReady();
-} else {
-    Reveal.addEventListener('ready', () => ElapsedTimeBar.handleReady());
-}
