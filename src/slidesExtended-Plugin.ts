@@ -2,12 +2,12 @@ import { addIcon, Plugin, TAbstractFile } from 'obsidian';
 import { SlidesExtendedSettings } from './@types';
 import { RevealServer } from './reveal/revealServer';
 import { ObsidianUtils } from './obsidian/obsidianUtils';
-import { AutoCompleteSuggest } from './obsidian/suggesters/AutoCompleteSuggester';
+// import { AutoCompleteSuggest } from './obsidian/suggesters/AutoCompleteSuggester';
 import {
     REVEAL_PREVIEW_VIEW,
     RevealPreviewView,
 } from './reveal/revealPreviewView';
-import { LineSelectionListener } from './obsidian/suggesters/lineSelectionListener';
+// import { LineSelectionListener } from './obsidian/suggesters/lineSelectionListener';
 import {
     DEFAULT_SETTINGS,
     ICON_DATA,
@@ -22,7 +22,7 @@ export class SlidesExtendedPlugin extends Plugin {
     obsidianUtils: ObsidianUtils;
 
     private revealServer: RevealServer;
-    private autoCompleteSuggester: AutoCompleteSuggest;
+    // private autoCompleteSuggester: AutoCompleteSuggest;
     private target: TAbstractFile;
     private slideProcessor: EmbeddedSlideProcessor;
 
@@ -59,9 +59,9 @@ export class SlidesExtendedPlugin extends Plugin {
             this.registerEvent(
                 this.app.vault.on('modify', this.onChange.bind(this)),
             );
-            this.registerEditorSuggest(
-                new LineSelectionListener(this.app, this),
-            );
+            // this.registerEditorSuggest(
+            //     new LineSelectionListener(this.app, this),
+            // );
 
             addIcon('slides', ICON_DATA);
             addIcon('refresh', REFRESH_ICON);
@@ -115,14 +115,14 @@ export class SlidesExtendedPlugin extends Plugin {
     }
 
     layoutReady = async () => {
-        this.autoCompleteSuggester = new AutoCompleteSuggest(this.app);
+        // this.autoCompleteSuggester = new AutoCompleteSuggest(this.app);
 
-        if (this.settings.autoComplete == 'always') {
-            this.autoCompleteSuggester.activate();
-        } else {
-            this.autoCompleteSuggester.deactivate();
-        }
-        this.registerEditorSuggest(this.autoCompleteSuggester);
+        // if (this.settings.autoComplete == 'always') {
+        //     this.autoCompleteSuggester.activate();
+        // } else {
+        //     this.autoCompleteSuggester.deactivate();
+        // }
+        // this.registerEditorSuggest(this.autoCompleteSuggester);
 
         await this.initServer();
     };
@@ -156,21 +156,21 @@ export class SlidesExtendedPlugin extends Plugin {
         const instance = this.getViewInstance();
         if (instance) {
             this.app.workspace.detachLeavesOfType(REVEAL_PREVIEW_VIEW);
-            if (this.settings.autoComplete == 'inPreview') {
-                this.autoCompleteSuggester.deactivate();
-            }
+            // if (this.settings.autoComplete == 'inPreview') {
+            //     this.autoCompleteSuggester.deactivate();
+            // }
         } else {
-            if (this.settings.autoComplete != 'never') {
-                this.autoCompleteSuggester.activate();
-            }
+            // if (this.settings.autoComplete != 'never') {
+            //     this.autoCompleteSuggester.activate();
+            // }
             await this.showView();
         }
     }
 
     hideView() {
-        if (this.settings.autoComplete == 'inPreview') {
-            this.autoCompleteSuggester.deactivate();
-        }
+        // if (this.settings.autoComplete == 'inPreview') {
+        //     this.autoCompleteSuggester.deactivate();
+        // }
     }
 
     async showView() {
