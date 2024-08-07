@@ -103,18 +103,20 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                 }),
             );
 
-        // new Setting(containerEl)
-        //     .setName('Auto complete')
-        //     .setDesc('Do you want to auto-complete inputs?')
-        //     .addDropdown(cb => {
-        //         cb.addOption('always', 'Always')
-        //             .addOption('inPreview', 'only in slide preview')
-        //             .addOption('never', 'Never')
-        //             .setValue(this.newSettings.autoComplete)
-        //             .onChange(value => {
-        //                 this.newSettings.autoComplete = value;
-        //             });
-        //     });
+        new Setting(containerEl)
+            .setName('Auto complete')
+            .setDesc(
+                'Enable auto-complete inputs. "Always" enables it everywhere, "When slide preview is active" enables it only when the slide preview is active, and "Never" disables it.',
+            )
+            .addDropdown(cb => {
+                cb.addOption('always', 'Always')
+                    .addOption('inPreview', 'When slide preview is active')
+                    .addOption('never', 'Never')
+                    .setValue(this.newSettings.autoComplete)
+                    .onChange(value => {
+                        this.newSettings.autoComplete = value;
+                    });
+            });
 
         new Setting(containerEl)
             .setName('Export directory')
