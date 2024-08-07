@@ -7,7 +7,7 @@ import {
     REVEAL_PREVIEW_VIEW,
     RevealPreviewView,
 } from './reveal/revealPreviewView';
-// import { LineSelectionListener } from './obsidian/suggesters/lineSelectionListener';
+import { LineSelectionListener } from './obsidian/suggesters/lineSelectionListener';
 import {
     DEFAULT_SETTINGS,
     ICON_DATA,
@@ -59,9 +59,9 @@ export class SlidesExtendedPlugin extends Plugin {
             this.registerEvent(
                 this.app.vault.on('modify', this.onChange.bind(this)),
             );
-            // this.registerEditorSuggest(
-            //     new LineSelectionListener(this.app, this),
-            // );
+            this.registerEditorSuggest(
+                new LineSelectionListener(this.app, this),
+            );
 
             addIcon('slides', ICON_DATA);
             addIcon('refresh', REFRESH_ICON);
