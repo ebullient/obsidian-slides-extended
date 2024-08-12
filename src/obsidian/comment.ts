@@ -94,6 +94,13 @@ export class CommentParser {
         return this.parseRegex.test(line);
     }
 
+    replace(line: string, comment: Comment): string {
+        return line.replace(
+            this.readCommentRegex,
+            this.commentToString(comment),
+        );
+    }
+
     private readCommentStringFromLine(line: string): string {
         return this.readCommentRegex.exec(line)?.[0] ?? '';
     }
