@@ -6,11 +6,12 @@ export class ImageProcessor {
     private parser: CommentParser;
 
     private markdownImageRegex =
-        /^[ ]{0,3}!\[([^\]]*)\]\((.*(?:jpg|png|jpeg|gif|bmp|webp|svg)?)\)\s?(<!--.*-->)?/gim;
+        /(!)?\[([^\]]*)\]\((.*(?:jpg|png|jpeg|gif|bmp|webp|svg)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
 
-    private obsidianImageRegex =
-        /!\[\[(.*?(?:jpg|png|jpeg|gif|bmp|webp|svg))\s*\|?\s*([^\]]*)??\]\]\s?(<!--.*-->)?/gi;
-    private obsidianImageReferenceRegex =
+    // post process/htmlify. Find non-embedded markdown image links
+    private quotedMarkdownImageRegex = /"\[.*?\]\((.*?)\)"/gi;
+
+    private wikilinkImageRegex =
         /\[\[(.*?(?:jpg|png|jpeg|webp|gif|bmp|svg))\|?([^\]]*)??\]\]/gi;
 
     constructor(utils: ObsidianUtils) {
@@ -22,60 +23,39 @@ export class ImageProcessor {
         return markdown
             .split('\n')
             .map(line => {
-                // Transform ![[myImage.png]] to ![](myImage.png)
-                if (this.obsidianImageRegex.test(line)) {
-                    return this.transformImageString(line);
-                }
-                // Transform referenced images to absolute paths (ex. in bg annotation)
-                if (this.obsidianImageReferenceRegex.test(line)) {
-                    return this.transformImageReferenceString(line);
+                // Transform [[myImage.png]] to [](myImage.png)
+                if (this.wikilinkImageRegex.test(line)) {
+                    return this.transformImageWikilinkToMarkdown(line);
                 }
                 return line;
             })
             .map(line => {
-                // Transform ![](myImage.png) to html
+                // Transform markdown image reference to html
                 if (this.markdownImageRegex.test(line)) {
                     return this.htmlify(line);
-                } else {
-                    return line;
                 }
+                return line;
             })
             .join('\n');
     }
-    transformImageReferenceString(line: string): string {
+
+    transformImageWikilinkToMarkdown(line: string): string {
         let result = line;
 
         let m;
-        this.obsidianImageReferenceRegex.lastIndex = 0;
+        this.wikilinkImageRegex.lastIndex = 0;
 
-        while ((m = this.obsidianImageReferenceRegex.exec(result)) !== null) {
-            if (m.index === this.obsidianImageReferenceRegex.lastIndex) {
-                this.obsidianImageReferenceRegex.lastIndex++;
+        while ((m = this.wikilinkImageRegex.exec(result)) !== null) {
+            if (m.index === this.wikilinkImageRegex.lastIndex) {
+                this.wikilinkImageRegex.lastIndex++;
             }
 
-            const [match, image] = m;
-            const filePath = this.utils.findFile(image);
-            result = result.replaceAll(match, filePath);
-        }
-
-        return result;
-    }
-
-    private transformImageString(line: string) {
-        let result = '';
-
-        let m;
-        this.obsidianImageRegex.lastIndex = 0;
-
-        while ((m = this.obsidianImageRegex.exec(line)) !== null) {
-            if (m.index === this.obsidianImageRegex.lastIndex) {
-                this.obsidianImageRegex.lastIndex++;
+            const [match, image, altText] = m;
+            let alias = altText ?? '';
+            if (!altText?.includes('|') && /\d+(x\d+)?/.test(altText)) {
+                alias = `|${alias}`;
             }
-            const [, image, ext, comment] = m;
-
-            const filePath = this.utils.findFile(image);
-            const commentAsString = this.buildComment(ext, comment) ?? '';
-            result = result + `\n![](${filePath}) ${commentAsString}`;
+            result = result.replace(match, `[${alias}](${image})`);
         }
         return result;
     }
@@ -103,6 +83,7 @@ export class ImageProcessor {
 
     private htmlify(line: string) {
         let result = '';
+        let lastIndex = 0;
 
         let m;
         this.markdownImageRegex.lastIndex = 0;
@@ -111,79 +92,121 @@ export class ImageProcessor {
             if (m.index === this.markdownImageRegex.lastIndex) {
                 this.markdownImageRegex.lastIndex++;
             }
+
             // eslint-disable-next-line prefer-const
-            let [, alt, filePath, commentString] = m;
+            let [match, embed, alt, imagePath, commentString] = m;
 
-            if (alt && alt.includes('|')) {
-                commentString =
-                    this.buildComment(alt.split('|')[1], commentString) ?? '';
-            }
-
-            const comment =
-                this.parser.parseLine(commentString) ??
-                this.parser.buildComment('element');
-
+            let filePath = imagePath;
             const isIcon = this.isIcon(filePath);
+            const isImage = this.isImage(filePath);
+            if (filePath.startsWith('file:/')) {
+                filePath = this.transformAbsoluteFilePath(filePath);
+            } else if (!isIcon && !filePath.match(/^.*?:\/\//)) {
+                filePath = this.utils.findFile(imagePath);
 
-            if (result.length > 0) {
-                result = result + '\n';
-            }
-
-            if (isIcon) {
-                result =
-                    result +
-                    `<i class="${filePath}" ${this.parser.buildAttributes(comment)}></i>`;
-            } else {
                 if (this.utils.shouldCollect()) {
                     this.utils.addImage(filePath);
                 }
-
-                if (filePath.startsWith('file:/')) {
-                    filePath = this.transformAbsoluteFilePath(filePath);
-                }
-
-                if (
-                    comment.hasStyle('width') &&
-                    !comment.hasStyle('object-fit')
-                ) {
-                    comment.addStyle('object-fit', 'fill');
-                }
-
-                if (!comment.hasStyle('align-self')) {
-                    if (comment.hasAttribute('align')) {
-                        const align = comment.getAttribute('align');
-
-                        switch (align) {
-                            case 'left':
-                                comment.addStyle('align-self', 'start');
-                                break;
-                            case 'right':
-                                comment.addStyle('align-self', 'end');
-                                break;
-                            case 'center':
-                                comment.addStyle('align-self', 'center');
-                                break;
-                            case 'stretch':
-                                comment.addStyle('align-self', 'stretch');
-                                comment.addStyle('object-fit', 'cover');
-                                comment.addStyle('height', '100%');
-                                comment.addStyle('width', '100%');
-                                break;
-                            default:
-                                break;
-                        }
-                        comment.deleteAttribute('align');
-                    }
-                }
-
-                if (!comment.hasStyle('object-fit')) {
-                    comment.addStyle('object-fit', 'scale-down');
-                }
-                const imageHtml = `<img src="${filePath}" alt="${alt}" ${this.parser.buildAttributes(comment)}>`;
-                result = result + imageHtml;
             }
+
+            if (line.match(/^(?:[ ]{4,}|\t)!\[/)) {
+                // leading indent, leave as-is
+                embed = ' ';
+            }
+
+            console.debug('htmlify', filePath, isIcon, isImage, embed);
+            let update = '';
+            if (embed === '!') {
+                update = this.createImageElement(filePath, alt, commentString);
+            } else {
+                update = this.updateMarkdownLink(
+                    line,
+                    match,
+                    imagePath,
+                    filePath,
+                );
+            }
+
+            // Append the text before the match and the updated match
+            result += line.substring(lastIndex, m.index) + update;
+            lastIndex = this.markdownImageRegex.lastIndex;
         }
-        return result + '\n';
+        return result + line.substring(lastIndex);
+    }
+
+    private updateMarkdownLink(
+        line: string,
+        match: string,
+        imagePath: string,
+        filePath: string,
+    ): string {
+        let updated = match.replace(imagePath, filePath);
+        if (line.indexOf(`"${match}"`) >= 0) {
+            // if the match is within quotes, return the filepath alone
+            return filePath;
+        }
+        return updated;
+    }
+
+    private createImageElement(
+        filePath: string,
+        alt: string,
+        commentString: string,
+    ): string {
+        let result = '';
+        if (alt && alt.includes('|')) {
+            commentString =
+                this.buildComment(alt.split('|')[1], commentString) ?? '';
+            alt = alt.split('|')[0];
+        }
+
+        const comment =
+            this.parser.parseLine(commentString) ??
+            this.parser.buildComment('element');
+
+        const isIcon = this.isIcon(filePath);
+
+        if (isIcon) {
+            result = `<i class="${filePath}" ${this.parser.buildAttributes(comment)}></i>\n`;
+        } else {
+            if (comment.hasStyle('width') && !comment.hasStyle('object-fit')) {
+                comment.addStyle('object-fit', 'fill');
+            }
+
+            if (!comment.hasStyle('align-self')) {
+                if (comment.hasAttribute('align')) {
+                    const align = comment.getAttribute('align');
+
+                    switch (align) {
+                        case 'left':
+                            comment.addStyle('align-self', 'start');
+                            break;
+                        case 'right':
+                            comment.addStyle('align-self', 'end');
+                            break;
+                        case 'center':
+                            comment.addStyle('align-self', 'center');
+                            break;
+                        case 'stretch':
+                            comment.addStyle('align-self', 'stretch');
+                            comment.addStyle('object-fit', 'cover');
+                            comment.addStyle('height', '100%');
+                            comment.addStyle('width', '100%');
+                            break;
+                        default:
+                            break;
+                    }
+                    comment.deleteAttribute('align');
+                }
+            }
+
+            if (!comment.hasStyle('object-fit')) {
+                comment.addStyle('object-fit', 'scale-down');
+            }
+            const imageHtml = `<img src="${filePath}" alt="${alt}" ${this.parser.buildAttributes(comment)}>\n`;
+            result = imageHtml;
+        }
+        return result;
     }
 
     private isIcon(path: string) {
@@ -193,6 +216,18 @@ export class ImageProcessor {
             path.startsWith('fal') ||
             path.startsWith('fad') ||
             path.startsWith('fab')
+        );
+    }
+
+    private isImage(path: string) {
+        return (
+            path.endsWith('bmp') ||
+            path.endsWith('gif') ||
+            path.endsWith('jpeg') ||
+            path.endsWith('jpg') ||
+            path.endsWith('png') ||
+            path.endsWith('svg') ||
+            path.endsWith('webp')
         );
     }
 
