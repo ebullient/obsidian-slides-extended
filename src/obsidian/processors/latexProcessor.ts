@@ -2,6 +2,23 @@ export class LatexProcessor {
     private singleLine = /\$(.*?)\$/g;
 
     process(markdown: string) {
+		return this.skipCodeBlocks(markdown);
+	}
+
+	skipCodeBlocks(markdown: string): string {
+		const regex = /(?<=(^|\r|\n|\r\n))`{3,}.*?(\r|\n|\r\n)[\s\S]*?(\r|\n|\r\n)`{3,}(\r|\n|\r\n)/;
+		const match = regex.exec(markdown);
+
+		if (match) {
+			return this.transformLatex(markdown.substring(0, match['index'])) +
+				match[0] +
+				this.skipCodeBlocks(markdown.substring(match['index'] + match[0].length));
+		} else {
+			return this.transformLatex(markdown);
+		}
+	}
+
+	private transformLatex(markdown: string) {
         const withoutEscapedCharaters = this.markEscapedCharacters(markdown);
         const processedMultiline = this.processMultiLine(
             withoutEscapedCharaters,
