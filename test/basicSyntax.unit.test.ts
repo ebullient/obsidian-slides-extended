@@ -176,11 +176,11 @@ This [[Internal link|Link]] will use its alias for displaying
 
 test('Basic Markdown Syntax > Embeds', () => {
 
-    when(MockedObsidianUtils.parseFile('Obsidian.md', 'Link')).thenCall(arg => {
+    when(MockedObsidianUtils.parseFile('Obsidian Notes.md', 'Link')).thenCall(arg => {
         return 'Link to Obsidian Homepage: http://obsidian.md';
     });
 
-    when(MockedObsidianUtils.parseFile('Obsidian.md', null)).thenCall(arg => {
+    when(MockedObsidianUtils.parseFile('Obsidian Notes.md', null)).thenCall(arg => {
         return `# Notes about Obsidian
 A knowledge base that works on local Markdown files
 
@@ -188,11 +188,19 @@ A knowledge base that works on local Markdown files
 Link to Obsidian Homepage: http://obsidian.md`;
     });
 
-    const input = `![[Obsidian]]
+    const input = `![[Obsidian Notes|Title]]
 
 ---
 
-![[Obsidian#Link]]
+![[Obsidian Notes#Link]]
+
+---
+
+![Title](Obsidian%20Notes.md)
+
+---
+
+![](Obsidian%20Notes.md#Link)
 `;
 
     const { options, markdown } = prepare(input);
