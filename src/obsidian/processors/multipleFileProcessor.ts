@@ -41,8 +41,7 @@ export class MultipleFileProcessor {
                 header = split[1];
             }
 
-            if ( isImage(link) || isIcon(link) || isUrl(link)
-            ) {
+            if (isImage(link) || isIcon(link) || isUrl(link)) {
                 return matched;
             }
 

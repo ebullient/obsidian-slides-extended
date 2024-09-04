@@ -18,6 +18,9 @@ export class RevealExporter {
         const folderName = path.basename(filePath).replaceAll(ext, '');
         const folderDir = path.join(this.exportDirectory, folderName);
         const sourceDir = path.dirname(filePath);
+        const vaultDir = this.vaultDirectory.replace(/\/$/, '');
+
+        console.debug('export', sourceDir, vaultDir, folderDir);
 
         await emptyDir(folderDir);
         await writeFile(path.join(folderDir, 'index.html'), html);
@@ -41,13 +44,14 @@ export class RevealExporter {
             if (img.startsWith('http')) {
                 continue;
             }
-            let imgPath = path.join(this.vaultDirectory, img);
-            if (sourceDir != this.vaultDirectory) {
+            let imgPath = path.join(vaultDir, img);
+            if (sourceDir !== vaultDir) {
                 const relative = path.join(sourceDir, img);
                 if (existsSync(relative)) {
                     imgPath = relative;
                 }
             }
+            console.debug('img', img, imgPath, sourceDir != vaultDir);
             await copy(imgPath, path.join(folderDir, img));
         }
 
