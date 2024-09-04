@@ -97,8 +97,17 @@ export class ImageProcessor {
             let [match, embed, alt, imagePath, commentString] = m;
 
             let filePath = imagePath;
-            const isIcon = this.isIcon(filePath);
-            const isImage = this.isImage(filePath);
+            const isIcon = ObsidianUtils.isIcon(filePath);
+            const isImage =
+                filePath.startsWith('http') || ObsidianUtils.isImage(filePath);
+
+            if (!isIcon && !isImage) {
+                // This is not an icon or an image. Leave it.
+                result += line.substring(lastIndex, m.index) + match;
+                lastIndex = this.markdownImageRegex.lastIndex;
+                continue;
+            }
+
             if (filePath.startsWith('file:/')) {
                 filePath = this.transformAbsoluteFilePath(filePath);
             } else if (!isIcon && !filePath.match(/^.*?:\/\//)) {
@@ -114,7 +123,6 @@ export class ImageProcessor {
                 embed = ' ';
             }
 
-            console.debug('htmlify', filePath, isIcon, isImage, embed);
             let update = '';
             if (embed === '!') {
                 update = this.createImageElement(filePath, alt, commentString);
@@ -164,7 +172,7 @@ export class ImageProcessor {
             this.parser.parseLine(commentString) ??
             this.parser.buildComment('element');
 
-        const isIcon = this.isIcon(filePath);
+        const isIcon = ObsidianUtils.isIcon(filePath);
 
         if (isIcon) {
             result = `<i class="${filePath}" ${this.parser.buildAttributes(comment)}></i>\n`;
@@ -207,28 +215,6 @@ export class ImageProcessor {
             result = imageHtml;
         }
         return result;
-    }
-
-    private isIcon(path: string) {
-        return (
-            path.startsWith('fas') ||
-            path.startsWith('far') ||
-            path.startsWith('fal') ||
-            path.startsWith('fad') ||
-            path.startsWith('fab')
-        );
-    }
-
-    private isImage(path: string) {
-        return (
-            path.endsWith('bmp') ||
-            path.endsWith('gif') ||
-            path.endsWith('jpeg') ||
-            path.endsWith('jpg') ||
-            path.endsWith('png') ||
-            path.endsWith('svg') ||
-            path.endsWith('webp')
-        );
     }
 
     private transformAbsoluteFilePath(path: string) {

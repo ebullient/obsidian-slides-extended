@@ -3,10 +3,9 @@ import { ObsidianUtils } from '../obsidianUtils';
 export class MultipleFileProcessor {
     private utils: ObsidianUtils;
 
-    private regex = /!\[\[(.*)\]\]/gm;
-    private obsidianImageRegex =
-        /!\[\[(.*(?:jpg|png|jpeg|gif|bmp|webp|svg))\s*\|?\s*([^\]]*)??\]\]\s?(<!--.*-->)?/i;
+    private regex = /!\[\[(.*?)(\|[^\]]*?)?\]\]/g;
     private excalidrawRegex = /(.*\.excalidraw)/i;
+    private markdownRegex = /!\[.*?\]\((.*?\.md)\)/g;
 
     constructor(utils: ObsidianUtils) {
         this.utils = utils;
@@ -16,62 +15,65 @@ export class MultipleFileProcessor {
         return markdown
             .split('\n')
             .map((line, index) => {
-                if (
-                    this.regex.test(line) &&
-                    !this.obsidianImageRegex.test(line)
-                ) {
-                    return this.transformLine(line);
+                if (this.regex.test(line)) {
+                    return this.transformContent(line, this.regex);
+                }
+                if (this.markdownRegex.test(line)) {
+                    return this.transformContent(line, this.markdownRegex);
                 }
                 return line;
             })
             .join('\n');
     }
 
-    private transformLine(line: string) {
+    private transformContent(line: string, match: RegExp) {
         let comment = '';
         if (line.includes('<!--')) {
             comment = line.substring(line.indexOf('<!--'));
         }
 
-        let link: string = line
-            .replace('![[', '')
-            .replace(']]', '')
-            .replace(comment, '')
-            .trim();
-        let header: string = null;
+        return line.replaceAll(match, (matched, link) => {
+            let header: string = null;
+            if (link.includes('#')) {
+                const split = link.split('#');
+                link = split[0];
+                header = split[1];
+            }
 
-        if (link.includes('#')) {
-            const split = link.split('#');
-            link = split[0];
-            header = split[1];
-        }
+            if (
+                ObsidianUtils.isImage(link) ||
+                ObsidianUtils.isIcon(link) ||
+                ObsidianUtils.isUrl(link)
+            ) {
+                return matched;
+            }
 
-        const fileName = this.getMarkdownFile(link);
+            const fileName = this.getMarkdownFile(link.replace('%20', ' '));
 
-        if (fileName === null) {
-            return line;
-        }
+            if (fileName === null) {
+                return matched;
+            }
 
-        const content = this.utils.parseFile(fileName, header);
+            const content = this.utils.parseFile(fileName, header);
+            if (!content) {
+                return matched;
+            }
 
-        if (content) {
             if (comment.length > 0) {
                 return this.process(content + comment);
             } else {
                 return this.process(content);
             }
-        } else {
-            return line;
-        }
+        });
     }
 
-    private getMarkdownFile(line: string) {
-        if (this.excalidrawRegex.test(line)) {
+    private getMarkdownFile(link: string) {
+        if (this.excalidrawRegex.test(link)) {
             return null; // Do not import excalidraw files
         }
 
-        let file = line;
-        if (!line.toLowerCase().endsWith('.md')) {
+        let file = link;
+        if (!link.toLowerCase().endsWith('.md')) {
             file = file + '.md';
         }
         return file;
