@@ -74,7 +74,7 @@ The above does not show backticks
 test('Basic Markdown Syntax > Math with Code Blocks', () => {
 	const input = `$$\begin{vmatrix}a & b\\
 c & d
-end{vmatrix}=ad-bc$$
+\end{vmatrix}=ad-bc$$
 
 \`\`\`dockerfile
 USER $USER_NAME:$USER_NAME
