@@ -1,3 +1,4 @@
+import { isIcon, isImage, isUrl } from 'src/util';
 import { ObsidianUtils } from '../obsidianUtils';
 
 export class MultipleFileProcessor {
@@ -40,10 +41,7 @@ export class MultipleFileProcessor {
                 header = split[1];
             }
 
-            if (
-                ObsidianUtils.isImage(link) ||
-                ObsidianUtils.isIcon(link) ||
-                ObsidianUtils.isUrl(link)
+            if ( isImage(link) || isIcon(link) || isUrl(link)
             ) {
                 return matched;
             }

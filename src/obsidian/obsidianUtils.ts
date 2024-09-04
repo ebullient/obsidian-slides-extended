@@ -367,30 +367,4 @@ export class ObsidianUtils implements ImageCollector {
     shouldCollect(): boolean {
         return this.isCollecting;
     }
-
-    static isUrl(path: string) {
-        return path.match(/^.*?:\/\//);
-    }
-
-    static isIcon(path: string) {
-        return (
-            path.startsWith('fas') ||
-            path.startsWith('far') ||
-            path.startsWith('fal') ||
-            path.startsWith('fad') ||
-            path.startsWith('fab')
-        );
-    }
-
-    static isImage(path: string) {
-        return (
-            path.endsWith('bmp') ||
-            path.endsWith('gif') ||
-            path.endsWith('jpeg') ||
-            path.endsWith('jpg') ||
-            path.endsWith('png') ||
-            path.endsWith('svg') ||
-            path.endsWith('webp')
-        );
-    }
 }

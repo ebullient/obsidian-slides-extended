@@ -1,3 +1,4 @@
+import { isIcon, isImage, isUrl } from 'src/util';
 import { CommentParser } from '../comment';
 import { ObsidianUtils } from '../obsidianUtils';
 
@@ -97,11 +98,10 @@ export class ImageProcessor {
             let [match, embed, alt, imagePath, commentString] = m;
 
             let filePath = imagePath;
-            const isIcon = ObsidianUtils.isIcon(filePath);
-            const isImage =
-                filePath.startsWith('http') || ObsidianUtils.isImage(filePath);
+            const icon = isIcon(filePath);
+            const image = isUrl(filePath) || isImage(filePath);
 
-            if (!isIcon && !isImage) {
+            if (!icon && !image) {
                 // This is not an icon or an image. Leave it.
                 result += line.substring(lastIndex, m.index) + match;
                 lastIndex = this.markdownImageRegex.lastIndex;
@@ -110,7 +110,7 @@ export class ImageProcessor {
 
             if (filePath.startsWith('file:/')) {
                 filePath = this.transformAbsoluteFilePath(filePath);
-            } else if (!isIcon && !filePath.match(/^.*?:\/\//)) {
+            } else if (!icon && !filePath.match(/^.*?:\/\//)) {
                 filePath = this.utils.findFile(imagePath);
 
                 if (this.utils.shouldCollect()) {
@@ -172,9 +172,7 @@ export class ImageProcessor {
             this.parser.parseLine(commentString) ??
             this.parser.buildComment('element');
 
-        const isIcon = ObsidianUtils.isIcon(filePath);
-
-        if (isIcon) {
+        if (isIcon(filePath)) {
             result = `<i class="${filePath}" ${this.parser.buildAttributes(comment)}></i>\n`;
         } else {
             if (comment.hasStyle('width') && !comment.hasStyle('object-fit')) {

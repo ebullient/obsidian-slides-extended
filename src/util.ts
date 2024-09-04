@@ -62,3 +62,29 @@ export function isEmpty(value: any) {
         (typeof value === 'object' && Object.keys(value).length === 0)
     );
 }
+
+export function isUrl(path: string) {
+    return path.match(/^.*?:\/\//);
+}
+
+export function isIcon(path: string) {
+    return (
+        path.startsWith('fas') ||
+        path.startsWith('far') ||
+        path.startsWith('fal') ||
+        path.startsWith('fad') ||
+        path.startsWith('fab')
+    );
+}
+
+export function isImage(path: string) {
+    return (
+        path.endsWith('bmp') ||
+        path.endsWith('gif') ||
+        path.endsWith('jpeg') ||
+        path.endsWith('jpg') ||
+        path.endsWith('png') ||
+        path.endsWith('svg') ||
+        path.endsWith('webp')
+    );
+}
