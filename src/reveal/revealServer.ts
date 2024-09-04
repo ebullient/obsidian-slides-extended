@@ -104,7 +104,7 @@ export class RevealServer {
     }
 
     getUrl(): URL {
-        return new URL(`http://127.0.0.1:${this._port}`);
+        return new URL(`http://localhost:${this._port}`);
     }
 
     getTargetUrl(target: TAbstractFile): URL {
@@ -128,7 +128,7 @@ export class RevealServer {
             return;
         }
         try {
-            await this._server.listen({ host: '127.0.0.1', port: this._port });
+            await this._server.listen({ host: 'localhost', port: this._port });
             console.info(
                 'Slides Extended is ready to go.',
                 this._server.listeningOrigin,
