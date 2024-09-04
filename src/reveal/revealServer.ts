@@ -123,7 +123,10 @@ export class RevealServer {
         if (this.running) {
             console.debug(
                 'Slides Extended server is already running',
-                this._server.listeningOrigin,
+                this._server.listeningOrigin.replace(
+                    /(127\.0\.0\.1|\[::1\])/,
+                    'localhost',
+                ),
             );
             return;
         }
@@ -131,7 +134,10 @@ export class RevealServer {
             await this._server.listen({ host: 'localhost', port: this._port });
             console.info(
                 'Slides Extended is ready to go.',
-                this._server.listeningOrigin,
+                this._server.listeningOrigin.replace(
+                    /(127\.0\.0\.1|\[::1\])/,
+                    'localhost',
+                ),
             );
         } catch (err) {
             new Notice(
