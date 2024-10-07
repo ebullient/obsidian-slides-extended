@@ -80,8 +80,12 @@ test('Basic Markdown Syntax > Images', () => {
         return null;
     });
 
-    when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+    when(MockedObsidianUtils.findImageFile('Image.jpg')).thenCall(arg => {
         return '/documentation/Image.jpg';
+    });
+
+    when(MockedObsidianUtils.findImageFile('/local-file-url/Users/testUser/Desktop/howToUse.png')).thenCall(arg => {
+        return '/local-file-url/Users/testUser/Desktop/howToUse.png';
     });
 
     const input = `

@@ -9,9 +9,6 @@ export class ImageProcessor {
     private markdownImageRegex =
         /(!)?\[([^\]]*)\]\((.*(?:jpg|png|jpeg|gif|bmp|webp|svg)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
 
-    // post process/htmlify. Find non-embedded markdown image links
-    private quotedMarkdownImageRegex = /"\[.*?\]\((.*?)\)"/gi;
-
     private wikilinkImageRegex =
         /\[\[(.*?(?:jpg|png|jpeg|webp|gif|bmp|svg))\|?([^\]]*)??\]\]/gi;
 
@@ -24,41 +21,24 @@ export class ImageProcessor {
         return markdown
             .split('\n')
             .map(line => {
-                // Transform [[myImage.png]] to [](myImage.png)
-                if (this.wikilinkImageRegex.test(line)) {
-                    return this.transformImageWikilinkToMarkdown(line);
-                }
-                return line;
+                // Transform [[myImage.png]] to [](myImage.png) (images only)
+                return line.replace(
+                    this.wikilinkImageRegex,
+                    (_, image, altText) => {
+                        let alias = altText ?? '';
+                        return `[${alias}](${image})`;
+                    },
+                );
             })
             .map(line => {
-                // Transform markdown image reference to html
+                // Look at all markdown links (images or not)
+                // embedded remote links may not have image file extensions..
                 if (this.markdownImageRegex.test(line)) {
                     return this.htmlify(line);
                 }
                 return line;
             })
             .join('\n');
-    }
-
-    transformImageWikilinkToMarkdown(line: string): string {
-        let result = line;
-
-        let m;
-        this.wikilinkImageRegex.lastIndex = 0;
-
-        while ((m = this.wikilinkImageRegex.exec(result)) !== null) {
-            if (m.index === this.wikilinkImageRegex.lastIndex) {
-                this.wikilinkImageRegex.lastIndex++;
-            }
-
-            const [match, image, altText] = m;
-            let alias = altText ?? '';
-            if (!altText?.includes('|') && /\d+(x\d+)?/.test(altText)) {
-                alias = `|${alias}`;
-            }
-            result = result.replace(match, `[${alias}](${image})`);
-        }
-        return result;
     }
 
     private buildComment(ext: string, commentAsString: string) {
@@ -108,11 +88,10 @@ export class ImageProcessor {
                 continue;
             }
 
-            if (filePath.startsWith('file:/')) {
-                filePath = this.transformAbsoluteFilePath(filePath);
-            } else if (!icon && !filePath.match(/^.*?:\/\//)) {
-                filePath = this.utils.findFile(imagePath);
-
+            if (isImage(filePath) && !isUrl(filePath)) {
+                // This is a regular file (of some kind)
+                // it will include /local-file-url references, too
+                filePath = this.utils.findImageFile(imagePath);
                 if (this.utils.shouldCollect()) {
                     this.utils.addImage(filePath);
                 }
@@ -124,7 +103,7 @@ export class ImageProcessor {
             }
 
             let update = '';
-            if (embed === '!') {
+            if (embed === '!' && (icon || image)) {
                 update = this.createImageElement(filePath, alt, commentString);
             } else {
                 update = this.updateMarkdownLink(
@@ -162,10 +141,9 @@ export class ImageProcessor {
         commentString: string,
     ): string {
         let result = '';
-        if (alt && alt.includes('|')) {
-            commentString =
-                this.buildComment(alt.split('|')[1], commentString) ?? '';
-            alt = alt.split('|')[0];
+        if (alt.match(/\d+x?\d*/)) {
+            commentString = this.buildComment(alt, commentString) ?? '';
+            alt = '';
         }
 
         const comment =
@@ -213,13 +191,5 @@ export class ImageProcessor {
             result = imageHtml;
         }
         return result;
-    }
-
-    private transformAbsoluteFilePath(path: string) {
-        const pathURL = new URL(path);
-        if (pathURL) {
-            return '/localFileSlash' + pathURL.pathname;
-        }
-        return path;
     }
 }

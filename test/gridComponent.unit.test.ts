@@ -88,7 +88,7 @@ test('Grid Component > Column Flow', () => {
 		return null;
 	});
 
-	when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+	when(MockedObsidianUtils.findImageFile('Image.jpg')).thenCall(arg => {
 		return '/documentation/Image.jpg';
 	});
 
@@ -109,7 +109,7 @@ test('Grid Component > Row Flow', () => {
 		return null;
 	});
 
-	when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+	when(MockedObsidianUtils.findImageFile('Image.jpg')).thenCall(arg => {
 		return '/documentation/Image.jpg';
 	});
 
@@ -168,7 +168,7 @@ test('Grid Component > Attributes > Filter', () => {
 		return null;
 	});
 
-	when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+	when(MockedObsidianUtils.findImageFile('Image.jpg')).thenCall(arg => {
 		return '/documentation/Image.jpg';
 	});
 
@@ -206,7 +206,7 @@ test('Grid Component > Attributes > Padding', () => {
 		return null;
 	});
 
-	when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+	when(MockedObsidianUtils.findImageFile('Image.jpg')).thenCall(arg => {
 		return '/documentation/Image.jpg';
 	});
 

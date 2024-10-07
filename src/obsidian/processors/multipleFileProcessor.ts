@@ -8,6 +8,9 @@ export class MultipleFileProcessor {
     private excalidrawRegex = /(.*\.excalidraw)/i;
     private markdownRegex = /!\[.*?\]\((.*?\.md)\)/g;
 
+    private wikilinkFileRegex = /\[\[(file:.+?)(\|[^\]]+)?\]\]/gi;
+    private fileUrlRegex = /(\[[^\]]*?\]\()(file:.+?)((?: ".*?")?\))/gi;
+
     constructor(utils: ObsidianUtils) {
         this.utils = utils;
     }
@@ -16,6 +19,26 @@ export class MultipleFileProcessor {
         return markdown
             .split('\n')
             .map((line, index) => {
+                // replace file:// with /local-file-url in markdown links
+                line = line.replace(
+                    this.fileUrlRegex,
+                    (_, linkText, fileUrl, titleAndClosing) => {
+                        const transformedUrl =
+                            this.transformAbsoluteFilePath(fileUrl);
+                        return `${linkText}${transformedUrl}${titleAndClosing}`;
+                    },
+                );
+                // replace file:// with /local-file-url in all wikilinks (images or not)
+                line = line.replace(
+                    this.wikilinkFileRegex,
+                    (_, filePath, aliasWithPipe) => {
+                        const alias = aliasWithPipe ? aliasWithPipe : '';
+                        const transformedPath =
+                            this.transformAbsoluteFilePath(filePath);
+                        return `[[${transformedPath}${alias}]]`;
+                    },
+                );
+
                 if (this.regex.test(line)) {
                     return this.transformContent(line, this.regex);
                 }
@@ -74,5 +97,14 @@ export class MultipleFileProcessor {
             file = file + '.md';
         }
         return file;
+    }
+
+    private transformAbsoluteFilePath(path: string) {
+        const pathUrl = new URL(path);
+        if (pathUrl) {
+            return '/local-file-url' + pathUrl.pathname;
+        }
+        console.debug('transformAbsoluteFilePath', path, 'invalid url');
+        return path;
     }
 }

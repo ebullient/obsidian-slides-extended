@@ -201,11 +201,22 @@ export class ObsidianUtils implements ImageCollector {
     }
 
     findFile(path: string) {
+        const file: TFile = this.getTFile(path);
+        console.debug('findFile', path, file);
+        if (file) {
+            return file.path;
+        } else {
+            return path;
+        }
+    }
+
+    findImageFile(path: string) {
         let base = '';
         if (!getImageCollector().shouldCollect()) {
             base = '/';
         }
         const file: TFile = this.getTFile(path);
+        console.debug('findImageFile', path, file, base);
         if (file) {
             return base + file.path;
         } else {

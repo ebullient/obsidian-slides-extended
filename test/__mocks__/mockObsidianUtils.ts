@@ -7,8 +7,8 @@ when(MockedObsidianUtils.getAbsolutePath(anyString())).thenCall(arg => {
 	throw new Error('ObsidianUtils.getAbsolutePath->Parameter not mocked: ' + arg);
 });
 
-when(MockedObsidianUtils.findFile(anyString())).thenCall(arg => {
-	throw new Error('ObsidianUtils.findFile->Parameter not mocked: ' + arg);
+when(MockedObsidianUtils.findImageFile(anyString())).thenCall(arg => {
+	throw new Error('ObsidianUtils.findImageFile->Parameter not mocked: ' + arg);
 });
 
 when(MockedObsidianUtils.parseFile(anyString(), anything())).thenCall((arg1, arg2) => {

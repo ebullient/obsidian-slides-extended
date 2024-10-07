@@ -144,7 +144,7 @@ styled text <!-- element class="with-border" -->
 
 test('Extended Markdown Syntax >  Slide Backgrounds', () => {
 
-    when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+    when(MockedObsidianUtils.findImageFile('Image.jpg')).thenCall(arg => {
         return '/documentation/Image.jpg';
     });
 
@@ -202,11 +202,11 @@ See [reveal backgrounds](https://revealjs.com/backgrounds/)
 
 test('Extended Markdown Syntax >  Default Background', () => {
 
-    when(MockedObsidianUtils.findFile('Image.jpg')).thenCall(arg => {
+    when(MockedObsidianUtils.findImageFile('Image.jpg')).thenCall(arg => {
         return '/documentation/Image.jpg';
     });
 
-    when(MockedObsidianUtils.findFile('Slide.jpg')).thenCall(arg => {
+    when(MockedObsidianUtils.findImageFile('Slide.jpg')).thenCall(arg => {
         return '/documentation/Slide.jpg';
     });
 
@@ -311,11 +311,11 @@ test('Extended Markdown Syntax >  Fragmented list', () => {
 });
 
 test('Extended Markdown Syntax >  Excalidraw support', () => {
-    when(MockedObsidianUtils.findFile('Sample.excalidraw')).thenCall(arg => {
+    when(MockedObsidianUtils.findImageFile('Sample.excalidraw')).thenCall(arg => {
         return 'Sample.excalidraw.svg';
     });
 
-    when(MockedObsidianUtils.findFile('Sample.excalidraw.svg')).thenCall(arg => {
+    when(MockedObsidianUtils.findImageFile('Sample.excalidraw.svg')).thenCall(arg => {
         return 'path/to/Sample.excalidraw.svg';
     });
 

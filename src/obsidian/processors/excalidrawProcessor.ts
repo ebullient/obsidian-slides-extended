@@ -24,7 +24,7 @@ export class ExcalidrawProcessor {
 
     private transformLine(line: string) {
         const [, image, ext, comment] = this.excalidrawImageRegex.exec(line);
-        const imgFile = this.utils.findFile(image);
+        const imgFile = this.utils.findImageFile(image);
 
         if (imgFile === null) {
             new Notice(

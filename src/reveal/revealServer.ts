@@ -2,21 +2,23 @@ import Fastify, { FastifyInstance } from 'fastify';
 
 import { RevealRenderer } from './revealRenderer';
 import { ObsidianUtils } from '../obsidian/obsidianUtils';
-import { Notice, TAbstractFile } from 'obsidian';
+import { Notice, Platform, TAbstractFile } from 'obsidian';
 import { fastifyStatic, ListDir, ListFile } from '@fastify/static';
 import path from 'path';
 import { QueryString } from '../@types';
 import { existsSync } from 'fs';
+import { Buffer } from 'buffer';
 
 export class RevealServer {
     private _server: FastifyInstance;
     private readonly _port: number;
+    private readonly _url: URL;
     private _revealRenderer: RevealRenderer;
     private filePath: string;
 
-    constructor(utils: ObsidianUtils, port: string) {
-        const numPort = Number(port);
-        this._port = isNaN(numPort) ? 3000 : numPort;
+    constructor(utils: ObsidianUtils, port: number, url: URL) {
+        this._port = port;
+        this._url = url;
         this._revealRenderer = new RevealRenderer(utils);
         this.filePath = null;
 
@@ -63,7 +65,7 @@ export class RevealServer {
                 // @ts-ignore
                 const file = request.params['*'];
 
-                const renderMarkdown = async (filePath: string) => {
+                const renderMarkdownFile = async (filePath: string) => {
                     const markup = await this._revealRenderer.renderFile(
                         filePath,
                         request.query,
@@ -71,18 +73,41 @@ export class RevealServer {
                     reply.type('text/html').send(markup);
                 };
 
-                if (file.startsWith('localFileSlash/')) {
-                    // alternate reference to local filesystem than file://
-                    reply.sendFile(file.replace('localFileSlash', ''));
+                if (file.startsWith('local-file-url')) {
+                    const urlpath = file.replace(
+                        'local-file-url',
+                        Platform.resourcePathPrefix,
+                    );
+                    const result = await fetch(urlpath).catch(error => {
+                        return new Response(null, {
+                            status: 404,
+                            statusText: error.messge,
+                        });
+                    });
+                    if (result.ok) {
+                        if (result.blob) {
+                            const blob = await result.blob();
+                            const bytes = await blob.arrayBuffer();
+                            reply.type(blob.type).send(Buffer.from(bytes));
+                        } else {
+                            console.info(
+                                'open a bug to handle this kind of response. Include this message',
+                                result,
+                            );
+                        }
+                    } else {
+                        reply.code(404).send(result.statusText);
+                    }
                 } else if (file.startsWith('embed/') && file.endsWith('.md')) {
                     const filePath = path.join(
                         utils.vaultDirectory,
                         file.replace('embed/', ''),
                     );
-                    await renderMarkdown(filePath);
+                    await renderMarkdownFile(filePath);
                 } else if (file.endsWith('.md')) {
+                    // top-level slide
                     this.filePath = path.join(utils.vaultDirectory, file);
-                    await renderMarkdown(this.filePath);
+                    await renderMarkdownFile(this.filePath);
                 } else {
                     let fetch = file;
                     const sourceDir = path.dirname(this.filePath);
@@ -92,6 +117,13 @@ export class RevealServer {
                             fetch = srcPath.replace(utils.vaultDirectory, '');
                         }
                     }
+                    console.debug(
+                        'serve file',
+                        file,
+                        sourceDir,
+                        utils.vaultDirectory,
+                        fetch,
+                    );
                     reply.sendFile(fetch);
                 }
                 return reply;
@@ -103,12 +135,8 @@ export class RevealServer {
         return !!this._server.addresses().slice(-1).pop();
     }
 
-    getUrl(): URL {
-        return new URL(`http://localhost:${this._port}`);
-    }
-
     getTargetUrl(target: TAbstractFile): URL {
-        const url = this.getUrl();
+        const url = this._url;
         url.pathname = this.fixedEncodeURIComponent(target.path);
         return url;
     }
