@@ -25,96 +25,105 @@ export class SlidesExtendedPlugin extends Plugin {
     // private autoCompleteSuggester: AutoCompleteSuggest;
     private target: TAbstractFile;
     private slideProcessor: EmbeddedSlideProcessor;
+    private port: number;
+    private serverUrl: URL;
 
     async onload() {
         await this.loadSettings();
+
+        addIcon('slides', ICON_DATA);
+        addIcon('refresh', REFRESH_ICON);
+
+        const numPort = Number(this.settings.port);
+        this.port = isNaN(numPort) ? 3000 : numPort;
+        this.serverUrl = new URL(`http://localhost:${this.port}`);
+
         this.obsidianUtils = new ObsidianUtils(this.app, this.settings);
 
-        const version = this.manifest.version;
-        const distribution = new SlidesExtendedDistribution(this);
-
-        console.log(
-            'Slides Extended v%s, needsReload=%s',
-            version,
-            distribution.isOutdated(),
+        this.registerView(
+            REVEAL_PREVIEW_VIEW,
+            leaf =>
+                new RevealPreviewView(
+                    leaf,
+                    this.url,
+                    this.settings,
+                    this.hideView.bind(this),
+                ),
         );
-        if (distribution.isOutdated()) {
-            await distribution.update();
-            console.log('Slides Extended updated to v%s', version);
-        }
+        this.registerEvent(
+            this.app.vault.on('modify', this.onChange.bind(this)),
+        );
+        this.registerEditorSuggest(new LineSelectionListener(this.app, this));
 
-        try {
-            this.configureServer();
+        this.addRibbonIcon('slides', 'Show slide preview', async () => {
+            await this.showView();
+        });
 
-            this.registerView(
-                REVEAL_PREVIEW_VIEW,
-                leaf =>
-                    new RevealPreviewView(
-                        leaf,
-                        this.revealServer.getUrl(),
-                        this.settings,
-                        this.hideView.bind(this),
-                    ),
-            );
-            this.registerEvent(
-                this.app.vault.on('modify', this.onChange.bind(this)),
-            );
-            this.registerEditorSuggest(
-                new LineSelectionListener(this.app, this),
-            );
+        this.addCommand({
+            id: 'open-preview',
+            name: 'Show slide preview',
+            callback: async () => this.toggleView(),
+        });
+        this.addCommand({
+            id: 'reload-preview',
+            name: 'Reload slide preview',
+            callback: () => {
+                const instance = this.getViewInstance();
+                if (!instance) {
+                    return;
+                }
+                instance.onChange();
+            },
+        });
+        this.addCommand({
+            id: 'stop-server-preview',
+            name: 'Stop slide preview server',
+            callback: async () => this.revealServer.stop(),
+        });
+        this.addCommand({
+            id: 'start-server-preview',
+            name: 'Start slide preview server',
+            callback: async () => this.revealServer.start(),
+        });
 
-            addIcon('slides', ICON_DATA);
-            addIcon('refresh', REFRESH_ICON);
+        this.addSettingTab(new SlidesExtendedSettingTab(this.app, this));
+        this.app.workspace.onLayoutReady(this.layoutReady);
 
-            this.addRibbonIcon('slides', 'Show slide preview', async () => {
-                await this.showView();
-            });
+        this.slideProcessor = new EmbeddedSlideProcessor(this);
+        this.registerMarkdownCodeBlockProcessor(
+            'slide',
+            this.slideProcessor.handler,
+        );
+        this.registerMarkdownPostProcessor(
+            this.obsidianUtils.markdownProcessor.postProcess,
+        );
+    }
 
-            this.addCommand({
-                id: 'open-preview',
-                name: 'Show slide preview',
-                callback: async () => this.toggleView(),
-            });
-
-            this.addCommand({
-                id: 'reload-preview',
-                name: 'Reload slide preview',
-                callback: () => {
-                    const instance = this.getViewInstance();
-                    if (!instance) {
-                        return;
-                    }
-                    instance.onChange();
-                },
-            });
-            this.addCommand({
-                id: 'stop-server-preview',
-                name: 'Stop slide preview server',
-                callback: async () => this.revealServer.stop(),
-            });
-            this.addCommand({
-                id: 'start-server-preview',
-                name: 'Start slide preview server',
-                callback: async () => this.revealServer.start(),
-            });
-
-            this.addSettingTab(new SlidesExtendedSettingTab(this.app, this));
-            this.app.workspace.onLayoutReady(this.layoutReady);
-
-            this.slideProcessor = new EmbeddedSlideProcessor(this);
-            this.registerMarkdownCodeBlockProcessor(
-                'slide',
-                this.slideProcessor.handler,
-            );
-            this.registerMarkdownPostProcessor(
-                this.obsidianUtils.markdownProcessor.postProcess,
-            );
-        } catch (err) {
-            console.debug('Slides Extended caught an error', err);
-        }
+    get url(): URL {
+        return this.serverUrl;
     }
 
     layoutReady = async () => {
+        try {
+            const version = this.manifest.version;
+            const distribution = new SlidesExtendedDistribution(this);
+
+            console.log(
+                'Slides Extended v%s, needsReload=%s',
+                version,
+                distribution.isOutdated(),
+            );
+            if (distribution.isOutdated()) {
+                await distribution.update();
+                console.log('Slides Extended updated to v%s', version);
+            }
+
+            this.configureServer();
+            await this.initServer();
+        } catch (err) {
+            console.debug('Slides Extended caught an error', err);
+        }
+
         // this.autoCompleteSuggester = new AutoCompleteSuggest(this.app);
 
         // if (this.settings.autoComplete == 'always') {
@@ -123,8 +132,6 @@ export class SlidesExtendedPlugin extends Plugin {
         //     this.autoCompleteSuggester.deactivate();
         // }
         // this.registerEditorSuggest(this.autoCompleteSuggester);
-
-        await this.initServer();
     };
 
     getViewInstance(): RevealPreviewView {
@@ -194,7 +201,8 @@ export class SlidesExtendedPlugin extends Plugin {
     configureServer = () => {
         this.revealServer = new RevealServer(
             this.obsidianUtils,
-            this.settings.port,
+            this.port,
+            this.url,
         );
     };
 
