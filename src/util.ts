@@ -63,8 +63,8 @@ export function isEmpty(value: any) {
     );
 }
 
-export function isUrl(path: string) {
-    return path.match(/^.*?:\/\//);
+export function isUrl(path: string): boolean {
+    return /^.*?:\/\//.test(path);
 }
 
 export function isIcon(path: string) {
