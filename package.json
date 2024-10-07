@@ -47,7 +47,7 @@
         "auto-changelog": "^2.5.0",
         "builtin-modules": "^4.0.0",
         "dotenv": "^16.4.5",
-        "electron": "^28.3.3",
+        "electron": "^32.1.2",
         "esbuild": "^0.20.2",
         "esbuild-plugin-copy": "^2.1.1",
         "esbuild-sass-plugin": "^3.3.1",
