@@ -44,8 +44,8 @@ export class Comment extends Properties {
 }
 
 export class CommentParser {
-    private readCommentRegex = /<!--.*-->/;
-    private parseRegex = /<!--\s*(?:\.)?(element|slide):?\s*(.*)-->/;
+    private readCommentRegex = /<!--.*?-->/s;
+    private parseRegex = /<!--\s*(?:\.)?(element|slide):?\s*(.*)-->/s;
     private parsePropertiesRegex =
         /([^=]*)\s*=\s*"([^"]*)"\s*|([^=]*)\s*=\s*'([^']*)'\s*|([^ ]*)\s*/g;
 
