@@ -4,7 +4,7 @@ import { FootnoteProcessor } from './processors/footNoteProcessor';
 import { FormatProcessor } from './processors/formatProcessor';
 import { FragmentProcessor } from './processors/fragmentProcessor';
 import { GridProcessor } from './processors/gridProcessor';
-import { ImageProcessor } from './processors/imageProcessor';
+import { MediaProcessor } from './processors/mediaProcessor';
 import { InternalLinkProcessor } from './processors/internalLinkProcessor';
 import { LatexProcessor } from './processors/latexProcessor';
 import { MermaidProcessor } from './processors/mermaidProcessor';
@@ -28,7 +28,7 @@ import { Options } from '../@types';
 export class MarkdownProcessor {
     private multipleFileProcessor: MultipleFileProcessor;
     private blockProcessor: BlockProcessor;
-    private imageProcessor: ImageProcessor;
+    private mediaProcessor: MediaProcessor;
     private internalLinkProcessor: InternalLinkProcessor;
     private footnoteProcessor: FootnoteProcessor;
     private latexProcessor: LatexProcessor;
@@ -53,7 +53,7 @@ export class MarkdownProcessor {
     constructor(utils: ObsidianUtils) {
         this.multipleFileProcessor = new MultipleFileProcessor(utils);
         this.blockProcessor = new BlockProcessor();
-        this.imageProcessor = new ImageProcessor(utils);
+        this.mediaProcessor = new MediaProcessor(utils);
         this.internalLinkProcessor = new InternalLinkProcessor(utils);
         this.footnoteProcessor = new FootnoteProcessor();
         this.latexProcessor = new LatexProcessor();
@@ -145,11 +145,11 @@ export class MarkdownProcessor {
         const afterExcalidrawProcessor = this.excalidrawProcessor.process(
             afterFootNoteProcessor,
         );
-        const afterImageProcessor = this.imageProcessor.process(
+        const afterMediaProcessor = this.mediaProcessor.process(
             afterExcalidrawProcessor,
         );
         const afterInternalLinkProcessor = this.internalLinkProcessor.process(
-            afterImageProcessor,
+            afterMediaProcessor,
             options,
         );
         const afterLatexProcessor = this.latexProcessor.process(
@@ -236,13 +236,13 @@ export class MarkdownProcessor {
                 afterExcalidrawProcessor,
             );
             this.log(
-                'afterImageProcessor',
+                'afterMediaProcessor',
                 afterExcalidrawProcessor,
-                afterImageProcessor,
+                afterMediaProcessor,
             );
             this.log(
                 'afterInternalLinkProcessor',
-                afterImageProcessor,
+                afterMediaProcessor,
                 afterInternalLinkProcessor,
             );
             this.log(

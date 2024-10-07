@@ -1,6 +1,13 @@
-import { emptyDir, copy, writeFile, existsSync } from 'fs-extra';
+import {
+    emptyDir,
+    copy,
+    writeFile,
+    existsSync,
+    outputFileSync,
+} from 'fs-extra';
 import path from 'path';
 import { ObsidianUtils } from '../obsidian/obsidianUtils';
+import { Platform } from 'obsidian';
 
 export class RevealExporter {
     private pluginDirectory: string;
@@ -41,7 +48,38 @@ export class RevealExporter {
         );
 
         for (const img of imgList) {
+            console.log('export', img);
             if (img.startsWith('http')) {
+                continue;
+            }
+            if (img.startsWith('/local-file-url')) {
+                const urlpath = img.replace(
+                    '/local-file-url',
+                    Platform.resourcePathPrefix,
+                );
+                const result = await fetch(urlpath).catch(error => {
+                    return new Response(null, {
+                        status: 404,
+                        statusText: error.messge,
+                    });
+                });
+                if (result.ok) {
+                    if (result.blob) {
+                        const blob = await result.blob();
+                        const bytes = await blob.arrayBuffer();
+                        outputFileSync(
+                            path.join(folderDir, img),
+                            Buffer.from(bytes),
+                        );
+                    } else {
+                        console.info(
+                            'open a bug to handle this kind of response. Include this message',
+                            result,
+                        );
+                    }
+                } else {
+                    console.error(result.statusText);
+                }
                 continue;
             }
             let imgPath = path.join(vaultDir, img);

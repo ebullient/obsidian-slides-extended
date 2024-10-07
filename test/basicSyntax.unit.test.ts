@@ -67,24 +67,11 @@ test('Basic Markdown Syntax > Lists', () => {
 });
 
 test('Basic Markdown Syntax > Images', () => {
-    //TODO: bugfix getAbsolutePath
-    when(MockedObsidianUtils.getAbsolutePath('Image.jpg.md')).thenCall(arg => {
-        return null;
-    });
-
-    when(MockedObsidianUtils.getAbsolutePath('Image.jpg|100.md')).thenCall(arg => {
-        return null;
-    });
-
-    when(MockedObsidianUtils.getAbsolutePath('Image.jpg|300x100 <!-- element style="object-fit: cover" -->.md')).thenCall(arg => {
-        return null;
-    });
-
-    when(MockedObsidianUtils.findImageFile('Image.jpg')).thenCall(arg => {
+    when(MockedObsidianUtils.findMediaFile('Image.jpg')).thenCall(arg => {
         return '/documentation/Image.jpg';
     });
 
-    when(MockedObsidianUtils.findImageFile('/local-file-url/Users/testUser/Desktop/howToUse.png')).thenCall(arg => {
+    when(MockedObsidianUtils.findMediaFile('/local-file-url/Users/testUser/Desktop/howToUse.png')).thenCall(arg => {
         return '/local-file-url/Users/testUser/Desktop/howToUse.png';
     });
 
@@ -125,6 +112,48 @@ Scale image to a width of 300x100 px
     const result = JSON.stringify(sut.process(markdown, options));
     return expect(result).toMatchSnapshot();
 });
+
+test('Basic Markdown Syntax > Videos', () => {
+    when(MockedObsidianUtils.findMediaFile('/local-file-url/Users/testUser/Desktop/video.mp4')).thenCall(arg => {
+        return '/local-file-url/Users/testUser/Desktop/video.mp4';
+    });
+
+    when(MockedObsidianUtils.findMediaFile('video.mp4')).thenCall(arg => {
+        return '/documentation/video.mp4';
+    });
+
+    const input = `
+Insert image that lies outside of your vault
+
+![Video](file:///Users/testUser/Desktop/video.mp4)
+
+---
+
+Insert image with obsidian markdown syntax
+
+![[video.mp4]]
+
+---
+
+Scale image to a width of 100 px
+
+![[video.mp4|100]]
+
+---
+
+Scale image to a width of 300x100 px
+
+![[video.mp4|300x100]] <!-- element style="object-fit: cover" controls="" -->
+
+`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
+});
+
 
 test('Basic Markdown Syntax > Links', () => {
     const input = `External Links

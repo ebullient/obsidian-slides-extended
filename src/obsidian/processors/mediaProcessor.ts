@@ -1,16 +1,16 @@
-import { isIcon, isImage, isUrl } from 'src/util';
+import { isIcon, isImage, isUrl, isVideo, mimeTypeFor } from 'src/util';
 import { CommentParser } from '../comment';
 import { ObsidianUtils } from '../obsidianUtils';
 
-export class ImageProcessor {
+export class MediaProcessor {
     private utils: ObsidianUtils;
     private parser: CommentParser;
 
-    private markdownImageRegex =
-        /(!)?\[([^\]]*)\]\((.*(?:jpg|png|jpeg|gif|bmp|webp|svg)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
+    private markdownMediaRegex =
+        /(!)?\[([^\]]*)\]\((.*(?:jpg|png|jpeg|gif|bmp|webp|svg|avi|mp4|ogg|mov|webm)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
 
-    private wikilinkImageRegex =
-        /\[\[(.*?(?:jpg|png|jpeg|webp|gif|bmp|svg))\|?([^\]]*)??\]\]/gi;
+    private wikilinkMediaRegex =
+        /\[\[(.*?(?:jpg|png|jpeg|webp|gif|bmp|svg|avi|mp4|ogg|mov|webm))\|?([^\]]*)??\]\]/gi;
 
     constructor(utils: ObsidianUtils) {
         this.utils = utils;
@@ -21,9 +21,9 @@ export class ImageProcessor {
         return markdown
             .split('\n')
             .map(line => {
-                // Transform [[myImage.png]] to [](myImage.png) (images only)
+                // Transform [[myImage.png]] to [](myImage.png) (media only)
                 return line.replace(
-                    this.wikilinkImageRegex,
+                    this.wikilinkMediaRegex,
                     (_, image, altText) => {
                         let alias = altText ?? '';
                         return `[${alias}](${image})`;
@@ -33,7 +33,7 @@ export class ImageProcessor {
             .map(line => {
                 // Look at all markdown links (images or not)
                 // embedded remote links may not have image file extensions..
-                if (this.markdownImageRegex.test(line)) {
+                if (this.markdownMediaRegex.test(line)) {
                     return this.htmlify(line);
                 }
                 return line;
@@ -67,33 +67,34 @@ export class ImageProcessor {
         let lastIndex = 0;
 
         let m;
-        this.markdownImageRegex.lastIndex = 0;
+        this.markdownMediaRegex.lastIndex = 0;
 
-        while ((m = this.markdownImageRegex.exec(line)) !== null) {
-            if (m.index === this.markdownImageRegex.lastIndex) {
-                this.markdownImageRegex.lastIndex++;
+        while ((m = this.markdownMediaRegex.exec(line)) !== null) {
+            if (m.index === this.markdownMediaRegex.lastIndex) {
+                this.markdownMediaRegex.lastIndex++;
             }
 
             // eslint-disable-next-line prefer-const
-            let [match, embed, alt, imagePath, commentString] = m;
+            let [match, embed, alt, mediaPath, commentString] = m;
 
-            let filePath = imagePath;
+            let filePath = mediaPath;
             const icon = isIcon(filePath);
+            const video = isVideo(filePath);
             const image = isUrl(filePath) || isImage(filePath);
 
-            if (!icon && !image) {
+            if (!icon && !image && !video) {
                 // This is not an icon or an image. Leave it.
                 result += line.substring(lastIndex, m.index) + match;
-                lastIndex = this.markdownImageRegex.lastIndex;
+                lastIndex = this.markdownMediaRegex.lastIndex;
                 continue;
             }
 
-            if (isImage(filePath) && !isUrl(filePath)) {
+            if ((image || video) && !isUrl(filePath)) {
                 // This is a regular file (of some kind)
                 // it will include /local-file-url references, too
-                filePath = this.utils.findImageFile(imagePath);
+                filePath = this.utils.findMediaFile(mediaPath);
                 if (this.utils.shouldCollect()) {
-                    this.utils.addImage(filePath);
+                    this.utils.addMedia(filePath);
                 }
             }
 
@@ -103,20 +104,20 @@ export class ImageProcessor {
             }
 
             let update = '';
-            if (embed === '!' && (icon || image)) {
+            if (embed === '!' && (icon || image || video)) {
                 update = this.createImageElement(filePath, alt, commentString);
             } else {
                 update = this.updateMarkdownLink(
                     line,
                     match,
-                    imagePath,
+                    mediaPath,
                     filePath,
                 );
             }
 
             // Append the text before the match and the updated match
             result += line.substring(lastIndex, m.index) + update;
-            lastIndex = this.markdownImageRegex.lastIndex;
+            lastIndex = this.markdownMediaRegex.lastIndex;
         }
         return result + line.substring(lastIndex);
     }
@@ -141,10 +142,11 @@ export class ImageProcessor {
         commentString: string,
     ): string {
         let result = '';
-        if (alt.match(/\d+x?\d*/)) {
+        if (alt.match(/^\d+x?\d*$/)) {
             commentString = this.buildComment(alt, commentString) ?? '';
             alt = '';
         }
+        const type = mimeTypeFor(filePath);
 
         const comment =
             this.parser.parseLine(commentString) ??
@@ -187,8 +189,11 @@ export class ImageProcessor {
             if (!comment.hasStyle('object-fit')) {
                 comment.addStyle('object-fit', 'scale-down');
             }
-            const imageHtml = `<img src="${filePath}" alt="${alt}" ${this.parser.buildAttributes(comment)}>\n`;
-            result = imageHtml;
+
+            const html = isVideo(filePath)
+                ? `<video ${this.parser.buildAttributes(comment)}><source src="${filePath}" alt="${alt}" type="${type}" /></video>\n`
+                : `<img src="${filePath}" alt="${alt}" ${this.parser.buildAttributes(comment)}>\n`;
+            result = html;
         }
         return result;
     }

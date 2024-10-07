@@ -2,7 +2,7 @@ import path, { basename, extname, join } from 'path';
 
 import Mustache from 'mustache';
 import { MarkdownProcessor } from '../obsidian/markdownProcessor';
-import { getImageCollector, ObsidianUtils } from '../obsidian/obsidianUtils';
+import { getMediaCollector, ObsidianUtils } from '../obsidian/obsidianUtils';
 import { RevealExporter } from './revealExporter';
 import { YamlParser } from '../yaml/yamlParser';
 import { glob } from 'glob';
@@ -60,7 +60,7 @@ export class RevealRenderer {
             await this.exporter.export(
                 filePath,
                 rendered,
-                getImageCollector().getAll(),
+                getMediaCollector().getAll(),
             );
             rendered = await this.render(
                 content,
@@ -107,7 +107,7 @@ export class RevealRenderer {
         } = settings;
 
         let base = '';
-        if (!getImageCollector().shouldCollect()) {
+        if (!getMediaCollector().shouldCollect()) {
             base = '/';
         }
 

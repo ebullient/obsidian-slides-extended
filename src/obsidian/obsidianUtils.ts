@@ -3,21 +3,21 @@ import { App, FileSystemAdapter, resolveSubpath, TFile } from 'obsidian';
 import path from 'path';
 import {
     SlidesExtendedSettings as SlidesExtendedSettings,
-    ImageCollector,
+    MediaCollector,
 } from '../@types';
 import { DISABLED_IMAGE_COLLECTOR } from '../slidesExtended-constants';
 import { MarkdownProcessor } from './markdownProcessor';
 
-let instance: ImageCollector = DISABLED_IMAGE_COLLECTOR;
-export function getImageCollector(): ImageCollector {
+let instance: MediaCollector = DISABLED_IMAGE_COLLECTOR;
+export function getMediaCollector(): MediaCollector {
     return instance;
 }
 
-function setImageCollector(newInstance: ImageCollector) {
+function setMediaCollector(newInstance: MediaCollector) {
     instance = newInstance;
 }
 
-export class ObsidianUtils implements ImageCollector {
+export class ObsidianUtils implements MediaCollector {
     private app: App;
     private fileSystem: FileSystemAdapter;
     private settings: SlidesExtendedSettings;
@@ -79,7 +79,7 @@ export class ObsidianUtils implements ImageCollector {
             this.htmlTemplateSearchPath.unshift(vaultThemeDir + '/html');
         }
 
-        setImageCollector(this);
+        setMediaCollector(this);
         this.processor = new MarkdownProcessor(this);
     }
 
@@ -210,13 +210,13 @@ export class ObsidianUtils implements ImageCollector {
         }
     }
 
-    findImageFile(path: string) {
+    findMediaFile(path: string) {
         let base = '';
-        if (!getImageCollector().shouldCollect()) {
+        if (!getMediaCollector().shouldCollect()) {
             base = '/';
         }
         const file: TFile = this.getTFile(path);
-        console.debug('findImageFile', path, file, base);
+        console.debug('findMediaFile', path, file, base);
         if (file) {
             return base + file.path;
         } else {
@@ -368,8 +368,8 @@ export class ObsidianUtils implements ImageCollector {
         this.isCollecting = false;
     }
 
-    // ImageCollector
-    addImage(filePath: string): void {
+    // MediaCollector
+    addMedia(filePath: string): void {
         this.images.add(filePath);
     }
 

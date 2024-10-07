@@ -57,10 +57,10 @@ export type Options = {
     transition: string;
 };
 
-export interface ImageCollector {
+export interface MediaCollector {
     shouldCollect(): boolean;
 
-    addImage(value: string): void;
+    addMedia(value: string): void;
 
     getAll(): string[];
 }
