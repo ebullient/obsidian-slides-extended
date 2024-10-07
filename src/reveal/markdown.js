@@ -4,6 +4,6 @@ export const md = (() => {
     global.Reveal = {
         registerPlugin: () => {}
     };
-    // eslint-disable-next-line @typescript-eslint/no-var-requires,no-undef
+    // eslint-disable-next-line no-undef
     return require('reveal.js/plugin/markdown/markdown')();
 })();

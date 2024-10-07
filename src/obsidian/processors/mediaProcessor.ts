@@ -25,7 +25,7 @@ export class MediaProcessor {
                 return line.replace(
                     this.wikilinkMediaRegex,
                     (_, image, altText) => {
-                        let alias = altText ?? '';
+                        const alias = altText ?? '';
                         return `[${alias}](${image})`;
                     },
                 );
@@ -128,7 +128,7 @@ export class MediaProcessor {
         imagePath: string,
         filePath: string,
     ): string {
-        let updated = match.replace(imagePath, filePath);
+        const updated = match.replace(imagePath, filePath);
         if (line.indexOf(`"${match}"`) >= 0) {
             // if the match is within quotes, return the filepath alone
             return filePath;

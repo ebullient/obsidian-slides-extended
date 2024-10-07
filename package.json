@@ -10,7 +10,7 @@
         "preinstall": "npx only-allow pnpm",
         "dev": "node esbuild.config.mjs",
         "build": "pnpm prettier && node esbuild.config.mjs production",
-        "lint": "eslint --fix --ext .ts .",
+        "lint": "eslint --fix",
         "prettier": "prettier -w 'src/**/*.ts'",
         "test": "jest",
         "coverage": "jest --coverage",
@@ -32,6 +32,7 @@
         "startingDate": "2024-02-17"
     },
     "devDependencies": {
+        "@eslint/eslintrc": "^3.1.0",
         "@eslint/js": "^9.12.0",
         "@fortawesome/fontawesome-free": "^6.6.0",
         "@popperjs/core": "^2.11.8",
@@ -78,7 +79,7 @@
         "@types/js-yaml": "^4.0.9",
         "chart.js": "^4.4.4",
         "color": "^4.2.3",
-        "fastify": "^4.28.1",
+        "fastify": "^5.0.0",
         "fs-extra": "^11.2.0",
         "glob": "^10.4.5",
         "js-yaml": "^4.1.0",
