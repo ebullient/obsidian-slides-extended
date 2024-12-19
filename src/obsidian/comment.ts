@@ -76,7 +76,7 @@ export class CommentParser {
 
             return new Comment(type, attributes);
         } catch (ex) {
-            console.error('ERROR: Cannot parse comment: ' + comment);
+            console.error(`ERROR: Cannot parse comment: ${comment}`);
             return null;
         }
     }
@@ -102,14 +102,17 @@ export class CommentParser {
     }
 
     private readCommentStringFromLine(line: string): string {
-        return this.readCommentRegex.exec(line)?.[0] ?? '';
+        return this.readCommentRegex.exec(line)?.[0] ?? "";
     }
 
     private parseAttributes(properties: string): Map<string, string> {
-        let m;
         const attributes = new Map<string, string>();
 
-        while ((m = this.parsePropertiesRegex.exec(properties)) !== null) {
+        while (true) {
+            const m = this.parsePropertiesRegex.exec(properties);
+            if (m == null) {
+                break;
+            }
             if (m.index === this.parsePropertiesRegex.lastIndex) {
                 this.parsePropertiesRegex.lastIndex++;
             }
@@ -118,16 +121,16 @@ export class CommentParser {
             let value: string;
 
             m.forEach((match, groupIndex) => {
-                if (groupIndex == 1 || groupIndex == 3) {
+                if (groupIndex === 1 || groupIndex === 3) {
                     key = match;
                 }
-                if (groupIndex == 2 || groupIndex == 4) {
+                if (groupIndex === 2 || groupIndex === 4) {
                     value = match;
                     attributes.set(key, value);
                 }
-                if (groupIndex == 5) {
+                if (groupIndex === 5) {
                     if (match) {
-                        attributes.set(match, 'true');
+                        attributes.set(match, "true");
                     }
                 }
             });

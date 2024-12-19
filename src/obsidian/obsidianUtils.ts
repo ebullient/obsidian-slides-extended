@@ -1,12 +1,14 @@
-import { readFileSync } from 'fs-extra';
-import { App, FileSystemAdapter, resolveSubpath, TFile } from 'obsidian';
-import path from 'path';
+import { readFileSync } from "fs-extra";
 import {
-    SlidesExtendedSettings as SlidesExtendedSettings,
-    MediaCollector,
-} from '../@types';
-import { DISABLED_IMAGE_COLLECTOR } from '../slidesExtended-constants';
-import { MarkdownProcessor } from './markdownProcessor';
+    type App,
+    FileSystemAdapter,
+    resolveSubpath,
+    type TFile,
+} from "obsidian";
+import path from "node:path";
+import type { SlidesExtendedSettings, MediaCollector } from "../@types";
+import { DISABLED_IMAGE_COLLECTOR } from "../slidesExtended-constants";
+import { MarkdownProcessor } from "./markdownProcessor";
 
 let instance: MediaCollector = DISABLED_IMAGE_COLLECTOR;
 export function getMediaCollector(): MediaCollector {
@@ -39,18 +41,18 @@ export class ObsidianUtils implements MediaCollector {
     constructor(app: App, settings: SlidesExtendedSettings) {
         this.app = app;
         if (!(this.app.vault.adapter instanceof FileSystemAdapter)) {
-            throw new Error('Slides Extended is only supported on the desktop');
+            throw new Error("Slides Extended is only supported on the desktop");
         }
 
         this.fileSystem = this.app.vault.adapter;
         this.settings = settings;
-        this.vaultDir = this.fileSystem.getBasePath() + '/';
+        this.vaultDir = `${this.fileSystem.getBasePath()}/`;
         this.pluginDir = path.join(
             this.vaultDir,
             this.app.vault.configDir,
-            'plugins/slides-extended/',
+            "plugins/slides-extended/",
         );
-        this.distDir = path.join(this.pluginDir, 'dist/');
+        this.distDir = path.join(this.pluginDir, "dist/");
         this.exportDir = path.join(
             this.vaultDir,
             this.settings.exportDirectory,
@@ -59,14 +61,12 @@ export class ObsidianUtils implements MediaCollector {
         this.cssSearchPath = [
             path.join(this.pluginDir), // relative to plugin dir
         ];
-        this.highlightSearchPath = [
-            path.join(this.pluginDir, 'plugin/highlight'),
-        ];
+        this.highlightSearchPath = [path.join(this.pluginDir, "plugin/highlight")];
         this.themeSearchPath = [
-            path.join(this.pluginDir, 'css'), // plugin layouts
-            path.join(this.distDir, 'theme'), // reveal.js themes
+            path.join(this.pluginDir, "css"), // plugin layouts
+            path.join(this.distDir, "theme"), // reveal.js themes
         ];
-        this.htmlTemplateSearchPath = [path.join(this.pluginDir, 'template')];
+        this.htmlTemplateSearchPath = [path.join(this.pluginDir, "template")];
 
         if (this.settings.themeDirectory) {
             const vaultThemeDir = path.join(
@@ -76,7 +76,7 @@ export class ObsidianUtils implements MediaCollector {
             this.cssSearchPath.unshift(vaultThemeDir);
             this.highlightSearchPath.unshift(vaultThemeDir);
             this.themeSearchPath.unshift(vaultThemeDir);
-            this.htmlTemplateSearchPath.unshift(vaultThemeDir + '/html');
+            this.htmlTemplateSearchPath.unshift(`${vaultThemeDir}/html`);
         }
 
         setMediaCollector(this);
@@ -125,39 +125,39 @@ export class ObsidianUtils implements MediaCollector {
     }
 
     private getTFile(filename: string): TFile | null {
-        if (filename.startsWith('[[') && filename.endsWith(']]')) {
+        if (filename.startsWith("[[") && filename.endsWith("]]")) {
             filename = filename.substring(2, filename.length - 2).trim();
         }
 
-        const expDir = this.settings.exportDirectory.startsWith('/')
+        const expDir = this.settings.exportDirectory.startsWith("/")
             ? this.settings.exportDirectory.substring(1)
             : this.settings.exportDirectory;
 
         const allFiles = this.app.vault.getFiles();
         const filesNotInExportDir = allFiles.filter(
-            item => !item.path.contains(expDir),
+            (item) => !item.path.contains(expDir),
         );
-        const allHits = filesNotInExportDir.filter(item =>
+        const allHits = filesNotInExportDir.filter((item) =>
             item.path.contains(filename),
         );
 
         let file: TFile = null;
 
-        // Only one match
-        if (allHits.length == 1) {
+        if (allHits.length === 1) {
+            // Only one match
             file = allHits.first();
         }
 
-        // Workaround for Excalidraw images
-        if (!file && filename.toLowerCase().endsWith('.excalidraw')) {
-            let hit = filesNotInExportDir.filter(x =>
-                x.path.contains(filename + '.svg'),
+        if (!file && filename.toLowerCase().endsWith(".excalidraw")) {
+            // Workaround for Excalidraw images
+            let hit = filesNotInExportDir.filter((x) =>
+                x.path.contains(`${filename}.svg`),
             );
             if (hit) {
                 file = hit.first();
             } else {
-                hit = filesNotInExportDir.filter(x =>
-                    x.path.contains(filename + '.png'),
+                hit = filesNotInExportDir.filter((x) =>
+                    x.path.contains(`${filename}.png`),
                 );
                 if (hit) {
                     file = hit.first();
@@ -165,8 +165,8 @@ export class ObsidianUtils implements MediaCollector {
             }
         }
 
-        // Find file most similar to search term
         if (!file && allHits.length > 1) {
+            // Find file most similar to search term
             let score = 0;
             for (const hit of allHits) {
                 const currentScore = this.similarity(filename, hit.path);
@@ -194,34 +194,23 @@ export class ObsidianUtils implements MediaCollector {
     }
 
     absolute(relativePath: string) {
-        if (relativePath) return this.fileSystem.getFullPath(relativePath);
-        else {
-            return null;
-        }
+        return relativePath ? this.fileSystem.getFullPath(relativePath) : null;
     }
 
     findFile(path: string) {
         const file: TFile = this.getTFile(path);
-        console.debug('findFile', path, file);
-        if (file) {
-            return file.path;
-        } else {
-            return path;
-        }
+        console.debug("findFile", path, file);
+        return file ? file.path : path;
     }
 
     findMediaFile(path: string) {
-        let base = '';
+        let base = "";
         if (!getMediaCollector().shouldCollect()) {
-            base = '/';
+            base = "/";
         }
         const file: TFile = this.getTFile(path);
-        console.debug('findMediaFile', path, file, base);
-        if (file) {
-            return base + file.path;
-        } else {
-            return path;
-        }
+        console.debug("findMediaFile", path, file, base);
+        return file ? base + file.path : path;
     }
 
     parseFile(filename: string, header: string) {
@@ -233,41 +222,37 @@ export class ObsidianUtils implements MediaCollector {
 
         const absoluteFilePath = this.absolute(tfile?.path);
         const fileContent = readFileSync(absoluteFilePath, {
-            encoding: 'utf-8',
+            encoding: "utf-8",
         });
 
         if (header === null) {
             if (this.yamlRegex.test(fileContent)) {
                 return this.yamlRegex.exec(fileContent)[1];
-            } else {
-                return fileContent;
             }
-        } else {
-            const cache = this.app.metadataCache.getFileCache(tfile);
-            const resolved = resolveSubpath(cache, header);
-
-            if (resolved && resolved.start && resolved.start.line != null) {
-                if (resolved.end && resolved.end.line != null) {
-                    return this.substring(
-                        fileContent,
-                        resolved.start.line,
-                        resolved.start.col,
-                        resolved.end.line,
-                        resolved.end.col,
-                    );
-                } else {
-                    return this.substring(
-                        fileContent,
-                        resolved.start.line,
-                        resolved.start.col,
-                        -1,
-                        -1,
-                    );
-                }
-            } else {
-                return '![[' + filename + '#' + header + ']]';
-            }
+            return fileContent;
         }
+        const cache = this.app.metadataCache.getFileCache(tfile);
+        const resolved = resolveSubpath(cache, header);
+
+        if (resolved && resolved.start && resolved.start.line != null) {
+            if (resolved.end && resolved.end.line != null) {
+                return this.substring(
+                    fileContent,
+                    resolved.start.line,
+                    resolved.start.col,
+                    resolved.end.line,
+                    resolved.end.col,
+                );
+            }
+            return this.substring(
+                fileContent,
+                resolved.start.line,
+                resolved.start.col,
+                -1,
+                -1,
+            );
+        }
+        return `![[${filename}#${header}]]`;
     }
 
     substring(
@@ -277,8 +262,8 @@ export class ObsidianUtils implements MediaCollector {
         endLine: number,
         endColumn: number,
     ): string {
-        let result = '';
-        const lines = input.split('\n');
+        let result = "";
+        const lines = input.split("\n");
 
         let eline = lines.length;
         if (endLine > -1) {
@@ -288,22 +273,22 @@ export class ObsidianUtils implements MediaCollector {
         for (let index = startLine; index <= eline; index++) {
             const line = lines[index];
             if (line != null) {
-                if (index == startLine) {
-                    result += line.substring(startColumn) + '\n';
-                } else if (index == eline) {
+                if (index === startLine) {
+                    result += `${line.substring(startColumn)}\n`;
+                } else if (index === eline) {
                     let endLine = line;
                     if (endColumn > -1) {
                         endLine = line.substring(0, endColumn);
                     }
-                    if (endLine.includes('^')) {
+                    if (endLine.includes("^")) {
                         endLine = endLine.substring(
                             0,
-                            endLine.lastIndexOf('^'),
+                            endLine.lastIndexOf("^"),
                         );
                     }
-                    result += endLine + '\n';
+                    result += `${endLine}\n`;
                 } else {
-                    result += line + '\n';
+                    result += `${line}\n`;
                 }
             }
         }
@@ -319,7 +304,7 @@ export class ObsidianUtils implements MediaCollector {
             shorter = s1;
         }
         const longerLength = longer.length;
-        if (longerLength == 0) {
+        if (longerLength === 0) {
             return 1.0;
         }
         return (
@@ -335,11 +320,11 @@ export class ObsidianUtils implements MediaCollector {
         for (let i = 0; i <= s1.length; i++) {
             let lastValue = i;
             for (let j = 0; j <= s2.length; j++) {
-                if (i == 0) costs[j] = j;
+                if (i === 0) costs[j] = j;
                 else {
                     if (j > 0) {
                         let newValue = costs[j - 1];
-                        if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                        if (s1.charAt(i - 1) !== s2.charAt(j - 1))
                             newValue =
                                 Math.min(
                                     Math.min(newValue, lastValue),
@@ -356,15 +341,13 @@ export class ObsidianUtils implements MediaCollector {
     }
 
     resetImageCollection() {
-        console.debug(
-            'enable image collection for exported slides, start collecting',
-        );
+        console.debug("enable image collection for exported slides, start collecting");
         this.images.clear();
         this.isCollecting = true;
     }
 
     disableImageCollection() {
-        console.debug('stop collecting images', this.images);
+        console.debug("stop collecting images", this.images);
         this.isCollecting = false;
     }
 

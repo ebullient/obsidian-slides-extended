@@ -94,7 +94,7 @@ export class ChartProcessor {
 
                 while (true) {
                     const m = this.datasetRegex.exec(chartMarkup);
-                    if (!m) {
+                    if (m == null) {
                         break;
                     }
                     if (m.index === this.datasetRegex.lastIndex) {

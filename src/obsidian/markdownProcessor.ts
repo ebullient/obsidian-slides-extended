@@ -9,7 +9,7 @@ import { InternalLinkProcessor } from './processors/internalLinkProcessor';
 import { LatexProcessor } from './processors/latexProcessor';
 import { MermaidProcessor } from './processors/mermaidProcessor';
 import { MultipleFileProcessor } from './processors/multipleFileProcessor';
-import { ObsidianUtils } from './obsidianUtils';
+import type { ObsidianUtils } from "./obsidianUtils";
 import { CommentProcessor } from './processors/commentProcessor';
 import { DropProcessor } from './processors/dropProcessor';
 import { YamlStore } from '../yaml/yamlStore';
@@ -23,7 +23,7 @@ import { ChartProcessor } from './processors/chartProcessor';
 import { DefaultBackgroundProcessor } from './processors/defaultBackgroundProcessor';
 import { ReferenceProcessor } from './processors/referenceProcessor';
 import { SkipSlideProcessor } from './processors/skipSlideProcessor';
-import { Options } from '../@types';
+import type { Options } from "../@types";
 
 export class MarkdownProcessor {
     private multipleFileProcessor: MultipleFileProcessor;
@@ -80,10 +80,10 @@ export class MarkdownProcessor {
         YamlStore.getInstance().options = options;
 
         let before = this.trimEnding(markdown, options);
-        let after;
+        let after: string;
 
         let circuitCounter = 0;
-        while (before != after) {
+        while (before !== after) {
             circuitCounter++;
             if (after) {
                 before = after;
@@ -100,7 +100,7 @@ export class MarkdownProcessor {
 
             if (circuitCounter > 9) {
                 console.warn(
-                    'WARNING: Circuit in template hierarchy detected!',
+                    "WARNING: Circuit in template hierarchy detected!",
                 );
                 break;
             }
@@ -297,10 +297,10 @@ export class MarkdownProcessor {
     };
 
     trimEnding(markdown: string, options: Options): string {
-        const input = markdown + '\n';
+        const input = `${markdown}\n`;
 
-        let m;
-        if ((m = new RegExp(options.separator, 'gmi').exec(input)) !== null) {
+        let m = new RegExp(options.separator, "gmi").exec(input);
+        if (m !== null) {
             const [match] = m;
 
             if (input.endsWith(match)) {
@@ -308,10 +308,8 @@ export class MarkdownProcessor {
             }
         }
 
-        if (
-            (m = new RegExp(options.verticalSeparator, 'gmi').exec(input)) !==
-            null
-        ) {
+        m = new RegExp(options.verticalSeparator, "gmi").exec(input);
+        if (m !== null) {
             const [match] = m;
 
             if (input.endsWith(match)) {
@@ -323,7 +321,7 @@ export class MarkdownProcessor {
     }
 
     log(name: string, before: string, after: string) {
-        if (before != after) {
+        if (before !== after) {
             console.debug(`${name}: ${after}`);
         }
     }

@@ -43,7 +43,7 @@ export class GridProcessor {
 
         while (true) {
             const m = this.gridBlockRegex.exec(slide);
-            if (!m) {
+            if (m == null) {
                 break;
             }
             if (m.index === this.gridBlockRegex.lastIndex) {
@@ -75,7 +75,7 @@ export class GridProcessor {
 
         while (true) {
             const m = this.gridPropertiesRegex.exec(attributes);
-            if (!m) {
+            if (m == null) {
                 break;
             }
             if (m.index === this.gridPropertiesRegex.lastIndex) {

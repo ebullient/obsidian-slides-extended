@@ -70,7 +70,7 @@ export class MediaProcessor {
         this.markdownMediaRegex.lastIndex = 0;
         while (true) {
             const m = this.markdownMediaRegex.exec(line);
-            if (!m) {
+            if (m == null) {
                 break;
             }
             if (m.index === this.markdownMediaRegex.lastIndex) {
