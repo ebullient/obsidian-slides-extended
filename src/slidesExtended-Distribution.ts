@@ -1,8 +1,8 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import path from 'path';
-import { SlidesExtendedPlugin } from './slidesExtended-Plugin';
-import JSZip from 'jszip';
-import { requestUrl } from 'obsidian';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import path from "node:path";
+import type { SlidesExtendedPlugin } from "./slidesExtended-Plugin";
+import JSZip from "jszip";
+import { requestUrl } from "obsidian";
 
 export class SlidesExtendedDistribution {
     plugin: SlidesExtendedPlugin;
@@ -20,21 +20,20 @@ export class SlidesExtendedDistribution {
     }
 
     isOldVersion(): boolean {
-        const versionFile = path.join(this.pluginDirectory, 'distVersion.json');
+        const versionFile = path.join(this.pluginDirectory, "distVersion.json");
         if (!existsSync(versionFile)) {
             return true;
-        } else {
-            const rawdata = readFileSync(versionFile, { encoding: 'utf-8' });
-            const distVersion = JSON.parse(rawdata).version;
-            return distVersion != this.plugin.manifest.version;
         }
+        const rawdata = readFileSync(versionFile, { encoding: "utf-8" });
+        const distVersion = JSON.parse(rawdata).version;
+        return distVersion !== this.plugin.manifest.version;
     }
 
     async update() {
         const version = this.plugin.manifest.version;
         const downloadUrl = `https://github.com/ebullient/obsidian-slides-extended/releases/download/${version}/slides-extended.zip`;
         const response = await requestUrl(downloadUrl);
-        if (response.status != 200) {
+        if (response.status !== 200) {
             console.error(`Failed to download ${downloadUrl}`);
             return;
         }
@@ -43,17 +42,17 @@ export class SlidesExtendedDistribution {
         const contents = await zip.loadAsync(response.arrayBuffer);
         const pluginDirectory = this.pluginDirectory;
 
-        Object.keys(contents.files).forEach(function (filename) {
+        for (const filename of Object.keys(contents.files)) {
             if (!contents.files[filename].dir) {
                 zip.file(filename)
-                    .async('nodebuffer')
-                    .then(function (content) {
+                    .async("nodebuffer")
+                    .then((content) => {
                         const dest = path.join(pluginDirectory, filename);
                         const dir = path.dirname(dest);
                         mkdirSync(dir, { recursive: true });
                         writeFileSync(dest, content);
                     });
             }
-        });
+        }
     }
 }

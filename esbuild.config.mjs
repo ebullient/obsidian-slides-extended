@@ -1,10 +1,10 @@
 import esbuild from "esbuild";
-import process from "process";
+import process from "node:process";
 import builtins from 'builtin-modules';
 import { copy } from 'esbuild-plugin-copy';
-import path, { basename } from 'path';
+import path, { basename } from 'node:path';
 import { sassPlugin } from 'esbuild-sass-plugin';
-import { readdirSync } from "fs";
+import { readdirSync } from "node:fs";
 import { config } from "dotenv";
 
 config();
@@ -27,13 +27,13 @@ const map = {
 
 const themeDir = 'src/scss/theme/';
 const files = readdirSync(themeDir);
-files.forEach(function (file) {
+for (const file of files) {
     if (file.endsWith('.scss')) {
         const source = themeDir + file;
-        const target = 'dist/theme/' + basename(file).replaceAll('.scss', '');
+        const target = `dist/theme/${basename(file).replaceAll('.scss', '')}`;
         map[source] = target;
     }
-});
+}
 
 const entryPoints = Object.entries(map)
     .map(([k,v]) => {
@@ -67,10 +67,9 @@ const parameters = {
     },
     format: 'cjs',
     minify: prod,
-    target: 'es2020',
+    target: 'es2022',
     logLevel: "info",
     sourcemap: prod ? false : 'inline',
-    sourcemap: 'inline',
     treeShaking: true,
     outdir: dir,
     plugins: [
@@ -217,6 +216,6 @@ if (prod) {
         process.exit(1)
     });
 } else {
-    let ctx = await esbuild.context(parameters);
+    const ctx = await esbuild.context(parameters);
     await ctx.watch();
 }

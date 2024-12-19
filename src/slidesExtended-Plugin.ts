@@ -1,21 +1,21 @@
-import { addIcon, Plugin, TAbstractFile } from 'obsidian';
-import { SlidesExtendedSettings } from './@types';
-import { RevealServer } from './reveal/revealServer';
-import { ObsidianUtils } from './obsidian/obsidianUtils';
+import { addIcon, Plugin, type TAbstractFile } from "obsidian";
+import type { SlidesExtendedSettings } from "./@types";
+import { RevealServer } from "./reveal/revealServer";
+import { ObsidianUtils } from "./obsidian/obsidianUtils";
 // import { AutoCompleteSuggest } from './obsidian/suggesters/AutoCompleteSuggester';
 import {
     REVEAL_PREVIEW_VIEW,
     RevealPreviewView,
-} from './reveal/revealPreviewView';
-import { LineSelectionListener } from './obsidian/suggesters/lineSelectionListener';
+} from "./reveal/revealPreviewView";
+import { LineSelectionListener } from "./obsidian/suggesters/lineSelectionListener";
 import {
     DEFAULT_SETTINGS,
     ICON_DATA,
     REFRESH_ICON,
-} from './slidesExtended-constants';
-import { SlidesExtendedSettingTab } from './slidesExtended-SettingTab';
-import { EmbeddedSlideProcessor } from './obsidian/embeddedSlideProcessor';
-import { SlidesExtendedDistribution } from './slidesExtended-Distribution';
+} from "./slidesExtended-constants";
+import { SlidesExtendedSettingTab } from "./slidesExtended-SettingTab";
+import { EmbeddedSlideProcessor } from "./obsidian/embeddedSlideProcessor";
+import { SlidesExtendedDistribution } from "./slidesExtended-Distribution";
 
 export class SlidesExtendedPlugin extends Plugin {
     settings: SlidesExtendedSettings;
@@ -31,18 +31,18 @@ export class SlidesExtendedPlugin extends Plugin {
     async onload() {
         await this.loadSettings();
 
-        addIcon('slides', ICON_DATA);
-        addIcon('refresh', REFRESH_ICON);
+        addIcon("slides", ICON_DATA);
+        addIcon("refresh", REFRESH_ICON);
 
         const numPort = Number(this.settings.port);
-        this.port = isNaN(numPort) ? 3000 : numPort;
+        this.port = Number.isNaN(numPort) ? 3000 : numPort;
         this.serverUrl = new URL(`http://localhost:${this.port}`);
 
         this.obsidianUtils = new ObsidianUtils(this.app, this.settings);
 
         this.registerView(
             REVEAL_PREVIEW_VIEW,
-            leaf =>
+            (leaf) =>
                 new RevealPreviewView(
                     leaf,
                     this.url,
@@ -51,22 +51,22 @@ export class SlidesExtendedPlugin extends Plugin {
                 ),
         );
         this.registerEvent(
-            this.app.vault.on('modify', this.onChange.bind(this)),
+            this.app.vault.on("modify", this.onChange.bind(this)),
         );
         this.registerEditorSuggest(new LineSelectionListener(this.app, this));
 
-        this.addRibbonIcon('slides', 'Show slide preview', async () => {
+        this.addRibbonIcon("slides", "Show slide preview", async () => {
             await this.showView();
         });
 
         this.addCommand({
-            id: 'open-preview',
-            name: 'Show slide preview',
+            id: "open-preview",
+            name: "Show slide preview",
             callback: async () => this.toggleView(),
         });
         this.addCommand({
-            id: 'reload-preview',
-            name: 'Reload slide preview',
+            id: "reload-preview",
+            name: "Reload slide preview",
             callback: () => {
                 const instance = this.getViewInstance();
                 if (!instance) {
@@ -76,13 +76,13 @@ export class SlidesExtendedPlugin extends Plugin {
             },
         });
         this.addCommand({
-            id: 'stop-server-preview',
-            name: 'Stop slide preview server',
+            id: "stop-server-preview",
+            name: "Stop slide preview server",
             callback: async () => this.revealServer.stop(),
         });
         this.addCommand({
-            id: 'start-server-preview',
-            name: 'Start slide preview server',
+            id: "start-server-preview",
+            name: "Start slide preview server",
             callback: async () => this.revealServer.start(),
         });
 
@@ -91,7 +91,7 @@ export class SlidesExtendedPlugin extends Plugin {
 
         this.slideProcessor = new EmbeddedSlideProcessor(this);
         this.registerMarkdownCodeBlockProcessor(
-            'slide',
+            "slide",
             this.slideProcessor.handler,
         );
         this.registerMarkdownPostProcessor(
@@ -109,19 +109,19 @@ export class SlidesExtendedPlugin extends Plugin {
             const distribution = new SlidesExtendedDistribution(this);
 
             console.log(
-                'Slides Extended v%s, needsReload=%s',
+                "Slides Extended v%s, needsReload=%s",
                 version,
                 distribution.isOutdated(),
             );
             if (distribution.isOutdated()) {
                 await distribution.update();
-                console.log('Slides Extended updated to v%s', version);
+                console.log("Slides Extended updated to v%s", version);
             }
 
             this.configureServer();
             await this.initServer();
         } catch (err) {
-            console.debug('Slides Extended caught an error', err);
+            console.debug("Slides Extended caught an error", err);
         }
 
         // this.autoCompleteSuggester = new AutoCompleteSuggest(this.app);
@@ -154,7 +154,7 @@ export class SlidesExtendedPlugin extends Plugin {
         if (!instance) {
             return;
         }
-        if (file == this.target) {
+        if (file === this.target) {
             instance.onChange();
         }
     }
@@ -186,7 +186,7 @@ export class SlidesExtendedPlugin extends Plugin {
             return;
         }
         if (
-            targetDocument == this.target &&
+            targetDocument === this.target &&
             this.app.workspace.getLeavesOfType(REVEAL_PREVIEW_VIEW).length > 0
         ) {
             return;
@@ -213,7 +213,7 @@ export class SlidesExtendedPlugin extends Plugin {
 
         const instance = this.getViewInstance();
         if (instance) {
-            if (instance.url == 'about:blank') {
+            if (instance.url === "about:blank") {
                 await this.showView();
             }
         }
@@ -236,7 +236,7 @@ export class SlidesExtendedPlugin extends Plugin {
 
     async activateView() {
         this.app.workspace.detachLeavesOfType(REVEAL_PREVIEW_VIEW);
-        if (this.settings.paneMode == 'sidebar') {
+        if (this.settings.paneMode === "sidebar") {
             await this.app.workspace.getRightLeaf(true).setViewState({
                 type: REVEAL_PREVIEW_VIEW,
                 active: true,
@@ -255,7 +255,7 @@ export class SlidesExtendedPlugin extends Plugin {
     }
 
     async onunload() {
-        console.debug('unloading Slides Extended');
+        console.debug("unloading Slides Extended");
         await this.stopServer();
     }
 
@@ -269,7 +269,7 @@ export class SlidesExtendedPlugin extends Plugin {
 
     async saveSettings() {
         await this.saveData(this.settings);
-        console.debug('Slides Extended: settings saved');
+        console.debug("Slides Extended: settings saved");
 
         await this.stopServer();
         this.obsidianUtils = new ObsidianUtils(this.app, this.settings);

@@ -1,30 +1,35 @@
 // Native / no lodash
 
-import { basename } from 'path';
+import { basename } from "node:path";
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function has(object: Record<string, any>, key: string): boolean {
-    const keyParts = key.split('.');
+    const keyParts = key.split(".");
 
     return (
         !!object &&
         (keyParts.length > 1
-            ? has(object[key.split('.')[0]], keyParts.slice(1).join('.'))
+            ? has(object[key.split(".")[0]], keyParts.slice(1).join("."))
             : Object.prototype.hasOwnProperty.call(object, key))
     );
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function pick(object: Record<string, any>, keys: string[]) {
     return keys.reduce(
         (obj, key) => {
-            if (object && object.hasOwnProperty(key)) {
+            // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
+            if (object?.hasOwnProperty(key)) {
                 obj[key] = object[key];
             }
             return obj;
         },
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         {} as Record<string, any>,
     );
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function omit(object: Record<string, any>, keys: string[]) {
     return Object.keys(object).reduce(
         (obj, key) => {
@@ -33,12 +38,15 @@ export function omit(object: Record<string, any>, keys: string[]) {
             }
             return obj;
         },
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         {} as Record<string, any>,
     );
 }
 
 export function omitBy(
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     object: Record<string, any>,
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     predicate: (value: any) => boolean,
 ) {
     return Object.keys(object).reduce(
@@ -48,20 +56,23 @@ export function omitBy(
             }
             return obj;
         },
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         {} as Record<string, any>,
     );
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function isNil(value: any) {
     return value === null || value === undefined;
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function isEmpty(value: any) {
     return (
         isNil(value) ||
-        value === '' ||
+        value === "" ||
         (Array.isArray(value) && value.length === 0) ||
-        (typeof value === 'object' && Object.keys(value).length === 0)
+        (typeof value === "object" && Object.keys(value).length === 0)
     );
 }
 

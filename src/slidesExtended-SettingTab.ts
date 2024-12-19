@@ -1,17 +1,17 @@
 import {
-    App,
+    type App,
     PluginSettingTab,
     Setting,
-    TAbstractFile,
+    type TAbstractFile,
     TFolder,
-} from 'obsidian';
-import { FolderInputSuggest } from 'obsidian-utilities';
+} from "obsidian";
+import { FolderInputSuggest } from "obsidian-utilities";
 import {
     ThemeInputSuggest,
     getThemeFiles,
-} from './obsidian/suggesters/ThemeSuggester';
-import { SlidesExtendedPlugin } from './slidesExtended-Plugin';
-import { SlidesExtendedSettings } from './@types';
+} from "./obsidian/suggesters/ThemeSuggester";
+import type { SlidesExtendedPlugin } from "./slidesExtended-Plugin";
+import type { SlidesExtendedSettings } from "./@types";
 
 /** This is because TypeScript's filters are dumb. */
 function isFolder(file: TAbstractFile): file is TFolder {
@@ -47,95 +47,97 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
         containerEl.empty();
 
         new Setting(containerEl)
-            .setName('Slide preview mode')
-            .setDesc('Select the slide preview pane display mode.')
-            .addDropdown(cb => {
-                cb.addOption('tab', 'as Tab')
-                    .addOption('split', 'split Workspace')
-                    .addOption('sidebar', 'right sidebar')
+            .setName("Slide preview mode")
+            .setDesc("Select the slide preview pane display mode.")
+            .addDropdown((cb) => {
+                cb.addOption("tab", "as Tab")
+                    .addOption("split", "split Workspace")
+                    .addOption("sidebar", "right sidebar")
                     .setValue(this.newSettings.paneMode)
-                    .onChange(value => {
+                    .onChange((value) => {
                         if (
-                            value == 'tab' ||
-                            value == 'split' ||
-                            value == 'sidebar'
+                            value === "tab" ||
+                            value === "split" ||
+                            value === "sidebar"
                         ) {
                             this.newSettings.paneMode = value;
                         } else {
-                            console.debug('Invalid pane mode', value);
+                            console.debug("Invalid pane mode", value);
                         }
                     });
             });
 
         new Setting(containerEl)
-            .setName('Automatically start server')
+            .setName("Automatically start server")
             .setDesc(
-                'When enabled, the server for rendering slides will automatically start when Obsidian starts.',
+                "When enabled, the server for rendering slides will automatically start when Obsidian starts.",
             )
-            .addToggle(value =>
-                value.setValue(this.newSettings.autoStart).onChange(value => {
+            .addToggle((value) =>
+                value.setValue(this.newSettings.autoStart).onChange((value) => {
                     this.newSettings.autoStart = value;
                 }),
             );
 
         new Setting(containerEl)
-            .setName('Server port')
+            .setName("Server port")
             .setDesc(
-                'Specify the port number for the server to listen on. Default is 3000.',
+                "Specify the port number for the server to listen on. Default is 3000.",
             )
-            .addText(text =>
+            .addText((text) =>
                 text
-                    .setPlaceholder('3000')
+                    .setPlaceholder("3000")
                     .setValue(this.newSettings.port)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.port = value;
                     }),
             );
 
         new Setting(containerEl)
-            .setName('Auto reload')
+            .setName("Auto reload")
             .setDesc(
-                'When enabled, the slide preview window automatically updates upon detecting changes in the source file.',
+                "When enabled, the slide preview window automatically updates upon detecting changes in the source file.",
             )
-            .addToggle(value =>
-                value.setValue(this.newSettings.autoReload).onChange(value => {
-                    this.newSettings.autoReload = value;
-                }),
+            .addToggle((value) =>
+                value
+                    .setValue(this.newSettings.autoReload)
+                    .onChange((value) => {
+                        this.newSettings.autoReload = value;
+                    }),
             );
 
         new Setting(containerEl)
-            .setName('Auto complete')
+            .setName("Auto complete")
             .setDesc(
                 'Enable auto-complete inputs. "Always" enables it everywhere, "When slide preview is active" enables it only when the slide preview is active, and "Never" disables it.',
             )
-            .addDropdown(cb => {
-                cb.addOption('always', 'Always')
-                    .addOption('inPreview', 'When slide preview is active')
-                    .addOption('never', 'Never')
+            .addDropdown((cb) => {
+                cb.addOption("always", "Always")
+                    .addOption("inPreview", "When slide preview is active")
+                    .addOption("never", "Never")
                     .setValue(this.newSettings.autoComplete)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.autoComplete = value;
                     });
             });
 
         new Setting(containerEl)
-            .setName('Export directory')
+            .setName("Export directory")
             .setDesc(
-                'Specify the directory where Slides Extended should export presentations.',
+                "Specify the directory where Slides Extended should export presentations.",
             )
-            .addSearch(cb => {
+            .addSearch((cb) => {
                 const folders: TFolder[] = this.app.vault
                     .getAllLoadedFiles()
                     .filter<TFolder>(isFolder);
                 const modal = new FolderInputSuggest(this.app, cb, folders);
                 modal.onSelect(({ item }) => {
                     cb.setValue(item.path);
-                    cb.inputEl.trigger('input');
+                    cb.inputEl.trigger("input");
                     modal.close();
                 });
-                cb.setPlaceholder('Folder')
+                cb.setPlaceholder("Folder")
                     .setValue(this.newSettings.exportDirectory)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.exportDirectory = value;
                     });
             });
@@ -143,32 +145,31 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
         const themeSettings: Record<string, Setting> = {};
         const themeDesc = (type: string, assets: string) => {
             const desc =
-                type == 'slide' ? '*' : '*.highlight.css or *.hljs.css';
+                type === "slide" ? "*" : "*.highlight.css or *.hljs.css";
             if (assets) {
                 return `Select the default ${desc} theme. Options include ${type}.css files defined in ${assets}.`;
-            } else {
-                return `Select the default ${desc} theme.`;
             }
+            return `Select the default ${desc} theme.`;
         };
 
         new Setting(containerEl)
-            .setName('Theme directory')
+            .setName("Theme directory")
             .setDesc(
                 'Specify the vault directory for custom themes. Highlight themes should include "highlight" or "hljs" in their name.',
             )
-            .addSearch(cb => {
+            .addSearch((cb) => {
                 const folders: TFolder[] = this.app.vault
                     .getAllLoadedFiles()
                     .filter<TFolder>(isFolder);
                 const modal = new FolderInputSuggest(this.app, cb, folders);
                 modal.onSelect(({ item }) => {
                     cb.setValue(item.path);
-                    cb.inputEl.trigger('input');
+                    cb.inputEl.trigger("input");
                     modal.close();
                 });
-                cb.setPlaceholder('Folder')
+                cb.setPlaceholder("Folder")
                     .setValue(this.newSettings.themeDirectory)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.themeDirectory = value;
                         for (const key in themeSettings) {
                             themeSettings[key].setDesc(themeDesc(key, value));
@@ -176,172 +177,176 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                     });
             });
 
-        new Setting(containerEl).setName('Slides').setHeading();
+        new Setting(containerEl).setName("Slides").setHeading();
 
-        themeSettings['slide'] = new Setting(containerEl)
-            .setName('Default slide theme')
-            .setDesc(themeDesc('slide', this.newSettings.themeDirectory))
-            .addSearch(cb => {
+        themeSettings.slide = new Setting(containerEl)
+            .setName("Default slide theme")
+            .setDesc(themeDesc("slide", this.newSettings.themeDirectory))
+            .addSearch((cb) => {
                 const modal = new ThemeInputSuggest(
                     this.app,
                     cb,
-                    getThemeFiles(this.plugin.obsidianUtils, 'theme'),
+                    getThemeFiles(this.plugin.obsidianUtils, "theme"),
                 ).onSelect(({ item }) => {
                     cb.setValue(item);
-                    cb.inputEl.trigger('input');
+                    cb.inputEl.trigger("input");
                     modal.close();
                 });
-                cb.setPlaceholder('black')
+                cb.setPlaceholder("black")
                     .setValue(this.newSettings.theme)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.theme = value;
                     });
             });
 
-        themeSettings['highlight'] = new Setting(containerEl)
-            .setName('Default highlight theme')
-            .setDesc(themeDesc('highlight', this.newSettings.themeDirectory))
-            .addSearch(cb => {
+        themeSettings.highlight = new Setting(containerEl)
+            .setName("Default highlight theme")
+            .setDesc(themeDesc("highlight", this.newSettings.themeDirectory))
+            .addSearch((cb) => {
                 const modal = new ThemeInputSuggest(
                     this.app,
                     cb,
-                    getThemeFiles(this.plugin.obsidianUtils, 'highlight'),
+                    getThemeFiles(this.plugin.obsidianUtils, "highlight"),
                 ).onSelect(({ item }) => {
                     cb.setValue(item);
-                    cb.inputEl.trigger('input');
+                    cb.inputEl.trigger("input");
                     modal.close();
                 });
-                cb.setPlaceholder('zenburn')
+                cb.setPlaceholder("zenburn")
                     .setValue(this.newSettings.highlightTheme)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.highlightTheme = value;
                     });
             });
 
         new Setting(containerEl)
-            .setName('Center content')
+            .setName("Center content")
             .setDesc(
-                'When enabled, content is centered on the slide by default.',
+                "When enabled, content is centered on the slide by default.",
             )
-            .addToggle(value =>
-                value.setValue(this.newSettings.center).onChange(value => {
+            .addToggle((value) =>
+                value.setValue(this.newSettings.center).onChange((value) => {
                     this.newSettings.center = value;
                 }),
             );
 
         new Setting(containerEl)
-            .setName('Transition style')
-            .setDesc('Select a default slide transition')
-            .addDropdown(cb => {
-                cb.addOption('none', 'none')
-                    .addOption('fade', 'fade')
-                    .addOption('slide', 'slide')
-                    .addOption('convex', 'convex')
-                    .addOption('concave', 'concave')
-                    .addOption('zoom', 'zoom')
+            .setName("Transition style")
+            .setDesc("Select a default slide transition")
+            .addDropdown((cb) => {
+                cb.addOption("none", "none")
+                    .addOption("fade", "fade")
+                    .addOption("slide", "slide")
+                    .addOption("convex", "convex")
+                    .addOption("concave", "concave")
+                    .addOption("zoom", "zoom")
                     .setValue(this.newSettings.transition)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.transition = value;
                     });
             });
 
         new Setting(containerEl)
-            .setName('Transition speed')
-            .setDesc('Select a default transition speed')
-            .addDropdown(cb => {
-                cb.addOption('slow', 'slow')
-                    .addOption('normal', 'default')
-                    .addOption('fast', 'fast')
+            .setName("Transition speed")
+            .setDesc("Select a default transition speed")
+            .addDropdown((cb) => {
+                cb.addOption("slow", "slow")
+                    .addOption("normal", "default")
+                    .addOption("fast", "fast")
                     .setValue(this.newSettings.transitionSpeed)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.transitionSpeed = value;
                     });
             });
 
-        containerEl.createEl('h2', { text: 'Plugins' });
+        containerEl.createEl("h2", { text: "Plugins" });
 
         new Setting(containerEl)
-            .setName('Controls')
-            .setDesc('When enabled, display presentation control arrows.')
-            .addToggle(value =>
-                value.setValue(this.newSettings.controls).onChange(value => {
+            .setName("Controls")
+            .setDesc("When enabled, display presentation control arrows.")
+            .addToggle((value) =>
+                value.setValue(this.newSettings.controls).onChange((value) => {
                     this.newSettings.controls = value;
                 }),
             );
 
         new Setting(containerEl)
-            .setName('Chalkboard')
-            .setDesc('When enabled, the slides will contain a chalkboard.')
-            .addToggle(value =>
+            .setName("Chalkboard")
+            .setDesc("When enabled, the slides will contain a chalkboard.")
+            .addToggle((value) =>
                 value
                     .setValue(this.newSettings.enableChalkboard)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.enableChalkboard = value;
                     }),
             );
 
         new Setting(containerEl)
-            .setName('Elapsed time bar')
-            .setDesc('When enabled, display an elapsed time bar.')
-            .addToggle(value =>
+            .setName("Elapsed time bar")
+            .setDesc("When enabled, display an elapsed time bar.")
+            .addToggle((value) =>
                 value
                     .setValue(this.newSettings.enableTimeBar)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.enableTimeBar = value;
                     }),
             );
 
         new Setting(containerEl)
-            .setName('Laser pointer')
+            .setName("Laser pointer")
             .setDesc(
-                'When enabled, changes your mouse into a laser pointer (Toggle with Q).',
+                "When enabled, changes your mouse into a laser pointer (Toggle with Q).",
             )
-            .addToggle(value =>
+            .addToggle((value) =>
                 value
                     .setValue(this.newSettings.enablePointer)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.enablePointer = value;
                     }),
             );
 
         new Setting(containerEl)
-            .setName('Menu')
-            .setDesc('When enabled, display a presentation menu button.')
-            .addToggle(value =>
-                value.setValue(this.newSettings.enableMenu).onChange(value => {
-                    this.newSettings.enableMenu = value;
-                }),
+            .setName("Menu")
+            .setDesc("When enabled, display a presentation menu button.")
+            .addToggle((value) =>
+                value
+                    .setValue(this.newSettings.enableMenu)
+                    .onChange((value) => {
+                        this.newSettings.enableMenu = value;
+                    }),
             );
 
         new Setting(containerEl)
-            .setName('Overview')
-            .setDesc('When enabled, display a presentation overview button.')
-            .addToggle(value =>
+            .setName("Overview")
+            .setDesc("When enabled, display a presentation overview button.")
+            .addToggle((value) =>
                 value
                     .setValue(this.newSettings.enableOverview)
-                    .onChange(value => {
+                    .onChange((value) => {
                         this.newSettings.enableOverview = value;
                     }),
             );
 
         new Setting(containerEl)
-            .setName('Progress bar')
-            .setDesc('When enabled, display a presentation progress bar.')
-            .addToggle(value =>
-                value.setValue(this.newSettings.progress).onChange(value => {
+            .setName("Progress bar")
+            .setDesc("When enabled, display a presentation progress bar.")
+            .addToggle((value) =>
+                value.setValue(this.newSettings.progress).onChange((value) => {
                     this.newSettings.progress = value;
                 }),
             );
 
         new Setting(containerEl)
-            .setName('Slide numbers')
+            .setName("Slide numbers")
             .setDesc(
-                'When enabled, display the page number of the current slide.',
+                "When enabled, display the page number of the current slide.",
             )
-            .addToggle(value =>
-                value.setValue(this.newSettings.slideNumber).onChange(value => {
-                    this.newSettings.slideNumber = value;
-                }),
+            .addToggle((value) =>
+                value
+                    .setValue(this.newSettings.slideNumber)
+                    .onChange((value) => {
+                        this.newSettings.slideNumber = value;
+                    }),
             );
     }
 }
