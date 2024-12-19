@@ -1,5 +1,5 @@
-import { ObsidianUtils } from '../obsidianUtils';
-import { Options } from '../../@types';
+import type { ObsidianUtils } from "../obsidianUtils";
+import type { Options } from "../../@types";
 
 export class InternalLinkProcessor {
     private utils: ObsidianUtils;
@@ -14,11 +14,10 @@ export class InternalLinkProcessor {
         if (options.enableLinks) {
             return markdown.replaceAll(this.regex, (sub, first, second) => {
                 return `[${second}](obsidian://open?vault=${encodeURI(this.utils.vaultName)}&file=${encodeURI(
-                    first == undefined ? second : first,
+                    first === undefined ? second : first,
                 )})`;
             });
-        } else {
-            return markdown.replaceAll(this.regex, `$2`);
         }
+        return markdown.replaceAll(this.regex, "$2");
     }
 }

@@ -1,5 +1,5 @@
 import { Notice } from 'obsidian';
-import { ObsidianUtils } from '../obsidianUtils';
+import type { ObsidianUtils } from "../obsidianUtils";
 
 export class ExcalidrawProcessor {
     private excalidrawImageRegex =
@@ -33,6 +33,6 @@ export class ExcalidrawProcessor {
             );
             return line;
         }
-        return `![[${imgFile}${ext == undefined ? '' : '|' + ext}]] ${comment ?? ''}`;
+        return `![[${imgFile}${ext === undefined ? "" : `|${ext}`}]] ${comment ?? ""}`;
     }
 }

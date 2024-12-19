@@ -1,5 +1,3 @@
-import { PaneType } from 'obsidian';
-
 export interface EmbeddedSlideParameters {
     slide: string;
     page?: number;
@@ -33,6 +31,15 @@ export interface SlidesExtendedSettings {
     center: boolean;
 }
 
+export type ChartJsOptions = {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    elements?: any;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    plugins?: any;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    scales?: any;
+};
+
 export type Options = {
     bg: string;
     center: boolean;
@@ -55,6 +62,8 @@ export type Options = {
     width: number;
     enableCustomControls: boolean;
     transition: string;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    [key: string]: any;
 };
 
 export interface MediaCollector {

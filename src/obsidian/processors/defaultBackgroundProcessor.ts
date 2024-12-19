@@ -1,5 +1,5 @@
-import { CommentParser } from 'src/obsidian/comment';
-import { Options } from '../../@types';
+import { CommentParser } from "src/obsidian/comment";
+import type { Options } from "../../@types";
 
 export class DefaultBackgroundProcessor {
     private slideCommentRegex = /<!--\s*(?:\.)?slide.*-->/;
@@ -11,24 +11,23 @@ export class DefaultBackgroundProcessor {
 
         if (options?.bg) {
             if (
-                options?.bg == 'transparent' ||
-                options?.bg == 'rgba(0,0,0,0)'
+                options?.bg === "transparent" ||
+                options?.bg === "rgba(0,0,0,0)"
             ) {
-                output =
-                    `<style>
+                output = `<style>
 body {
 	background-color: rgba(0,0,0,0) !important;
 }
 </style>
-` + output;
+${output}`;
             }
 
             markdown
-                .split(new RegExp(options.separator, 'gmi'))
-                .map(slidegroup => {
+                .split(new RegExp(options.separator, "gmi"))
+                .map((slidegroup) => {
                     return slidegroup
-                        .split(new RegExp(options.verticalSeparator, 'gmi'))
-                        .map(slide => {
+                        .split(new RegExp(options.verticalSeparator, "gmi"))
+                        .map((slide) => {
                             if (slide) {
                                 const newSlide = this.transformSlide(
                                     slide,
@@ -36,9 +35,8 @@ body {
                                 );
                                 output = output.split(slide).join(newSlide);
                                 return newSlide;
-                            } else {
-                                return slide;
                             }
+                            return slide;
                         })
                         .join(options.verticalSeparator);
                 })
@@ -52,17 +50,16 @@ body {
             const [match] = this.slideCommentRegex.exec(slide);
             const comment = this.parser.parseLine(match);
             if (
-                !comment.hasAttribute('data-background-image') &&
-                !comment.hasAttribute('data-background-color')
+                !comment.hasAttribute("data-background-image") &&
+                !comment.hasAttribute("data-background-color")
             ) {
-                comment.addAttribute('bg', bg);
+                comment.addAttribute("bg", bg);
             }
             return slide.replace(
                 this.slideCommentRegex,
                 this.parser.commentToString(comment),
             );
-        } else {
-            return slide + `\n<!-- slide bg="${bg}" -->\n`;
         }
+        return `${slide}\n<!-- slide bg="${bg}" -->\n`;
     }
 }

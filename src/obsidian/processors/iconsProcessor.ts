@@ -6,7 +6,7 @@ export class IconsProcessor {
     }
 
     transformIconShortcode(markdown: string) {
-        markdown = markdown.replaceAll(this.regex, `![]($1 fa-$2)`);
+        markdown = markdown.replaceAll(this.regex, "![]($1 fa-$2)");
         return markdown;
     }
 }

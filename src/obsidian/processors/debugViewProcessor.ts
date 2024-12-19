@@ -1,4 +1,4 @@
-import { Options } from '../../@types';
+import type { Options } from "../../@types";
 
 export class DebugViewProcessor {
     process(markdown: string, options: Options) {
@@ -6,10 +6,10 @@ export class DebugViewProcessor {
 
         if (options.showGrid) {
             markdown
-                .split(new RegExp(options.separator, 'gmi'))
+                .split(new RegExp(options.separator, "gmi"))
                 .map((slidegroup, index) => {
                     return slidegroup
-                        .split(new RegExp(options.verticalSeparator, 'gmi'))
+                        .split(new RegExp(options.verticalSeparator, "gmi"))
                         .map((slide, index) => {
                             const [md, notes] = this.extractNotes(
                                 slide,
@@ -18,7 +18,7 @@ export class DebugViewProcessor {
 
                             let newSlide = this.addDebugCode(md);
                             if (notes.length > 0) {
-                                newSlide += '\n\n' + notes;
+                                newSlide += `\n\n${notes}`;
                             }
                             output = output.replace(slide, newSlide);
                             return newSlide;
@@ -31,7 +31,7 @@ export class DebugViewProcessor {
     }
 
     addDebugCode(markdown: string) {
-        let gridBlock = '';
+        let gridBlock = "";
         gridBlock +=
             '<grid drag="100 10" drop="0 0" border="thin dotted blue"/>\n';
         gridBlock +=
@@ -74,11 +74,11 @@ export class DebugViewProcessor {
         gridBlock +=
             '<grid drag="10 100" drop="90 0" border="thin dotted blue"/>\n';
 
-        return markdown + '\n' + gridBlock;
+        return `${markdown}\n${gridBlock}`;
     }
 
     extractNotes(input: string, options: Options): [string, string] {
-        let noteSeparator = 'note:';
+        let noteSeparator = "note:";
         if (options.notesSeparator && options.notesSeparator.length > 0) {
             noteSeparator = options.notesSeparator;
         }
@@ -86,8 +86,7 @@ export class DebugViewProcessor {
         const spliceIdx = input.indexOf(noteSeparator);
         if (spliceIdx > 0) {
             return [input.substring(0, spliceIdx), input.substring(spliceIdx)];
-        } else {
-            return [input, ''];
         }
+        return [input, ""];
     }
 }

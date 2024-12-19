@@ -6,7 +6,7 @@ export class AutoClosingProcessor {
     }
 
     transformBlock(markdown: string) {
-        markdown = markdown.replaceAll(this.regex, `<$1></$2>`);
+        markdown = markdown.replaceAll(this.regex, "<$1></$2>");
         return markdown;
     }
 }

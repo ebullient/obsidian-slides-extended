@@ -1,5 +1,5 @@
-import { CommentParser } from 'src/obsidian/comment';
-import { Options } from '../../@types';
+import { CommentParser } from "src/obsidian/comment";
+import type { Options } from "../../@types";
 
 export class DropProcessor {
     private slideCommentRegex = /<!--\s*(?:\.)?slide.*-->/;
@@ -10,18 +10,18 @@ export class DropProcessor {
         let output = markdown;
 
         markdown
-            .split(new RegExp(options.separator, 'gmi'))
-            .map(slidegroup => {
+            .split(new RegExp(options.separator, "gmi"))
+            .map((slidegroup) => {
                 return slidegroup
-                    .split(new RegExp(options.verticalSeparator, 'gmi'))
-                    .map(slide => {
+                    .split(new RegExp(options.verticalSeparator, "gmi"))
+                    .map((slide) => {
                         if (slide.trim().length > 0) {
                             const newSlide = this.transformSlide(
                                 slide,
                                 options,
                             );
                             const split = output.split(slide);
-                            if (split.length == 2) {
+                            if (split.length === 2) {
                                 output = split.join(newSlide);
                             } else {
                                 const right = split.splice(1).join(slide);
@@ -30,9 +30,8 @@ export class DropProcessor {
                                 output = both.join(newSlide);
                             }
                             return newSlide;
-                        } else {
-                            return slide;
                         }
+                        return slide;
                     })
                     .join(options.verticalSeparator);
             })
@@ -44,14 +43,15 @@ export class DropProcessor {
     transformSlide(slide: string, options: Options) {
         const [md, notes] = this.extractNotes(slide, options);
 
-        let outMd, outSlideComment;
+        let outMd: string;
+        let outSlideComment: string;
 
         if (this.slideCommentRegex.test(md)) {
             const [match] = this.slideCommentRegex.exec(md);
             const comment = this.parser.parseLine(match);
-            comment.addClass('drop');
+            comment.addClass("drop");
 
-            outMd = md.replace(this.slideCommentRegex, '');
+            outMd = md.replace(this.slideCommentRegex, "");
             outMd = outMd.trim();
 
             outSlideComment = this.parser.commentToString(comment);
@@ -63,13 +63,13 @@ export class DropProcessor {
         let out = `${outSlideComment}\n<grid absolute="true" drag="100 100" drop="0 0">\n${outMd}\n</grid>`;
 
         if (notes.length > 0) {
-            out += '\n\n' + notes;
+            out += `\n\n${notes}`;
         }
         return out;
     }
 
     extractNotes(input: string, options: Options): [string, string] {
-        let noteSeparator = 'note:';
+        let noteSeparator = "note:";
         if (options.notesSeparator && options.notesSeparator.length > 0) {
             noteSeparator = options.notesSeparator;
         }
@@ -77,8 +77,7 @@ export class DropProcessor {
         const spliceIdx = input.indexOf(noteSeparator);
         if (spliceIdx > 0) {
             return [input.substring(0, spliceIdx), input.substring(spliceIdx)];
-        } else {
-            return [input, ''];
         }
+        return [input, ""];
     }
 }

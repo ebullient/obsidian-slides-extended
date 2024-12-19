@@ -1,5 +1,5 @@
 import { Properties } from 'src/obsidian/transformers';
-import { Options } from '../../@types';
+import type { Options } from "../../@types";
 
 export class GridProcessor {
     private gridBlockRegex = /<\s*grid(?:(?!(<grid|<\/grid>)).)*<\/grid>/gs;
@@ -18,8 +18,8 @@ export class GridProcessor {
                     .map(slide => {
                         if (this.gridBlockRegex.test(slide)) {
                             let before = this.transformSlide(slide);
-                            let after;
-                            while (after != before) {
+                            let after: string;
+                            while (after !== before) {
                                 if (after) {
                                     before = after;
                                 }
@@ -41,8 +41,11 @@ export class GridProcessor {
         const result: Map<string, string> = new Map<string, string>();
         this.gridBlockRegex.lastIndex = 0;
 
-        let m;
-        while ((m = this.gridBlockRegex.exec(slide)) !== null) {
+        while (true) {
+            const m = this.gridBlockRegex.exec(slide);
+            if (!m) {
+                break;
+            }
             if (m.index === this.gridBlockRegex.lastIndex) {
                 this.gridBlockRegex.lastIndex++;
             }
@@ -70,8 +73,11 @@ export class GridProcessor {
         const result: Map<string, string> = new Map<string, string>();
         this.gridPropertiesRegex.lastIndex = 0;
 
-        let m;
-        while ((m = this.gridPropertiesRegex.exec(attributes)) !== null) {
+        while (true) {
+            const m = this.gridPropertiesRegex.exec(attributes);
+            if (!m) {
+                break;
+            }
             if (m.index === this.gridPropertiesRegex.lastIndex) {
                 this.gridPropertiesRegex.lastIndex++;
             }

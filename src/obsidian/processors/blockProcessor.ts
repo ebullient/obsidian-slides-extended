@@ -8,7 +8,7 @@ export class BlockProcessor {
             /:::\sblock\s*/g,
             '<div class="block">\n\n',
         );
-        markdown = markdown.replaceAll(':::', '</div>\n\n');
+        markdown = markdown.replaceAll(":::", "</div>\n\n");
         return markdown;
     }
 }

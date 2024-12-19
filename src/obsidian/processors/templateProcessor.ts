@@ -1,8 +1,8 @@
-import { CommentParser } from 'src/obsidian/comment';
-import { ObsidianUtils } from 'src/obsidian/obsidianUtils';
-import { FootnoteProcessor } from './footNoteProcessor';
-import { MultipleFileProcessor } from './multipleFileProcessor';
-import { Options } from '../../@types';
+import { CommentParser } from "src/obsidian/comment";
+import type { ObsidianUtils } from "src/obsidian/obsidianUtils";
+import { FootnoteProcessor } from "./footNoteProcessor";
+import { MultipleFileProcessor } from "./multipleFileProcessor";
+import type { Options } from "../../@types";
 
 export class TemplateProcessor {
     private multipleFileProcessor: MultipleFileProcessor;
@@ -32,19 +32,19 @@ export class TemplateProcessor {
 
         if (options.defaultTemplate != null) {
             markdown
-                .split(new RegExp(options.separator, 'gmi'))
-                .map(slidegroup => {
+                .split(new RegExp(options.separator, "gmi"))
+                .map((slidegroup) => {
                     return slidegroup
-                        .split(new RegExp(options.verticalSeparator, 'gmi'))
-                        .map(slide => {
+                        .split(new RegExp(options.verticalSeparator, "gmi"))
+                        .map((slide) => {
                             if (this.slideCommentRegex.test(slide)) {
                                 const [slideAnnotation] =
                                     this.slideCommentRegex.exec(slide);
                                 const comment =
                                     this.parser.parseLine(slideAnnotation);
-                                if (!comment.hasAttribute('template')) {
+                                if (!comment.hasAttribute("template")) {
                                     comment.addAttribute(
-                                        'template',
+                                        "template",
                                         options.defaultTemplate,
                                         false,
                                     );
@@ -64,8 +64,7 @@ export class TemplateProcessor {
                                 input = input
                                     .split(slide)
                                     .join(
-                                        `<!-- slide template="${options.defaultTemplate}" -->\n` +
-                                            slide,
+                                        `<!-- slide template="${options.defaultTemplate}" -->\n${slide}`,
                                     );
                             }
                             return slide;
@@ -78,11 +77,11 @@ export class TemplateProcessor {
         let output = input;
 
         input
-            .split(new RegExp(options.separator, 'gmi'))
-            .map(slidegroup => {
+            .split(new RegExp(options.separator, "gmi"))
+            .map((slidegroup) => {
                 return slidegroup
-                    .split(new RegExp(options.verticalSeparator, 'gmi'))
-                    .map(slide => {
+                    .split(new RegExp(options.verticalSeparator, "gmi"))
+                    .map((slide) => {
                         if (this.templateCommentRegex.test(slide)) {
                             try {
                                 // eslint-disable-next-line prefer-const
@@ -98,25 +97,25 @@ export class TemplateProcessor {
 
                                     if (circuitCounter > 9) {
                                         console.warn(
-                                            'WARNING: Circuit in template hierarchy detected!',
+                                            "WARNING: Circuit in template hierarchy detected!",
                                         );
                                         break;
                                     }
                                 }
                                 md = md.replaceAll(
                                     this.emptySlideCommentRegex,
-                                    '',
+                                    "",
                                 );
                                 md = md.trim();
                                 md = this.computeVariables(md, options);
                                 if (notes.length > 0) {
-                                    md += '\n\n' + notes;
+                                    md += `\n\n${notes}`;
                                 }
                                 output = output.split(slide).join(md);
                                 return md;
                             } catch (error) {
                                 console.error(
-                                    'Cannot process template: ' + error,
+                                    `Cannot process template: ${error}`,
                                 );
                                 return slide;
                             }
@@ -130,7 +129,7 @@ export class TemplateProcessor {
     }
 
     extractNotes(input: string, options: Options): [string, string] {
-        let noteSeparator = 'note:';
+        let noteSeparator = "note:";
         if (options.notesSeparator && options.notesSeparator.length > 0) {
             noteSeparator = options.notesSeparator;
         }
@@ -138,9 +137,8 @@ export class TemplateProcessor {
         const spliceIdx = input.indexOf(noteSeparator);
         if (spliceIdx > 0) {
             return [input.substring(0, spliceIdx), input.substring(spliceIdx)];
-        } else {
-            return [input, ''];
         }
+        return [input, ""];
     }
 
     transformSlide(slide: string) {
@@ -148,27 +146,29 @@ export class TemplateProcessor {
             const [, templateProperty, file] =
                 this.templateCommentRegex.exec(slide);
             let fileWithExtension = file;
-            if (!fileWithExtension.endsWith('.md')) {
-                fileWithExtension = fileWithExtension + '.md';
+            if (!fileWithExtension.endsWith(".md")) {
+                fileWithExtension = `${fileWithExtension}.md`;
             }
             let templateContent = this.utils.parseFile(fileWithExtension, null);
             templateContent =
                 this.multipleFileProcessor.process(templateContent);
             templateContent = templateContent
-                .split('<% content %>')
-                .join(slide.replaceAll(templateProperty, ''));
+                .split("<% content %>")
+                .join(slide.replaceAll(templateProperty, ""));
             return templateContent;
-        } else {
-            return slide;
         }
+        return slide;
     }
 
     computeVariables(slide: string, options: Options): string {
         let result = slide;
         this.propertyRegex.lastIndex = 0;
 
-        let m;
-        while ((m = this.propertyRegex.exec(slide)) !== null) {
+        while (true) {
+            const m = this.propertyRegex.exec(slide);
+            if (m == null) {
+                break;
+            }
             if (m.index === this.propertyRegex.lastIndex) {
                 this.propertyRegex.lastIndex++;
             }
@@ -176,38 +176,45 @@ export class TemplateProcessor {
             // eslint-disable-next-line prefer-const
             let [match, name, content] = m;
 
-            if (name.includes('<!--')) {
-                name = name.substring(0, name.indexOf('<!--'));
+            if (name.includes("<!--")) {
+                name = name.substring(0, name.indexOf("<!--"));
             }
 
-            if (name.trim() == 'block') continue;
+            if (name.trim() === "block") continue;
 
-            content = '::: block\n' + content;
-            const optionalName = '<%? ' + name.trim() + ' %>';
-            name = '<% ' + name.trim() + ' %>';
+            content = `::: block\n${content}`;
+            const optionalName = `<%? ${name.trim()} %>`;
+            name = `<% ${name.trim()} %>`;
             result = result.replaceAll(
                 optionalName,
-                content + '\n' + optionalName,
+                `${content}\n${optionalName}`,
             );
             result = result.replaceAll(name, content);
-            result = result.replaceAll(match, '');
+            result = result.replaceAll(match, "");
         }
         result = this.footnoteProcessor.transformFootNotes(result);
 
-        while ((m = this.variableRegex.exec(result)) !== null) {
+        while (true) {
+            const m = this.variableRegex.exec(result);
+            if (m == null) {
+                break;
+            }
             const key = m[1].trim();
-            const optionsAny = options as any;
-            if (optionsAny[key] != null) {
-                result = result.replaceAll(m[0], optionsAny[key] + '');
+            if (options[key] != null) {
+                result = result.replaceAll(m[0], `${options[key]}`);
             }
         }
 
         //Remove optional template variables
-        while ((m = this.optionalRegex.exec(result)) !== null) {
+        while (true) {
+            const m = this.optionalRegex.exec(result);
+            if (m == null) {
+                break;
+            }
             if (m.index === this.optionalRegex.lastIndex) {
                 this.optionalRegex.lastIndex++;
             }
-            result = result.replaceAll(m[0], '');
+            result = result.replaceAll(m[0], "");
         }
         return result;
     }

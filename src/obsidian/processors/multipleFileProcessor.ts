@@ -1,5 +1,5 @@
-import { isIcon, isImage, isUrl, isVideo } from 'src/util';
-import { ObsidianUtils } from '../obsidianUtils';
+import { isIcon, isImage, isUrl, isVideo } from "src/util";
+import type { ObsidianUtils } from "../obsidianUtils";
 
 export class MultipleFileProcessor {
     private utils: ObsidianUtils;
@@ -17,7 +17,7 @@ export class MultipleFileProcessor {
 
     process(markdown: string): string {
         return markdown
-            .split('\n')
+            .split("\n")
             .map((line, index) => {
                 // replace file:// with /local-file-url in markdown links
                 line = line.replace(
@@ -32,7 +32,7 @@ export class MultipleFileProcessor {
                 line = line.replace(
                     this.wikilinkFileRegex,
                     (_, filePath, aliasWithPipe) => {
-                        const alias = aliasWithPipe ? aliasWithPipe : '';
+                        const alias = aliasWithPipe ? aliasWithPipe : "";
                         const transformedPath =
                             this.transformAbsoluteFilePath(filePath);
                         return `[[${transformedPath}${alias}]]`;
@@ -47,19 +47,19 @@ export class MultipleFileProcessor {
                 }
                 return line;
             })
-            .join('\n');
+            .join("\n");
     }
 
     private transformContent(line: string, match: RegExp) {
-        let comment = '';
-        if (line.includes('<!--')) {
-            comment = line.substring(line.indexOf('<!--'));
+        let comment = "";
+        if (line.includes("<!--")) {
+            comment = line.substring(line.indexOf("<!--"));
         }
 
         return line.replaceAll(match, (matched, link) => {
             let header: string = null;
-            if (link.includes('#')) {
-                const split = link.split('#');
+            if (link.includes("#")) {
+                const split = link.split("#");
                 link = split[0];
                 header = split[1];
             }
@@ -68,7 +68,7 @@ export class MultipleFileProcessor {
                 return matched;
             }
 
-            const fileName = this.getMarkdownFile(link.replace('%20', ' '));
+            const fileName = this.getMarkdownFile(link.replace("%20", " "));
 
             if (fileName === null) {
                 return matched;
@@ -81,9 +81,8 @@ export class MultipleFileProcessor {
 
             if (comment.length > 0) {
                 return this.process(content + comment);
-            } else {
-                return this.process(content);
             }
+            return this.process(content);
         });
     }
 
@@ -93,8 +92,8 @@ export class MultipleFileProcessor {
         }
 
         let file = link;
-        if (!link.toLowerCase().endsWith('.md')) {
-            file = file + '.md';
+        if (!link.toLowerCase().endsWith(".md")) {
+            file = `${file}.md`;
         }
         return file;
     }
@@ -102,9 +101,9 @@ export class MultipleFileProcessor {
     private transformAbsoluteFilePath(path: string) {
         const pathUrl = new URL(path);
         if (pathUrl) {
-            return '/local-file-url' + pathUrl.pathname;
+            return `/local-file-url${pathUrl.pathname}`;
         }
-        console.debug('transformAbsoluteFilePath', path, 'invalid url');
+        console.debug("transformAbsoluteFilePath", path, "invalid url");
         return path;
     }
 }

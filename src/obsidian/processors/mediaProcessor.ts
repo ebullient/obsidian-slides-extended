@@ -1,6 +1,6 @@
 import { isIcon, isImage, isUrl, isVideo, mimeTypeFor } from 'src/util';
 import { CommentParser } from '../comment';
-import { ObsidianUtils } from '../obsidianUtils';
+import type { ObsidianUtils } from "../obsidianUtils";
 
 export class MediaProcessor {
     private utils: ObsidianUtils;
@@ -47,16 +47,17 @@ export class MediaProcessor {
             : this.parser.buildComment('element');
 
         if (ext) {
-            let width, height;
-            if (ext.includes('x')) {
-                [width, height] = ext.split('x');
+            let width: string;
+            let height: string;
+            if (ext.includes("x")) {
+                [width, height] = ext.split("x");
             } else {
                 width = ext;
             }
-            comment.addStyle('width', `${width}px`);
+            comment.addStyle("width", `${width}px`);
 
             if (height) {
-                comment.addStyle('height', `${height}px`);
+                comment.addStyle("height", `${height}px`);
             }
         }
         return this.parser.commentToString(comment);
@@ -66,10 +67,12 @@ export class MediaProcessor {
         let result = '';
         let lastIndex = 0;
 
-        let m;
         this.markdownMediaRegex.lastIndex = 0;
-
-        while ((m = this.markdownMediaRegex.exec(line)) !== null) {
+        while (true) {
+            const m = this.markdownMediaRegex.exec(line);
+            if (!m) {
+                break;
+            }
             if (m.index === this.markdownMediaRegex.lastIndex) {
                 this.markdownMediaRegex.lastIndex++;
             }
@@ -100,11 +103,11 @@ export class MediaProcessor {
 
             if (line.match(/^(?:[ ]{4,}|\t)!\[/)) {
                 // leading indent, leave as-is
-                embed = ' ';
+                embed = " ";
             }
 
-            let update = '';
-            if (embed === '!' && (icon || image || video)) {
+            let update = "";
+            if (embed === "!" && (icon || image || video)) {
                 update = this.createImageElement(filePath, alt, commentString);
             } else {
                 update = this.updateMarkdownLink(

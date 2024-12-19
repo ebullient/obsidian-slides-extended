@@ -12,15 +12,14 @@ export class LatexProcessor {
 
         if (match) {
             return (
-                this.transformLatex(markdown.substring(0, match['index'])) +
+                this.transformLatex(markdown.substring(0, match.index)) +
                 match[0] +
                 this.skipCodeBlocks(
-                    markdown.substring(match['index'] + match[0].length),
+                    markdown.substring(match.index + match[0].length),
                 )
             );
-        } else {
-            return this.transformLatex(markdown);
         }
+        return this.transformLatex(markdown);
     }
 
     private transformLatex(markdown: string) {
@@ -41,49 +40,48 @@ export class LatexProcessor {
         return (
             markdown
                 //Escaped $ signs
-                .replaceAll('\\$', '~~d~~')
+                .replaceAll("\\$", "~~d~~")
                 //Multiline in backticks
-                .replaceAll(/`\$\$/gm, '~~s~~')
-                .replaceAll(/\$\$`/gm, '~~e~~')
+                .replaceAll(/`\$\$/gm, "~~s~~")
+                .replaceAll(/\$\$`/gm, "~~e~~")
                 //Singleline in backticks
-                .replaceAll(/`\$/gm, '~~ss~~')
-                .replaceAll(/\$`/gm, '~~se~~')
+                .replaceAll(/`\$/gm, "~~ss~~")
+                .replaceAll(/\$`/gm, "~~se~~")
         );
     }
 
     private unmarkEscapedCharacters(markdown: string) {
         return markdown
-            .replaceAll('~~d~~', '\\$')
-            .replaceAll('~~e~~', '$$$$`')
-            .replaceAll('~~s~~', '`$$$$')
-            .replaceAll('~~ss~~', '`$')
-            .replaceAll('~~se~~', '$$`');
+            .replaceAll("~~d~~", "\\$")
+            .replaceAll("~~e~~", "$$$$`")
+            .replaceAll("~~s~~", "`$$$$")
+            .replaceAll("~~ss~~", "`$")
+            .replaceAll("~~se~~", "$$`");
     }
 
     private processSingleLine(markdown: string) {
         return markdown
-            .split('\n')
-            .map(line => {
-                if (line.includes('$')) {
-                    line = line.replaceAll(this.singleLine, '`$$$1$$`');
+            .split("\n")
+            .map((line) => {
+                if (line.includes("$")) {
+                    line = line.replaceAll(this.singleLine, "`$$$1$$`");
                 }
                 return line;
             })
-            .join('\n');
+            .join("\n");
     }
 
     private processMultiLine(markdown: string) {
-        if (markdown.includes('$$')) {
+        if (markdown.includes("$$")) {
             return markdown
-                .split('$$')
+                .split("$$")
                 .map((line, index) => {
                     if (this.isOdd(index)) {
                         return line;
-                    } else {
-                        return '`' + line + '`';
                     }
+                    return `\`${line}\``;
                 })
-                .join('$$')
+                .join("$$")
                 .slice(1, -1);
         }
         return markdown;

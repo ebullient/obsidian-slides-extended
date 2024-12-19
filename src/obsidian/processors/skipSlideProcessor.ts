@@ -1,5 +1,5 @@
-import { CommentParser } from 'src/obsidian/comment';
-import { Options } from '../../@types';
+import { CommentParser } from "src/obsidian/comment";
+import type { Options } from "../../@types";
 
 export class SkipSlideProcessor {
     private slideCommentRegex = /<!--\s*(?:\.)?slide.*-->/;
@@ -10,11 +10,11 @@ export class SkipSlideProcessor {
         let output = markdown;
 
         markdown
-            .split(new RegExp(options.separator, 'gmi'))
+            .split(new RegExp(options.separator, "gmi"))
             .map((slidegroup, index) => {
                 return slidegroup
-                    .split(new RegExp(options.verticalSeparator, 'gmi'))
-                    .map(slide => {
+                    .split(new RegExp(options.verticalSeparator, "gmi"))
+                    .map((slide) => {
                         let newSlide = slide;
 
                         if (this.slideCommentRegex.test(slide)) {
@@ -22,8 +22,8 @@ export class SkipSlideProcessor {
                             const comment = this.parser.parseLine(match);
 
                             if (
-                                comment.hasAttribute('skip') &&
-                                comment.getAttribute('skip') == 'true'
+                                comment.hasAttribute("skip") &&
+                                comment.getAttribute("skip") === "true"
                             ) {
                                 newSlide =
                                     '<!-- slide data-visibility="hidden" -->';

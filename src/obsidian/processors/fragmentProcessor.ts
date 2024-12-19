@@ -1,5 +1,5 @@
 import { CommentParser } from '../comment';
-import { Options } from '../../@types';
+import type { Options } from "../../@types";
 
 export class FragmentProcessor {
     private parser: CommentParser;
@@ -76,13 +76,9 @@ export class FragmentProcessor {
         }
 
         // See here: https://github.com/hakimel/reveal.js/issues/1848. This makes sure that reveals work when dealing with formatting in the list (e.g. bold / italic / code, etc.)
-        const extra_replacement =
-            '&shy;' + this.parser.commentToString(comment);
-        line = line.replace('+ ', '- ' + extra_replacement);
-        line = line.replaceAll(
-            this.orderedListRegex,
-            '1. ' + extra_replacement,
-        );
+        const extra_replacement = `&shy;${this.parser.commentToString(comment)}`;
+        line = line.replace("+ ", `- ${extra_replacement}`);
+        line = line.replaceAll(this.orderedListRegex, `1. ${extra_replacement}`);
 
         const output = line;
         return output;
