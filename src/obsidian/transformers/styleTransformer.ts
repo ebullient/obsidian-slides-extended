@@ -1,23 +1,20 @@
-import { AttributeTransformer, Properties } from './index';
+import type { AttributeTransformer, Properties } from "./index";
 
 export class StyleTransformer implements AttributeTransformer {
     transform(element: Properties) {
         const style = element.getAttribute('style');
 
-        if (style != undefined) {
-            style
-                .split(';')
-                .map(value => value.trim())
-                .filter(value => value.length > 0)
-                .forEach((item: string) => {
-                    if (item && item.includes(':')) {
-                        const [key, value] = item.split(':');
-                        if (key && key.length > 0 && value) {
-                            element.addStyle(key.trim(), value.trim());
-                        }
+        if (style !== undefined) {
+            for (const value of style.split(";")) {
+                const item = value.trim();
+                if (item.length > 0) {
+                    const [key, val] = item.split(":");
+                    if (key && key.length > 0 && val) {
+                        element.addStyle(key.trim(), val.trim());
                     }
-                });
-            element.deleteAttribute('style');
+                }
+            }
+            element.deleteAttribute("style");
         }
     }
 }

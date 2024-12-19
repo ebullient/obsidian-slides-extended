@@ -1,5 +1,5 @@
-import { YamlStore } from 'src/yaml/yamlStore';
-import { AttributeTransformer, Properties } from './index';
+import { YamlStore } from "src/yaml/yamlStore";
+import type { AttributeTransformer, Properties } from "./index";
 
 export class GridTransformer implements AttributeTransformer {
     private maxWidth: number;
@@ -16,54 +16,54 @@ export class GridTransformer implements AttributeTransformer {
         /^(?:(-?\d*(?:px)?)(?:\s*|x)(-?\d*(?:px)?)|(center|top|bottom|left|right|topleft|topright|bottomleft|bottomright))$/m;
 
     transform(element: Properties) {
-        let defaultDrop;
-        let defaultUnit;
+        let defaultDrop: string;
+        let defaultUnit: string;
 
-        const isAbsolute = element.getAttribute('absolute') == 'true';
+        const isAbsolute = element.getAttribute("absolute") === "true";
 
         if (isAbsolute) {
-            defaultDrop = '480px 700px';
-            defaultUnit = 'px';
+            defaultDrop = "480px 700px";
+            defaultUnit = "px";
         } else {
-            defaultDrop = '50 100';
-            defaultUnit = '%';
+            defaultDrop = "50 100";
+            defaultUnit = "%";
         }
 
-        const drop = element.getAttribute('drop');
+        const drop = element.getAttribute("drop");
 
-        if (drop != undefined) {
-            const drag = element.getAttribute('drag') ?? defaultDrop;
+        if (drop !== undefined) {
+            const drag = element.getAttribute("drag") ?? defaultDrop;
             const grid = this.read(drag, drop, isAbsolute);
 
-            if (grid != undefined) {
+            if (grid !== undefined) {
                 const left = this.leftOf(grid) + defaultUnit;
                 const top = this.topOf(grid) + defaultUnit;
                 const height = this.heightOf(grid) + defaultUnit;
                 const width = this.widthOf(grid) + defaultUnit;
 
-                element.addStyle('position', 'absolute');
-                element.addStyle('left', left);
-                element.addStyle('top', top);
-                element.addStyle('height', height);
-                element.addStyle('width', width);
+                element.addStyle("position", "absolute");
+                element.addStyle("left", left);
+                element.addStyle("top", top);
+                element.addStyle("height", height);
+                element.addStyle("width", width);
 
                 if (isAbsolute) {
-                    element.addStyle('min-height', height);
+                    element.addStyle("min-height", height);
                 }
             }
-            element.deleteAttribute('drag');
-            element.deleteAttribute('drop');
+            element.deleteAttribute("drag");
+            element.deleteAttribute("drop");
         }
 
-        if (element.getAttribute('align') || drop) {
-            const flow = element.getAttribute('flow');
+        if (element.getAttribute("align") || drop) {
+            const flow = element.getAttribute("flow");
             const [align, alignItems, justifyContent, stretch] =
-                this.getAlignment(element.getAttribute('align'), flow);
+                this.getAlignment(element.getAttribute("align"), flow);
             const justifyCtx =
-                element.getAttribute('justify-content') ?? justifyContent;
+                element.getAttribute("justify-content") ?? justifyContent;
 
             if (align) {
-                element.addAttribute('align', align, false);
+                element.addAttribute("align", align, false);
             }
 
             if (stretch) {
@@ -71,27 +71,26 @@ export class GridTransformer implements AttributeTransformer {
             }
 
             switch (flow) {
-                case 'row':
-                    element.addStyle('display', 'flex');
-                    element.addStyle('flex-direction', 'row');
-                    element.addStyle('align-items', alignItems);
-                    element.addStyle('justify-content', justifyCtx);
-                    element.addClass('flex-even');
+                case "row":
+                    element.addStyle("display", "flex");
+                    element.addStyle("flex-direction", "row");
+                    element.addStyle("align-items", alignItems);
+                    element.addStyle("justify-content", justifyCtx);
+                    element.addClass("flex-even");
                     break;
-                case 'col':
-                default:
-                    element.addStyle('display', 'flex');
-                    element.addStyle('flex-direction', 'column');
-                    element.addStyle('align-items', alignItems);
-                    element.addStyle('justify-content', justifyCtx);
+                default: // col
+                    element.addStyle("display", "flex");
+                    element.addStyle("flex-direction", "column");
+                    element.addStyle("align-items", alignItems);
+                    element.addStyle("justify-content", justifyCtx);
                     break;
             }
 
-            if (this.isCenter != undefined && !this.isCenter) {
-                element.addStyle('align-items', 'start');
+            if (this.isCenter !== undefined && !this.isCenter) {
+                element.addStyle("align-items", "start");
             }
-            element.deleteAttribute('flow');
-            element.deleteAttribute('justify-content');
+            element.deleteAttribute("flow");
+            element.deleteAttribute("justify-content");
         }
     }
 
@@ -99,77 +98,67 @@ export class GridTransformer implements AttributeTransformer {
         input: string,
         flow: string,
     ): [string, string, string, string] {
-        const direction = flow ?? 'col';
+        const direction = flow ?? "col";
 
         switch (input) {
-            case 'topleft':
-                if (direction == 'col') {
-                    return ['left', 'flex-start', 'flex-start', undefined];
-                } else {
-                    return ['left', 'flex-start', 'space-evenly', undefined];
+            case "topleft":
+                if (direction === "col") {
+                    return ["left", "flex-start", "flex-start", undefined];
                 }
-            case 'topright':
-                if (direction == 'col') {
-                    return ['right', 'flex-end', 'flex-start', undefined];
-                } else {
-                    return ['right', 'flex-start', 'space-evenly', undefined];
+                return ["left", "flex-start", "space-evenly", undefined];
+            case "topright":
+                if (direction === "col") {
+                    return ["right", "flex-end", "flex-start", undefined];
                 }
-            case 'bottomright':
-                if (direction == 'col') {
-                    return ['right', 'flex-end', 'flex-end', undefined];
-                } else {
-                    return ['right', 'flex-end', 'space-evenly', undefined];
+                return ["right", "flex-start", "space-evenly", undefined];
+            case "bottomright":
+                if (direction === "col") {
+                    return ["right", "flex-end", "flex-end", undefined];
                 }
-            case 'bottomleft':
-                if (direction == 'col') {
-                    return ['left', 'flex-start', 'flex-end', undefined];
-                } else {
-                    return ['left', 'flex-end', 'space-evenly', undefined];
+                return ["right", "flex-end", "space-evenly", undefined];
+            case "bottomleft":
+                if (direction === "col") {
+                    return ["left", "flex-start", "flex-end", undefined];
                 }
-            case 'left':
-                if (direction == 'col') {
-                    return ['left', 'flex-start', 'space-evenly', undefined];
-                } else {
-                    return ['left', 'center', 'space-evenly', undefined];
+                return ["left", "flex-end", "space-evenly", undefined];
+            case "left":
+                if (direction === "col") {
+                    return ["left", "flex-start", "space-evenly", undefined];
                 }
-            case 'right':
-                if (direction == 'col') {
-                    return ['right', 'flex-end', 'space-evenly', undefined];
-                } else {
-                    return ['right', 'center', 'space-evenly', undefined];
+                return ["left", "center", "space-evenly", undefined];
+            case "right":
+                if (direction === "col") {
+                    return ["right", "flex-end", "space-evenly", undefined];
                 }
-            case 'top':
-                if (direction == 'col') {
-                    return [undefined, 'center', 'flex-start', undefined];
-                } else {
-                    return [undefined, 'flex-start', 'space-evenly', undefined];
+                return ["right", "center", "space-evenly", undefined];
+            case "top":
+                if (direction === "col") {
+                    return [undefined, "center", "flex-start", undefined];
                 }
-            case 'bottom':
-                if (direction == 'col') {
-                    return [undefined, 'center', 'flex-end', undefined];
-                } else {
-                    return [undefined, 'flex-end', 'space-evenly', undefined];
+                return [undefined, "flex-start", "space-evenly", undefined];
+            case "bottom":
+                if (direction === "col") {
+                    return [undefined, "center", "flex-end", undefined];
                 }
+                return [undefined, "flex-end", "space-evenly", undefined];
 
-            case 'stretch':
-                if (direction == 'col') {
+            case "stretch":
+                if (direction === "col") {
                     return [
                         undefined,
-                        'center',
-                        'space-evenly',
-                        'stretch-column',
+                        "center",
+                        "space-evenly",
+                        "stretch-column",
                     ];
-                } else {
-                    return [undefined, 'center', 'space-evenly', 'stretch-row'];
                 }
+                return [undefined, "center", "space-evenly", "stretch-row"];
 
-            case 'block':
-            case 'justify':
-                return ['justify', 'center', 'space-evenly', undefined];
-            case 'center':
+            case "block":
+            case "justify":
+                return ["justify", "center", "space-evenly", undefined];
             default:
-                // align - alignItems - justifyContent
-                return [undefined, 'center', 'center', undefined];
+                // center; align - alignItems - justifyContent
+                return [undefined, "center", "center", undefined];
         }
     }
 
@@ -177,23 +166,17 @@ export class GridTransformer implements AttributeTransformer {
         try {
             const result = new Map<string, number>();
 
-            result.set('slideWidth', this.maxWidth);
-            result.set('slideHeight', this.maxHeight);
+            result.set("slideWidth", this.maxWidth);
+            result.set("slideHeight", this.maxHeight);
 
             if (isAbsolute) {
-                result.set('maxWidth', this.maxWidth);
-                result.set('maxHeight', this.maxHeight);
+                result.set("maxWidth", this.maxWidth);
+                result.set("maxHeight", this.maxHeight);
                 return this.readValues(drag, drop, result, this.toPixel);
-            } else {
-                result.set('maxWidth', 100);
-                result.set('maxHeight', 100);
-                return this.readValues(
-                    drag,
-                    drop,
-                    result,
-                    this.toRelativeValue,
-                );
             }
+            result.set("maxWidth", 100);
+            result.set("maxHeight", 100);
+            return this.readValues(drag, drop, result, this.toRelativeValue);
         } catch (ex) {
             return undefined;
         }
@@ -211,41 +194,41 @@ export class GridTransformer implements AttributeTransformer {
 
             if (width) {
                 result.set(
-                    'width',
-                    valueTransformer(result.get('slideWidth'), width),
+                    "width",
+                    valueTransformer(result.get("slideWidth"), width),
                 );
             }
 
             if (height) {
                 result.set(
-                    'height',
-                    valueTransformer(result.get('slideHeight'), height),
+                    "height",
+                    valueTransformer(result.get("slideHeight"), height),
                 );
             }
 
             if (name) {
                 const [nx, ny] = this.getXYof(
                     name,
-                    result.get('width'),
-                    result.get('height'),
-                    result.get('maxWidth'),
-                    result.get('maxHeight'),
+                    result.get("width"),
+                    result.get("height"),
+                    result.get("maxWidth"),
+                    result.get("maxHeight"),
                 );
 
-                result.set('x', nx);
-                result.set('y', ny);
+                result.set("x", nx);
+                result.set("y", ny);
             } else {
                 if (x) {
                     result.set(
-                        'x',
-                        valueTransformer(result.get('slideWidth'), x),
+                        "x",
+                        valueTransformer(result.get("slideWidth"), x),
                     );
                 }
 
                 if (y) {
                     result.set(
-                        'y',
-                        valueTransformer(result.get('slideHeight'), y),
+                        "y",
+                        valueTransformer(result.get("slideHeight"), y),
                     );
                 }
             }
@@ -256,22 +239,20 @@ export class GridTransformer implements AttributeTransformer {
     }
 
     toRelativeValue(max: number, input: string): number {
-        if (input.toLowerCase().endsWith('px')) {
+        if (input.toLowerCase().endsWith("px")) {
             return (
-                (Number(input.toLowerCase().replace('px', '').trim()) / max) *
+                (Number(input.toLowerCase().replace("px", "").trim()) / max) *
                 100
             );
-        } else {
-            return Number(input);
         }
+        return Number(input);
     }
 
     toPixel(max: number, input: string): number {
-        if (input.toLowerCase().endsWith('px')) {
-            return Number(input.toLowerCase().replace('px', '').trim());
-        } else {
-            return (max / 100) * Number(input);
+        if (input.toLowerCase().endsWith("px")) {
+            return Number(input.toLowerCase().replace("px", "").trim());
         }
+        return (max / 100) * Number(input);
     }
 
     getXYof(
@@ -282,23 +263,23 @@ export class GridTransformer implements AttributeTransformer {
         maxHeight: number,
     ): [number, number] {
         switch (name) {
-            case 'topleft':
+            case "topleft":
                 return [0, 0];
-            case 'topright':
+            case "topright":
                 return [maxWidth - width, 0];
-            case 'bottomleft':
+            case "bottomleft":
                 return [0, maxHeight - height];
-            case 'bottomright':
+            case "bottomright":
                 return [maxWidth - width, maxHeight - height];
-            case 'left':
+            case "left":
                 return [0, (maxHeight - height) / 2];
-            case 'right':
+            case "right":
                 return [maxWidth - width, (maxHeight - height) / 2];
-            case 'top':
+            case "top":
                 return [(maxWidth - width) / 2, 0];
-            case 'bottom':
+            case "bottom":
                 return [(maxWidth - width) / 2, maxHeight - height];
-            case 'center':
+            case "center":
                 return [(maxWidth - width) / 2, (maxHeight - height) / 2];
             default:
                 return [0, 0];
@@ -306,26 +287,24 @@ export class GridTransformer implements AttributeTransformer {
     }
 
     leftOf(grid: Map<string, number>): number {
-        if (grid.get('x') < 0) {
-            return grid.get('maxWidth') + grid.get('x') - grid.get('width');
-        } else {
-            return grid.get('x');
+        if (grid.get("x") < 0) {
+            return grid.get("maxWidth") + grid.get("x") - grid.get("width");
         }
+        return grid.get("x");
     }
 
     topOf(grid: Map<string, number>): number {
-        if (grid.get('y') < 0) {
-            return grid.get('maxHeight') + grid.get('y') - grid.get('height');
-        } else {
-            return grid.get('y');
+        if (grid.get("y") < 0) {
+            return grid.get("maxHeight") + grid.get("y") - grid.get("height");
         }
+        return grid.get("y");
     }
 
     heightOf(grid: Map<string, number>): number {
-        return grid.get('height');
+        return grid.get("height");
     }
 
     widthOf(grid: Map<string, number>): number {
-        return grid.get('width');
+        return grid.get("width");
     }
 }

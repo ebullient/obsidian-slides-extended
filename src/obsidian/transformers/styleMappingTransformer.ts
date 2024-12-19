@@ -1,4 +1,4 @@
-import { AttributeTransformer, Properties } from './index';
+import type { AttributeTransformer, Properties } from "./index";
 
 export class StyleMappingTransformer implements AttributeTransformer {
     private from: string;
@@ -11,7 +11,7 @@ export class StyleMappingTransformer implements AttributeTransformer {
 
     transform(element: Properties) {
         const value = element.getAttribute(this.from);
-        if (value != undefined) {
+        if (value !== undefined) {
             element.addStyle(this.to, value);
             element.deleteAttribute(this.from);
         }

@@ -1,12 +1,12 @@
-import { AttributeTransformer, Properties } from './index';
+import type { AttributeTransformer, Properties } from "./index";
 
 export class FragmentTransformer implements AttributeTransformer {
     transform(element: Properties) {
-        const value = element.getAttribute('frag');
-        if (value != undefined) {
-            element.addClass('fragment');
-            element.deleteAttribute('frag');
-            element.addAttribute('data-fragment-index', value);
+        const value = element.getAttribute("frag");
+        if (value !== undefined) {
+            element.addClass("fragment");
+            element.deleteAttribute("frag");
+            element.addAttribute("data-fragment-index", value);
         }
     }
 }

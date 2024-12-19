@@ -97,7 +97,7 @@ export class Properties {
         const result = Array<string>();
 
         for (const [key, value] of this.attributes) {
-            if (key == 'onTarget') {
+            if (key === "onTarget") {
                 continue;
             }
             result.push(`${key}="${value}"`);

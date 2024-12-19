@@ -1,17 +1,16 @@
-import { AttributeTransformer, Properties } from './index';
+import type { AttributeTransformer, Properties } from "./index";
 
 export class ClassTransformer implements AttributeTransformer {
     transform(element: Properties) {
         const clazz = element.getAttribute('class');
 
-        if (clazz != undefined) {
-            clazz
-                .split(' ')
-                .map(value => value.trim())
-                .forEach(value => {
-                    element.addClass(value);
-                });
-            element.deleteAttribute('class');
+        if (clazz !== undefined) {
+            for (const value of clazz.split(" ")) {
+                if (value.trim().length > 0) {
+                    element.addClass(value.trim());
+                }
+            }
+            element.deleteAttribute("class");
         }
     }
 }
