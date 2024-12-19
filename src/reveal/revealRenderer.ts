@@ -1,16 +1,19 @@
-import path, { basename, extname, join } from 'path';
+import path, { basename, extname, join } from "node:path";
 
-import Mustache from 'mustache';
-import { MarkdownProcessor } from '../obsidian/markdownProcessor';
-import { getMediaCollector, ObsidianUtils } from '../obsidian/obsidianUtils';
-import { RevealExporter } from './revealExporter';
-import { YamlParser } from '../yaml/yamlParser';
-import { glob } from 'glob';
-import { md } from './markdown';
-import { exists, readFile } from 'fs-extra';
-import { has, isEmpty } from '../util';
-import { DEFAULTS } from '../slidesExtended-constants';
-import { QueryString } from '../@types';
+import Mustache from "mustache";
+import type { MarkdownProcessor } from "../obsidian/markdownProcessor";
+import {
+    getMediaCollector,
+    type ObsidianUtils,
+} from "../obsidian/obsidianUtils";
+import { RevealExporter } from "./revealExporter";
+import { YamlParser } from "../yaml/yamlParser";
+import { glob } from "glob";
+import { md } from "./markdown";
+import { exists, readFile } from "fs-extra";
+import { has, isEmpty } from "../util";
+import { DEFAULTS } from "../slidesExtended-constants";
+import type { QueryString } from "../@types";
 
 export class RevealRenderer {
     private processor: MarkdownProcessor;
@@ -31,15 +34,15 @@ export class RevealRenderer {
         let renderForEmbed = false;
 
         if (!isEmpty(params)) {
-            if (has(params, 'export')) {
+            if (has(params, "export")) {
                 renderForExport = params?.export;
             }
 
-            if (has(params, 'print-pdf')) {
+            if (has(params, "print-pdf")) {
                 renderForPrint = true;
             }
 
-            if (has(params, 'embed')) {
+            if (has(params, "embed")) {
                 renderForEmbed = params?.embed;
             }
         }
@@ -106,9 +109,9 @@ export class RevealRenderer {
             enablePointer,
         } = settings;
 
-        let base = '';
+        let base = "";
         if (!getMediaCollector().shouldCollect()) {
-            base = '/';
+            base = "/";
         }
 
         const context = Object.assign(options, {
@@ -154,15 +157,15 @@ export class RevealRenderer {
         }
 
         for (const themeDir of searchPath) {
-            const revealThemes = glob.sync('*.css', {
+            const revealThemes = glob.sync("*.css", {
                 cwd: themeDir,
             });
 
             // We're doing some compensation + matching here
-            const key = basename(theme).replace(extname(theme), '');
+            const key = basename(theme).replace(extname(theme), "");
             const revealTheme = revealThemes.find(
-                themePath =>
-                    basename(themePath).replace(extname(themePath), '') === key,
+                (themePath) =>
+                    basename(themePath).replace(extname(themePath), "") === key,
             );
 
             if (revealTheme) {
@@ -174,12 +177,12 @@ export class RevealRenderer {
 
     private toExternalPath(urlPath: string): string {
         return urlPath
-            .replace(this.utils.pluginDirectory, '')
-            .replace(this.utils.vaultDirectory, '');
+            .replace(this.utils.pluginDirectory, "")
+            .replace(this.utils.vaultDirectory, "");
     }
 
     private async getPageTemplate(embed = false) {
-        const relativePath = embed ? 'embed.html' : DEFAULTS.template;
+        const relativePath = embed ? "embed.html" : DEFAULTS.template;
 
         const searchPath = this.utils.getHtmlTemplateSearchPath();
         for (const dir of searchPath) {
@@ -192,7 +195,7 @@ export class RevealRenderer {
         console.error(
             `Template file ${relativePath} not found in search path: ${searchPath}.`,
         );
-        return '';
+        return "";
     }
 
     private slidify(markdown: string, slidifyOptions: unknown) {
@@ -204,13 +207,13 @@ export class RevealRenderer {
         if (!css) {
             return input;
         }
-        if (typeof css === 'string') {
-            input = css.split(',');
+        if (typeof css === "string") {
+            input = css.split(",");
         } else {
             input = css;
         }
 
-        return input.map(css => {
+        return input.map((css) => {
             if (this.isValidUrl(css)) {
                 return css;
             }

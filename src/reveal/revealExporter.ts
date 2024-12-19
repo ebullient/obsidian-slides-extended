@@ -4,10 +4,10 @@ import {
     writeFile,
     existsSync,
     outputFileSync,
-} from 'fs-extra';
-import path from 'path';
-import { ObsidianUtils } from '../obsidian/obsidianUtils';
-import { Platform } from 'obsidian';
+} from "fs-extra";
+import path from "node:path";
+import type { ObsidianUtils } from "../obsidian/obsidianUtils";
+import { Platform } from "obsidian";
 
 export class RevealExporter {
     private pluginDirectory: string;
@@ -22,42 +22,42 @@ export class RevealExporter {
 
     public async export(filePath: string, html: string, imgList: string[]) {
         const ext = path.extname(filePath);
-        const folderName = path.basename(filePath).replaceAll(ext, '');
+        const folderName = path.basename(filePath).replaceAll(ext, "");
         const folderDir = path.join(this.exportDirectory, folderName);
         const sourceDir = path.dirname(filePath);
-        const vaultDir = this.vaultDirectory.replace(/\/$/, '');
+        const vaultDir = this.vaultDirectory.replace(/\/$/, "");
 
-        console.debug('export', sourceDir, vaultDir, folderDir);
+        console.debug("export", sourceDir, vaultDir, folderDir);
 
         await emptyDir(folderDir);
-        await writeFile(path.join(folderDir, 'index.html'), html);
+        await writeFile(path.join(folderDir, "index.html"), html);
 
         // TODO: let's track what css, scripts, and plugins are actually used
         // rather than copying everything.
         await copy(
-            path.join(this.pluginDirectory, 'css'),
-            path.join(folderDir, 'css'),
+            path.join(this.pluginDirectory, "css"),
+            path.join(folderDir, "css"),
         );
         await copy(
-            path.join(this.pluginDirectory, 'dist'),
-            path.join(folderDir, 'dist'),
+            path.join(this.pluginDirectory, "dist"),
+            path.join(folderDir, "dist"),
         );
         await copy(
-            path.join(this.pluginDirectory, 'plugin'),
-            path.join(folderDir, 'plugin'),
+            path.join(this.pluginDirectory, "plugin"),
+            path.join(folderDir, "plugin"),
         );
 
         for (const img of imgList) {
-            console.log('export', img);
-            if (img.startsWith('http')) {
+            console.log("export", img);
+            if (img.startsWith("http")) {
                 continue;
             }
-            if (img.startsWith('/local-file-url')) {
+            if (img.startsWith("/local-file-url")) {
                 const urlpath = img.replace(
-                    '/local-file-url',
+                    "/local-file-url",
                     Platform.resourcePathPrefix,
                 );
-                const result = await fetch(urlpath).catch(error => {
+                const result = await fetch(urlpath).catch((error) => {
                     return new Response(null, {
                         status: 404,
                         statusText: error.messge,
@@ -73,7 +73,7 @@ export class RevealExporter {
                         );
                     } else {
                         console.info(
-                            'open a bug to handle this kind of response. Include this message',
+                            "open a bug to handle this kind of response. Include this message",
                             result,
                         );
                     }
@@ -89,10 +89,10 @@ export class RevealExporter {
                     imgPath = relative;
                 }
             }
-            console.debug('img', img, imgPath, sourceDir != vaultDir);
+            console.debug("img", img, imgPath, sourceDir !== vaultDir);
             await copy(imgPath, path.join(folderDir, img));
         }
 
-        window.open('file://' + folderDir);
+        window.open(`file://${folderDir}`);
     }
 }

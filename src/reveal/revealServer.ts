@@ -1,13 +1,13 @@
-import Fastify, { FastifyInstance } from 'fastify';
+import Fastify, { type FastifyInstance } from "fastify";
 
-import { RevealRenderer } from './revealRenderer';
-import { ObsidianUtils } from '../obsidian/obsidianUtils';
-import { Notice, Platform, TAbstractFile } from 'obsidian';
-import { fastifyStatic, ListDir, ListFile } from '@fastify/static';
-import path from 'path';
-import { QueryString } from '../@types';
-import { existsSync } from 'fs';
-import { Buffer } from 'buffer';
+import { RevealRenderer } from "./revealRenderer";
+import type { ObsidianUtils } from "../obsidian/obsidianUtils";
+import { Notice, Platform, type TAbstractFile } from "obsidian";
+import { fastifyStatic, type ListDir, type ListFile } from "@fastify/static";
+import path from "node:path";
+import type { QueryString } from "../@types";
+import { existsSync } from "node:fs";
+import { Buffer } from "node:buffer";
 
 export class RevealServer {
     private _server: FastifyInstance;
@@ -29,106 +29,100 @@ export class RevealServer {
             serve: false,
         });
 
-        this._server.get<{ Querystring: QueryString }>(
-            '/',
-            async (request, reply) => {
-                if (this.filePath === null) {
-                    reply.type('text/html').send(chooseSlides);
-                } else {
-                    const markup = await this._revealRenderer.renderFile(
-                        this.filePath,
-                        request.query,
-                    );
-                    reply.type('text/html').send(markup);
-                }
-                return reply;
-            },
-        );
+        this._server.get<{ Querystring: QueryString }>("/", async (request, reply) => {
+            if (this.filePath === null) {
+                reply.type("text/html").send(chooseSlides);
+            } else {
+                const markup = await this._revealRenderer.renderFile(
+                    this.filePath,
+                    request.query,
+                );
+                reply.type("text/html").send(markup);
+            }
+            return reply;
+        });
 
-        ['plugin', 'dist', 'css'].forEach(dir => {
+        for (const dir of ["plugin", "dist", "css"]) {
             this._server.register(fastifyStatic, {
                 root: path.join(utils.pluginDirectory, dir),
-                prefix: '/' + dir,
+                prefix: `/${dir}`,
                 wildcard: true,
                 index: false,
                 decorateReply: false,
                 list: {
-                    format: 'html',
+                    format: "html",
                     render: renderIndex,
                 },
             });
-        });
+        }
 
-        this._server.get<{ Querystring: QueryString }>(
-            '/*',
-            async (request, reply) => {
-                // @ts-ignore
-                const file = request.params['*'];
+        this._server.get<{ Querystring: QueryString }>("/*", async (request, reply) => {
+            // @ts-ignore
+            const file = request.params["*"];
 
-                const renderMarkdownFile = async (filePath: string) => {
-                    const markup = await this._revealRenderer.renderFile(
-                        filePath,
-                        request.query,
-                    );
-                    reply.type('text/html').send(markup);
-                };
+            const renderMarkdownFile = async (filePath: string) => {
+                const markup = await this._revealRenderer.renderFile(
+                    filePath,
+                    request.query,
+                );
+                reply.type("text/html").send(markup);
+            };
 
-                if (file.startsWith('local-file-url')) {
-                    const urlpath = file.replace(
-                        'local-file-url',
-                        Platform.resourcePathPrefix,
-                    );
-                    const result = await fetch(urlpath).catch(error => {
-                        return new Response(null, {
-                            status: 404,
-                            statusText: error.messge,
-                        });
+            if (file.startsWith("local-file-url")) {
+                const urlpath = file.replace(
+                    "local-file-url",
+                    Platform.resourcePathPrefix,
+                );
+                const result = await fetch(urlpath).catch((error) => {
+                    return new Response(null, {
+                        status: 404,
+                        statusText: error.messge,
                     });
-                    if (result.ok) {
-                        if (result.blob) {
-                            const blob = await result.blob();
-                            const bytes = await blob.arrayBuffer();
-                            reply.type(blob.type).send(Buffer.from(bytes));
-                        } else {
-                            console.info(
-                                'open a bug to handle this kind of response. Include this message',
-                                result,
-                            );
-                        }
+                });
+                if (result.ok) {
+                    if (result.blob) {
+                        const blob = await result.blob();
+                        const bytes = await blob.arrayBuffer();
+                        reply.type(blob.type).send(Buffer.from(bytes));
                     } else {
-                        reply.code(404).send(result.statusText);
+                        console.info(
+                            "open a bug to handle this kind of response. Include this message",
+                            result,
+                        );
                     }
-                } else if (file.startsWith('embed/') && file.endsWith('.md')) {
-                    const filePath = path.join(
-                        utils.vaultDirectory,
-                        file.replace('embed/', ''),
-                    );
-                    await renderMarkdownFile(filePath);
-                } else if (file.endsWith('.md')) {
-                    // top-level slide
-                    this.filePath = path.join(utils.vaultDirectory, file);
-                    await renderMarkdownFile(this.filePath);
                 } else {
-                    let fetch = file;
-                    const sourceDir = path.dirname(this.filePath);
-                    if (sourceDir != utils.vaultDirectory) {
-                        const srcPath = path.join(sourceDir, file);
-                        if (existsSync(srcPath)) {
-                            fetch = srcPath.replace(utils.vaultDirectory, '');
-                        }
-                    }
-                    console.debug(
-                        'serve file',
-                        file,
-                        sourceDir,
-                        utils.vaultDirectory,
-                        fetch,
-                    );
-                    reply.sendFile(fetch);
+                    reply.code(404).send(result.statusText);
                 }
-                return reply;
-            },
-        );
+            } else if (file.startsWith("embed/") && file.endsWith(".md")) {
+                const filePath = path.join(
+                    utils.vaultDirectory,
+                    file.replace("embed/", ""),
+                );
+                await renderMarkdownFile(filePath);
+            } else if (file.endsWith(".md")) {
+                // top-level slide
+                this.filePath = path.join(utils.vaultDirectory, file);
+                await renderMarkdownFile(this.filePath);
+            } else {
+                let fetch = file;
+                const sourceDir = path.dirname(this.filePath);
+                if (sourceDir !== utils.vaultDirectory) {
+                    const srcPath = path.join(sourceDir, file);
+                    if (existsSync(srcPath)) {
+                        fetch = srcPath.replace(utils.vaultDirectory, "");
+                    }
+                }
+                console.debug(
+                    "serve file",
+                    file,
+                    sourceDir,
+                    utils.vaultDirectory,
+                    fetch,
+                );
+                reply.sendFile(fetch);
+            }
+            return reply;
+        });
     }
 
     get running(): boolean {
@@ -142,45 +136,43 @@ export class RevealServer {
     }
 
     private fixedEncodeURIComponent(str: string) {
-        return str.replace(/[!'()*]/g, function (c) {
-            return '%' + c.charCodeAt(0).toString(16);
-        });
+        return str.replace(/[!'()*]/g, (c) => `%${c.charCodeAt(0).toString(16)}`);
     }
 
     async start() {
         if (this.running) {
             console.debug(
-                'Slides Extended server is already running',
+                "Slides Extended server is already running",
                 this._server.listeningOrigin.replace(
                     /(127\.0\.0\.1|\[::1\])/,
-                    'localhost',
+                    "localhost",
                 ),
             );
             return;
         }
         try {
-            await this._server.listen({ host: 'localhost', port: this._port });
+            await this._server.listen({ host: "localhost", port: this._port });
             console.info(
-                'Slides Extended is ready to go.',
+                "Slides Extended is ready to go.",
                 this._server.listeningOrigin.replace(
                     /(127\.0\.0\.1|\[::1\])/,
-                    'localhost',
+                    "localhost",
                 ),
             );
         } catch (err) {
             new Notice(
                 `Unable to start server. Is ${this._port} already in use?`,
             );
-            console.error('Unable to start server', err);
+            console.error("Unable to start server", err);
         }
     }
 
     async stop() {
         if (this.running) {
-            console.info('stopping Slides Extended server', this.running);
+            console.info("stopping Slides Extended server", this.running);
             await this._server.close();
         } else {
-            console.debug('Slides Extended server is not running');
+            console.debug("Slides Extended server is not running");
         }
     }
 }
@@ -194,10 +186,10 @@ const renderIndex = (dirs: ListDir[], files: ListFile[]) => {
     return `
 <html lang='en'><body>
 <ul>
-  ${dirs.map(dir => `<li><a href="${dir.href}">${dir.name}</a></li>`).join('\n  ')}
+  ${dirs.map((dir) => `<li><a href="${dir.href}">${dir.name}</a></li>`).join("\n  ")}
 </ul>
 <ul>
-  ${files.map(file => `<li><a href="${file.href}" target="_blank">${file.name}</a></li>`).join('\n  ')}
+  ${files.map((file) => `<li><a href="${file.href}" target="_blank">${file.name}</a></li>`).join("\n  ")}
 </ul>
 </body></html>`;
 };

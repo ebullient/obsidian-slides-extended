@@ -7,7 +7,7 @@ Keeping to time in presentations!
 
 [Check out the live demo](https://tkrkt.github.com/reveal.js-elapsed-time-bar/)
 
-## Installation 
+## Installation
 
 Copy the folder ``plugin/elapsed-time-bar`` into plugin folder of your reveal.js project.
 
@@ -27,7 +27,6 @@ Reveal.initialize({
   ]
 });
 ```
-
 
 ## Configurations
 
@@ -49,7 +48,6 @@ Reveal.initialize({
 });
 ```
 
-
 ## API
 
 You can use APIs from global ``ElapsedTimeBar`` object.
@@ -62,7 +60,6 @@ You can use APIs from global ``ElapsedTimeBar`` object.
 |reset()|reset timer|
 |pause()|pause timer|
 |resume()|resume timer|
-
 
 ## Keyboard binding example
 
@@ -83,7 +80,6 @@ Reveal.initialize({
 });
 ```
 
-
-# License
+## License
 
 MIT

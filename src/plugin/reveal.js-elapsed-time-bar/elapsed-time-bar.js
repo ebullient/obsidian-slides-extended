@@ -1,24 +1,19 @@
 
 window.ElapsedTimeBar = window.ElapsedTimeBar || {
     id: 'ElapsedTimeBar',
-    start: function(allottedTime, elapsedTime) {
+    start: (allottedTime, elapsedTime) => {
         ElapsedTimeBar.start(allottedTime, elapsedTime);
     },
-    reset: function() {
+    reset: () => {
         ElapsedTimeBar.reset();
     },
-    pause: function() {
+    pause: () => {
         ElapsedTimeBar.pause();
     },
-    resume: function() {
+    resume: () => {
         ElapsedTimeBar.resume();
     }
 };
-if (Reveal.isReady()) {
-    ElapsedTimeBar.handleReady();
-} else {
-    Reveal.addEventListener('ready', () => ElapsedTimeBar.handleReady());
-}
 
 const ElapsedTimeBar = {
     id: 'ElapsedTimeBar',
@@ -56,13 +51,15 @@ const ElapsedTimeBar = {
         let barHeight;
         const pageProgressContainer = document.querySelector('.progress');
         if (config.progressBarHeight) {
-            barHeight = parseInt(config.progressBarHeight, 10) + 'px';
+            barHeight = `${Number.parseInt(config.progressBarHeight, 10)}px`;
 
             // override height of page-progress container
-            pageProgressContainer && (pageProgressContainer.style.height = barHeight);
+            if (pageProgressContainer) {
+                pageProgressContainer.style.height = barHeight;
+            }
         } else if (config.progress && pageProgressContainer) {
             // get height from page-progress container
-            barHeight = pageProgressContainer.getBoundingClientRect().height + 'px';
+            barHeight = `${pageProgressContainer.getBoundingClientRect().height}px`;
         } else {
             // default
             barHeight = '3px';
@@ -71,25 +68,27 @@ const ElapsedTimeBar = {
         // create container of time-progress
         const timeProgressContainer = document.createElement('div');
         timeProgressContainer.classList.add('progress');
-        Object.entries({
+        for (const [k, v] of Object.entries({
             display: 'block',
             position: 'fixed',
             bottom: config.progress ? barHeight : 0,
             width: '100%',
             height: barHeight
-        }).forEach(([k, v]) => {
+        })) {
             timeProgressContainer.style[k] = v;
-        });
+        }
+
         document.querySelector('.reveal').appendChild(timeProgressContainer);
 
         // create content of time-progress
         this.timeProgressBar = document.createElement('div');
-        Object.entries({
+        for (const [k, v] of Object.entries({
             height: '100%',
             willChange: 'width'
-        }).forEach(([k, v]) => {
+        })) {
             this.timeProgressBar.style[k] = v;
-        });
+        }
+
         timeProgressContainer.appendChild(this.timeProgressBar);
 
         // start timer
@@ -107,7 +106,7 @@ const ElapsedTimeBar = {
             this.timeProgressBar.style.width = '100%';
             this.isFinished = true;
         } else {
-            this.timeProgressBar.style.width = elapsedTime / this.allottedTime * 100 + '%';
+            this.timeProgressBar.style.width = `${elapsedTime / this.allottedTime * 100}%`;
             requestAnimationFrame(this.loop.bind(this));
         }
     },
@@ -160,3 +159,9 @@ const ElapsedTimeBar = {
         this.loop();
     }
 };
+
+if (Reveal.isReady()) {
+    ElapsedTimeBar.handleReady();
+} else {
+    Reveal.addEventListener('ready', () => ElapsedTimeBar.handleReady());
+}
