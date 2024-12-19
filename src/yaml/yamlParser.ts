@@ -1,8 +1,8 @@
-import { loadFront } from 'yaml-front-matter';
+import { loadFront } from "yaml-front-matter";
 
-import { isEmpty, isNil, omit, omitBy, pick } from '../util';
-import { SlidesExtendedSettings, Options } from '../@types';
-import { DEFAULTS } from '../slidesExtended-constants';
+import { isEmpty, isNil, omit, omitBy, pick } from "../util";
+import type { SlidesExtendedSettings, Options } from "../@types";
+import { DEFAULTS } from "../slidesExtended-constants";
 
 export class YamlParser {
     private settings: SlidesExtendedSettings;
@@ -12,7 +12,7 @@ export class YamlParser {
     }
 
     getSlideOptions(options: unknown, print = false): Options {
-        const globalSettings = omitBy(this.settings, v => isNil(v) || v === '');
+        const globalSettings = omitBy(this.settings, (v) => isNil(v) || v === "");
         const printOptions = print ? this.getPrintOptions() : {};
         return Object.assign(
             {},
@@ -36,77 +36,73 @@ export class YamlParser {
     }
 
     getSlidifyOptions(options: Partial<Options>) {
-        const slidifyProps = [
-            'separator',
-            'verticalSeparator',
-            'notesSeparator',
-        ];
+        const slidifyProps = ["separator", "verticalSeparator", "notesSeparator"];
         return pick(options, slidifyProps);
     }
 
     getRevealOptions(options: Partial<Options>) {
         const revealProps = [
-            'width',
-            'height',
-            'margin',
-            'minScale',
-            'maxScale',
-            'controls',
-            'controlsTutorial',
-            'controlsLayout',
-            'controlsBackArrows',
-            'progress',
-            'slideNumber',
-            'showSlideNumber',
-            'hashOneBasedIndex',
-            'hash',
-            'respondToHashChanges',
-            'history',
-            'keyboard',
-            'keyboardCondition',
-            'disableLayout',
-            'overview',
-            'center',
-            'touch',
-            'loop',
-            'rtl',
-            'navigationMode',
-            'shuffle',
-            'fragments',
-            'fragmentInURL',
-            'embedded',
-            'help',
-            'pause',
-            'showNotes',
-            'autoPlayMedia',
-            'preloadIframes',
-            'autoAnimate',
-            'autoAnimateMatcher',
-            'autoAnimateEasing',
-            'autoAnimateDuration',
-            'autoAnimateUnmatched',
-            'autoSlide',
-            'autoSlideStoppable',
-            'autoSlideMethod',
-            'defaultTiming',
-            'mouseWheel',
-            'previewLinks',
-            'postMessage',
-            'postMessageEvents',
-            'focusBodyOnPageVisibilityChange',
-            'transition',
-            'transitionSpeed',
-            'backgroundTransition',
-            'pdfMaxPagesPerSlide',
-            'pdfSeparateFragments',
-            'pdfPageHeightOffset',
-            'viewDistance',
-            'mobileViewDistance',
-            'display',
-            'hideInactiveCursor',
-            'hideCursorTime',
-            'markdown',
-            'mermaid',
+            "width",
+            "height",
+            "margin",
+            "minScale",
+            "maxScale",
+            "controls",
+            "controlsTutorial",
+            "controlsLayout",
+            "controlsBackArrows",
+            "progress",
+            "slideNumber",
+            "showSlideNumber",
+            "hashOneBasedIndex",
+            "hash",
+            "respondToHashChanges",
+            "history",
+            "keyboard",
+            "keyboardCondition",
+            "disableLayout",
+            "overview",
+            "center",
+            "touch",
+            "loop",
+            "rtl",
+            "navigationMode",
+            "shuffle",
+            "fragments",
+            "fragmentInURL",
+            "embedded",
+            "help",
+            "pause",
+            "showNotes",
+            "autoPlayMedia",
+            "preloadIframes",
+            "autoAnimate",
+            "autoAnimateMatcher",
+            "autoAnimateEasing",
+            "autoAnimateDuration",
+            "autoAnimateUnmatched",
+            "autoSlide",
+            "autoSlideStoppable",
+            "autoSlideMethod",
+            "defaultTiming",
+            "mouseWheel",
+            "previewLinks",
+            "postMessage",
+            "postMessageEvents",
+            "focusBodyOnPageVisibilityChange",
+            "transition",
+            "transitionSpeed",
+            "backgroundTransition",
+            "pdfMaxPagesPerSlide",
+            "pdfSeparateFragments",
+            "pdfPageHeightOffset",
+            "viewDistance",
+            "mobileViewDistance",
+            "display",
+            "hideInactiveCursor",
+            "hideCursorTime",
+            "markdown",
+            "mermaid",
         ];
         const globalSettings = pick(
             omitBy(this.settings, isEmpty),
@@ -118,12 +114,12 @@ export class YamlParser {
 
     getTemplateSettings(options: Partial<Options>) {
         const properties = [
-            'enableOverview',
-            'enableChalkboard',
-            'enableMenu',
-            'enableCustomControls',
-            'enableTimeBar',
-            'enablePointer',
+            "enableOverview",
+            "enableChalkboard",
+            "enableMenu",
+            "enableCustomControls",
+            "enableTimeBar",
+            "enablePointer",
         ];
 
         const globalSettings = pick(this.settings, properties);
@@ -137,9 +133,9 @@ export class YamlParser {
         markdown: string;
     } {
         try {
-            const document = loadFront(input.replace(/^\uFEFF/, ''));
+            const document = loadFront(input.replace(/^\uFEFF/, ""));
             return {
-                yamlOptions: omit(document, ['__content']),
+                yamlOptions: omit(document, ["__content"]),
                 markdown: document.__content || input,
             };
         } catch (error) {
