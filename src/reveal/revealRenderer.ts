@@ -92,7 +92,8 @@ export class RevealRenderer {
 
         const slidifyOptions = this.yaml.getSlidifyOptions(options);
 
-        const processedMarkdown = this.processor.process(markdown, options);
+        const prefetched = await this.utils.fetchRemoteMarkdown(markdown);
+        const processedMarkdown = this.processor.process(prefetched, options);
         const slides = this.slidify(processedMarkdown, slidifyOptions);
 
         const cssPaths = this.getCssPaths(options.css);

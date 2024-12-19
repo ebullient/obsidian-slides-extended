@@ -3,6 +3,7 @@ import { readFileSync } from "fs-extra";
 import {
     type App,
     FileSystemAdapter,
+    Platform,
     type TFile,
     resolveSubpath,
 } from "obsidian";
@@ -255,6 +256,78 @@ export class ObsidianUtils implements MediaCollector {
             );
         }
         return `![[${filename}#${header}]]`;
+    }
+
+    async fetchRemoteMarkdown(markdown: string): Promise<string> {
+        const stackTrace = Error().stack;
+        console.log(
+            "fetchRemoteMarkdown",
+            markdown.contains("file://"),
+            stackTrace,
+        );
+        const wikilinkFileRegex = /!\[\[(file:.+?\.md)(\|[^\]]+)?\]\]/gi;
+        const fileUrlRegex = /(!\[[^\]]*?\]\()(file:.+?\.md(?:#.+?)?)(\))/i;
+
+        // Replace wikilinks with markdown links
+        markdown = markdown.replace(wikilinkFileRegex, (match, p1, p2) => {
+            const filePath = p1;
+            const alias = p2 ? p2.slice(1) : "";
+            const url = new URL(filePath);
+            return `![${alias}](${url})`;
+        });
+        console.log(markdown);
+
+        // Replace markdown links with markdown content
+        if (fileUrlRegex.test(markdown)) {
+            const lines = markdown.split("\n");
+            for (let index = 0; index < lines.length; index++) {
+                const line = lines[index];
+                const match = fileUrlRegex.exec(line);
+                // one per line (as embed, should be fine)
+                if (match) {
+                    const fullMatch = match[0];
+                    const fileUrl = match[2];
+                    const content = await this.readRemoteFile(fileUrl);
+                    if (content) {
+                        lines[index] = line.replace(fullMatch, content);
+                    }
+                }
+            }
+            markdown = lines.join("\n");
+        }
+
+        return markdown;
+    }
+
+    async readRemoteFile(fileUrl: string): Promise<string> {
+        const anchorIndex = fileUrl.indexOf("#");
+        if (anchorIndex > -1) {
+            fileUrl = fileUrl.substring(0, anchorIndex);
+        }
+        const urlpath = fileUrl.replace("file://", Platform.resourcePathPrefix);
+
+        const result = await fetch(urlpath).catch((error) => {
+            return new Response(null, {
+                status: 404,
+                statusText: error.messge,
+            });
+        });
+        if (result.ok) {
+            if (result.blob) {
+                const blob = await result.blob();
+                const bytes = await blob.arrayBuffer();
+                const content = Buffer.from(bytes).toString();
+                if (this.yamlRegex.test(content)) {
+                    return this.yamlRegex.exec(content)[1];
+                }
+                return content;
+            }
+            console.info(
+                "open a bug to handle this kind of response. Include this message",
+                result,
+            );
+        }
+        return null;
     }
 
     substring(

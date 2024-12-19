@@ -74,6 +74,7 @@ export class RevealServer {
                 };
 
                 if (file.startsWith("local-file-url")) {
+                    console.debug("fetching local file", file);
                     const urlpath = file.replace(
                         "local-file-url",
                         Platform.resourcePathPrefix,
@@ -99,6 +100,7 @@ export class RevealServer {
                         reply.code(404).send(result.statusText);
                     }
                 } else if (file.startsWith("embed/") && file.endsWith(".md")) {
+                    console.debug("fetching embed file", file);
                     const filePath = path.join(
                         utils.vaultDirectory,
                         file.replace("embed/", ""),
@@ -106,11 +108,13 @@ export class RevealServer {
                     await renderMarkdownFile(filePath);
                 } else if (file.endsWith(".md")) {
                     // top-level slide
+                    console.debug("fetching markdown file", file);
                     this.filePath = path.join(utils.vaultDirectory, file);
                     await renderMarkdownFile(this.filePath);
                 } else {
                     let fetch = file;
                     const sourceDir = path.dirname(this.filePath);
+                    console.debug("fetching other file", sourceDir);
                     if (sourceDir !== utils.vaultDirectory) {
                         const srcPath = path.join(sourceDir, file);
                         if (existsSync(srcPath)) {
