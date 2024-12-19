@@ -1,8 +1,8 @@
 import { loadFront } from "yaml-front-matter";
 
-import { isEmpty, isNil, omit, omitBy, pick } from "../util";
-import type { SlidesExtendedSettings, Options } from "../@types";
+import type { Options, SlidesExtendedSettings } from "../@types";
 import { DEFAULTS } from "../slidesExtended-constants";
+import { isEmpty, isNil, omit, omitBy, pick } from "../util";
 
 export class YamlParser {
     private settings: SlidesExtendedSettings;
@@ -12,7 +12,10 @@ export class YamlParser {
     }
 
     getSlideOptions(options: unknown, print = false): Options {
-        const globalSettings = omitBy(this.settings, (v) => isNil(v) || v === "");
+        const globalSettings = omitBy(
+            this.settings,
+            (v) => isNil(v) || v === "",
+        );
         const printOptions = print ? this.getPrintOptions() : {};
         return Object.assign(
             {},
@@ -36,7 +39,11 @@ export class YamlParser {
     }
 
     getSlidifyOptions(options: Partial<Options>) {
-        const slidifyProps = ["separator", "verticalSeparator", "notesSeparator"];
+        const slidifyProps = [
+            "separator",
+            "verticalSeparator",
+            "notesSeparator",
+        ];
         return pick(options, slidifyProps);
     }
 

@@ -6,8 +6,8 @@ import {
     type EditorSuggestTriggerInfo,
     type TFile,
 } from "obsidian";
-import { dict } from './dict/SlidesExtendedDictionary';
-import { byInput, type DictionaryEntry } from "./dict/Dictionary";
+import { type DictionaryEntry, byInput } from "./dict/Dictionary";
+import { dict } from "./dict/SlidesExtendedDictionary";
 
 type Parameters = {
     tag: {
@@ -121,7 +121,10 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
 
                 let offset = 0;
 
-                if (line[json.value.start] === '"' || line[json.value.start] === "'") {
+                if (
+                    line[json.value.start] === '"' ||
+                    line[json.value.start] === "'"
+                ) {
                     offset = 1;
                 }
 
@@ -203,9 +206,9 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
         }
 
         const startPosition =
-            selectedLine.substring(0, cursorPosition).lastIndexOf(' ') + 1;
+            selectedLine.substring(0, cursorPosition).lastIndexOf(" ") + 1;
         const endPosition =
-            selectedLine.substring(cursorPosition).indexOf(' ') +
+            selectedLine.substring(cursorPosition).indexOf(" ") +
             cursorPosition +
             1;
 
@@ -223,7 +226,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
     }
 
     readTag(selectedLine: string) {
-        const line = selectedLine.substring(selectedLine.lastIndexOf('<'));
+        const line = selectedLine.substring(selectedLine.lastIndexOf("<"));
         const regex = /<!?-?-?\s?\.?(\w*)\s/;
 
         if (regex.test(line)) {

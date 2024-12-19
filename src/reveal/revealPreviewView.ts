@@ -4,8 +4,8 @@ import {
     type Menu,
     type WorkspaceLeaf,
 } from "obsidian";
+import type { Options, SlidesExtendedSettings } from "../@types";
 import { YamlParser } from "../yaml/yamlParser";
-import type { SlidesExtendedSettings, Options } from "../@types";
 
 export const REVEAL_PREVIEW_VIEW = "reveal-preview-view";
 

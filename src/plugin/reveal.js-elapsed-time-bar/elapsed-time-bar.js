@@ -1,6 +1,5 @@
-
 window.ElapsedTimeBar = window.ElapsedTimeBar || {
-    id: 'ElapsedTimeBar',
+    id: "ElapsedTimeBar",
     start: (allottedTime, elapsedTime) => {
         ElapsedTimeBar.start(allottedTime, elapsedTime);
     },
@@ -12,15 +11,15 @@ window.ElapsedTimeBar = window.ElapsedTimeBar || {
     },
     resume: () => {
         ElapsedTimeBar.resume();
-    }
+    },
 };
 
 const ElapsedTimeBar = {
-    id: 'ElapsedTimeBar',
+    id: "ElapsedTimeBar",
 
     // default value
-    barColor: 'rgb(200,0,0)',
-    pausedBarColor: 'rgba(200,0,0,.6)',
+    barColor: "rgb(200,0,0)",
+    pausedBarColor: "rgba(200,0,0,.6)",
 
     isPaused: false,
     isFinished: false,
@@ -39,7 +38,9 @@ const ElapsedTimeBar = {
 
         // activate this plugin if config.allottedTime exists.
         if (!config.allottedTime) {
-            console.warn('"allottedTime" property is required by the ElapsedTimeBar plugin.');
+            console.warn(
+                '"allottedTime" property is required by the ElapsedTimeBar plugin.',
+            );
             return;
         }
 
@@ -49,7 +50,7 @@ const ElapsedTimeBar = {
 
         // calc barHeight from config.barHeight or page-progress container
         let barHeight;
-        const pageProgressContainer = document.querySelector('.progress');
+        const pageProgressContainer = document.querySelector(".progress");
         if (config.progressBarHeight) {
             barHeight = `${Number.parseInt(config.progressBarHeight, 10)}px`;
 
@@ -62,29 +63,29 @@ const ElapsedTimeBar = {
             barHeight = `${pageProgressContainer.getBoundingClientRect().height}px`;
         } else {
             // default
-            barHeight = '3px';
+            barHeight = "3px";
         }
 
         // create container of time-progress
-        const timeProgressContainer = document.createElement('div');
-        timeProgressContainer.classList.add('progress');
+        const timeProgressContainer = document.createElement("div");
+        timeProgressContainer.classList.add("progress");
         for (const [k, v] of Object.entries({
-            display: 'block',
-            position: 'fixed',
+            display: "block",
+            position: "fixed",
             bottom: config.progress ? barHeight : 0,
-            width: '100%',
-            height: barHeight
+            width: "100%",
+            height: barHeight,
         })) {
             timeProgressContainer.style[k] = v;
         }
 
-        document.querySelector('.reveal').appendChild(timeProgressContainer);
+        document.querySelector(".reveal").appendChild(timeProgressContainer);
 
         // create content of time-progress
-        this.timeProgressBar = document.createElement('div');
+        this.timeProgressBar = document.createElement("div");
         for (const [k, v] of Object.entries({
-            height: '100%',
-            willChange: 'width'
+            height: "100%",
+            willChange: "width",
         })) {
             this.timeProgressBar.style[k] = v;
         }
@@ -103,10 +104,10 @@ const ElapsedTimeBar = {
         const now = +new Date();
         const elapsedTime = now - this.startTime - this.pauseTimeDuration;
         if (elapsedTime > this.allottedTime) {
-            this.timeProgressBar.style.width = '100%';
+            this.timeProgressBar.style.width = "100%";
             this.isFinished = true;
         } else {
-            this.timeProgressBar.style.width = `${elapsedTime / this.allottedTime * 100}%`;
+            this.timeProgressBar.style.width = `${(elapsedTime / this.allottedTime) * 100}%`;
             requestAnimationFrame(this.loop.bind(this));
         }
     },
@@ -157,11 +158,11 @@ const ElapsedTimeBar = {
         this.pauseTime = null;
         this.setBarColor();
         this.loop();
-    }
+    },
 };
 
 if (Reveal.isReady()) {
     ElapsedTimeBar.handleReady();
 } else {
-    Reveal.addEventListener('ready', () => ElapsedTimeBar.handleReady());
+    Reveal.addEventListener("ready", () => ElapsedTimeBar.handleReady());
 }

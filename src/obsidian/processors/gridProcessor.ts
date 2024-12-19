@@ -1,4 +1,4 @@
-import { Properties } from 'src/obsidian/transformers';
+import { Properties } from "src/obsidian/transformers";
 import type { Options } from "../../@types";
 
 export class GridProcessor {
@@ -11,11 +11,11 @@ export class GridProcessor {
         let output = markdown;
 
         markdown
-            .split(new RegExp(options.separator, 'gmi'))
-            .map(slidegroup => {
+            .split(new RegExp(options.separator, "gmi"))
+            .map((slidegroup) => {
                 return slidegroup
-                    .split(new RegExp(options.verticalSeparator, 'gmi'))
-                    .map(slide => {
+                    .split(new RegExp(options.verticalSeparator, "gmi"))
+                    .map((slide) => {
                         if (this.gridBlockRegex.test(slide)) {
                             let before = this.transformSlide(slide);
                             let after: string;

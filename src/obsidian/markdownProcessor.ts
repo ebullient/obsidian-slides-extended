@@ -1,29 +1,29 @@
-import { BlockProcessor } from './processors/blockProcessor';
-import { ExcalidrawProcessor } from './processors/excalidrawProcessor';
-import { FootnoteProcessor } from './processors/footNoteProcessor';
-import { FormatProcessor } from './processors/formatProcessor';
-import { FragmentProcessor } from './processors/fragmentProcessor';
-import { GridProcessor } from './processors/gridProcessor';
-import { MediaProcessor } from './processors/mediaProcessor';
-import { InternalLinkProcessor } from './processors/internalLinkProcessor';
-import { LatexProcessor } from './processors/latexProcessor';
-import { MermaidProcessor } from './processors/mermaidProcessor';
-import { MultipleFileProcessor } from './processors/multipleFileProcessor';
-import type { ObsidianUtils } from "./obsidianUtils";
-import { CommentProcessor } from './processors/commentProcessor';
-import { DropProcessor } from './processors/dropProcessor';
-import { YamlStore } from '../yaml/yamlStore';
-import { AutoClosingProcessor } from './processors/autoClosingProcessor';
-import { EmojiProcessor } from './processors/emojiProcessor';
-import { IconsProcessor } from './processors/iconsProcessor';
-import { DebugViewProcessor } from './processors/debugViewProcessor';
-import { CalloutProcessor } from './processors/calloutProcessor';
-import { TemplateProcessor } from './processors/templateProcessor';
-import { ChartProcessor } from './processors/chartProcessor';
-import { DefaultBackgroundProcessor } from './processors/defaultBackgroundProcessor';
-import { ReferenceProcessor } from './processors/referenceProcessor';
-import { SkipSlideProcessor } from './processors/skipSlideProcessor';
 import type { Options } from "../@types";
+import { YamlStore } from "../yaml/yamlStore";
+import type { ObsidianUtils } from "./obsidianUtils";
+import { AutoClosingProcessor } from "./processors/autoClosingProcessor";
+import { BlockProcessor } from "./processors/blockProcessor";
+import { CalloutProcessor } from "./processors/calloutProcessor";
+import { ChartProcessor } from "./processors/chartProcessor";
+import { CommentProcessor } from "./processors/commentProcessor";
+import { DebugViewProcessor } from "./processors/debugViewProcessor";
+import { DefaultBackgroundProcessor } from "./processors/defaultBackgroundProcessor";
+import { DropProcessor } from "./processors/dropProcessor";
+import { EmojiProcessor } from "./processors/emojiProcessor";
+import { ExcalidrawProcessor } from "./processors/excalidrawProcessor";
+import { FootnoteProcessor } from "./processors/footNoteProcessor";
+import { FormatProcessor } from "./processors/formatProcessor";
+import { FragmentProcessor } from "./processors/fragmentProcessor";
+import { GridProcessor } from "./processors/gridProcessor";
+import { IconsProcessor } from "./processors/iconsProcessor";
+import { InternalLinkProcessor } from "./processors/internalLinkProcessor";
+import { LatexProcessor } from "./processors/latexProcessor";
+import { MediaProcessor } from "./processors/mediaProcessor";
+import { MermaidProcessor } from "./processors/mermaidProcessor";
+import { MultipleFileProcessor } from "./processors/multipleFileProcessor";
+import { ReferenceProcessor } from "./processors/referenceProcessor";
+import { SkipSlideProcessor } from "./processors/skipSlideProcessor";
+import { TemplateProcessor } from "./processors/templateProcessor";
 
 export class MarkdownProcessor {
     private multipleFileProcessor: MultipleFileProcessor;
@@ -177,106 +177,106 @@ export class MarkdownProcessor {
         );
 
         if (options.log) {
-            this.log('markdown', '', markdown);
-            this.log('merge & template', markdown, after);
-            this.log('afterSkipSlideProcessor', after, afterSkipSlideProcessor);
+            this.log("markdown", "", markdown);
+            this.log("merge & template", markdown, after);
+            this.log("afterSkipSlideProcessor", after, afterSkipSlideProcessor);
             this.log(
-                'afterReferenceProcessor',
+                "afterReferenceProcessor",
                 afterSkipSlideProcessor,
                 afterReferenceProcessor,
             );
             this.log(
-                'afterDebugViewProcessor',
+                "afterDebugViewProcessor",
                 afterReferenceProcessor,
                 afterDebugViewProcessor,
             );
             this.log(
-                'afterAutoClosingProcessor',
+                "afterAutoClosingProcessor",
                 afterDebugViewProcessor,
                 afterAutoClosingProcessor,
             );
             this.log(
-                'defaultBackgroundProcessor',
+                "defaultBackgroundProcessor",
                 afterAutoClosingProcessor,
                 defaultBackgroundProcessor,
             );
             this.log(
-                'afterCalloutProcessor',
+                "afterCalloutProcessor",
                 defaultBackgroundProcessor,
                 afterCalloutProcessor,
             );
             this.log(
-                'afterEmojiProcessor',
+                "afterEmojiProcessor",
                 afterCalloutProcessor,
                 afterEmojiProcessor,
             );
             this.log(
-                'afterIconsProcessor',
+                "afterIconsProcessor",
                 afterEmojiProcessor,
                 afterIconsProcessor,
             );
             this.log(
-                'afterMermaidProcessor',
+                "afterMermaidProcessor",
                 afterIconsProcessor,
                 afterMermaidProcessor,
             );
             this.log(
-                'afterBlockProcessor',
+                "afterBlockProcessor",
                 afterMermaidProcessor,
                 afterBlockProcessor,
             );
             this.log(
-                'afterFootNoteProcessor',
+                "afterFootNoteProcessor",
                 afterBlockProcessor,
                 afterFootNoteProcessor,
             );
             this.log(
-                'afterExcalidrawProcessor',
+                "afterExcalidrawProcessor",
                 afterFootNoteProcessor,
                 afterExcalidrawProcessor,
             );
             this.log(
-                'afterMediaProcessor',
+                "afterMediaProcessor",
                 afterExcalidrawProcessor,
                 afterMediaProcessor,
             );
             this.log(
-                'afterInternalLinkProcessor',
+                "afterInternalLinkProcessor",
                 afterMediaProcessor,
                 afterInternalLinkProcessor,
             );
             this.log(
-                'afterLatexProcessor',
+                "afterLatexProcessor",
                 afterInternalLinkProcessor,
                 afterLatexProcessor,
             );
             this.log(
-                'afterFormatProcessor',
+                "afterFormatProcessor",
                 afterLatexProcessor,
                 afterFormatProcessor,
             );
             this.log(
-                'afterFragmentProcessor',
+                "afterFragmentProcessor",
                 afterFormatProcessor,
                 afterFragmentProcessor,
             );
             this.log(
-                'afterDropProcessor',
+                "afterDropProcessor",
                 afterFragmentProcessor,
                 afterDropProcessor,
             );
             this.log(
-                'afterGridProcessor',
+                "afterGridProcessor",
                 afterDropProcessor,
                 afterGridProcessor,
             );
             this.log(
-                'afterCommentProcessor',
+                "afterCommentProcessor",
                 afterGridProcessor,
                 afterCommentProcessor,
             );
             this.log(
-                'afterChartProcessor',
+                "afterChartProcessor",
                 afterCommentProcessor,
                 afterChartProcessor,
             );
@@ -286,11 +286,11 @@ export class MarkdownProcessor {
     }
 
     postProcess = (element: HTMLElement) => {
-        const paragraphs = element.querySelectorAll<HTMLParagraphElement>('p');
+        const paragraphs = element.querySelectorAll<HTMLParagraphElement>("p");
         for (let index = 0; index < paragraphs.length; index++) {
             const paragraph = paragraphs.item(index);
 
-            if (paragraph.innerText.startsWith(':::')) {
+            if (paragraph.innerText.startsWith(":::")) {
                 paragraph.remove();
             }
         }

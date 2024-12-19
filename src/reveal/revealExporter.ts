@@ -1,13 +1,13 @@
+import path from "node:path";
 import {
-    emptyDir,
     copy,
-    writeFile,
+    emptyDir,
     existsSync,
     outputFileSync,
+    writeFile,
 } from "fs-extra";
-import path from "node:path";
-import type { ObsidianUtils } from "../obsidian/obsidianUtils";
 import { Platform } from "obsidian";
+import type { ObsidianUtils } from "../obsidian/obsidianUtils";
 
 export class RevealExporter {
     private pluginDirectory: string;

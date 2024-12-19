@@ -2,7 +2,7 @@ import type { AttributeTransformer, Properties } from "./index";
 
 export class StyleTransformer implements AttributeTransformer {
     transform(element: Properties) {
-        const style = element.getAttribute('style');
+        const style = element.getAttribute("style");
 
         if (style !== undefined) {
             for (const value of style.split(";")) {

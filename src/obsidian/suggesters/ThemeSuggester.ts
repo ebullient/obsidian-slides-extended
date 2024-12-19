@@ -1,7 +1,7 @@
-import type { FuzzyMatch } from "obsidian";
 import fs from "node:fs";
-import type { ObsidianUtils } from "../obsidianUtils";
+import type { FuzzyMatch } from "obsidian";
 import { FuzzyInputSuggest } from "obsidian-utilities";
+import type { ObsidianUtils } from "../obsidianUtils";
 
 const highlightCss = (path: string, basename: string): boolean => {
     return (

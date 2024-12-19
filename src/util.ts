@@ -82,65 +82,65 @@ export function isUrl(path: string): boolean {
 
 export function isIcon(path: string) {
     return (
-        path.startsWith('fas') ||
-        path.startsWith('far') ||
-        path.startsWith('fal') ||
-        path.startsWith('fad') ||
-        path.startsWith('fab')
+        path.startsWith("fas") ||
+        path.startsWith("far") ||
+        path.startsWith("fal") ||
+        path.startsWith("fad") ||
+        path.startsWith("fab")
     );
 }
 
 export function isImage(path: string) {
     return (
-        path.endsWith('bmp') ||
-        path.endsWith('gif') ||
-        path.endsWith('jpeg') ||
-        path.endsWith('jpg') ||
-        path.endsWith('png') ||
-        path.endsWith('svg') ||
-        path.endsWith('webp')
+        path.endsWith("bmp") ||
+        path.endsWith("gif") ||
+        path.endsWith("jpeg") ||
+        path.endsWith("jpg") ||
+        path.endsWith("png") ||
+        path.endsWith("svg") ||
+        path.endsWith("webp")
     );
 }
 
 export function isVideo(path: string) {
     return (
-        path.endsWith('avi') ||
-        path.endsWith('mp4') ||
-        path.endsWith('mov') ||
-        path.endsWith('ogg') ||
-        path.endsWith('webm')
+        path.endsWith("avi") ||
+        path.endsWith("mp4") ||
+        path.endsWith("mov") ||
+        path.endsWith("ogg") ||
+        path.endsWith("webm")
     );
 }
 
 export function mimeTypeFor(fileName: string) {
-    switch (basename(fileName).split('.').pop()) {
-        case 'avi':
-            return 'video/x-msvideo';
-        case 'bmp':
-            return 'image/bmp';
-        case 'gif':
-            return 'image/gif';
-        case 'jpeg':
-            return 'image/jpeg';
-        case 'jpg':
-            return 'image/jpeg';
-        case 'mov':
-            return 'video/quicktime';
-        case 'mpeg':
-            return 'video/mpeg';
-        case 'mp4':
-            return 'video/mp4';
-        case 'ogv':
-            return 'video/ogg';
-        case 'png':
-            return 'image/png';
-        case 'svg':
-            return 'image/svg+xml';
-        case 'webm':
-            return 'video/webm';
-        case 'webp':
-            return 'image/webp';
+    switch (basename(fileName).split(".").pop()) {
+        case "avi":
+            return "video/x-msvideo";
+        case "bmp":
+            return "image/bmp";
+        case "gif":
+            return "image/gif";
+        case "jpeg":
+            return "image/jpeg";
+        case "jpg":
+            return "image/jpeg";
+        case "mov":
+            return "video/quicktime";
+        case "mpeg":
+            return "video/mpeg";
+        case "mp4":
+            return "video/mp4";
+        case "ogv":
+            return "video/ogg";
+        case "png":
+            return "image/png";
+        case "svg":
+            return "image/svg+xml";
+        case "webm":
+            return "video/webm";
+        case "webp":
+            return "image/webp";
         default:
-            return '';
+            return "";
     }
 }

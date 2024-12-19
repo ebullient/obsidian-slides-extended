@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { SlidesExtendedPlugin } from "./slidesExtended-Plugin";
 import JSZip from "jszip";
 import { requestUrl } from "obsidian";
+import type { SlidesExtendedPlugin } from "./slidesExtended-Plugin";
 
 export class SlidesExtendedDistribution {
     plugin: SlidesExtendedPlugin;

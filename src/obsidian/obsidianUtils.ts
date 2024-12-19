@@ -1,12 +1,12 @@
+import path from "node:path";
 import { readFileSync } from "fs-extra";
 import {
     type App,
     FileSystemAdapter,
-    resolveSubpath,
     type TFile,
+    resolveSubpath,
 } from "obsidian";
-import path from "node:path";
-import type { SlidesExtendedSettings, MediaCollector } from "../@types";
+import type { MediaCollector, SlidesExtendedSettings } from "../@types";
 import { DISABLED_IMAGE_COLLECTOR } from "../slidesExtended-constants";
 import { MarkdownProcessor } from "./markdownProcessor";
 
@@ -61,7 +61,9 @@ export class ObsidianUtils implements MediaCollector {
         this.cssSearchPath = [
             path.join(this.pluginDir), // relative to plugin dir
         ];
-        this.highlightSearchPath = [path.join(this.pluginDir, "plugin/highlight")];
+        this.highlightSearchPath = [
+            path.join(this.pluginDir, "plugin/highlight"),
+        ];
         this.themeSearchPath = [
             path.join(this.pluginDir, "css"), // plugin layouts
             path.join(this.distDir, "theme"), // reveal.js themes
@@ -341,7 +343,9 @@ export class ObsidianUtils implements MediaCollector {
     }
 
     resetImageCollection() {
-        console.debug("enable image collection for exported slides, start collecting");
+        console.debug(
+            "enable image collection for exported slides, start collecting",
+        );
         this.images.clear();
         this.isCollecting = true;
     }

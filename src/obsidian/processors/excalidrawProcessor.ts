@@ -1,4 +1,4 @@
-import { Notice } from 'obsidian';
+import { Notice } from "obsidian";
 import type { ObsidianUtils } from "../obsidianUtils";
 
 export class ExcalidrawProcessor {
@@ -13,13 +13,13 @@ export class ExcalidrawProcessor {
 
     process(markdown: string) {
         return markdown
-            .split('\n')
-            .map(line => {
+            .split("\n")
+            .map((line) => {
                 if (this.excalidrawImageRegex.test(line))
                     return this.transformLine(line);
                 return line;
             })
-            .join('\n');
+            .join("\n");
     }
 
     private transformLine(line: string) {

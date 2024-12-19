@@ -1,10 +1,10 @@
-import Color from 'color';
+import Color from "color";
 import type { AttributeTransformer, Properties } from "./index";
 
 export class BackgroundTransformer implements AttributeTransformer {
     transform(element: Properties) {
-        const bg = element.getAttribute('bg');
-        const target = element.getAttribute('onTarget');
+        const bg = element.getAttribute("bg");
+        const target = element.getAttribute("onTarget");
 
         if (bg !== undefined) {
             const color = this.readColor(bg);

@@ -1,5 +1,5 @@
-import { isIcon, isImage, isUrl, isVideo, mimeTypeFor } from 'src/util';
-import { CommentParser } from '../comment';
+import { isIcon, isImage, isUrl, isVideo, mimeTypeFor } from "src/util";
+import { CommentParser } from "../comment";
 import type { ObsidianUtils } from "../obsidianUtils";
 
 export class MediaProcessor {
@@ -19,18 +19,18 @@ export class MediaProcessor {
 
     process(markdown: string) {
         return markdown
-            .split('\n')
-            .map(line => {
+            .split("\n")
+            .map((line) => {
                 // Transform [[myImage.png]] to [](myImage.png) (media only)
                 return line.replace(
                     this.wikilinkMediaRegex,
                     (_, image, altText) => {
-                        const alias = altText ?? '';
+                        const alias = altText ?? "";
                         return `[${alias}](${image})`;
                     },
                 );
             })
-            .map(line => {
+            .map((line) => {
                 // Look at all markdown links (images or not)
                 // embedded remote links may not have image file extensions..
                 if (this.markdownMediaRegex.test(line)) {
@@ -38,13 +38,13 @@ export class MediaProcessor {
                 }
                 return line;
             })
-            .join('\n');
+            .join("\n");
     }
 
     private buildComment(ext: string, commentAsString: string) {
         const comment = commentAsString
             ? this.parser.parseComment(commentAsString)
-            : this.parser.buildComment('element');
+            : this.parser.buildComment("element");
 
         if (ext) {
             let width: string;
@@ -64,7 +64,7 @@ export class MediaProcessor {
     }
 
     private htmlify(line: string) {
-        let result = '';
+        let result = "";
         let lastIndex = 0;
 
         this.markdownMediaRegex.lastIndex = 0;
@@ -144,53 +144,53 @@ export class MediaProcessor {
         alt: string,
         commentString: string,
     ): string {
-        let result = '';
+        let result = "";
         if (alt.match(/^\d+x?\d*$/)) {
-            commentString = this.buildComment(alt, commentString) ?? '';
-            alt = '';
+            commentString = this.buildComment(alt, commentString) ?? "";
+            alt = "";
         }
         const type = mimeTypeFor(filePath);
 
         const comment =
             this.parser.parseLine(commentString) ??
-            this.parser.buildComment('element');
+            this.parser.buildComment("element");
 
         if (isIcon(filePath)) {
             result = `<i class="${filePath}" ${this.parser.buildAttributes(comment)}></i>\n`;
         } else {
-            if (comment.hasStyle('width') && !comment.hasStyle('object-fit')) {
-                comment.addStyle('object-fit', 'fill');
+            if (comment.hasStyle("width") && !comment.hasStyle("object-fit")) {
+                comment.addStyle("object-fit", "fill");
             }
 
-            if (!comment.hasStyle('align-self')) {
-                if (comment.hasAttribute('align')) {
-                    const align = comment.getAttribute('align');
+            if (!comment.hasStyle("align-self")) {
+                if (comment.hasAttribute("align")) {
+                    const align = comment.getAttribute("align");
 
                     switch (align) {
-                        case 'left':
-                            comment.addStyle('align-self', 'start');
+                        case "left":
+                            comment.addStyle("align-self", "start");
                             break;
-                        case 'right':
-                            comment.addStyle('align-self', 'end');
+                        case "right":
+                            comment.addStyle("align-self", "end");
                             break;
-                        case 'center':
-                            comment.addStyle('align-self', 'center');
+                        case "center":
+                            comment.addStyle("align-self", "center");
                             break;
-                        case 'stretch':
-                            comment.addStyle('align-self', 'stretch');
-                            comment.addStyle('object-fit', 'cover');
-                            comment.addStyle('height', '100%');
-                            comment.addStyle('width', '100%');
+                        case "stretch":
+                            comment.addStyle("align-self", "stretch");
+                            comment.addStyle("object-fit", "cover");
+                            comment.addStyle("height", "100%");
+                            comment.addStyle("width", "100%");
                             break;
                         default:
                             break;
                     }
-                    comment.deleteAttribute('align');
+                    comment.deleteAttribute("align");
                 }
             }
 
-            if (!comment.hasStyle('object-fit')) {
-                comment.addStyle('object-fit', 'scale-down');
+            if (!comment.hasStyle("object-fit")) {
+                comment.addStyle("object-fit", "scale-down");
             }
 
             const html = isVideo(filePath)

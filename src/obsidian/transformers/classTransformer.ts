@@ -2,7 +2,7 @@ import type { AttributeTransformer, Properties } from "./index";
 
 export class ClassTransformer implements AttributeTransformer {
     transform(element: Properties) {
-        const clazz = element.getAttribute('class');
+        const clazz = element.getAttribute("class");
 
         if (clazz !== undefined) {
             for (const value of clazz.split(" ")) {

@@ -1,8 +1,8 @@
 import { CommentParser } from "src/obsidian/comment";
 import type { ObsidianUtils } from "src/obsidian/obsidianUtils";
+import type { Options } from "../../@types";
 import { FootnoteProcessor } from "./footNoteProcessor";
 import { MultipleFileProcessor } from "./multipleFileProcessor";
-import type { Options } from "../../@types";
 
 export class TemplateProcessor {
     private multipleFileProcessor: MultipleFileProcessor;

@@ -2,7 +2,7 @@ import esbuild from "esbuild";
 import process from "node:process";
 import builtins from 'builtin-modules';
 import { copy } from 'esbuild-plugin-copy';
-import path, { basename } from 'node:path';
+import { basename } from 'node:path';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import { readdirSync } from "node:fs";
 import { config } from "dotenv";

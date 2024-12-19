@@ -1,14 +1,14 @@
-import { BackgroundImageTransformer } from './backgroundImageTransformer';
-import { BackgroundTransformer } from './backgroundTransformer';
-import { BorderTransformer } from './borderTransformer';
-import { ClassMappingTransformer } from './classMappingTransformer';
-import { ClassTransformer } from './classTransformer';
-import { FragmentTransformer } from './fragmentTransformer';
-import { GridTransformer } from './gridTransformer';
-import { PaddingTransformer } from './paddingTransformer';
-import { RotateTransformer } from './rotateTransformer';
-import { StyleMappingTransformer } from './styleMappingTransformer';
-import { StyleTransformer } from './styleTransformer';
+import { BackgroundImageTransformer } from "./backgroundImageTransformer";
+import { BackgroundTransformer } from "./backgroundTransformer";
+import { BorderTransformer } from "./borderTransformer";
+import { ClassMappingTransformer } from "./classMappingTransformer";
+import { ClassTransformer } from "./classTransformer";
+import { FragmentTransformer } from "./fragmentTransformer";
+import { GridTransformer } from "./gridTransformer";
+import { PaddingTransformer } from "./paddingTransformer";
+import { RotateTransformer } from "./rotateTransformer";
+import { StyleMappingTransformer } from "./styleMappingTransformer";
+import { StyleTransformer } from "./styleTransformer";
 
 export interface AttributeTransformer {
     transform(element: Properties): void;
@@ -80,7 +80,7 @@ export class Properties {
     }
 
     public getClasses(): string {
-        return Array.from(this.class).join(' ');
+        return Array.from(this.class).join(" ");
     }
 
     public getStyles(): string {
@@ -90,7 +90,7 @@ export class Properties {
             result.push(`${key}: ${value}`);
         }
 
-        return result.join('; ');
+        return result.join("; ");
     }
 
     public getAttributes(): string {
@@ -103,7 +103,7 @@ export class Properties {
             result.push(`${key}="${value}"`);
         }
 
-        return result.join(' ');
+        return result.join(" ");
     }
 }
 
@@ -116,14 +116,14 @@ class AttributeTransformers {
         this.allTransformers.push(new StyleTransformer());
         this.allTransformers.push(new BackgroundTransformer());
         this.allTransformers.push(new PaddingTransformer());
-        this.allTransformers.push(new ClassMappingTransformer('animate'));
+        this.allTransformers.push(new ClassMappingTransformer("animate"));
         this.allTransformers.push(new FragmentTransformer());
         this.allTransformers.push(
-            new StyleMappingTransformer('opacity', 'opacity'),
+            new StyleMappingTransformer("opacity", "opacity"),
         );
         this.allTransformers.push(new BorderTransformer());
         this.allTransformers.push(
-            new StyleMappingTransformer('filter', 'filter'),
+            new StyleMappingTransformer("filter", "filter"),
         );
         this.allTransformers.push(new RotateTransformer());
         this.allTransformers.push(new GridTransformer());

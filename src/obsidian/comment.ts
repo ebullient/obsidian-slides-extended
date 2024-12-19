@@ -1,10 +1,10 @@
-import { Properties } from './transformers';
+import { Properties } from "./transformers";
 
 export class Comment extends Properties {
     type: string;
 
     constructor(type: string, attributes: Map<string, string>) {
-        attributes.set('onTarget', type);
+        attributes.set("onTarget", type);
         super(attributes);
         this.type = type;
     }
@@ -16,26 +16,28 @@ export class Comment extends Properties {
         attributes: Map<string, string> = new Map<string, string>(),
     ): Comment {
         if (clazz && clazz.length > 0) {
-            const classValue = attributes.get('class');
+            const classValue = attributes.get("class");
 
             if (classValue) {
-                const split = classValue.split(' ');
+                const split = classValue.split(" ");
                 split.push(...clazz);
-                attributes.set('class', split.join(' '));
+                attributes.set("class", split.join(" "));
             } else {
-                attributes.set('class', clazz.join(' '));
+                attributes.set("class", clazz.join(" "));
             }
         }
 
         if (style && style.length > 0) {
-            const styleValue = attributes.get('style');
+            const styleValue = attributes.get("style");
 
             if (styleValue) {
-                const split = styleValue.split(';').map(value => value.trim());
+                const split = styleValue
+                    .split(";")
+                    .map((value) => value.trim());
                 split.push(...style);
-                attributes.set('style', split.join('; '));
+                attributes.set("style", split.join("; "));
             } else {
-                attributes.set('style', style.join('; '));
+                attributes.set("style", style.join("; "));
             }
         }
 
@@ -57,8 +59,8 @@ export class CommentParser {
         const styles = comment.getStyles();
         const classes = comment.getClasses();
 
-        const stylesString = styles.length > 0 ? `style="${styles}" ` : '';
-        const classesString = classes.length > 0 ? `class="${classes}" ` : '';
+        const stylesString = styles.length > 0 ? `style="${styles}" ` : "";
+        const classesString = classes.length > 0 ? `class="${classes}" ` : "";
 
         return `${stylesString}${classesString}${comment.getAttributes()}`.trim();
     }

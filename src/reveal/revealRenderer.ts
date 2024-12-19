@@ -1,19 +1,19 @@
 import path, { basename, extname, join } from "node:path";
 
+import { exists, readFile } from "fs-extra";
+import { glob } from "glob";
 import Mustache from "mustache";
+import type { QueryString } from "../@types";
 import type { MarkdownProcessor } from "../obsidian/markdownProcessor";
 import {
-    getMediaCollector,
     type ObsidianUtils,
+    getMediaCollector,
 } from "../obsidian/obsidianUtils";
-import { RevealExporter } from "./revealExporter";
-import { YamlParser } from "../yaml/yamlParser";
-import { glob } from "glob";
-import { md } from "./markdown";
-import { exists, readFile } from "fs-extra";
-import { has, isEmpty } from "../util";
 import { DEFAULTS } from "../slidesExtended-constants";
-import type { QueryString } from "../@types";
+import { has, isEmpty } from "../util";
+import { YamlParser } from "../yaml/yamlParser";
+import { md } from "./markdown";
+import { RevealExporter } from "./revealExporter";
 
 export class RevealRenderer {
     private processor: MarkdownProcessor;

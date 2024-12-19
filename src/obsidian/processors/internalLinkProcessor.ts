@@ -1,5 +1,5 @@
-import type { ObsidianUtils } from "../obsidianUtils";
 import type { Options } from "../../@types";
+import type { ObsidianUtils } from "../obsidianUtils";
 
 export class InternalLinkProcessor {
     private utils: ObsidianUtils;

@@ -1,6 +1,6 @@
-import type { SlidesExtendedPlugin } from "../slidesExtended-Plugin";
-import type { EmbeddedSlideParameters } from "../@types";
 import { load } from "js-yaml";
+import type { EmbeddedSlideParameters } from "../@types";
+import type { SlidesExtendedPlugin } from "../slidesExtended-Plugin";
 
 export class EmbeddedSlideProcessor {
     private plugin: SlidesExtendedPlugin;

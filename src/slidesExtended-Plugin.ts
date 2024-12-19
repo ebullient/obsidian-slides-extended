@@ -1,21 +1,21 @@
-import { addIcon, Plugin, type TAbstractFile } from "obsidian";
+import { Plugin, type TAbstractFile, addIcon } from "obsidian";
 import type { SlidesExtendedSettings } from "./@types";
-import { RevealServer } from "./reveal/revealServer";
+import { EmbeddedSlideProcessor } from "./obsidian/embeddedSlideProcessor";
 import { ObsidianUtils } from "./obsidian/obsidianUtils";
+import { LineSelectionListener } from "./obsidian/suggesters/lineSelectionListener";
 // import { AutoCompleteSuggest } from './obsidian/suggesters/AutoCompleteSuggester';
 import {
     REVEAL_PREVIEW_VIEW,
     RevealPreviewView,
 } from "./reveal/revealPreviewView";
-import { LineSelectionListener } from "./obsidian/suggesters/lineSelectionListener";
+import { RevealServer } from "./reveal/revealServer";
+import { SlidesExtendedDistribution } from "./slidesExtended-Distribution";
+import { SlidesExtendedSettingTab } from "./slidesExtended-SettingTab";
 import {
     DEFAULT_SETTINGS,
     ICON_DATA,
     REFRESH_ICON,
 } from "./slidesExtended-constants";
-import { SlidesExtendedSettingTab } from "./slidesExtended-SettingTab";
-import { EmbeddedSlideProcessor } from "./obsidian/embeddedSlideProcessor";
-import { SlidesExtendedDistribution } from "./slidesExtended-Distribution";
 
 export class SlidesExtendedPlugin extends Plugin {
     settings: SlidesExtendedSettings;

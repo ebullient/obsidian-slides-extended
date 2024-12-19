@@ -6,12 +6,12 @@ import {
     TFolder,
 } from "obsidian";
 import { FolderInputSuggest } from "obsidian-utilities";
+import type { SlidesExtendedSettings } from "./@types";
 import {
     ThemeInputSuggest,
     getThemeFiles,
 } from "./obsidian/suggesters/ThemeSuggester";
 import type { SlidesExtendedPlugin } from "./slidesExtended-Plugin";
-import type { SlidesExtendedSettings } from "./@types";
 
 /** This is because TypeScript's filters are dumb. */
 function isFolder(file: TAbstractFile): file is TFolder {
