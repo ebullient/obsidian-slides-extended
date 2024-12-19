@@ -1,13 +1,13 @@
 import {
-    Editor,
-    EditorPosition,
+    type Editor,
+    type EditorPosition,
     EditorSuggest,
-    EditorSuggestContext,
-    EditorSuggestTriggerInfo,
-    TFile,
-} from 'obsidian';
+    type EditorSuggestContext,
+    type EditorSuggestTriggerInfo,
+    type TFile,
+} from "obsidian";
 import { dict } from './dict/SlidesExtendedDictionary';
-import { byInput, DictionaryEntry } from './dict/Dictionary';
+import { byInput, type DictionaryEntry } from "./dict/Dictionary";
 
 type Parameters = {
     tag: {
@@ -58,19 +58,21 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
         } catch (error) {}
 
         if (json) {
-            const tag = dict.children.filter(x => x.property == json.tag.value);
+            const tag = dict.children.filter(
+                (x) => x.property === json.tag.value,
+            );
             if (tag && tag.length > 0) {
                 const map = tag.first().dictionary;
-                if (json.value.value != null && json.value.value.length == 0) {
+                if (json.value.value != null && json.value.value.length === 0) {
                     const result = map.children.filter(
-                        x => x.property == json.property.value,
+                        (x) => x.property === json.property.value,
                     );
                     if (result && result.length > 0) {
                         return result.first().dictionary;
                     }
                 } else if (json.value.value) {
                     const result = map.children.filter(
-                        x => x.property == json.property.value,
+                        (x) => x.property === json.property.value,
                     );
                     if (result && result.length > 0) {
                         const dict = result.first();
@@ -78,33 +80,25 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
                             return dict.dictionary.filter(
                                 byInput(json.value.value),
                             );
-                        } else {
-                            return result.first().dictionary;
                         }
+                        return result.first().dictionary;
                     }
                 } else {
                     if (json.property.value) {
                         return map.parent.filter(byInput(json.property.value));
-                    } else {
-                        return map.parent;
                     }
+                    return map.parent;
                 }
             }
         }
 
-        if (ctx.query.trim().startsWith('</')) {
+        if (ctx.query.trim().startsWith("</")) {
             return [];
-        } else {
-            return dict.parent.filter(byInput(ctx.query));
         }
+        return dict.parent.filter(byInput(ctx.query));
     }
     renderSuggestion(element: DictionaryEntry, el: HTMLElement) {
-        let text;
-        if (element.description) {
-            text = element.description;
-        } else {
-            text = element.value;
-        }
+        const text = element.description ? element.description : element.value;
         el.createSpan({ text });
     }
     selectSuggestion(
@@ -127,21 +121,15 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
 
                 let offset = 0;
 
-                if (
-                    line[json.value.start] == '"' ||
-                    line[json.value.start] == "'"
-                ) {
+                if (line[json.value.start] === '"' || line[json.value.start] === "'") {
                     offset = 1;
                 }
 
                 const before = line.substring(0, json.value.start + offset);
-                const after =
-                    line.substring(
-                        json.value.end + offset,
-                        json.value.end + 1 + offset,
-                    ) +
-                    ' ' +
-                    line.substring(json.value.end + 1 + offset);
+                const after = `${line.substring(
+                    json.value.end + offset,
+                    json.value.end + 1 + offset,
+                )} ${line.substring(json.value.end + 1 + offset)}`;
                 this.context.editor.setLine(
                     cursor.line,
                     `${before}${element.value}${after}`,
@@ -172,7 +160,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
                     `${element.value}`,
                     this.context.start,
                     this.context.end,
-                    'slidesExtended',
+                    "slidesExtended",
                 );
                 if (element.offset) {
                     this.context.editor.setCursor(
@@ -186,7 +174,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
                 `${element.value}`,
                 this.context.start,
                 this.context.end,
-                'slidesExtended',
+                "slidesExtended",
             );
             if (element.offset) {
                 this.context.editor.setCursor(
@@ -254,22 +242,21 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
         const tag = this.readTag(selectedLine);
 
         //Determain Property
-        let property;
-        let propStart;
-        let propEnd;
+        let property: string;
+        let propStart: number;
+        let propEnd: number;
 
         //Determain Value
-        let propValue;
-        let valStart;
-        let valEnd;
+        let propValue: string;
+        let valStart: number;
+        let valEnd: number;
 
         if (tag) {
             const regex = /\s(\w+[\w-]*)=?((?:"|')([^(?:"|')]*)(?:"|'))?/g;
             regex.lastIndex = 0;
 
-            let m;
-            while (
-                (m = regex.exec(
+            while (true) {
+                const m = regex.exec(
                     selectedLine.substring(
                         0,
                         firstFromPosition(selectedLine, cursorPosition, [
@@ -277,8 +264,10 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
                             '"',
                         ]),
                     ),
-                )) !== null
-            ) {
+                );
+                if (m == null) {
+                    break;
+                }
                 if (m.index === regex.lastIndex) {
                     regex.lastIndex++;
                 }
@@ -298,7 +287,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
                         selectedLine.substring(m.index).indexOf(propValue);
                     valEnd = valStart + propValue.length;
                 } else if (m[2]) {
-                    propValue = '';
+                    propValue = "";
                     valStart =
                         m.index + selectedLine.substring(m.index).indexOf('"');
                     if (valStart < 0) {
@@ -307,22 +296,16 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
                             selectedLine.substring(m.index).indexOf("'");
                     }
                     valEnd = valStart;
+                } else {
+                    //Reset if Cursor behind last Property
+                    property = undefined;
+                    propStart = undefined;
+                    propEnd = undefined;
+
+                    propValue = undefined;
+                    valStart = undefined;
+                    valEnd = undefined;
                 }
-            }
-
-            //Reset if Cursor behind last Property
-            if (
-                (valEnd && cursorPosition > valEnd + 1) ||
-                property == 'slide' ||
-                property == 'element'
-            ) {
-                property = undefined;
-                propStart = undefined;
-                propEnd = undefined;
-
-                propValue = undefined;
-                valStart = undefined;
-                valEnd = undefined;
             }
 
             return {
@@ -351,7 +334,7 @@ function firstFromPosition(
 
     for (const token of tokens) {
         const pos = target.indexOf(token, position);
-        if (pos != -1) {
+        if (pos !== -1) {
             result = result < pos ? result : pos;
         }
     }

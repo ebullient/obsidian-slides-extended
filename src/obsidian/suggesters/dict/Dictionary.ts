@@ -3,7 +3,7 @@ export interface DictionaryEntry {
     description?: string;
     offset?: number;
     name?: string;
-    strategy?: 'contains' | 'startsWith';
+    strategy?: "contains" | "startsWith";
 }
 
 export interface DictionaryTreeEntry {
@@ -32,19 +32,14 @@ export interface DictionaryRoot {
 export function byInput(
     input: string,
 ): (value: DictionaryEntry, index: number, array: Dictionary) => boolean {
-    return x => {
-        if (x.strategy == 'startsWith') {
-            if (x.name) {
-                return x.name.toLowerCase().startsWith(input.toLowerCase());
-            } else {
-                return x.value.toLowerCase().startsWith(input.toLowerCase());
-            }
-        } else {
-            if (x.name) {
-                return x.name.toLowerCase().contains(input.toLowerCase());
-            } else {
-                return x.value.toLowerCase().contains(input.toLowerCase());
-            }
+    return (x) => {
+        if (x.strategy === "startsWith") {
+            return x.name
+                ? x.name.toLowerCase().startsWith(input.toLowerCase())
+                : x.value.toLowerCase().startsWith(input.toLowerCase());
         }
+        return x.name
+            ? x.name.toLowerCase().contains(input.toLowerCase())
+            : x.value.toLowerCase().contains(input.toLowerCase());
     };
 }

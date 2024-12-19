@@ -1,13 +1,13 @@
-import { FuzzyMatch } from 'obsidian';
-import fs from 'fs';
-import { ObsidianUtils } from '../obsidianUtils';
-import { FuzzyInputSuggest } from 'obsidian-utilities';
+import type { FuzzyMatch } from "obsidian";
+import fs from "node:fs";
+import type { ObsidianUtils } from "../obsidianUtils";
+import { FuzzyInputSuggest } from "obsidian-utilities";
 
 const highlightCss = (path: string, basename: string): boolean => {
     return (
-        path.contains('highlight') ||
-        basename.contains('highlight') ||
-        basename.contains('hljs')
+        path.contains("highlight") ||
+        basename.contains("highlight") ||
+        basename.contains("hljs")
     );
 };
 const themeCss = (path: string, basename: string) =>
@@ -20,29 +20,29 @@ const getFiles = (
     const result = new Set<string>();
 
     for (const directory of directories) {
-        fs.readdirSync(directory).forEach(file => {
+        for (const file of fs.readdirSync(directory)) {
             if (include(directory, file)) {
                 result.add(file);
             }
-        });
+        }
     }
     return result;
 };
 
 export const getThemeFiles = (
     utils: ObsidianUtils,
-    type: 'highlight' | 'theme',
+    type: "highlight" | "theme",
 ): string[] => {
     const searchPath =
-        type == 'highlight'
+        type === "highlight"
             ? utils.getHighlightSearchPath()
             : utils.getThemeSearchPath();
 
     // ==> hljs or highlight
     return [
         ...getFiles(searchPath, (path: string, basename: string) => {
-            if (basename.endsWith('.css')) {
-                return type == 'highlight'
+            if (basename.endsWith(".css")) {
+                return type === "highlight"
                     ? highlightCss(path, basename)
                     : themeCss(path, basename);
             }

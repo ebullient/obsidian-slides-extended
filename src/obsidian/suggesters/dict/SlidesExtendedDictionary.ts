@@ -1,55 +1,55 @@
-import { Dictionary, DictionaryMap, DictionaryRoot } from './Dictionary';
+import type { Dictionary, DictionaryMap, DictionaryRoot } from "./Dictionary";
 
 const suggestionData: Dictionary = [
     {
-        value: '<grid >\n\n</grid>',
-        description: '<grid>',
+        value: "<grid >\n\n</grid>",
+        description: "<grid>",
         offset: 6,
     },
     {
-        value: '<split >\n\n</split>',
-        description: '<split>',
+        value: "<split >\n\n</split>",
+        description: "<split>",
         offset: 7,
     },
     {
-        value: '<style>\n\n\n\n</style>',
-        description: '<style>',
+        value: "<style>\n\n\n\n</style>",
+        description: "<style>",
         offset: 9,
     },
     {
-        value: '<!-- slide  -->',
-        description: '@slide',
+        value: "<!-- slide  -->",
+        description: "@slide",
         offset: 11,
     },
     {
-        name: 'element',
-        value: '<!-- element  -->',
-        description: '@element',
-        strategy: 'startsWith',
+        name: "element",
+        value: "<!-- element  -->",
+        description: "@element",
+        strategy: "startsWith",
         offset: 13,
     },
     {
-        value: '::: \n\n:::',
-        description: '::: <name>',
+        value: "::: \n\n:::",
+        description: "::: <name>",
         offset: 4,
     },
     {
-        value: '::: block\n\n\n\n:::',
-        description: '::: block',
+        value: "::: block\n\n\n\n:::",
+        description: "::: block",
         offset: 11,
     },
     {
-        name: 'small',
+        name: "small",
         value: '<span style="font-size:small"></span>',
-        description: 'small',
-        strategy: 'startsWith',
+        description: "small",
+        strategy: "startsWith",
         offset: 30,
     },
     {
-        name: 'embed',
-        value: '```slide\n{\n	slide: [[]],\n	page: 0\n}\n```',
-        description: '@embed',
-        strategy: 'startsWith',
+        name: "embed",
+        value: "```slide\n{\n	slide: [[]],\n	page: 0\n}\n```",
+        description: "@embed",
+        strategy: "startsWith",
         offset: 21,
     },
 ];
@@ -131,693 +131,693 @@ const gridData: Dictionary = [
 
 const dragData: Dictionary = [
     {
-        value: '<width> <height>',
+        value: "<width> <height>",
     },
 ];
 
 const dropData: Dictionary = [
     {
-        value: '<x> <y>',
+        value: "<x> <y>",
     },
     {
-        value: 'topleft',
+        value: "topleft",
     },
     {
-        value: 'top',
+        value: "top",
     },
     {
-        value: 'topright',
+        value: "topright",
     },
     {
-        value: 'left',
+        value: "left",
     },
     {
-        value: 'center',
+        value: "center",
     },
     {
-        value: 'right',
+        value: "right",
     },
     {
-        value: 'bottomleft',
+        value: "bottomleft",
     },
     {
-        value: 'bottom',
+        value: "bottom",
     },
     {
-        value: 'bottomright',
+        value: "bottomright",
     },
 ];
 
 const flowData: Dictionary = [
     {
-        value: 'row',
+        value: "row",
     },
     {
-        value: 'col',
+        value: "col",
     },
 ];
 
 const bgData: Dictionary = [
     {
-        value: '#425232',
-        description: '<#425232>',
+        value: "#425232",
+        description: "<#425232>",
     },
     {
-        value: 'rgb(255, 99, 71)',
-        description: '<rgb(255, 99, 71)>',
+        value: "rgb(255, 99, 71)",
+        description: "<rgb(255, 99, 71)>",
     },
     {
-        value: 'hsl(0, 100%, 50%)',
-        description: '<hsl(0, 100%, 50%)>',
+        value: "hsl(0, 100%, 50%)",
+        description: "<hsl(0, 100%, 50%)>",
     },
     {
-        value: 'black',
+        value: "black",
     },
     {
-        value: 'silver',
+        value: "silver",
     },
     {
-        value: 'gray',
+        value: "gray",
     },
     {
-        value: 'white',
+        value: "white",
     },
     {
-        value: 'maroon',
+        value: "maroon",
     },
     {
-        value: 'red',
+        value: "red",
     },
     {
-        value: 'purple',
+        value: "purple",
     },
     {
-        value: 'fuchsia',
+        value: "fuchsia",
     },
     {
-        value: 'green',
+        value: "green",
     },
     {
-        value: 'lime',
+        value: "lime",
     },
     {
-        value: 'olive',
+        value: "olive",
     },
     {
-        value: 'yellow',
+        value: "yellow",
     },
     {
-        value: 'navy',
+        value: "navy",
     },
     {
-        value: 'blue',
+        value: "blue",
     },
     {
-        value: 'teal',
+        value: "teal",
     },
     {
-        value: 'aqua',
+        value: "aqua",
     },
     {
-        value: 'orange',
+        value: "orange",
     },
     {
-        value: 'aliceblue',
+        value: "aliceblue",
     },
     {
-        value: 'antiquewhite',
+        value: "antiquewhite",
     },
     {
-        value: 'aquamarine',
+        value: "aquamarine",
     },
     {
-        value: 'azure',
+        value: "azure",
     },
     {
-        value: 'beige',
+        value: "beige",
     },
     {
-        value: 'bisque',
+        value: "bisque",
     },
     {
-        value: 'blanchedalmond',
+        value: "blanchedalmond",
     },
     {
-        value: 'blueviolet',
+        value: "blueviolet",
     },
     {
-        value: 'brown',
+        value: "brown",
     },
     {
-        value: 'burlywood',
+        value: "burlywood",
     },
     {
-        value: 'cadetblue',
+        value: "cadetblue",
     },
     {
-        value: 'chartreuse',
+        value: "chartreuse",
     },
     {
-        value: 'chocolate',
+        value: "chocolate",
     },
     {
-        value: 'coral',
+        value: "coral",
     },
     {
-        value: 'cornflowerblue',
+        value: "cornflowerblue",
     },
     {
-        value: 'cornsilk',
+        value: "cornsilk",
     },
     {
-        value: 'crimson',
+        value: "crimson",
     },
     {
-        value: 'cyan',
+        value: "cyan",
     },
     {
-        value: 'aqua',
+        value: "aqua",
     },
     {
-        value: 'darkblue',
+        value: "darkblue",
     },
     {
-        value: 'darkcyan',
+        value: "darkcyan",
     },
     {
-        value: 'darkgoldenrod',
+        value: "darkgoldenrod",
     },
     {
-        value: 'darkgray',
+        value: "darkgray",
     },
     {
-        value: 'darkgreen',
+        value: "darkgreen",
     },
     {
-        value: 'darkgrey',
+        value: "darkgrey",
     },
     {
-        value: 'darkkhaki',
+        value: "darkkhaki",
     },
     {
-        value: 'darkmagenta',
+        value: "darkmagenta",
     },
     {
-        value: 'darkolivegreen',
+        value: "darkolivegreen",
     },
     {
-        value: 'darkorange',
+        value: "darkorange",
     },
     {
-        value: 'darkorchid',
+        value: "darkorchid",
     },
     {
-        value: 'darkred',
+        value: "darkred",
     },
     {
-        value: 'darksalmon',
+        value: "darksalmon",
     },
     {
-        value: 'darkseagreen',
+        value: "darkseagreen",
     },
     {
-        value: 'darkslateblue',
+        value: "darkslateblue",
     },
     {
-        value: 'darkslategray',
+        value: "darkslategray",
     },
     {
-        value: 'darkslategrey',
+        value: "darkslategrey",
     },
     {
-        value: 'darkturquoise',
+        value: "darkturquoise",
     },
     {
-        value: 'darkviolet',
+        value: "darkviolet",
     },
     {
-        value: 'deeppink',
+        value: "deeppink",
     },
     {
-        value: 'deepskyblue',
+        value: "deepskyblue",
     },
     {
-        value: 'dimgray',
+        value: "dimgray",
     },
     {
-        value: 'dimgrey',
+        value: "dimgrey",
     },
     {
-        value: 'dodgerblue',
+        value: "dodgerblue",
     },
     {
-        value: 'firebrick',
+        value: "firebrick",
     },
     {
-        value: 'floralwhite',
+        value: "floralwhite",
     },
     {
-        value: 'forestgreen',
+        value: "forestgreen",
     },
     {
-        value: 'gainsboro',
+        value: "gainsboro",
     },
     {
-        value: 'ghostwhite',
+        value: "ghostwhite",
     },
     {
-        value: 'gold',
+        value: "gold",
     },
     {
-        value: 'goldenrod',
+        value: "goldenrod",
     },
     {
-        value: 'greenyellow',
+        value: "greenyellow",
     },
     {
-        value: 'grey',
+        value: "grey",
     },
     {
-        value: 'honeydew',
+        value: "honeydew",
     },
     {
-        value: 'hotpink',
+        value: "hotpink",
     },
     {
-        value: 'indianred',
+        value: "indianred",
     },
     {
-        value: 'indigo',
+        value: "indigo",
     },
     {
-        value: 'ivory',
+        value: "ivory",
     },
     {
-        value: 'khaki',
+        value: "khaki",
     },
     {
-        value: 'lavender',
+        value: "lavender",
     },
     {
-        value: 'lavenderblush',
+        value: "lavenderblush",
     },
     {
-        value: 'lawngreen',
+        value: "lawngreen",
     },
     {
-        value: 'lemonchiffon',
+        value: "lemonchiffon",
     },
     {
-        value: 'lightblue',
+        value: "lightblue",
     },
     {
-        value: 'lightcoral',
+        value: "lightcoral",
     },
     {
-        value: 'lightcyan',
+        value: "lightcyan",
     },
     {
-        value: 'lightgoldenrodyellow',
+        value: "lightgoldenrodyellow",
     },
     {
-        value: 'lightgray',
+        value: "lightgray",
     },
     {
-        value: 'lightgreen',
+        value: "lightgreen",
     },
     {
-        value: 'lightgrey',
+        value: "lightgrey",
     },
     {
-        value: 'lightpink',
+        value: "lightpink",
     },
     {
-        value: 'lightsalmon',
+        value: "lightsalmon",
     },
     {
-        value: 'lightseagreen',
+        value: "lightseagreen",
     },
     {
-        value: 'lightskyblue',
+        value: "lightskyblue",
     },
     {
-        value: 'lightslategray',
+        value: "lightslategray",
     },
     {
-        value: 'lightslategrey',
+        value: "lightslategrey",
     },
     {
-        value: 'lightsteelblue',
+        value: "lightsteelblue",
     },
     {
-        value: 'lightyellow',
+        value: "lightyellow",
     },
     {
-        value: 'limegreen',
+        value: "limegreen",
     },
     {
-        value: 'linen',
+        value: "linen",
     },
     {
-        value: 'magenta',
+        value: "magenta",
     },
     {
-        value: 'fuchsia',
+        value: "fuchsia",
     },
     {
-        value: 'mediumaquamarine',
+        value: "mediumaquamarine",
     },
     {
-        value: 'mediumblue',
+        value: "mediumblue",
     },
     {
-        value: 'mediumorchid',
+        value: "mediumorchid",
     },
     {
-        value: 'mediumpurple',
+        value: "mediumpurple",
     },
     {
-        value: 'mediumseagreen',
+        value: "mediumseagreen",
     },
     {
-        value: 'mediumslateblue',
+        value: "mediumslateblue",
     },
     {
-        value: 'mediumspringgreen',
+        value: "mediumspringgreen",
     },
     {
-        value: 'mediumturquoise',
+        value: "mediumturquoise",
     },
     {
-        value: 'mediumvioletred',
+        value: "mediumvioletred",
     },
     {
-        value: 'midnightblue',
+        value: "midnightblue",
     },
     {
-        value: 'mintcream',
+        value: "mintcream",
     },
     {
-        value: 'mistyrose',
+        value: "mistyrose",
     },
     {
-        value: 'moccasin',
+        value: "moccasin",
     },
     {
-        value: 'navajowhite',
+        value: "navajowhite",
     },
     {
-        value: 'oldlace',
+        value: "oldlace",
     },
     {
-        value: 'olivedrab',
+        value: "olivedrab",
     },
     {
-        value: 'orangered',
+        value: "orangered",
     },
     {
-        value: 'orchid',
+        value: "orchid",
     },
     {
-        value: 'palegoldenrod',
+        value: "palegoldenrod",
     },
     {
-        value: 'palegreen',
+        value: "palegreen",
     },
     {
-        value: 'paleturquoise',
+        value: "paleturquoise",
     },
     {
-        value: 'palevioletred',
+        value: "palevioletred",
     },
     {
-        value: 'papayawhip',
+        value: "papayawhip",
     },
     {
-        value: 'peachpuff',
+        value: "peachpuff",
     },
     {
-        value: 'peru',
+        value: "peru",
     },
     {
-        value: 'pink',
+        value: "pink",
     },
     {
-        value: 'plum',
+        value: "plum",
     },
     {
-        value: 'powderblue',
+        value: "powderblue",
     },
     {
-        value: 'rosybrown',
+        value: "rosybrown",
     },
     {
-        value: 'royalblue',
+        value: "royalblue",
     },
     {
-        value: 'saddlebrown',
+        value: "saddlebrown",
     },
     {
-        value: 'salmon',
+        value: "salmon",
     },
     {
-        value: 'sandybrown',
+        value: "sandybrown",
     },
     {
-        value: 'seagreen',
+        value: "seagreen",
     },
     {
-        value: 'seashell',
+        value: "seashell",
     },
     {
-        value: 'sienna',
+        value: "sienna",
     },
     {
-        value: 'skyblue',
+        value: "skyblue",
     },
     {
-        value: 'slateblue',
+        value: "slateblue",
     },
     {
-        value: 'slategray',
+        value: "slategray",
     },
     {
-        value: 'slategrey',
+        value: "slategrey",
     },
     {
-        value: 'snow',
+        value: "snow",
     },
     {
-        value: 'springgreen',
+        value: "springgreen",
     },
     {
-        value: 'steelblue',
+        value: "steelblue",
     },
     {
-        value: 'tan',
+        value: "tan",
     },
     {
-        value: 'thistle',
+        value: "thistle",
     },
     {
-        value: 'tomato',
+        value: "tomato",
     },
     {
-        value: 'turquoise',
+        value: "turquoise",
     },
     {
-        value: 'violet',
+        value: "violet",
     },
     {
-        value: 'wheat',
+        value: "wheat",
     },
     {
-        value: 'whitesmoke',
+        value: "whitesmoke",
     },
     {
-        value: 'yellowgreen',
+        value: "yellowgreen",
     },
     {
-        value: 'rebeccapurple',
+        value: "rebeccapurple",
     },
 ];
 
 const padData: Dictionary = [
     {
-        value: '<top> <right> <bottom> <left>',
+        value: "<top> <right> <bottom> <left>",
     },
     {
-        value: '<top> <right & left> <bottom>',
+        value: "<top> <right & left> <bottom>",
     },
     {
-        value: '<top & bottom> <right & left>',
+        value: "<top & bottom> <right & left>",
     },
     {
-        value: '<all sides>',
+        value: "<all sides>",
     },
 ];
 
 const alignData: Dictionary = [
     {
-        value: 'left',
+        value: "left",
     },
     {
-        value: 'right',
+        value: "right",
     },
     {
-        value: 'center',
+        value: "center",
     },
     {
-        value: 'justify',
+        value: "justify",
     },
     {
-        value: 'block',
+        value: "block",
     },
     {
-        value: 'top',
+        value: "top",
     },
     {
-        value: 'bottom',
+        value: "bottom",
     },
     {
-        value: 'topleft',
+        value: "topleft",
     },
     {
-        value: 'topright',
+        value: "topright",
     },
     {
-        value: 'bottomleft',
+        value: "bottomleft",
     },
     {
-        value: 'bottomright',
+        value: "bottomright",
     },
     {
-        value: 'stretch',
+        value: "stretch",
     },
 ];
 
 const borderData: Dictionary = [
     {
-        value: '<width> <style> <color>',
+        value: "<width> <style> <color>",
     },
 ];
 
 const animateData: Dictionary = [
     {
-        value: '<type> (<slower | faster>)',
+        value: "<type> (<slower | faster>)",
     },
     {
-        value: 'fadeIn',
+        value: "fadeIn",
     },
     {
-        value: 'fadeOut',
+        value: "fadeOut",
     },
     {
-        value: 'slideRightIn',
+        value: "slideRightIn",
     },
     {
-        value: 'slideLeftIn',
+        value: "slideLeftIn",
     },
     {
-        value: 'slideUpIn',
+        value: "slideUpIn",
     },
     {
-        value: 'slideDownIn',
+        value: "slideDownIn",
     },
     {
-        value: 'slideRightOut',
+        value: "slideRightOut",
     },
     {
-        value: 'slideLeftOut',
+        value: "slideLeftOut",
     },
     {
-        value: 'slideUpOut',
+        value: "slideUpOut",
     },
     {
-        value: 'slideDownOut',
+        value: "slideDownOut",
     },
     {
-        value: 'scaleUp',
+        value: "scaleUp",
     },
     {
-        value: 'scaleUpOut',
+        value: "scaleUpOut",
     },
     {
-        value: 'scaleDown',
+        value: "scaleDown",
     },
     {
-        value: 'scaleDownOut',
+        value: "scaleDownOut",
     },
 ];
 
 const opacityData: Dictionary = [
     {
-        value: '<0.0...1.0>',
+        value: "<0.0...1.0>",
     },
 ];
 
 const skipData: Dictionary = [
     {
-        value: 'true',
-        description: 'true',
+        value: "true",
+        description: "true",
     },
     {
-        value: 'false',
-        description: 'false',
+        value: "false",
+        description: "false",
     },
 ];
 
 const rotateData: Dictionary = [
     {
-        value: '<0...360>',
+        value: "<0...360>",
     },
 ];
 
 const filterData: Dictionary = [
     {
-        value: 'blur(10px)',
-        description: 'blur',
+        value: "blur(10px)",
+        description: "blur",
     },
     {
-        value: 'brightness(50%)',
-        description: 'brightness',
+        value: "brightness(50%)",
+        description: "brightness",
     },
     {
-        value: 'contrast(50%)',
-        description: 'contrast',
+        value: "contrast(50%)",
+        description: "contrast",
     },
     {
-        value: 'grayscale(100%)',
-        description: 'grayscale',
+        value: "grayscale(100%)",
+        description: "grayscale",
     },
     {
-        value: 'hue-rotate(90deg)',
-        description: 'hue',
+        value: "hue-rotate(90deg)",
+        description: "hue",
     },
     {
-        value: 'invert(100%)',
-        description: 'invert',
+        value: "invert(100%)",
+        description: "invert",
     },
     {
-        value: 'saturate(50%)',
-        description: 'saturate',
+        value: "saturate(50%)",
+        description: "saturate",
     },
     {
-        value: 'sepia(50%)',
-        description: 'sepia',
+        value: "sepia(50%)",
+        description: "sepia",
     },
 ];
 
 const fragData: Dictionary = [
     {
-        value: '<index>',
+        value: "<index>",
     },
 ];
 
 const splitData: Dictionary = [
     {
-        value: 'even ',
-        description: 'even',
+        value: "even ",
+        description: "even",
         offset: 5,
     },
     {
@@ -841,8 +841,8 @@ const splitData: Dictionary = [
         offset: 6,
     },
     {
-        value: 'no-margin ',
-        description: 'no-margin',
+        value: "no-margin ",
+        description: "no-margin",
         offset: 10,
     },
     {
@@ -857,25 +857,25 @@ const splitData: Dictionary = [
 
 const gapData: Dictionary = [
     {
-        value: '<size>',
+        value: "<size>",
     },
 ];
 
 const leftData: Dictionary = [
     {
-        value: '<size>',
+        value: "<size>",
     },
 ];
 
 const rightData: Dictionary = [
     {
-        value: '<size>',
+        value: "<size>",
     },
 ];
 
 const wrapData: Dictionary = [
     {
-        value: '<amount>',
+        value: "<amount>",
     },
 ];
 
@@ -909,7 +909,7 @@ const slideData: Dictionary = [
         offset: 25,
     },
     {
-        value: 'data-auto-animate ',
+        value: "data-auto-animate ",
         offset: 18,
     },
     {
@@ -921,474 +921,474 @@ const slideData: Dictionary = [
 
 const slideBgData: Dictionary = [
     {
-        value: '#425232',
-        description: '<#425232>',
+        value: "#425232",
+        description: "<#425232>",
     },
     {
-        value: 'rgb(255, 99, 71)',
-        description: '<rgb(255, 99, 71)>',
+        value: "rgb(255, 99, 71)",
+        description: "<rgb(255, 99, 71)>",
     },
     {
-        value: 'hsl(0, 100%, 50%)',
-        description: '<hsl(0, 100%, 50%)>',
+        value: "hsl(0, 100%, 50%)",
+        description: "<hsl(0, 100%, 50%)>",
     },
     {
-        value: 'http://',
-        description: '<url>',
+        value: "http://",
+        description: "<url>",
     },
     {
-        value: '[[]]',
-        description: '<[[reference]]>',
+        value: "[[]]",
+        description: "<[[reference]]>",
     },
     {
-        value: 'black',
+        value: "black",
     },
     {
-        value: 'silver',
+        value: "silver",
     },
     {
-        value: 'gray',
+        value: "gray",
     },
     {
-        value: 'white',
+        value: "white",
     },
     {
-        value: 'maroon',
+        value: "maroon",
     },
     {
-        value: 'red',
+        value: "red",
     },
     {
-        value: 'purple',
+        value: "purple",
     },
     {
-        value: 'fuchsia',
+        value: "fuchsia",
     },
     {
-        value: 'green',
+        value: "green",
     },
     {
-        value: 'lime',
+        value: "lime",
     },
     {
-        value: 'olive',
+        value: "olive",
     },
     {
-        value: 'yellow',
+        value: "yellow",
     },
     {
-        value: 'navy',
+        value: "navy",
     },
     {
-        value: 'blue',
+        value: "blue",
     },
     {
-        value: 'teal',
+        value: "teal",
     },
     {
-        value: 'aqua',
+        value: "aqua",
     },
     {
-        value: 'orange',
+        value: "orange",
     },
     {
-        value: 'aliceblue',
+        value: "aliceblue",
     },
     {
-        value: 'antiquewhite',
+        value: "antiquewhite",
     },
     {
-        value: 'aquamarine',
+        value: "aquamarine",
     },
     {
-        value: 'azure',
+        value: "azure",
     },
     {
-        value: 'beige',
+        value: "beige",
     },
     {
-        value: 'bisque',
+        value: "bisque",
     },
     {
-        value: 'blanchedalmond',
+        value: "blanchedalmond",
     },
     {
-        value: 'blueviolet',
+        value: "blueviolet",
     },
     {
-        value: 'brown',
+        value: "brown",
     },
     {
-        value: 'burlywood',
+        value: "burlywood",
     },
     {
-        value: 'cadetblue',
+        value: "cadetblue",
     },
     {
-        value: 'chartreuse',
+        value: "chartreuse",
     },
     {
-        value: 'chocolate',
+        value: "chocolate",
     },
     {
-        value: 'coral',
+        value: "coral",
     },
     {
-        value: 'cornflowerblue',
+        value: "cornflowerblue",
     },
     {
-        value: 'cornsilk',
+        value: "cornsilk",
     },
     {
-        value: 'crimson',
+        value: "crimson",
     },
     {
-        value: 'cyan',
+        value: "cyan",
     },
     {
-        value: 'aqua',
+        value: "aqua",
     },
     {
-        value: 'darkblue',
+        value: "darkblue",
     },
     {
-        value: 'darkcyan',
+        value: "darkcyan",
     },
     {
-        value: 'darkgoldenrod',
+        value: "darkgoldenrod",
     },
     {
-        value: 'darkgray',
+        value: "darkgray",
     },
     {
-        value: 'darkgreen',
+        value: "darkgreen",
     },
     {
-        value: 'darkgrey',
+        value: "darkgrey",
     },
     {
-        value: 'darkkhaki',
+        value: "darkkhaki",
     },
     {
-        value: 'darkmagenta',
+        value: "darkmagenta",
     },
     {
-        value: 'darkolivegreen',
+        value: "darkolivegreen",
     },
     {
-        value: 'darkorange',
+        value: "darkorange",
     },
     {
-        value: 'darkorchid',
+        value: "darkorchid",
     },
     {
-        value: 'darkred',
+        value: "darkred",
     },
     {
-        value: 'darksalmon',
+        value: "darksalmon",
     },
     {
-        value: 'darkseagreen',
+        value: "darkseagreen",
     },
     {
-        value: 'darkslateblue',
+        value: "darkslateblue",
     },
     {
-        value: 'darkslategray',
+        value: "darkslategray",
     },
     {
-        value: 'darkslategrey',
+        value: "darkslategrey",
     },
     {
-        value: 'darkturquoise',
+        value: "darkturquoise",
     },
     {
-        value: 'darkviolet',
+        value: "darkviolet",
     },
     {
-        value: 'deeppink',
+        value: "deeppink",
     },
     {
-        value: 'deepskyblue',
+        value: "deepskyblue",
     },
     {
-        value: 'dimgray',
+        value: "dimgray",
     },
     {
-        value: 'dimgrey',
+        value: "dimgrey",
     },
     {
-        value: 'dodgerblue',
+        value: "dodgerblue",
     },
     {
-        value: 'firebrick',
+        value: "firebrick",
     },
     {
-        value: 'floralwhite',
+        value: "floralwhite",
     },
     {
-        value: 'forestgreen',
+        value: "forestgreen",
     },
     {
-        value: 'gainsboro',
+        value: "gainsboro",
     },
     {
-        value: 'ghostwhite',
+        value: "ghostwhite",
     },
     {
-        value: 'gold',
+        value: "gold",
     },
     {
-        value: 'goldenrod',
+        value: "goldenrod",
     },
     {
-        value: 'greenyellow',
+        value: "greenyellow",
     },
     {
-        value: 'grey',
+        value: "grey",
     },
     {
-        value: 'honeydew',
+        value: "honeydew",
     },
     {
-        value: 'hotpink',
+        value: "hotpink",
     },
     {
-        value: 'indianred',
+        value: "indianred",
     },
     {
-        value: 'indigo',
+        value: "indigo",
     },
     {
-        value: 'ivory',
+        value: "ivory",
     },
     {
-        value: 'khaki',
+        value: "khaki",
     },
     {
-        value: 'lavender',
+        value: "lavender",
     },
     {
-        value: 'lavenderblush',
+        value: "lavenderblush",
     },
     {
-        value: 'lawngreen',
+        value: "lawngreen",
     },
     {
-        value: 'lemonchiffon',
+        value: "lemonchiffon",
     },
     {
-        value: 'lightblue',
+        value: "lightblue",
     },
     {
-        value: 'lightcoral',
+        value: "lightcoral",
     },
     {
-        value: 'lightcyan',
+        value: "lightcyan",
     },
     {
-        value: 'lightgoldenrodyellow',
+        value: "lightgoldenrodyellow",
     },
     {
-        value: 'lightgray',
+        value: "lightgray",
     },
     {
-        value: 'lightgreen',
+        value: "lightgreen",
     },
     {
-        value: 'lightgrey',
+        value: "lightgrey",
     },
     {
-        value: 'lightpink',
+        value: "lightpink",
     },
     {
-        value: 'lightsalmon',
+        value: "lightsalmon",
     },
     {
-        value: 'lightseagreen',
+        value: "lightseagreen",
     },
     {
-        value: 'lightskyblue',
+        value: "lightskyblue",
     },
     {
-        value: 'lightslategray',
+        value: "lightslategray",
     },
     {
-        value: 'lightslategrey',
+        value: "lightslategrey",
     },
     {
-        value: 'lightsteelblue',
+        value: "lightsteelblue",
     },
     {
-        value: 'lightyellow',
+        value: "lightyellow",
     },
     {
-        value: 'limegreen',
+        value: "limegreen",
     },
     {
-        value: 'linen',
+        value: "linen",
     },
     {
-        value: 'magenta',
+        value: "magenta",
     },
     {
-        value: 'fuchsia',
+        value: "fuchsia",
     },
     {
-        value: 'mediumaquamarine',
+        value: "mediumaquamarine",
     },
     {
-        value: 'mediumblue',
+        value: "mediumblue",
     },
     {
-        value: 'mediumorchid',
+        value: "mediumorchid",
     },
     {
-        value: 'mediumpurple',
+        value: "mediumpurple",
     },
     {
-        value: 'mediumseagreen',
+        value: "mediumseagreen",
     },
     {
-        value: 'mediumslateblue',
+        value: "mediumslateblue",
     },
     {
-        value: 'mediumspringgreen',
+        value: "mediumspringgreen",
     },
     {
-        value: 'mediumturquoise',
+        value: "mediumturquoise",
     },
     {
-        value: 'mediumvioletred',
+        value: "mediumvioletred",
     },
     {
-        value: 'midnightblue',
+        value: "midnightblue",
     },
     {
-        value: 'mintcream',
+        value: "mintcream",
     },
     {
-        value: 'mistyrose',
+        value: "mistyrose",
     },
     {
-        value: 'moccasin',
+        value: "moccasin",
     },
     {
-        value: 'navajowhite',
+        value: "navajowhite",
     },
     {
-        value: 'oldlace',
+        value: "oldlace",
     },
     {
-        value: 'olivedrab',
+        value: "olivedrab",
     },
     {
-        value: 'orangered',
+        value: "orangered",
     },
     {
-        value: 'orchid',
+        value: "orchid",
     },
     {
-        value: 'palegoldenrod',
+        value: "palegoldenrod",
     },
     {
-        value: 'palegreen',
+        value: "palegreen",
     },
     {
-        value: 'paleturquoise',
+        value: "paleturquoise",
     },
     {
-        value: 'palevioletred',
+        value: "palevioletred",
     },
     {
-        value: 'papayawhip',
+        value: "papayawhip",
     },
     {
-        value: 'peachpuff',
+        value: "peachpuff",
     },
     {
-        value: 'peru',
+        value: "peru",
     },
     {
-        value: 'pink',
+        value: "pink",
     },
     {
-        value: 'plum',
+        value: "plum",
     },
     {
-        value: 'powderblue',
+        value: "powderblue",
     },
     {
-        value: 'rosybrown',
+        value: "rosybrown",
     },
     {
-        value: 'royalblue',
+        value: "royalblue",
     },
     {
-        value: 'saddlebrown',
+        value: "saddlebrown",
     },
     {
-        value: 'salmon',
+        value: "salmon",
     },
     {
-        value: 'sandybrown',
+        value: "sandybrown",
     },
     {
-        value: 'seagreen',
+        value: "seagreen",
     },
     {
-        value: 'seashell',
+        value: "seashell",
     },
     {
-        value: 'sienna',
+        value: "sienna",
     },
     {
-        value: 'skyblue',
+        value: "skyblue",
     },
     {
-        value: 'slateblue',
+        value: "slateblue",
     },
     {
-        value: 'slategray',
+        value: "slategray",
     },
     {
-        value: 'slategrey',
+        value: "slategrey",
     },
     {
-        value: 'snow',
+        value: "snow",
     },
     {
-        value: 'springgreen',
+        value: "springgreen",
     },
     {
-        value: 'steelblue',
+        value: "steelblue",
     },
     {
-        value: 'tan',
+        value: "tan",
     },
     {
-        value: 'thistle',
+        value: "thistle",
     },
     {
-        value: 'tomato',
+        value: "tomato",
     },
     {
-        value: 'turquoise',
+        value: "turquoise",
     },
     {
-        value: 'violet',
+        value: "violet",
     },
     {
-        value: 'wheat',
+        value: "wheat",
     },
     {
-        value: 'whitesmoke',
+        value: "whitesmoke",
     },
     {
-        value: 'yellowgreen',
+        value: "yellowgreen",
     },
     {
-        value: 'rebeccapurple',
+        value: "rebeccapurple",
     },
 ];
 
@@ -1477,57 +1477,57 @@ const gridMap: DictionaryMap = {
     parent: gridData,
     children: [
         {
-            property: 'drag',
+            property: "drag",
             dictionary: dragData,
         },
         {
-            property: 'drop',
+            property: "drop",
             dictionary: dropData,
             filter: true,
         },
         {
-            property: 'flow',
+            property: "flow",
             dictionary: flowData,
             filter: true,
         },
         {
-            property: 'bg',
+            property: "bg",
             dictionary: bgData,
             filter: true,
         },
         {
-            property: 'pad',
+            property: "pad",
             dictionary: padData,
         },
         {
-            property: 'align',
+            property: "align",
             dictionary: alignData,
             filter: true,
         },
         {
-            property: 'border',
+            property: "border",
             dictionary: borderData,
         },
         {
-            property: 'animate',
+            property: "animate",
             dictionary: animateData,
             filter: true,
         },
         {
-            property: 'opacity',
+            property: "opacity",
             dictionary: opacityData,
         },
         {
-            property: 'rotate',
+            property: "rotate",
             dictionary: rotateData,
         },
         {
-            property: 'filter',
+            property: "filter",
             dictionary: filterData,
             filter: true,
         },
         {
-            property: 'frag',
+            property: "frag",
             dictionary: fragData,
         },
     ],
@@ -1537,19 +1537,19 @@ const splitMap: DictionaryMap = {
     parent: splitData,
     children: [
         {
-            property: 'gap',
+            property: "gap",
             dictionary: gapData,
         },
         {
-            property: 'left',
+            property: "left",
             dictionary: leftData,
         },
         {
-            property: 'right',
+            property: "right",
             dictionary: rightData,
         },
         {
-            property: 'wrap',
+            property: "wrap",
             dictionary: wrapData,
         },
     ],
@@ -1559,16 +1559,16 @@ const slideMap: DictionaryMap = {
     parent: slideData,
     children: [
         {
-            property: 'bg',
+            property: "bg",
             dictionary: slideBgData,
             filter: true,
         },
         {
-            property: 'data-background-opacity',
+            property: "data-background-opacity",
             dictionary: opacityData,
         },
         {
-            property: 'skip',
+            property: "skip",
             dictionary: skipData,
         },
     ],
@@ -1578,43 +1578,43 @@ const elementMap: DictionaryMap = {
     parent: elementData,
     children: [
         {
-            property: 'bg',
+            property: "bg",
             dictionary: bgData,
             filter: true,
         },
         {
-            property: 'pad',
+            property: "pad",
             dictionary: padData,
         },
         {
-            property: 'align',
+            property: "align",
             dictionary: alignData,
             filter: true,
         },
         {
-            property: 'border',
+            property: "border",
             dictionary: borderData,
         },
         {
-            property: 'animate',
+            property: "animate",
             dictionary: animateData,
             filter: true,
         },
         {
-            property: 'opacity',
+            property: "opacity",
             dictionary: opacityData,
         },
         {
-            property: 'rotate',
+            property: "rotate",
             dictionary: rotateData,
         },
         {
-            property: 'filter',
+            property: "filter",
             dictionary: filterData,
             filter: true,
         },
         {
-            property: 'frag',
+            property: "frag",
             dictionary: fragData,
         },
     ],
@@ -1624,19 +1624,19 @@ export const dict: DictionaryRoot = {
     parent: suggestionData,
     children: [
         {
-            property: 'grid',
+            property: "grid",
             dictionary: gridMap,
         },
         {
-            property: 'split',
+            property: "split",
             dictionary: splitMap,
         },
         {
-            property: 'slide',
+            property: "slide",
             dictionary: slideMap,
         },
         {
-            property: 'element',
+            property: "element",
             dictionary: elementMap,
         },
     ],

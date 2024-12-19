@@ -1,13 +1,13 @@
 import {
-    App,
-    Editor,
-    EditorPosition,
+    type App,
+    type Editor,
+    type EditorPosition,
     EditorSuggest,
-    EditorSuggestContext,
-    EditorSuggestTriggerInfo,
-    TFile,
-} from 'obsidian';
-import { SlidesExtendedPlugin } from '../../slidesExtended-Plugin';
+    type EditorSuggestContext,
+    type EditorSuggestTriggerInfo,
+    type TFile,
+} from "obsidian";
+import type { SlidesExtendedPlugin } from "../../slidesExtended-Plugin";
 
 export class LineSelectionListener extends EditorSuggest<string> {
     private plugin: SlidesExtendedPlugin;
@@ -25,7 +25,7 @@ export class LineSelectionListener extends EditorSuggest<string> {
         const instance = this.plugin.getViewInstance();
 
         if (instance) {
-            if (instance.url == 'about:blank') {
+            if (instance.url === "about:blank") {
                 this.plugin.showView();
             }
             instance.onLineChanged(cursor.line);
@@ -36,14 +36,14 @@ export class LineSelectionListener extends EditorSuggest<string> {
     getSuggestions(
         context: EditorSuggestContext,
     ): string[] | Promise<string[]> {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
 
     renderSuggestion(value: string, el: HTMLElement): void {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
 
     selectSuggestion(value: string, evt: MouseEvent | KeyboardEvent): void {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
 }
