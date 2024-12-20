@@ -22,7 +22,7 @@ References:
 - https://forum.obsidian.md/t/advanced-slides-create-markdown-based-reveal-js-presentations-in-obsidian/28243/42
 - https://www.w3schools.com/tags/tag_video.asp
 
-{{<revealhtml theme="black" progress="true" controls="true">}}
+{{<revealjs theme="black" progress="true" controls="true">}}
 
 <section>
 <p>Insert video as an HTML video tag</p>
@@ -34,5 +34,5 @@ References:
 <video data-autoplay controls width="800" height="600"><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video>
 </section>
 
-{{</revealhtml>}}
+{{</revealjs>}}
 

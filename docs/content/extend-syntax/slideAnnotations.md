@@ -22,7 +22,7 @@ Paragraph has coral background color, too!
 - background color
 ```
 
-{{<revealhtml theme="black" progress="true" controls="true">}}
+{{<revealjs theme="black" progress="true" controls="true">}}
 
 <section style="background-color: coral;">
 
@@ -42,4 +42,4 @@ Paragraph has coral background color, too!
 </ul>
 </section>
 
-{{</revealhtml>}}
+{{</revealjs>}}

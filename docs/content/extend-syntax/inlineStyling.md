@@ -19,13 +19,13 @@ you may define css styles inside your markdown:
 styled text <!-- element class="with-border" -->
 ```
 
-{{<revealhtml theme="black" progress="true" controls="true">}}
+{{<revealjs theme="black" progress="true" controls="true">}}
 
 <section>
 <p style="border: 1px solid red;">styled text <!-- --></p>
 </section>
 
-{{</revealhtml>}}
+{{</revealjs>}}
 
 ### by including them through css file
 
