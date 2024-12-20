@@ -18,7 +18,9 @@ Grid layouts drag-and-drop is used to size and position content of your slides.
 
 The following syntax is used to drag-and-drop a grid in Slides Extended:
 
-	<grid drag="width height" drop="x y">
+```md
+<grid drag="width height" drop="x y">
+```
 
 The *width* and *height* values of the **drag** property define the  size of the area in which the content will be displayed. The *x* and *y* values ​​of the **drop** property define the position on the slide where the content should be inserted. 
 
@@ -92,7 +94,9 @@ Bottom
 
 The following syntax is used to define a custom flow for a grid:
 
-	<grid drag="width height" drop="x y" flow="col | row">
+```md
+<grid drag="width height" drop="x y" flow="col | row">
+```
 
 Using a value of **col** or **row** for the **flow** property defines the layout behavior for the grid. If the flow property is not specified then the grid automatically inherits the default *col* flow behavior.
 
@@ -144,7 +148,9 @@ Left
 
 The grid bg property is used to define a custom background for a grid. Children added to the grid are rendered on top of the background.
 
-	<grid  drag="width height" drop="x y" bg="color">
+```md
+<grid  drag="width height" drop="x y" bg="color">
+```
 
 Where the color option of the **bg** property takes any valid [CSS Color Value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value). The following sample demonstrates color backgrounds:
 
@@ -166,7 +172,9 @@ Where the color option of the **bg** property takes any valid [CSS Color Value](
 
 The grid border property is used to define a custom border for a grid section. Custom borders can help to highlight or differentiate grids on your slide.
 
-	<grid  drag="width height" drop="x y" border="width style color">
+```md
+<grid  drag="width height" drop="x y" border="width style color">
+```
 
 Where the **width** option of the **border** property takes values of *thin*, *medium*, *thick* or a pixel value such as **10px**. The style option takes values of *dotted*, *solid*, *dashed*, *inset*, or *outset*. And the **color** option takes any valid [CSS Color Value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
 
@@ -190,8 +198,9 @@ thick dotted blue <!-- element drag="30 25" drop="right" border="medium dashed r
 
 The grid animate property is used to define a slide animation a grid section. The animation applies to the grid and all associated children.
 
-	<grid  drag="width height" drop="x y" animate="type speed">
-
+```md
+<grid  drag="width height" drop="x y" animate="type speed">
+```
 
 Where the **type** option of the **animate** property can take one of the following animation types:
 
@@ -217,7 +226,9 @@ Where the **type** option of the **animate** property can take one of the follow
 
 The grid opacity property is used to control the transparency of a grid section. Adjusting the opacity of a section also affects the opacity of all associated children.
 
-	<grid  drag="width height" drop="x y" opacity="level">
+```md
+<grid  drag="width height" drop="x y" opacity="level">
+```
 
 
 Where the **level** option of the **opacity** property can take any value from **0.0** to **1.0**. A grid section with an opacity value of 0.0 is invisible.
@@ -226,8 +237,9 @@ Where the **level** option of the **opacity** property can take any value from *
 
 The grid filter property is used to define filter effects for a grid section. Filter effects on a grid section also affect all associated children.
 
-	<grid  drag="width height" drop="x y" filter="effect">
-
+```
+<grid  drag="width height" drop="x y" filter="effect">
+```
 
 Where the **effect** option of the **filter** property can take one of the following types:
 
@@ -256,7 +268,9 @@ Text is too blurry <!-- element drag="30 25" drop="5 15" bg="#B565A7" filter="bl
 
 The grid rotate property is used to control the 2D rotation of a grid section. Rotation on a grid section also affect all associated children.
 
-	<grid  drag="width height" drop="x y" rotate="deg">
+```md
+<grid  drag="width height" drop="x y" rotate="deg">
+```
 
 Where the **deg** option of the **rotate** property is a postive or negative value indicates a degree of rotation from 0 to 360 degrees.
 
@@ -276,11 +290,15 @@ World! <!-- element drag="40 25" drop="-12 -25" bg="#D65076" rotate="40" -->
 
 The grid **pad** property is used to define custom padding for grid. Custom padding can help to enhance the overall appearance of content by controlling the space around grid children.
 
-	<grid  drag="width height" drop="x y" pad="top right bottom left">
+```md
+<grid  drag="width height" drop="x y" pad="top right bottom left">
+```
 
 Where the **top**, **right**, **bottom**, and **left** options on the **pad** property all take pixel size values. Following standard [CSS Padding Rules](https://developer.mozilla.org/en-US/docs/Web/CSS/padding) these four options can also be specified with just two values or even a single value, for example:
 
-	<grid  drag="width height" drop="x y" pad="10px 15px">
+```md
+<grid  drag="width height" drop="x y" pad="10px 15px">
+```
 
 This sample grid above would display with 10px padding top and bottom and 15px padding left and right. The following sample demonstrates padding:
 
@@ -303,7 +321,9 @@ This sample grid above would display with 10px padding top and bottom and 15px p
 
 The grid **align** property is used to define the horizontal alignment of a grid section.
 
-	<grid  drag="width height" drop="x y" align="type">
+```md
+<grid  drag="width height" drop="x y" align="type">
+```
 
 Where the **type** option of the **align** property can take one of the following types:
 
@@ -360,7 +380,9 @@ The following sample demonstrates the use of stretch alignment:
 
 The grid **justify-content** property is used to define how the grid component distributes space between and around their children.
 
-	<grid  drag="width height" drop="x y" justify-content="type">
+```md
+<grid  drag="width height" drop="x y" justify-content="type">
+```
 
 Where the **type** option of the **justify-content** property can take one of the following types:
 
@@ -376,11 +398,11 @@ The following sample demonstrates the use of align:
 ```md
 <grid drag="30 100" drop="left" justify-content="center" bg="red">
 Item 1
-	
+
 Item 2
-	
+
 Item 3
-	
+
 Item 4
 </grid>
 
@@ -388,19 +410,19 @@ Item 4
 Item 1
 
 Item 2
-	
+
 Item 3
-	
+
 Item 4
 </grid>
 
 <grid drag="30 100" drop="right" justify-content="space-around" bg="coral">
 Item 1
-	
+
 Item 2
-	
+
 Item 3
-	
+
 Item 4
 </grid>
 ```
@@ -411,7 +433,9 @@ Item 4
 
 The grid frag property is used to define fragments for grid. Fragments are used to highlight or incrementally reveal individual elements on a slide.
 
-	<grid  drag="width height" drop="x y" frag="index">
+```html
+    <grid  drag="width height" drop="x y" frag="index">
+```
 
 Where the **index** option of the **frag** property is a postive value indicates the order the fragment will be displayed.
 
@@ -433,7 +457,7 @@ Bottom Grid
 </grid>
 ```
 
-As you have surely seen in the example, you can combine Fragments and [Fragment Lists]({{%relref "fragments.md"%}}) with each other. By default, Fragment Lists generate indexes that start at 1.
+As you have surely seen in the example, you can combine [Fragments](../extend-syntax/fragments.md) and [Fragment Lists](../extend-syntax/fragmentedLists.md) with each other. By default, Fragment Lists generate indexes that start at 1.
 
 ### Reference
 

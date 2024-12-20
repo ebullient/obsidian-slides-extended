@@ -6,24 +6,25 @@ alwaysopen: false
 pre: "<i class='fa fa-code' ></i> "
 ---
 
-Slides Extended allows you to design individual slides based on slide templates. Each slide template can have a unique layout and structure that you can draw upon repeatedly over the presentation. Using slide templates makes creating presentations that use different layout formats across different slides easy and fast. Also, slide templates reduce redundant code (aka boilerplate code) in your md presentation document. 
+Slides Extended allows you to design individual slides based on slide templates. Each slide template can have a unique layout and structure that you can draw upon repeatedly over the presentation. Using slide templates makes creating presentations that use different layout formats across different slides easy and fast. Also, slide templates reduce redundant code (aka boilerplate code) in your md presentation document.
 
 ### Example: Using a simple slide template
 
 The following slide template defines a slide structure that has a main content area as well as a footer. It shall be named `tpl-footer` and can be stored as a regular md note anywhere within the Obsidian vault you are using to make the presentation.
 
-```
+```md
 <% content %>
 
 <grid drag="100 6" drop="bottom">
 <% footer %>
 </grid>
 ```
+
 Once we have created this slide template we can reference it in our presentation by making a slide annotation in the following manner:
 
 #### How to use templates
 
-```
+```md
 <!-- slide template="[[tpl-footer]]" -->
 
 # This header will be part of the content section defined in the template
@@ -40,12 +41,11 @@ To place a text into the footer section you have to create a block comment with 
 
 Note that every template _must_ contain a `<% content %>` variable _even if it is not used_ in the slide content.
 
-
 ### Optional Variables
 
 By default, every variable in a slide template has to be set by a block comment in the slide. Otherwise, a dummy text will be placed into the variable that reminds you to create a block comment for this variable. But there are scenarios where you don't want this behaviour, such as when you have a citation line in the footer of your template, but you don't need to reference any citations. Therefore you can create a section in the template and add a `?` in its definition:
 
-```
+```md
 <% content %>
 
 <grid drag="100 6" drop="bottom">
@@ -55,12 +55,11 @@ By default, every variable in a slide template has to be set by a block comment 
 
 The footer markup won't be visible until you create a footer block comment inside of your slide.
 
-
 ### Advanced example
 
 The following slide template is called `tpl-con-2-1-box`. It creates a slide structure with a narrow header bar at the top end of the slide, 2 broad  columns at the center of the slide as well as a footer bar with a citation line in the bottom of the slide.
 
-```
+```md
 <grid drag="100 10" drop="top" bg="white" align="left" pad="0 20px">
  <% title %>
 </grid>
@@ -82,9 +81,8 @@ The following slide template is called `tpl-con-2-1-box`. It creates a slide str
 <% content %>
 
 <style>
-.horizontal_dotted_line{
-  border-bottom: 2px dotted gray;
-} 
+.horizontal_dotted_line {
+    border-bottom: 2px dotted gray;
 } 
 </style>
 
@@ -103,7 +101,7 @@ The following slide template is called `tpl-con-2-1-box`. It creates a slide str
 
 ### Using templates in a presentation
 
-```
+```md
 ---
 theme: consult
 height: 540
@@ -154,11 +152,11 @@ Umsetzungsschritte
 
 ![Slide](../images/templateSlide.png)
 
-
 ### Default Template
+
 You can define a default Template that will be applied to all slides of a deck by adding the `defaultTemplate` frontmatter property to your yaml:
 
-```
+```md
 ---
 defaultTemplate: "[[tpl-footer]]"
 ---

@@ -6,3 +6,5 @@ MD033:
     - img
     - a
 MD034: false
+MD046:
+    style: fenced

@@ -19,8 +19,8 @@ You can customize many setting for your current slide deck by adding one or more
 | separator | Sets the slide separator | string | ^( ?\| )---( ?\| )$ |
 | verticalSeparator | Sets the vertical slide separator | string | ^( ?\| )--( ?\| )$ |
 | enableLinks | Enable backlinks in slides | true / false | false |
-| theme | Sets the theme | [see theme docs]({{%relref "themes"%}}) | black |
-| highlightTheme | Sets the highlight theme | [see theme docs]({{%relref "themes"%}}) | zenburn |
+| theme | Sets the theme | [see theme docs](../themes/README.md) | black |
+| highlightTheme | Sets the highlight theme | [see theme docs](../themes/README.md) | zenburn |
 | css | Adds further css files |  | [] |
 | enableOverview | Shows the Overview Button on the bottom right corner of the slide | true / false | false |
 | enableChalkboard | Activates the chalkboard for slides | true / false | false |
@@ -38,21 +38,21 @@ You can customize many setting for your current slide deck by adding one or more
 | autoSlide | Controls automatic progression to the next slide | number (in milliseconds) | 0 |
 | transition | Transition style | none / fade / slide / convex / concave / zoom | slide |
 | transitionSpeed | Transition speed | default / fast / slow | default |
-| bg | Sets a default background for all slides | [see slide background docs]({{%relref "slideBackground"%}}) | '#ffffff' |
+| bg | Sets a default background for all slides | [see slide background docs](../extend-syntax/slideBackground.md) | '#ffffff' |
 | markdown | Sets options for marked | (see note below) | (see note below) |
 | enableTimeBar | Activates elapsing timer bar for slides | true / false | false |
 | timeForPresentation | Sets the time for elapsing timer in seconds | number | 120 |
-| defaultTemplate | Sets a template that will be applied to all slides | [see template docs]({{%relref "templates/_index.md#default-template"%}}) | null |
-
+| defaultTemplate | Sets a template that will be applied to all slides | [see template docs](../templates/README.md#default-template) | null |
 
 > [!TIP]
 > You can find more possible parameters [here](https://revealjs.com/config/)
-
+<!-- -->
 > [!NOTE]
 > [marked](https://marked.js.org/) is the Markdown parser used by reveal.js.
 > The complete set of marked options is [here](https://marked.js.org/using_advanced#options).
 
 The default value of `markdown`:
+
 ```yaml
 markdown:
   gfm: true
@@ -63,4 +63,3 @@ markdown:
 ```
 
 Other marked options exist, but should not be used with the Slides Extended plugin.
-
