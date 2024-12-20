@@ -9,12 +9,12 @@ Add ordered (numbered) and unordered lists to slides to present information as b
 ## Unordered Lists
 
 To create an unordered list, start the line with `*` or `-`.
-Alternatively, you can also use `+` to create a [Unordered Fragmented List]({{%relref "fragmentedLists.md"%}})
+Alternatively, you can also use `+` to create a [Unordered Fragmented List](../extend-syntax/fragmentedLists.md)
 
 ## Ordered Lists
 
 To create an ordered list, start the line with any number, followed by a dot and a space. The slide will show the correct numbers in the list.
-Alternatively, you can also start the line with any number, followed by a `)` to create a [Ordered Fragmented List]({{%relref "fragmentedLists.md"%}})
+Alternatively, you can also start the line with any number, followed by a `)` to create a [Ordered Fragmented List](../extend-syntax/fragmentedLists.md)
 
 ## Nesting Lists and Content
 

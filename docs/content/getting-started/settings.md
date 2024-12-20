@@ -18,4 +18,4 @@ Changing the port can be useful if you operate multiple vaults and both have Sli
 
 ## First Steps
 
-[Follow instructions here]({{%relref "firstSteps.md"%}})
+[Follow instructions here](firstSteps.md)
