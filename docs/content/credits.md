@@ -5,7 +5,7 @@ description: "contributors and packages used by Slides Extended"
 
 
 ## github contributors
-{{%ghcontributors "https://api.github.com/repos/ebullient/obsidian-advanced-slides/contributors?per_page=100" %}}
+{{%ghcontributors "ebullient/obsidian-slides-extended,MSzturc/obsidian-advanced-slides" %}}
 
 
 ## Packages and libraries
