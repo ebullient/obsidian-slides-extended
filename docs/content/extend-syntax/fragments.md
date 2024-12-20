@@ -30,7 +30,7 @@ Slide up while fading in <!-- element class="fragment fade-up" -->
 - Appear First <!-- element class="fragment" data-fragment-index="1" -->
 ```
 
-{{<revealhtml theme="black" progress="true" controls="true">}}
+{{<revealjs theme="black" progress="true" controls="true">}}
 
 <section data-fragment="-1"><p class="fragment" data-fragment-index="0">Fade in <!-- --></p>
 <p class="fragment fade-out" data-fragment-index="1">Fade out <!-- --></p>
@@ -49,4 +49,4 @@ Slide up while fading in <!-- element class="fragment fade-up" -->
 </ul>
 </section>
 
-{{</revealhtml>}}
+{{</revealjs>}}

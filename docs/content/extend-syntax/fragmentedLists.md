@@ -41,7 +41,7 @@ Based on the Fragments concept Advanced Slides introduced a convention to automa
 4) Fourth
 ```
 
-{{<revealhtml theme="black" progress="true" controls="true">}}
+{{<revealjs theme="black" progress="true" controls="true">}}
 
 <section><h1 id="unordered-list">Unordered list</h1>
 <ul>
@@ -77,5 +77,5 @@ Based on the Fragments concept Advanced Slides introduced a convention to automa
 </ol>
 </section>
 
-{{</revealhtml>}}
+{{</revealjs>}}
 

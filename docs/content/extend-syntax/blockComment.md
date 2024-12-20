@@ -37,7 +37,7 @@ red
 no color
 ```
 
-{{<revealhtml theme="black" progress="true" controls="true">}}
+{{<revealjs theme="black" progress="true" controls="true">}}
 
 <section><div class="block">
 
@@ -63,4 +63,4 @@ Paragraph content
 <p>no color</p>
 </section>
 
-{{</revealhtml>}}
+{{</revealjs>}}

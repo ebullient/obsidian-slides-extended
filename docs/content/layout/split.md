@@ -101,7 +101,7 @@ By adding no margin attribute automatic gaps between rows and column gets remove
 
 ## Split Component in Action
 
-{{<revealhtml theme="black" progress="true" controls="true">}}
+{{<revealjs theme="black" progress="true" controls="true">}}
 
 <section><split even="">
 
@@ -151,4 +151,4 @@ when an unknown printer took a galley of type and scrambled it to make a type sp
 </p>
 </split></section>
 
-{{</revealhtml>}}
+{{</revealjs>}}

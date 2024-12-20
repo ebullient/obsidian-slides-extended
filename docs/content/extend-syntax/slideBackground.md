@@ -52,7 +52,7 @@ you can change the background by annotating the slide:
 See [reveal backgrounds](https://revealjs.com/backgrounds/)
 ```
 
-{{<revealhtml theme="black" progress="true" controls="true">}}
+{{<revealjs theme="black" progress="true" controls="true">}}
 
 <section bg="aquamarine" class="has-light-background present">
 <h2 id="slide-with-text-based-background">Slide with text based background</h2>
@@ -86,7 +86,7 @@ See [reveal backgrounds](https://revealjs.com/backgrounds/)
 </section>
 
 
-{{</revealhtml>}}
+{{</revealjs>}}
 
 
 

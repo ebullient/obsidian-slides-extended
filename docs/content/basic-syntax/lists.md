@@ -35,7 +35,7 @@ To nest lists or other content inside a list item, indent it with spaces or tabs
    1. Item 3b
 ```
 
-{{< revealhtml theme="black" progress="true" controls="true" >}}
+{{< revealjs theme="black" progress="true" controls="true" >}}
 
 <section>
 
@@ -62,4 +62,4 @@ To nest lists or other content inside a list item, indent it with spaces or tabs
 </ol>
 </section>
 
-{{< /revealhtml >}}
+{{< /revealjs >}}

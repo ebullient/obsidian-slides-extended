@@ -92,7 +92,7 @@ And one fine morning — So we beat on.<!-- .element: style="font-size: 46px" al
 
 
 
-{{<revealhtml theme="black" progress="true" controls="true">}}
+{{<revealjs theme="black" progress="true" controls="true">}}
 
 <section  data-markdown><script type="text/template"><!-- .slide: class="has-light-background" data-background-color="white" -->
 
@@ -165,7 +165,7 @@ And one fine morning — So we beat on<!-- .element: style="font-size: 46px" ali
 </script></section>
 
 
-{{</revealhtml>}}
+{{</revealjs>}}
 
 
 > [!TIP]
