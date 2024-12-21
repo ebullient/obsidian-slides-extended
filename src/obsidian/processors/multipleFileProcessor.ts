@@ -5,8 +5,9 @@ export class MultipleFileProcessor {
     private utils: ObsidianUtils;
 
     private regex = /!\[\[(.*?)(\|[^\]]*?)?\]\]/g;
-    private excalidrawRegex = /(.*\.excalidraw)/i;
     private markdownRegex = /!\[.*?\]\((.*?\.md)\)/g;
+
+    private excalidrawRegex = /(.*\.excalidraw)/i;
 
     private wikilinkFileRegex = /\[\[(file:.+?)(\|[^\]]+)?\]\]/gi;
     private fileUrlRegex = /(\[[^\]]*?\]\()(file:.+?)((?: ".*?")?\))/gi;
@@ -69,7 +70,6 @@ export class MultipleFileProcessor {
             }
 
             const fileName = this.getMarkdownFile(link.replace("%20", " "));
-
             if (fileName === null) {
                 return matched;
             }
@@ -79,10 +79,10 @@ export class MultipleFileProcessor {
                 return matched;
             }
 
-            if (comment.length > 0) {
-                return this.process(content + comment);
-            }
-            return this.process(content);
+            const result = `\n<!-- begin::[${fileName}] -->
+${this.process(content + comment).trim()}
+<!-- end::[${fileName}] -->\n`;
+            return result;
         });
     }
 

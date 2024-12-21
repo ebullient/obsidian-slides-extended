@@ -94,8 +94,11 @@ export class RevealPreviewView extends ItemView {
         const view = this.app.workspace.getActiveViewOfType(MarkdownView);
         if (view?.file.name.includes(filename)) {
             const line = this.getTargetLine(url, view.data);
-            view.editor.setCursor(view.editor.lastLine());
-            view.editor.setCursor({ line: line, ch: 0 });
+            // line will be undefined for embedded content
+            if (line) {
+                view.editor.setCursor(view.editor.lastLine());
+                view.editor.setCursor({ line: line, ch: 0 });
+            }
         }
     }
 
@@ -131,7 +134,6 @@ export class RevealPreviewView extends ItemView {
                 break;
             }
         }
-
         if (resultKey) {
             const keys = resultKey.split(",");
             return [Number.parseInt(keys[0]), Number.parseInt(keys[1])];

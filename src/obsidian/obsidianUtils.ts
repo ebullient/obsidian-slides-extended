@@ -37,7 +37,7 @@ export class ObsidianUtils implements MediaCollector {
     private images = new Set<string>();
     private isCollecting = false;
 
-    private yamlRegex = /^---.*?---\n(.*?)($|---)/s;
+    private yamlRegex = /^(---\n[\s\S]*?\n---\n)/;
 
     constructor(app: App, settings: SlidesExtendedSettings) {
         this.app = app;
@@ -229,13 +229,15 @@ export class ObsidianUtils implements MediaCollector {
         });
 
         if (header === null) {
-            if (this.yamlRegex.test(fileContent)) {
-                return this.yamlRegex.exec(fileContent)[1];
+            const match = this.yamlRegex.exec(fileContent);
+            if (match) {
+                return fileContent.slice(match[0].length);
             }
             return fileContent;
         }
         const cache = this.app.metadataCache.getFileCache(tfile);
         const resolved = resolveSubpath(cache, header);
+        console.log("parseFile, cache, resolved", cache, resolved);
 
         if (resolved && resolved.start && resolved.start.line != null) {
             if (resolved.end && resolved.end.line != null) {
@@ -259,12 +261,6 @@ export class ObsidianUtils implements MediaCollector {
     }
 
     async fetchRemoteMarkdown(markdown: string): Promise<string> {
-        const stackTrace = Error().stack;
-        console.log(
-            "fetchRemoteMarkdown",
-            markdown.contains("file://"),
-            stackTrace,
-        );
         const wikilinkFileRegex = /!\[\[(file:.+?\.md)(\|[^\]]+)?\]\]/gi;
         const fileUrlRegex = /(!\[[^\]]*?\]\()(file:.+?\.md(?:#.+?)?)(\))/i;
 
@@ -275,7 +271,6 @@ export class ObsidianUtils implements MediaCollector {
             const url = new URL(filePath);
             return `![${alias}](${url})`;
         });
-        console.log(markdown);
 
         // Replace markdown links with markdown content
         if (fileUrlRegex.test(markdown)) {
