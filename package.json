@@ -70,11 +70,11 @@
     "dependencies": {
         "@codemirror/state": "^6.5.0",
         "@codemirror/view": "^6.36.1",
-        "@fastify/static": "^8.0.3",
+        "@fastify/static": "^7.0.4",
         "@types/js-yaml": "^4.0.9",
         "chart.js": "^4.4.7",
         "color": "^4.2.3",
-        "fastify": "^5.2.0",
+        "fastify": "^4.29.0",
         "fs-extra": "^11.2.0",
         "glob": "11.0.0",
         "js-yaml": "^4.1.0",
