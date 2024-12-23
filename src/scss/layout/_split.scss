@@ -1,55 +1,37 @@
 :root {
 	--split-div-size: 0;
-	--split-gap-size: 0;
-}
-
-split {
-    display: flex;
-    gap: unset;
-    flex-flow: row wrap;
-    align-content: center;
-}
-
-split[even]>* {
-    flex: 1
+	--split-gap-size: unset;
 }
 
 split[no-margin]>* {
 	--r-block-margin: 0;
 }
 
-@for $i from 1 through 12 {
-	split[wrap="#{$i}"]>* {
-		flex: 1 1 calc((100% - (calc(var(--split-gap-size) * (#{$i} - 1))) - (calc(var(--dbg-size) * #{$i} * 2))) / #{$i});
-	}
-}
-
-split[gap="0"] {
-	--split-gap-size: 0;
-    gap: unset;
-}
-
-@for $i from 1 through 5 {
+@for $i from 0 through 5 {
     split[gap="#{$i}"] {
 		--split-gap-size: #{$i}em;
-        gap: #{$i}em;
     }
 }
 
-@for $i from 1 through 11 {
-	split[left="#{$i}"]>*:first-child {
-		flex: #{$i};
-	}
+split[even]:not([wrap])>* {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: center;
+    gap: var(--split-gap-size);
+    grid-gap: unset;
+}
+split[wrap]:not([even]) {
+    display: grid;
+    gap: unset;
+    grid-gap: var(--split-gap-size);
 
-	split[middle="#{$i}"]>*:nth-child(2) {
-		flex: #{$i}!important;
-	}
+    >* {
+        margin: auto;
+    }
+}
 
-	split[right="#{$i}"]>*:nth-child(2) {
-		flex: #{$i};
-	}
-
-	split[right="#{$i}"]>*:nth-child(3) {
-		flex: #{$i};
-	}
+@for $i from 1 through 12 {
+    split[wrap="#{$i}"] {
+        grid-template-columns: repeat(#{$i}, 1fr);
+    }
 }
