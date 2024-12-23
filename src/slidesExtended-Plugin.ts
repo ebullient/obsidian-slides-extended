@@ -46,6 +46,7 @@ export class SlidesExtendedPlugin extends Plugin {
                 new RevealPreviewView(
                     leaf,
                     this.url,
+                    this,
                     this.settings,
                     this.hideView.bind(this),
                 ),
@@ -144,6 +145,14 @@ export class SlidesExtendedPlugin extends Plugin {
             }
         }
         return null;
+    }
+
+    getTargetName(): string {
+        console.log("target", this.target);
+        if (!this.target) {
+            return "";
+        }
+        return this.target.name;
     }
 
     onChange(file: TAbstractFile) {

@@ -4,6 +4,7 @@ import {
     type Menu,
     type WorkspaceLeaf,
 } from "obsidian";
+import type { SlidesExtendedPlugin } from "src/slidesExtended-Plugin";
 import type { Options, SlidesExtendedSettings } from "../@types";
 import { YamlParser } from "../yaml/yamlParser";
 
@@ -16,16 +17,19 @@ export class RevealPreviewView extends ItemView {
 
     private urlRegex = /#\/(\d*)(?:\/(\d*))?(?:\/(\d*))?/;
     private yaml: YamlParser;
+    private plugin: SlidesExtendedPlugin;
 
     constructor(
         leaf: WorkspaceLeaf,
         home: URL,
+        plugin: SlidesExtendedPlugin,
         settings: SlidesExtendedSettings,
         onCloseListener: () => void,
     ) {
         super(leaf);
         this.home = home;
         this.yaml = new YamlParser(settings);
+        this.plugin = plugin;
         this.onCloseListener = onCloseListener;
 
         this.addAction("globe", "Open in browser", () => {
@@ -238,7 +242,8 @@ export class RevealPreviewView extends ItemView {
     }
 
     getDisplayText() {
-        return "Slide preview";
+        const name = this.plugin.getTargetName();
+        return name ? `Preview: ${name}` : "Slide preview";
     }
 
     getIcon() {
