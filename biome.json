@@ -9,7 +9,8 @@
         "ignoreUnknown": false,
         "ignore": [
             "*.scss",
-            "*.css"
+            "*.css",
+            "docs/**"
         ]
     },
     "formatter": {
