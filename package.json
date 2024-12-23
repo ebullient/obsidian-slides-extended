@@ -36,7 +36,7 @@
         "@biomejs/biome": "^1.9.4",
         "@fortawesome/fontawesome-free": "^6.7.2",
         "@popperjs/core": "^2.11.8",
-        "@types/color": "^3.0.6",
+        "@types/color": "^4.2.0",
         "@types/fs-extra": "^11.0.4",
         "@types/glob": "^8.1.0",
         "@types/jest": "^29.5.14",
