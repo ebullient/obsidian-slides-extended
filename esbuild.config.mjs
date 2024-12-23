@@ -151,7 +151,7 @@ const parameters = {
         }),
         copy({
             assets: {
-                from: ['node_modules/chart.js/dist/chart.min.js'],
+                from: ['node_modules/chart.js/dist/chart.umd.js'],
                 to: ['./plugin/chart/'],
             }
         }),
