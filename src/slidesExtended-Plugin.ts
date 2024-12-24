@@ -148,11 +148,7 @@ export class SlidesExtendedPlugin extends Plugin {
     }
 
     getTargetName(): string {
-        console.log("target", this.target);
-        if (!this.target) {
-            return "";
-        }
-        return this.target.name;
+        return this.target ? this.target.name : "";
     }
 
     onChange(file: TAbstractFile) {

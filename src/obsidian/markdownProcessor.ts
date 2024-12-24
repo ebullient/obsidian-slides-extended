@@ -286,10 +286,8 @@ export class MarkdownProcessor {
     }
 
     postProcess = (element: HTMLElement) => {
-        const paragraphs = element.querySelectorAll<HTMLParagraphElement>("p");
-        for (let index = 0; index < paragraphs.length; index++) {
-            const paragraph = paragraphs.item(index);
-
+        const paragraphs = element.findAll("p");
+        for (const paragraph of paragraphs) {
             if (paragraph.innerText.startsWith(":::")) {
                 paragraph.remove();
             }
