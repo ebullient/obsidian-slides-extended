@@ -13,18 +13,15 @@ split[no-margin]>* {
     }
 }
 
-split[even]:not([wrap])>* {
+split[even]:not([wrap]) {
     display: flex;
     flex-flow: row wrap;
     align-content: center;
     gap: var(--split-gap-size);
-    grid-gap: unset;
 }
 split[wrap]:not([even]) {
     display: grid;
-    gap: unset;
     grid-gap: var(--split-gap-size);
-
     >* {
         margin: auto;
     }
