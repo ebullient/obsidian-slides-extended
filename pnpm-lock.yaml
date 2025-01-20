@@ -135,8 +135,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       sass:
-        specifier: ^1.83.1
-        version: 1.83.1
+        specifier: ^1.83.4
+        version: 1.83.4
       ts-jest:
         specifier: ^29.2.5
         version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.10.5)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.3)))(typescript@5.7.3)
@@ -2129,9 +2129,9 @@ packages:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
 
-  readdirp@4.0.2:
-    resolution: {integrity: sha512-yDMz9g+VaZkqBYS/ozoBJwaBhTbZo3UNYQHNRw1D3UFQB8oHB4uS/tAODO+ZLjGWmUbKnIlOWO+aaIiAxrUWHA==}
-    engines: {node: '>= 14.16.0'}
+  readdirp@4.1.1:
+    resolution: {integrity: sha512-h80JrZu/MHUZCyHu5ciuoI0+WxsCxzxJTILn6Fs8rxSnFPh+UVHYfeIxK1nVGugMqkfC4vJcBOYbkfkwYK0+gw==}
+    engines: {node: '>= 14.18.0'}
 
   real-require@0.2.0:
     resolution: {integrity: sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg==}
@@ -2337,8 +2337,8 @@ packages:
     engines: {node: '>=16.0.0'}
     hasBin: true
 
-  sass@1.83.1:
-    resolution: {integrity: sha512-EVJbDaEs4Rr3F0glJzFSOvtg2/oy2V/YrGFPqPY24UqcLDWcI9ZY5sN+qyO3c/QCZwzgfirvhXvINiJCE/OLcA==}
+  sass@1.83.4:
+    resolution: {integrity: sha512-B1bozCeNQiOgDcLd33e2Cs2U60wZwjUUXzh900ZyQF5qUasvMdDZYbQ566LJu7cqR+sAHlAfO6RMkaID5s6qpA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -3623,7 +3623,7 @@ snapshots:
 
   chokidar@4.0.3:
     dependencies:
-      readdirp: 4.0.2
+      readdirp: 4.1.1
 
   ci-info@3.9.0: {}
 
@@ -3773,7 +3773,7 @@ snapshots:
       esbuild: 0.24.2
       resolve: 1.22.10
       safe-identifier: 0.4.2
-      sass: 1.83.1
+      sass: 1.83.4
       sass-embedded: 1.83.0
 
   esbuild@0.24.2:
@@ -4743,7 +4743,7 @@ snapshots:
     dependencies:
       picomatch: 2.3.1
 
-  readdirp@4.0.2: {}
+  readdirp@4.1.1: {}
 
   real-require@0.2.0: {}
 
@@ -4895,7 +4895,7 @@ snapshots:
       sass-embedded-win32-ia32: 1.83.0
       sass-embedded-win32-x64: 1.83.0
 
-  sass@1.83.1:
+  sass@1.83.4:
     dependencies:
       chokidar: 4.0.3
       immutable: 5.0.3
