@@ -1,6 +1,6 @@
 # Slides Extended
 
-***Create Awesome Presentations in Obsidian**
+**Create Awesome Presentations in Obsidian**
 
 [Slides Extended](https://github.com/ebullient/obsidian-slides-extended) is an open source plugin for [Obsidian](https://obsidian.md/) that allows you to create [reveal.js](https://revealjs.com/) based presentations in Obsidian. With this tool anyone who is able to create a note in Obsidian can also create a beautiful presentation.
 
@@ -26,7 +26,7 @@
         - pipe image properties: `![[image.png|100x100]]` or `![|100x100](image.png)`
     - See [Extended Syntax](/docs/extend-syntax/) for more
 - Reveal.js Markdown features
-    - Define stylesheets inside Markdown: `<style>....</style>` d
+    - Define stylesheets inside Markdown: `<style>....</style>`
     - Annotate elements: `<!-- element class="red" -->`
 
 ## Call for Help
