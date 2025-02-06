@@ -5,6 +5,8 @@ MD033:
   allowed_elements:
     - img
     - a
+    - video
+    - source
 MD034: false
 MD046:
     style: fenced

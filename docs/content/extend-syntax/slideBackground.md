@@ -4,25 +4,34 @@ description: ""
 weight: 7
 ---
 
-you can change the background by annotating the slide:
+You can change the background by annotating the slide:
 
 ```md
 <!-- slide bg="aquamarine" -->
 ## Slide with text based background
+
+`bg` is shorthand for [`data-background`](https://revealjs.com/markdown/#slide-attributes)
+
 ---
 
 <!-- slide bg="#ff0000" -->
 ## Slide with hex based background
+
+`bg` is shorthand for [`data-background`](https://revealjs.com/markdown/#slide-attributes)
 
 ---
 
 <!-- slide bg="rgb(70, 70, 255)" -->
 ## Slide with rgb based background
 
+`bg` is shorthand for [`data-background`](https://revealjs.com/markdown/#slide-attributes)
+
 ---
 
 <!-- slide bg="hsla(315, 100%, 50%, 1)" -->
 ## Slide with hsl based background
+
+`bg` is shorthand for [`data-background`](https://revealjs.com/markdown/#slide-attributes)
 
 ---
 
@@ -33,62 +42,89 @@ you can change the background by annotating the slide:
 <!-- slide bg="https://picsum.photos/seed/picsum/800/600" -->
 ## Slide with image background
 
+`bg` with a URL attribute is shorthand for [`data-background-image`](https://revealjs.com/backgrounds/#image-backgrounds)
+
 ---
 
 <!-- slide bg="[[image.jpg]]" -->
 ## Slide with image background #2
+
+`bg` with a URL attribute is shorthand for [`data-background-image`](https://revealjs.com/backgrounds/#image-backgrounds)
 
 ---
 
 <!-- slide bg="https://picsum.photos/seed/picsum/800/600" data-background-opacity="0.5" -->
 ## with opacity
 
-0.5 ≙ 50% opacity
+- `bg` with a URL attribute is shorthand for [`data-background-image`](https://revealjs.com/backgrounds/#image-backgrounds)
+- 0.5 ≙ 50% opacity
+```
+
+<!-- --->
+
+{{< revealjs theme="black" progress="true" controls="true" >}}
+
+<!-- .slide: data-background="aquamarine" -->
+## Slide with text based background
+
+`bg` is shorthand for [`data-background-color`](https://revealjs.com/backgrounds/#color-backgrounds)
 
 ---
 
-## More options:
+<!-- .slide: data-background="#ff0000" -->
+## Slide with hex based background
 
-See [reveal backgrounds](https://revealjs.com/backgrounds/)
-```
+`bg` is shorthand for [`data-background-color`](https://revealjs.com/backgrounds/#color-backgrounds)
 
-{{<revealjs theme="black" progress="true" controls="true">}}
+---
 
-<section bg="aquamarine" class="has-light-background present">
-<h2 id="slide-with-text-based-background">Slide with text based background</h2>
-</section>
+<!-- .slide: data-background="rgb(70, 70, 255)" -->
+## Slide with rgb based background
 
-<section bg="#ff0000" class="has-dark-background">
-<h2 id="slide-with-hex-based-background">Slide with hex based background</h2>
-</section>
+`bg` is shorthand for [`data-background-color`](https://revealjs.com/backgrounds/#color-backgrounds)
 
-<section bg="rgb(70, 70, 255)" class="has-dark-background">
-<h2 id="slide-with-rgb-based-background">Slide with rgb based background</h2>
-</section>
+---
 
-<section bg="hsla(315, 100%, 50%, 1)" class="has-dark-background">
-<h2 id="slide-with-hsl-based-background">Slide with hsl based background</h2>
-</section>
+<!-- .slide: data-background="hsla(315, 100%, 50%, 1)" -->
+## Slide with hsl based background
 
-<section><h1 id="slide-without-background">Slide without background</h1>
-</section>
+`bg` is shorthand for [`data-background-color`](https://revealjs.com/backgrounds/#color-backgrounds)
 
-<section data-background-image="https://picsum.photos/seed/picsum/800/600">
-<h2 id="slide-with-image-background">Slide with image background</h2>
-</section>
+---
 
-<section data-background-image="https://picsum.photos/seed/picsum/800/600">
-<h2 id="slide-with-image-background">Slide with image background #2</h2>
-</section>
+# Slide without background
 
-<section><h2 id="more-options">More options:</h2>
-<p>See <a href="https://revealjs.com/backgrounds/">reveal backgrounds</a></p>
-</section>
+---
 
+<!-- .slide: data-background-image="https://picsum.photos/seed/picsum/800/600" -->
+## Slide with image background
+
+`bg` with a URL attribute is shorthand for [`data-background-image`](https://revealjs.com/backgrounds/#image-backgrounds)
+
+---
+
+<!-- .slide: data-background-image="https://picsum.photos/seed/picsum/800/600" -->
+## Slide with image background #2
+
+`bg` with a URL attribute is shorthand for [`data-background-image`](https://revealjs.com/backgrounds/#image-backgrounds)
+
+---
+
+<!-- .slide: data-background-image="https://picsum.photos/seed/picsum/800/600" data-background-opacity="0.5" -->
+## with opacity
+
+- `bg` with a URL attribute is shorthand for [`data-background-image`](https://revealjs.com/backgrounds/#image-backgrounds)
+- 0.5 ≙ 50% opacity
 
 {{</revealjs>}}
 
+<!-- --->
 
+## More slide options
+
+See [reveal backgrounds](https://revealjs.com/backgrounds/)
+
+## Changing the background for all slides
 
 You can change the background of all slides by adding the following frontmatter:
 
@@ -118,6 +154,6 @@ bg: transparent
 ---
 ```
 
-### See in action:
-<video controls width="320" height="240"><source src="https://cdn.discordapp.com/attachments/840286238928797736/1014391376248573952/slides-in-obs.mp4" type="video/mp4"></video>
+### See in action
 
+<video controls width="320" height="240"><source src="https://cdn.discordapp.com/attachments/840286238928797736/1014391376248573952/slides-in-obs.mp4" type="video/mp4"></video>

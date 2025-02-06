@@ -4,6 +4,8 @@ description: ""
 weight: 5
 ---
 
+<!--more-->
+
 ```md
 External Links
 
@@ -34,8 +36,6 @@ Slide Links
 You can link between slides, [like this](#/1/0).
 
 Or by slide id, [like this](#InternalLinks).
-
-
 ```
 
 {{<revealjs theme="black" progress="true" controls="true">}}
@@ -69,13 +69,7 @@ You can link between slides, [like this](#/1/0).
 
 Or by slide id, [like this](#/2/0).
 
-___
-
-> If you'd like backlinks to be displayed in the slides, check out the frontmatter property **enableLinks**
-
 {{</revealjs>}}
-
-<br>
 
 > [!TIP]
 > If you'd like backlinks to be displayed in the slides, check out the frontmatter property `enableLinks`.

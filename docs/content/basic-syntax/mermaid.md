@@ -4,12 +4,12 @@ description: ""
 weight: 13
 ---
 
+<!--more-->
 
-```md
+````md
 ---
 theme: beige
 highlightTheme: css/vs2015.css
-
 ---
 
 ```mermaid
@@ -18,18 +18,18 @@ sequenceDiagram
     Alice->>+John: John, can you hear me?
     John-->>-Alice: Hi Alice, I can hear you!
     John-->>-Alice: I feel great!
-    ```
 ```
+````
 
 ![Mermaid](../images/mermaid.png)
 
-```md
+````md
 ---
 theme: beige
 highlightTheme: css/vs2015.css
 ---
 
-#### Gitgraph Diagrams support
+## Gitgraph Diagrams support
 
 ```mermaid
     gitGraph
@@ -43,19 +43,23 @@ highlightTheme: css/vs2015.css
        merge develop
        commit
        commit
-    ```
 ```
+````
+
 ![Gitgraph](../images/gitgraph.png)
 
+## Mermaid Configuration
 
-#### Mermaid Configuration
-It's possible to overload the default mermaid configuration to change the behaviour / layout of the rendered mermaid diagrams. To do so, add a mermaid property to yaml as following:
+It's possible to overload the default mermaid configuration to change the behaviour / layout of the rendered mermaid diagrams using configuraton like this:
 
+```yaml
 mermaid:
   themeVariables:
     fontSize: 32px
   theme: 'forest'
+```
 
+To do so, add a mermaid property to frontmatter as follows:
 
 ```md
 ---

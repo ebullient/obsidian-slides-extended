@@ -4,6 +4,8 @@ description: ""
 weight: 4
 ---
 
+<!--more-->
+
 ```md
 
 Insert image with standard markdown syntax
@@ -38,7 +40,12 @@ Scale image to a width of 300x100 px
 ```
 
 {{<revealjs theme="black" progress="true" controls="true">}}
-Include image with standard markdown syntax
+
+Let's go...
+
+---
+
+Insert image with standard markdown syntax
 
 ![Image](https://picsum.photos/id/1006/500/300)
 
@@ -57,14 +64,13 @@ Insert image with obsidian markdown syntax
 ---
 
 Scale image to a width of 100 px
-<br><br>
+
 ![Image](https://picsum.photos/id/1006/100/60)
 
 ---
 
-Scale image to a width of 300x100 px
-<br><br>
-![Image](https://picsum.photos/id/1006/300/100)
+Scale image to 300x100 px
 
+![Image](https://picsum.photos/id/1006/300/100)<!-- element style="object-fit: cover" -->
 
 {{</revealjs>}}

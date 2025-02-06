@@ -5,7 +5,15 @@ weight: 4
 pre: "<i class='fa fa-leanpub' style='margin-right:5px' ></i> "
 ---
 
-Learn more about the Slides Extended from the following pages:
+Learn more about the Slides Extended and Advanced Slides plugins.
+
+<!--more-->
+
+## Slides Extended
+
+Share ideas and ask questions in [Github Discussions](https://github.com/ebullient/obsidian-slides-extended/discussions).
+
+## Advanced Slides
 
 ### Advanced Slides Basics
 
@@ -18,6 +26,7 @@ Learn more about the Slides Extended from the following pages:
 - {{%icon fa-book%}} [Using Templates in Advanced Slides](https://github.com/MSzturc/advanced-slides-consult-template)
 
 ### Advanced Slides in Action
+
 - SaturdayShowcase: A weekly format where the Advanced Slides developers feature presentations of their users:
     - {{%icon fa-twitter%}} [Curated List](https://twitter.com/search?q=%23SaturdayShowcase%20%40AdvancedSlides&src=typed_query&f=live)
 - Rust Talks by No Boilerplate
@@ -50,4 +59,4 @@ Learn more about the Slides Extended from the following pages:
     - {{%icon fa-address-card%}} [Slides](https://saforem2.github.io/anl-job-talk/#/)
     - {{%icon fa-github%}} [Source](https://raw.githubusercontent.com/saforem2/anl-job-talk/main/slides.md)
 - Talk Series: Python for Data Science and Machine Learning in Healthcare (Module at Imperial College London) by Chris Lovejoy
-	- {{%icon fa-address-card%}} [Slides](https://www.chrislovejoy.me/imperial)
+    - {{%icon fa-address-card%}} [Slides](https://www.chrislovejoy.me/imperial)

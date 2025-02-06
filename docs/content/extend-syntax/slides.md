@@ -19,6 +19,7 @@ To create a horizontal slide use three dashes surrounded by two blank lines. To 
 ```
 
 {{<revealjs theme="black" progress="true" controls="true">}}
+
 # Slide 1
 
 ---
@@ -30,8 +31,6 @@ To create a horizontal slide use three dashes surrounded by two blank lines. To 
 # Slide 2.2
 
 {{</revealjs>}}
-
-<br>
 
 > [!TIP]
 > It is possible to change the vertical / horizontal slide separator by changing the `separator` or `verticalSeparator` property in frontmatter.
