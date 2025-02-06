@@ -4,12 +4,12 @@ description: ""
 weight: 11
 ---
 
+<!--more-->
 
 ```md
 Here's a simple footnote[^1]
 
 [^1]: meaningful!
-
 ```
 
 ![Footnote](../images/footnote.png)

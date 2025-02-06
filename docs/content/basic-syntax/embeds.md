@@ -4,6 +4,7 @@ description: ""
 weight: 6
 ---
 
+<!--more-->
 
 Given the following `Obsidian.md` Note file:
 
@@ -26,7 +27,8 @@ And the following `Slide.md`:
 
 ```
 
-{{<revealjs theme="black" progress="true" controls="true">}}
+{{< revealjs theme="black" progress="true" controls="true" >}}
+
 # Notes about Obsidian
 A knowledge base that works on local Markdown files
 

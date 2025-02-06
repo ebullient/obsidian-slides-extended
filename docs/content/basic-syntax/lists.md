@@ -4,7 +4,9 @@ description: ""
 weight: 3
 ---
 
-Add ordered (numbered) and unordered lists to slides to present information as bullet points.
+Use ordered (numbered) and unordered lists to slides to present information as bullet points.
+
+<!--more-->
 
 ## Unordered Lists
 
@@ -23,8 +25,8 @@ To nest lists or other content inside a list item, indent it with spaces or tabs
 ```md
 - Item 1
 - Item 2
-	- Item 2a
-	- Item 2b
+    - Item 2a
+    - Item 2b
 
 ---
 
@@ -37,29 +39,17 @@ To nest lists or other content inside a list item, indent it with spaces or tabs
 
 {{< revealjs theme="black" progress="true" controls="true" >}}
 
-<section>
+- Item 1
+- Item 2
+    - Item 2a
+    - Item 2b
 
-<ul>
-<li>Item 1</li>
-<li>Item 2<ul>
-<li>Item 2a</li>
-<li>Item 2b</li>
-</ul>
-</li>
-</ul>
-</section>
+---
 
-<section>
-
-<ol>
-<li>Item 1</li>
-<li>Item 2</li>
-<li>Item 3<ol>
-<li>Item 3a</li>
-<li>Item 3b</li>
-</uo>
-</li>
-</ol>
-</section>
+1. Item 1
+1. Item 2
+1. Item 3
+   1. Item 3a
+   1. Item 3b
 
 {{< /revealjs >}}

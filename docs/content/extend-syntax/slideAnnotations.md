@@ -24,22 +24,18 @@ Paragraph has coral background color, too!
 
 {{<revealjs theme="black" progress="true" controls="true">}}
 
-<section style="background-color: coral;">
+<!-- .slide: style="background-color: coral;" -->
 
-<h1 id="header-with-coral-background-color">Header with coral background color</h1>
-<p>Paragraph has coral background color, too!</p>
-</section>
+# Header with coral background color
 
-<section style="background-color: green;">
+Paragraph has coral background color, too!
 
-<ul>
-<li><p>All Bullet points</p>
-</li>
-<li><p>have green</p>
-</li>
-<li><p>background color</p>
-</li>
-</ul>
-</section>
+---
+
+<!-- .slide: style="background-color: green;" -->
+
+- All Bullet points
+- have green
+- background color
 
 {{</revealjs>}}

@@ -13,13 +13,14 @@ Grid layouts drag-and-drop is used to size and position content of your slides.
 - **Drag** to size a block of content on your slide, then
 - **Drop** to position that block anywhere on the slide.
 
-
 ### Basic Syntax
 
 The following syntax is used to drag-and-drop a grid in Slides Extended:
 
 ```md
 <grid drag="width height" drop="x y">
+...
+</grid>
 ```
 
 The *width* and *height* values of the **drag** property define the  size of the area in which the content will be displayed. The *x* and *y* values ​​of the **drop** property define the position on the slide where the content should be inserted. 
@@ -53,7 +54,6 @@ The following sample slide helps to clarify these concepts:
 ```
 
 ![Example](../images/grid-basic1.png)
-
 
 #### Position by Name
 

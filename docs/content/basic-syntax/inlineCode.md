@@ -4,12 +4,14 @@ description: ""
 weight: 8
 ---
 
+<!--more-->
 
 ```md
 ### Text inside `backticks` on a line will be formatted like code.
 ```
 
 {{<revealjs theme="black" progress="true" controls="true">}}
+
 ### Text inside `backticks` on a line will be formatted like code.
 
 {{</revealjs>}}

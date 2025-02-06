@@ -6,8 +6,8 @@ pre: "<i class='fa fa-send' style='margin-right:5px' ></i> "
 ---
 
 Step by Step guide to create your first Presentation
-<!--more-->
 
+<!--more-->
 
 ### Create Slides
 
