@@ -1,34 +1,62 @@
-:root {
+body {
 	--split-div-size: 0;
-	--split-gap-size: unset;
+	--split-gap-size: 1em;
 }
 
-split[no-margin]>* {
-	--r-block-margin: 0;
+.reveal split {
+    img, video, iframe {
+        max-width: unset;
+        max-height: unset;
+    }
+    &[no-margin] {
+        --split-gap-size: 0;
+        &>* {
+            --r-block-margin: 0;
+        }
+    }
+    &[wrap] {
+        display: grid;
+        grid-gap: var(--split-gap-size);
+        >* {
+            margin: auto;
+        }
+    }
+    @for $i from 1 through 12 {
+        &[wrap="#{$i}"] {
+            grid-template-columns: repeat(#{$i}, 1fr);
+        }
+    }
+    &:not([wrap]) {
+        display: flex;
+        flex-flow: row wrap;
+        align-content: center;
+        gap: var(--split-gap-size);
+
+        &[even]>* {
+            flex: 1
+        }
+        @for $i from 1 through 11 {
+            &[left="#{$i}"]>*:first-child {
+                flex: #{$i};
+            }
+
+            &[middle="#{$i}"]>*:nth-child(2) {
+                flex: #{$i}!important;
+            }
+
+            &[right="#{$i}"]>*:nth-child(2) {
+                flex: #{$i};
+            }
+
+            &[right="#{$i}"]>*:nth-child(3) {
+                flex: #{$i};
+            }
+        }
+    }
 }
 
 @for $i from 0 through 5 {
-    split[gap="#{$i}"] {
-		--split-gap-size: #{$i}em;
-    }
-}
-
-split[even]:not([wrap]) {
-    display: flex;
-    flex-flow: row wrap;
-    align-content: center;
-    gap: var(--split-gap-size);
-}
-split[wrap]:not([even]) {
-    display: grid;
-    grid-gap: var(--split-gap-size);
-    >* {
-        margin: auto;
-    }
-}
-
-@for $i from 1 through 12 {
-    split[wrap="#{$i}"] {
-        grid-template-columns: repeat(#{$i}, 1fr);
+    .reveal split[gap="#{$i}"] {
+        --split-gap-size: #{$i}em;
     }
 }

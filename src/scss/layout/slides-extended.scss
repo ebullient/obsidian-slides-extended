@@ -1,10 +1,10 @@
-@import '_split.scss';
-@import '_align.scss';
-@import '_animation.scss';
-@import '_callouts.scss';
-@import '_stretch.scss';
-@import '_arrowList.scss';
-@import '_tables.scss';
+@use '_split.scss';
+@use '_align.scss';
+@use '_animation.scss';
+@use '_callouts.scss';
+@use '_stretch.scss';
+@use '_arrowList.scss';
+@use '_tables.scss';
 
 :root {
 	--dbg-size: 1;
