@@ -126,8 +126,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       reveal.js-mermaid-plugin:
-        specifier: ^2.3.0
-        version: 2.3.0
+        specifier: ^11.4.1
+        version: 11.4.1
       reveal.js-plugins:
         specifier: ^4.2.5
         version: 4.2.5
@@ -2173,8 +2173,8 @@ packages:
   reveal.js-menu@2.1.0:
     resolution: {integrity: sha512-35zp4fHSMyWd15+3CvQ8LrpS+4Gj2qvlkxX3lo5LpITDe6ZkA4A9y1E5fE63YlQl5fp7W1mNgNJr4kCU0s14lA==}
 
-  reveal.js-mermaid-plugin@2.3.0:
-    resolution: {integrity: sha512-61t2jWPCB0+PYsO1lpoUXX7NfhcRwavpEi5r20Au7dEdoYzA3aYwP/vP90mBc+bvCcCPIAgulcixllGob59jkA==}
+  reveal.js-mermaid-plugin@11.4.1:
+    resolution: {integrity: sha512-ZRVVRmaqrGsaMl/EVJLwVX7fct5GJ9njfvaKM3OFKSn21N+pJ+dmGlPAA3M7D8IN7tk0Bslq9IbzPJyZB3HRCw==}
     engines: {node: '>=10.0.0'}
 
   reveal.js-plugins@4.2.5:
@@ -4771,7 +4771,7 @@ snapshots:
 
   reveal.js-menu@2.1.0: {}
 
-  reveal.js-mermaid-plugin@2.3.0: {}
+  reveal.js-mermaid-plugin@11.4.1: {}
 
   reveal.js-plugins@4.2.5:
     dependencies:
