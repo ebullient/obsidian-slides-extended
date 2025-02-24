@@ -34,12 +34,19 @@ Slides Extended is an official community plugin. Here's how you can install it:
 ### Manual Installation
 
 1. Download the latest release from [GitHub](https://github.com/ebullient/obsidian-slides-extended/releases).
+   You need the files: `manifest.json`, `main.js`, `style.css` and `slides-extended.zip`.
 2. In Obsidian, open your vault's root folder in your file explorer.
 3. Navigate to the `.obsidian/plugins` directory. If it doesn't exist, create it.
-4. Extract the contents of the downloaded `.zip` file into a new folder within the `plugins` directory. The folder name should be `slides-extended`.
+4. Extract the contents of the downloaded `.zip` file into a new folder within the `plugins` directory.
+5. Copy the file `manifest.json`, `main.js`, and `style.css` into the folder `slides-extended`.
 5. Restart Obsidian or reload your vault.
 6. Go to `Settings` > `Community Plugins` and make sure "Safe Mode" is turned off.
 7. Click on `Browse` under `Community Plugins`, find `Obsidian Slides Extended`, and enable it.
+
+> [!NOTE]
+> The plugin folder is named `slides-extended` and contains the `.zip`-contents, like `css`, `dist`, `plugin`, `template`,
+> but also the additional files `mainfest.json`, `main.js`, and `style.css`.
+
 
 ### Installation Using BRAT
 
