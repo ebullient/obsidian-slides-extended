@@ -4,10 +4,9 @@ body {
 }
 
 .reveal split {
-    img, video, iframe {
-        max-width: unset;
-        max-height: unset;
-    }
+    max-width: 100%;
+    max-height: 100%;
+
     &[no-margin] {
         --split-gap-size: 0;
         &>* {
@@ -21,7 +20,7 @@ body {
             margin: auto;
         }
     }
-    @for $i from 1 through 12 {
+    @for $i from 1 through 10 {
         &[wrap="#{$i}"] {
             grid-template-columns: repeat(#{$i}, 1fr);
         }
@@ -35,20 +34,20 @@ body {
         &[even]>* {
             flex: 1
         }
-        @for $i from 1 through 11 {
+        @for $i from 1 through 10 {
             &[left="#{$i}"]>*:first-child {
                 flex: #{$i};
             }
 
-            &[middle="#{$i}"]>*:nth-child(2) {
+            &[middle="#{$i}"]>*:nth-child(2) { // middle must win if present
                 flex: #{$i}!important;
             }
 
-            &[right="#{$i}"]>*:nth-child(2) {
+            &[right="#{$i}"]>*:nth-child(2) { // 2nd, middle will override
                 flex: #{$i};
             }
 
-            &[right="#{$i}"]>*:nth-child(3) {
+            &[right="#{$i}"]>*:nth-child(3) { // has middle, this becomes 3rd element
                 flex: #{$i};
             }
         }
