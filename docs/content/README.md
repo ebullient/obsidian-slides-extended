@@ -24,7 +24,7 @@
     - Obsidian embed Support: `![[Note.md#FirstChapter]]` or `![First Chapter](Note.md#FirstChapter)`
     - Image Support: `![[picture.jpg]]` or `![](picture.jpg)`
         - pipe image properties: `![[image.png|100x100]]` or `![|100x100](image.png)`
-    - See [Extended Syntax](/docs/extend-syntax/) for more
+    - See [Extended Syntax](./extend-syntax/_index.md) for more
 - Reveal.js Markdown features
     - Define stylesheets inside Markdown: `<style>....</style>`
     - Annotate elements: `<!-- element class="red" -->`
