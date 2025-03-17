@@ -73,7 +73,7 @@
         "@fastify/static": "^7.0.4",
         "@types/js-yaml": "^4.0.9",
         "chart.js": "^4.4.8",
-        "color": "^4.2.3",
+        "color": "^5.0.0",
         "fastify": "^4.29.0",
         "fs-extra": "^11.3.0",
         "glob": "11.0.1",
