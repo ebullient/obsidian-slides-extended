@@ -74,17 +74,18 @@ export class RevealServer {
                 };
 
                 if (file.startsWith("local-file-url")) {
-                    console.debug("fetching local file", file);
                     const urlpath = file.replace(
                         "local-file-url",
                         Platform.resourcePathPrefix,
                     );
                     const result = await fetch(urlpath).catch((error) => {
-                        return new Response(null, {
-                            status: 404,
+                        console.error("local file error", error);
+                        return new Response(error, {
+                            status: error.status,
                             statusText: error.messge,
                         });
                     });
+                    console.debug("Serving local file", file, urlpath, result);
                     if (result.ok) {
                         if (result.blob) {
                             const blob = await result.blob();
@@ -97,7 +98,7 @@ export class RevealServer {
                             );
                         }
                     } else {
-                        reply.code(404).send(result.statusText);
+                        reply.status(result.status).send(result.statusText);
                     }
                 } else if (file.startsWith("embed/") && file.endsWith(".md")) {
                     console.debug("fetching embed file", file);
@@ -108,13 +109,12 @@ export class RevealServer {
                     await renderMarkdownFile(filePath);
                 } else if (file.endsWith(".md")) {
                     // top-level slide
-                    console.debug("fetching markdown file", file);
                     this.filePath = path.join(utils.vaultDirectory, file);
+                    console.debug("New presentation: ", file, this.filePath);
                     await renderMarkdownFile(this.filePath);
                 } else {
                     let fetch = file;
                     const sourceDir = path.dirname(this.filePath);
-                    console.debug("fetching other file", sourceDir);
                     if (sourceDir !== utils.vaultDirectory) {
                         const srcPath = path.join(sourceDir, file);
                         if (existsSync(srcPath)) {
@@ -122,7 +122,7 @@ export class RevealServer {
                         }
                     }
                     console.debug(
-                        "serve file",
+                        "Serve file",
                         file,
                         sourceDir,
                         utils.vaultDirectory,
