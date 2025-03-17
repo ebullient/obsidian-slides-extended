@@ -69,7 +69,7 @@ export class MultipleFileProcessor {
                 return matched;
             }
 
-            const fileName = this.getMarkdownFile(link.replaceAll("%20", " "));
+            const fileName = this.getMarkdownFile(link);
             if (fileName === null) {
                 return matched;
             }
@@ -95,7 +95,7 @@ ${this.process(content + comment).trim()}
         if (!link.toLowerCase().endsWith(".md")) {
             file = `${file}.md`;
         }
-        return file;
+        return file.replaceAll("%20", " ");
     }
 
     private transformAbsoluteFilePath(path: string) {

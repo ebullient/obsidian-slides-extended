@@ -131,6 +131,7 @@ export class ObsidianUtils implements MediaCollector {
         if (filename.startsWith("[[") && filename.endsWith("]]")) {
             filename = filename.substring(2, filename.length - 2).trim();
         }
+        filename = filename.replaceAll("%20", " ");
 
         const expDir = this.settings.exportDirectory.startsWith("/")
             ? this.settings.exportDirectory.substring(1)
