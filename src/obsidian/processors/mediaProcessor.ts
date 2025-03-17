@@ -145,8 +145,13 @@ export class MediaProcessor {
         commentString: string,
     ): string {
         let result = "";
-        if (alt.match(/^\d+x?\d*$/)) {
-            commentString = this.buildComment(alt, commentString) ?? "";
+        if (alt.match(/(?:^|\|)(\d+x?\d*)$/)) {
+            const parts = alt.split("|");
+            const size = parts.length > 1 ? parts[1] : parts[0];
+            if (parts.length > 1) {
+                alt = parts[0];
+            }
+            commentString = this.buildComment(size, commentString) ?? "";
             alt = "";
         }
         const type = mimeTypeFor(filePath);
