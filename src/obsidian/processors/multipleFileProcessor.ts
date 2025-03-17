@@ -69,7 +69,7 @@ export class MultipleFileProcessor {
                 return matched;
             }
 
-            const fileName = this.getMarkdownFile(link.replace("%20", " "));
+            const fileName = this.getMarkdownFile(link.replaceAll("%20", " "));
             if (fileName === null) {
                 return matched;
             }
