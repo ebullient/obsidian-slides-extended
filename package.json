@@ -55,7 +55,7 @@
         "mathjax": "^3.2.2",
         "obsidian": "^1.8.7",
         "obsidian-utilities": "^1.1.5",
-        "reveal.js": "^5.1.0",
+        "reveal.js": "^5.2.0",
         "reveal.js-menu": "^2.1.0",
         "reveal.js-mermaid-plugin": "^2.3.0",
         "reveal.js-plugins": "^4.2.5",
