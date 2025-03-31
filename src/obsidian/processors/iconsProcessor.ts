@@ -1,4 +1,6 @@
-export class IconsProcessor {
+import type { Processor } from "src/@types";
+
+export class IconsProcessor implements Processor {
     private regex = /:(fas|far|fal|fad|fab)_([\w-]+):/g;
 
     process(markdown: string) {

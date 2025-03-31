@@ -1,7 +1,7 @@
-import type { Options } from "../../@types";
+import type { Options, Processor } from "src/@types";
 import { CommentParser } from "../comment";
 
-export class FragmentProcessor {
+export class FragmentProcessor implements Processor {
     private parser: CommentParser;
     private fragmentCounter = 1;
     private orderedListRegex = /^\d\) /g;

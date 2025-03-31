@@ -1,4 +1,6 @@
-export class CalloutProcessor {
+import type { Processor } from "src/@types";
+
+export class CalloutProcessor implements Processor {
     private regex = />\s?\[!([^\]]+)\]-* *(.*)/;
 
     process(markdown: string) {

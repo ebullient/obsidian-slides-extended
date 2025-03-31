@@ -1,6 +1,6 @@
-import type { Options } from "../../@types";
+import type { Options, Processor } from "src/@types";
 
-export class FootnoteProcessor {
+export class FootnoteProcessor implements Processor {
     private regex = /\[\^([^\]]*)]/im;
 
     process(markdown: string, options: Options) {

@@ -40,6 +40,10 @@ export type ChartJsOptions = {
     scales?: any;
 };
 
+export interface Processor {
+    process: (markdown: string, options?: Options) => string;
+}
+
 export type Options = {
     bg: string;
     center: boolean;

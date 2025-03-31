@@ -1,4 +1,6 @@
-export class FormatProcessor {
+import type { Processor } from "src/@types";
+
+export class FormatProcessor implements Processor {
     private boldRegex = /(?<=[^_]|^)__([^_]+)__(?!_)/gm;
     private markRegex = /==([^=]*)==/gm;
     private commentRegex = /%%([^%]*)%%/gm;

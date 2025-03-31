@@ -1,10 +1,10 @@
+import type { Options, Processor } from "src/@types";
 import { CommentParser } from "src/obsidian/comment";
 import type { ObsidianUtils } from "src/obsidian/obsidianUtils";
-import type { Options } from "../../@types";
 import { FootnoteProcessor } from "./footNoteProcessor";
 import { MultipleFileProcessor } from "./multipleFileProcessor";
 
-export class TemplateProcessor {
+export class TemplateProcessor implements Processor {
     private multipleFileProcessor: MultipleFileProcessor;
     private footnoteProcessor: FootnoteProcessor;
 

@@ -1,8 +1,9 @@
+import type { Processor } from "src/@types";
 import { isIcon, isImage, isUrl, isVideo, mimeTypeFor } from "src/util";
 import { CommentParser } from "../comment";
 import type { ObsidianUtils } from "../obsidianUtils";
 
-export class MediaProcessor {
+export class MediaProcessor implements Processor {
     private utils: ObsidianUtils;
     private parser: CommentParser;
 

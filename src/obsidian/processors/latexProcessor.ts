@@ -1,4 +1,6 @@
-export class LatexProcessor {
+import type { Processor } from "src/@types";
+
+export class LatexProcessor implements Processor {
     private singleLine = /\$(.*?)\$/g;
 
     process(markdown: string) {

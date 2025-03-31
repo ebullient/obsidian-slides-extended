@@ -1,7 +1,7 @@
-import type { Options } from "../../@types";
+import type { Options, Processor } from "src/@types";
 import type { ObsidianUtils } from "../obsidianUtils";
 
-export class InternalLinkProcessor {
+export class InternalLinkProcessor implements Processor {
     private utils: ObsidianUtils;
 
     constructor(utils: ObsidianUtils) {

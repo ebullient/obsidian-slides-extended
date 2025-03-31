@@ -1,4 +1,6 @@
-export class BlockProcessor {
+import type { Processor } from "src/@types";
+
+export class BlockProcessor implements Processor {
     process(markdown: string) {
         return this.transformBlock(markdown);
     }

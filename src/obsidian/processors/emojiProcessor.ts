@@ -1,3 +1,5 @@
+import type { Processor } from "src/@types";
+
 // Taken from obsidian-emoji-shortcodes
 // Generated from: https://api.github.com/emojis
 export const emoji: { [key: string]: string } = {
@@ -1858,7 +1860,7 @@ export const emoji: { [key: string]: string } = {
     ":zzz:": "💤",
 };
 
-export class EmojiProcessor {
+export class EmojiProcessor implements Processor {
     process(markdown: string) {
         return this.transformEmoji(markdown);
     }

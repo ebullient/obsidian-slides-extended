@@ -1,7 +1,7 @@
+import type { Options, Processor } from "src/@types";
 import { Properties } from "src/obsidian/transformers";
-import type { Options } from "../../@types";
 
-export class GridProcessor {
+export class GridProcessor implements Processor {
     private gridBlockRegex = /<\s*grid(?:(?!(<grid|<\/grid>)).)*<\/grid>/gs;
     private gridRegex = /<\s*grid([^>]+)>(.*?)<\/grid>/s;
     private gridPropertiesRegex =

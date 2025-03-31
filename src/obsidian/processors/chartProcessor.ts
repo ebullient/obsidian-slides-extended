@@ -1,4 +1,4 @@
-import type { ChartJsOptions, Options } from "../../@types";
+import type { ChartJsOptions, Options, Processor } from "src/@types";
 
 type ChartObject = {
     data: DataObject;
@@ -16,7 +16,7 @@ type DataObject = {
     datasets: DataEntry[];
 };
 
-export class ChartProcessor {
+export class ChartProcessor implements Processor {
     private typeRegex = /type:\s(\w*)/;
     private labelRegex = /labels:\s(.*)/;
     private datasetRegex = /title:\s(.*)\s*data:\s(.*)/g;

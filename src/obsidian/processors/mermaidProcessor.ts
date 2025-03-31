@@ -1,4 +1,6 @@
-export class MermaidProcessor {
+import type { Processor } from "src/@types";
+
+export class MermaidProcessor implements Processor {
     process(markdown: string) {
         return this.transformMermaid(markdown);
     }

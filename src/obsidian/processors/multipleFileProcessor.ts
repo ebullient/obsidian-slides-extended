@@ -1,7 +1,8 @@
+import type { Processor } from "src/@types";
 import { isIcon, isImage, isUrl, isVideo } from "src/util";
 import type { ObsidianUtils } from "../obsidianUtils";
 
-export class MultipleFileProcessor {
+export class MultipleFileProcessor implements Processor {
     private utils: ObsidianUtils;
 
     private regex = /!\[\[(.*?)(\|[^\]]*?)?\]\]/g;

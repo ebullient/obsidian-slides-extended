@@ -1,4 +1,6 @@
-export class AutoClosingProcessor {
+import type { Processor } from "src/@types";
+
+export class AutoClosingProcessor implements Processor {
     private regex = /<(\s*?([\w]*)[^>]*?)\/(?<=\/)>/gm;
 
     process(markdown: string) {

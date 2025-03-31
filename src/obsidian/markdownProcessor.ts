@@ -1,4 +1,4 @@
-import type { Options } from "../@types";
+import type { Options, Processor } from "../@types";
 import { YamlStore } from "../yaml/yamlStore";
 import type { ObsidianUtils } from "./obsidianUtils";
 import { AutoClosingProcessor } from "./processors/autoClosingProcessor";
@@ -24,6 +24,11 @@ import { MultipleFileProcessor } from "./processors/multipleFileProcessor";
 import { ReferenceProcessor } from "./processors/referenceProcessor";
 import { SkipSlideProcessor } from "./processors/skipSlideProcessor";
 import { TemplateProcessor } from "./processors/templateProcessor";
+
+interface ProcessStep {
+    name: string;
+    processor: Processor;
+}
 
 export class MarkdownProcessor {
     private multipleFileProcessor: MultipleFileProcessor;
@@ -78,7 +83,30 @@ export class MarkdownProcessor {
 
     process(markdown: string, options: Options) {
         YamlStore.getInstance().options = options;
+        if (options.log) {
+            this.log("begin", "", markdown);
+        }
+        // First phase: Template processing
+        let processedMarkdown = this.processTemplates(markdown, options);
 
+        // Second phase: Core processors that modify slide structure
+        processedMarkdown = this.processSlideStructure(
+            processedMarkdown,
+            options,
+        );
+
+        // Third phase: Content processors
+        processedMarkdown = this.processContent(processedMarkdown, options);
+
+        if (options.log) {
+            this.log("end", "", markdown);
+        }
+        return processedMarkdown;
+    }
+
+    private processTemplates(markdown: string, options: Options): string {
+        // Process multi-file includes and templates
+        // Trim trailing separators
         let before = this.trimEnding(markdown, options);
         let after: string;
 
@@ -88,16 +116,21 @@ export class MarkdownProcessor {
             if (after) {
                 before = after;
             }
+
+            // Process multiple file includes first
             const afterMultipleFileProcessor =
                 this.multipleFileProcessor.process(before);
+
+            // Then process templates
             after = this.templateProcessor.process(
                 afterMultipleFileProcessor,
                 options,
             );
 
-            //Remove default templates after first pass
+            // Remove default templates after first pass to prevent re-application
             options.defaultTemplate = null;
 
+            // Circuit breaker to prevent infinite loops
             if (circuitCounter > 9) {
                 console.warn(
                     "WARNING: Circuit in template hierarchy detected!",
@@ -105,184 +138,118 @@ export class MarkdownProcessor {
                 break;
             }
         }
-
-        const afterSkipSlideProcessor = this.skipSlideProcessor.process(
-            after,
-            options,
-        );
-        const afterReferenceProcessor = this.referenceProcessor.process(
-            afterSkipSlideProcessor,
-        );
-        const afterDebugViewProcessor = this.debugViewProcessor.process(
-            afterReferenceProcessor,
-            options,
-        );
-        const afterAutoClosingProcessor = this.autoClosingProcessor.process(
-            afterDebugViewProcessor,
-        );
-        const defaultBackgroundProcessor =
-            this.defaultBackgroundProcessor.process(
-                afterAutoClosingProcessor,
-                options,
-            );
-        const afterCalloutProcessor = this.calloutProcessor.process(
-            defaultBackgroundProcessor,
-        );
-        const afterEmojiProcessor = this.emojiProcessor.process(
-            afterCalloutProcessor,
-        );
-        const afterIconsProcessor =
-            this.iconsProcessor.process(afterEmojiProcessor);
-        const afterMermaidProcessor =
-            this.mermaidProcessor.process(afterIconsProcessor);
-        const afterBlockProcessor = this.blockProcessor.process(
-            afterMermaidProcessor,
-        );
-        const afterFootNoteProcessor = this.footnoteProcessor.process(
-            afterBlockProcessor,
-            options,
-        );
-        const afterExcalidrawProcessor = this.excalidrawProcessor.process(
-            afterFootNoteProcessor,
-        );
-        const afterMediaProcessor = this.mediaProcessor.process(
-            afterExcalidrawProcessor,
-        );
-        const afterInternalLinkProcessor = this.internalLinkProcessor.process(
-            afterMediaProcessor,
-            options,
-        );
-        const afterLatexProcessor = this.latexProcessor.process(
-            afterInternalLinkProcessor,
-        );
-        const afterFormatProcessor =
-            this.formatProcessor.process(afterLatexProcessor);
-        const afterFragmentProcessor = this.fragmentProcessor.process(
-            afterFormatProcessor,
-            options,
-        );
-        const afterDropProcessor = this.dropProcessor.process(
-            afterFragmentProcessor,
-            options,
-        );
-        const afterGridProcessor = this.gridProcessor.process(
-            afterDropProcessor,
-            options,
-        );
-        const afterCommentProcessor =
-            this.commentProcessor.process(afterGridProcessor);
-        const afterChartProcessor = this.chartProcessor.process(
-            afterCommentProcessor,
-            options,
-        );
-
         if (options.log) {
-            this.log("markdown", "", markdown);
             this.log("merge & template", markdown, after);
-            this.log("afterSkipSlideProcessor", after, afterSkipSlideProcessor);
-            this.log(
-                "afterReferenceProcessor",
-                afterSkipSlideProcessor,
-                afterReferenceProcessor,
-            );
-            this.log(
-                "afterDebugViewProcessor",
-                afterReferenceProcessor,
-                afterDebugViewProcessor,
-            );
-            this.log(
-                "afterAutoClosingProcessor",
-                afterDebugViewProcessor,
-                afterAutoClosingProcessor,
-            );
-            this.log(
-                "defaultBackgroundProcessor",
-                afterAutoClosingProcessor,
-                defaultBackgroundProcessor,
-            );
-            this.log(
-                "afterCalloutProcessor",
-                defaultBackgroundProcessor,
-                afterCalloutProcessor,
-            );
-            this.log(
-                "afterEmojiProcessor",
-                afterCalloutProcessor,
-                afterEmojiProcessor,
-            );
-            this.log(
-                "afterIconsProcessor",
-                afterEmojiProcessor,
-                afterIconsProcessor,
-            );
-            this.log(
-                "afterMermaidProcessor",
-                afterIconsProcessor,
-                afterMermaidProcessor,
-            );
-            this.log(
-                "afterBlockProcessor",
-                afterMermaidProcessor,
-                afterBlockProcessor,
-            );
-            this.log(
-                "afterFootNoteProcessor",
-                afterBlockProcessor,
-                afterFootNoteProcessor,
-            );
-            this.log(
-                "afterExcalidrawProcessor",
-                afterFootNoteProcessor,
-                afterExcalidrawProcessor,
-            );
-            this.log(
-                "afterMediaProcessor",
-                afterExcalidrawProcessor,
-                afterMediaProcessor,
-            );
-            this.log(
-                "afterInternalLinkProcessor",
-                afterMediaProcessor,
-                afterInternalLinkProcessor,
-            );
-            this.log(
-                "afterLatexProcessor",
-                afterInternalLinkProcessor,
-                afterLatexProcessor,
-            );
-            this.log(
-                "afterFormatProcessor",
-                afterLatexProcessor,
-                afterFormatProcessor,
-            );
-            this.log(
-                "afterFragmentProcessor",
-                afterFormatProcessor,
-                afterFragmentProcessor,
-            );
-            this.log(
-                "afterDropProcessor",
-                afterFragmentProcessor,
-                afterDropProcessor,
-            );
-            this.log(
-                "afterGridProcessor",
-                afterDropProcessor,
-                afterGridProcessor,
-            );
-            this.log(
-                "afterCommentProcessor",
-                afterGridProcessor,
-                afterCommentProcessor,
-            );
-            this.log(
-                "afterChartProcessor",
-                afterCommentProcessor,
-                afterChartProcessor,
-            );
         }
+        return after || before;
+    }
 
-        return afterChartProcessor;
+    private processWithLog(
+        before: string,
+        options: Options,
+        step: ProcessStep,
+    ): string {
+        const after = step.processor.process(before, options);
+        if (options.log) {
+            this.log(step.name, before, after);
+        }
+        return after;
+    }
+
+    private processSlideStructure(markdown: string, options: Options): string {
+        // Process slide structural elements in a specific order
+        return [
+            // Skip slides marked to be hidden
+            {
+                name: "skipSlideProcessor",
+                processor: this.skipSlideProcessor,
+            },
+            // Process reference blocks
+            {
+                name: "referenceProcessor",
+                processor: this.referenceProcessor,
+            },
+            // Add debug grid if enabled
+            {
+                name: "debugViewProcessor",
+                processor: this.debugViewProcessor,
+            },
+            // Auto-close self-closing tags
+            {
+                name: "autoClosingProcessor",
+                processor: this.autoClosingProcessor,
+            },
+            // Apply default backgrounds
+            {
+                name: "defaultBackgroundProcessor",
+                processor: this.defaultBackgroundProcessor,
+            },
+        ].reduce(
+            (md, step) => this.processWithLog(md, options, step),
+            markdown,
+        );
+    }
+
+    private processContent(markdown: string, options: Options): string {
+        // Process content elements in a specific order
+        return [
+            // Process callouts
+            {
+                name: "calloutProcessor",
+                processor: this.calloutProcessor,
+            },
+            // Convert emoji shortcodes
+            { name: "emojiProcessor", processor: this.emojiProcessor },
+            // Process icon shortcodes
+            { name: "iconsProcessor", processor: this.iconsProcessor },
+            // Convert mermaid code blocks
+            {
+                name: "mermaidProcessor",
+                processor: this.mermaidProcessor,
+            },
+            // Process block syntax
+            { name: "blockProcessor", processor: this.blockProcessor },
+            // Process footnotes
+            {
+                name: "footnoteProcessor",
+                processor: this.footnoteProcessor,
+            },
+            // Process excalidraw embeds
+            {
+                name: "excalidrawProcessor",
+                processor: this.excalidrawProcessor,
+            },
+            // Process media embeds
+            { name: "mediaProcessor", processor: this.mediaProcessor },
+            // Process internal links
+            {
+                name: "internalLinkProcessor",
+                processor: this.internalLinkProcessor,
+            },
+            // Process LaTeX content
+            { name: "latexProcessor", processor: this.latexProcessor },
+            // Process formatting
+            { name: "formatProcessor", processor: this.formatProcessor },
+            // Process fragments
+            {
+                name: "fragmentProcessor",
+                processor: this.fragmentProcessor,
+            },
+            // Process drop layouts
+            { name: "dropProcessor", processor: this.dropProcessor },
+            // Process grid layouts
+            { name: "gridProcessor", processor: this.gridProcessor },
+            // Process slide comments
+            {
+                name: "commentProcessor",
+                processor: this.commentProcessor,
+            },
+            // Process charts
+            { name: "chartProcessor", processor: this.chartProcessor },
+        ].reduce(
+            (md, step) => this.processWithLog(md, options, step),
+            markdown,
+        );
     }
 
     postProcess = (element: HTMLElement) => {
@@ -315,6 +282,9 @@ export class MarkdownProcessor {
             }
         }
 
+        if (options.log) {
+            this.log("trimEnding", input, markdown);
+        }
         return markdown;
     }
 
