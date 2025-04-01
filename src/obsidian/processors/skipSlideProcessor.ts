@@ -29,7 +29,8 @@ export class SkipSlideProcessor implements Processor {
                                     '<!-- slide data-visibility="hidden" -->';
                             }
                         }
-                        output = output.replace(slide, newSlide);
+                        // avoid replacement behaviors for special characters like $
+                        output = output.replace(slide, () => newSlide);
                         return newSlide;
                     })
                     .join(options.verticalSeparator);
