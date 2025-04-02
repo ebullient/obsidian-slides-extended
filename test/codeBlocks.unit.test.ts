@@ -1,8 +1,9 @@
 import { MarkdownProcessor } from 'src/obsidian/markdownProcessor';
 import { obsidianUtils as utilsInstance } from './__mocks__/mockObsidianUtils';
 import { prepare } from './testUtils';
+import { readFileSync } from 'node:fs';
 
-test('Basic Markdown Syntax > Code Blocks', () => {
+test('Code Block Syntax > Code Blocks', () => {
 	const input = `
 \`\`\`dockerfile
 FROM ubuntu
@@ -15,7 +16,7 @@ FROM ubuntu
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
 
-test('Basic Markdown Syntax > Code Blocks with multiple $ characters', () => {
+test('Code Block Syntax > Code Blocks with $ and underscores', () => {
 	const input = `
 \`\`\`dockerfile
 USER $USER_NAME:$USER_NAME
@@ -28,7 +29,7 @@ USER $USER_NAME:$USER_NAME
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
 
-test('Code Block Syntax > Headers', () => {
+test('Code Block Syntax > no type', () => {
 	const input = `
 \`\`\`
 USER $USER_NAME:$USER_NAME
@@ -43,12 +44,14 @@ The above does not show backticks
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
 
-test('Code Block Syntax > Headers', () => {
-	const input = ` \`\`\`
+test('Code Block Syntax > codeblock-ish, not math', () => {
+	const input = `
+ \`\`\`
 USER $USER_NAME:$USER_NAME
 \`\`\`
 
-The above does show backticks
+The above does not show backticks.
+Underscores should not be escaped
 `;
 
 	const { options, markdown } = prepare(input);
@@ -57,13 +60,8 @@ The above does show backticks
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
 
-test('Code Block Syntax > Headers', () => {
-	const input = `\`\`\`
-USER $USER_NAME:$USER_NAME
-\`\`\`
-
-The above does not show backticks
-`;
+test('Code Block Syntax > Math with Code Blocks', () => {
+	const input = readFileSync('test/fixtures/mathjax-codeblock.md', 'utf8');
 
 	const { options, markdown } = prepare(input);
 	const sut = new MarkdownProcessor(utilsInstance);
@@ -71,44 +69,8 @@ The above does not show backticks
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
 
-test('Basic Markdown Syntax > Math with Code Blocks', () => {
-	const input = `$$\begin{vmatrix}a & b\\
-c & d
-\end{vmatrix}=ad-bc$$
-
-\`\`\`dockerfile
-USER $USER_NAME:$USER_NAME
-\`\`\`
-
-You can also do inline math like $s^{-2}_{n}sum_{i=1}^{n}$`;
-
-	const { options, markdown } = prepare(input);
-	const sut = new MarkdownProcessor(utilsInstance);
-
-	return expect(sut.process(markdown, options)).toMatchSnapshot();
-});
-
-test('Basic Markdown Syntax > Math with Multiple Code Blocks', () => {
-	const input = `$$\begin{vmatrix}a & b\\
-c & d
-\end{vmatrix}=ad-bc$$
-
-\`\`\`dockerfile
-USER $USER_NAME:$USER_NAME
-\`\`\`
-
-You can also do inline math like $s^{-2}_{n}sum_{i=1}^{n}$
-
-\`\`\`bash
-eval "$(/home/$USER_NAME/.rbenv/bin/rbenv init -)"
-\`\`\`
-
-That was ruby, now we have javascript:
-
-\`\`\`
-console.log("Hello world!")
-\`\`\`
-`;
+test('Code Block Syntax > Math with Mixed Code Blocks', () => {
+	const input = readFileSync('test/fixtures/mathjax-codeblock-mixed.md', 'utf8');
 
 	const { options, markdown } = prepare(input);
 	const sut = new MarkdownProcessor(utilsInstance);
@@ -117,25 +79,7 @@ console.log("Hello world!")
 });
 
 test('Embedded code has extra characters near dollar signs', () => {
-	const input = `
-\`\`\`javascript
-export class CounterService {
-  count$ = new BehaviorSubject(1000);
-
-  double$ = this.count$.pipe(map((count) => count * 2));
-  triple$ = this.count$.pipe(map((count) => count * 3));
-
-  combined$ = combineLatest([this.double$, this.triple$]).pipe(
-    map(([double, triple]) => double + triple)
-  );
-
-  over9000$ = this.combined$.pipe(map((combined) => combined > 9000));
-
-  message$ = this.over9000$.pipe(
-    map((over9000) => (over9000 ? "It's over 9000!" : "It's under 9000."))
-  );
-}
-\`\`\``;
+	const input = readFileSync('test/fixtures/codeblock-with-math-chars.md', 'utf8');
 
 	const { options, markdown } = prepare(input);
 	const sut = new MarkdownProcessor(utilsInstance);

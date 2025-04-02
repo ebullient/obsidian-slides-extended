@@ -29,6 +29,7 @@
     {{/remoteCSSPaths}}
 
     <script defer src="{{{base}}}dist/fontawesome/all.min.js"></script>
+    <script defer src="{{{base}}}plugin/load-mathjax.js"></script>
 
     <script type="text/javascript">
         function pageInIframe() {
@@ -81,7 +82,6 @@
                 fitElement(element, size, end);
             }
         }
-
 
         document.onreadystatechange = () => {
             fitElements();
@@ -207,11 +207,11 @@
             allottedTime: {{{.}}} * 1000,
             {{/timeForPresentation}}
             mathjax3: {
-                mathjax: '{{{base}}}plugin/math/mathjax/tex-mml-chtml.js',
+                mathjax: '{{{base}}}plugin/math/mathjax/tex-chtml-full.js',
             },
             markdown: {
                 gfm: true,
-                mangle: true,
+                mangle: false,
                 pedantic: false,
                 smartLists: false,
                 smartypants: false,
@@ -265,7 +265,6 @@
     <script>
       Reveal.initialize(options);
     </script>
+    <!-- created with {{! ignore me }}Slides Extended reveal.html template -->
 </body>
-
-<!-- created with {{! ignore me }}Slides Extended -->
 </html>

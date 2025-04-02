@@ -1,95 +1,85 @@
-import type { Processor } from "src/@types";
+import type { Options, Processor } from "src/@types";
+import { processBySlide } from "../obsidianUtils";
 
 export class LatexProcessor implements Processor {
     private singleLine = /\$(.*?)\$/g;
+    private TWO_BACKSLASHES = /\\\\/g;
+    private THREE_BACKSLASHES = "\\\\\\";
 
-    process(markdown: string) {
-        return this.skipCodeBlocks(markdown);
+    process(markdown: string, options: Options) {
+        let output = markdown;
+        processBySlide(markdown, options, (slide) => {
+            let newSlide = slide;
+            if (slide.includes("$")) {
+                newSlide = this.skipCodeBlocks(slide);
+                output = output.replace(slide, () => newSlide);
+            }
+            return newSlide;
+        });
+
+        return output;
     }
 
     skipCodeBlocks(markdown: string): string {
-        const regex =
-            /(?<=(^|\r|\n|\r\n))`{3,}.*?(\r|\n|\r\n)[\s\S]*?(\r|\n|\r\n)`{3,}(?=($|\r|\n|\r\n))/;
-        const match = regex.exec(markdown);
-
-        if (match) {
-            return (
-                this.transformLatex(markdown.substring(0, match.index)) +
-                match[0] +
-                this.skipCodeBlocks(
-                    markdown.substring(match.index + match[0].length),
-                )
-            );
+        if (!markdown.includes("$")) {
+            return markdown;
         }
-        return this.transformLatex(markdown);
+
+        const regex =
+            /(?<=(^|\r|\n|\r\n))\s*`{3,}.*?(\r|\n|\r\n)[\s\S]*?(\r|\n|\r\n)`{3,}(?=($|\r|\n|\r\n))/;
+
+        const codeBlocks: string[] = [];
+        let result = markdown.replace(regex, (match) => {
+            const placeholder = `CODE_BLOCK_PLACEHOLDER_${codeBlocks.length}`;
+            codeBlocks.push(match);
+            return placeholder;
+        });
+
+        // Process LaTeX in the non-code-block text
+        result = this.transformLatex(result);
+
+        // Restore code blocks
+        codeBlocks.forEach((block, index) => {
+            result = result.replace(`CODE_BLOCK_PLACEHOLDER_${index}`, block);
+        });
+
+        return result;
     }
 
     private transformLatex(markdown: string) {
-        const withoutEscapedCharaters = this.markEscapedCharacters(markdown);
-        const processedMultiline = this.processMultiLine(
-            withoutEscapedCharaters,
+        // First, protect escaped $ characters
+        let processed = markdown.replaceAll("\\$", "~~ESCAPED_DOLLAR~~");
+
+        // Note: we are wrapping backticks (%`%):
+        // 1. having paired backticks will still match general regular expressions
+        //    that avoid inline code.
+        // 2. the formatProcessor, in particular, can skip math expressions entirely
+        //    when matching underscores.
+
+        // First handle display math
+        processed = processed.replace(
+            /\$\$([\s\S]*?)\$\$/g,
+            (match, content) => {
+                const fixedContent = content
+                    .replace(/\n\s*/g, "")
+                    .replace(/_/g, "\\_")
+                    .replace(this.TWO_BACKSLASHES, this.THREE_BACKSLASHES);
+                return `%\`%$$${fixedContent}$$%\`%`;
+            },
         );
-        const multiWithoutEscapedCharaters =
-            this.markEscapedCharacters(processedMultiline);
-        const processedSingleLine = this.processSingleLine(
-            multiWithoutEscapedCharaters,
+
+        // Then handle inline math: avoid matching within already processed content
+        processed = processed.replace(
+            /([^`]|^)\$(.*?[^\\])\$(?!`)/g,
+            (match, before, content) => {
+                return `${before}%\`%$${content.replace(/_/g, "\\_")}$%\`%`;
+            },
         );
-        const finalResult = this.unmarkEscapedCharacters(processedSingleLine);
-        return finalResult;
-    }
 
-    private markEscapedCharacters(markdown: string) {
-        return (
-            markdown
-                //Escaped $ signs
-                .replaceAll("\\$", "~~d~~")
-                //Multiline in backticks
-                .replaceAll(/`\$\$/gm, "~~s~~")
-                .replaceAll(/\$\$`/gm, "~~e~~")
-                //Singleline in backticks
-                .replaceAll(/`\$/gm, "~~ss~~")
-                .replaceAll(/\$`/gm, "~~se~~")
-        );
-    }
+        // Handle inline math
+        processed = processed.replace(this.singleLine, "%`%$$$1$$%`%");
 
-    private unmarkEscapedCharacters(markdown: string) {
-        return markdown
-            .replaceAll("~~d~~", "\\$")
-            .replaceAll("~~e~~", "$$$$`")
-            .replaceAll("~~s~~", "`$$$$")
-            .replaceAll("~~ss~~", "`$")
-            .replaceAll("~~se~~", "$$`");
-    }
-
-    private processSingleLine(markdown: string) {
-        return markdown
-            .split("\n")
-            .map((line) => {
-                if (line.includes("$")) {
-                    line = line.replaceAll(this.singleLine, "`$$$1$$`");
-                }
-                return line;
-            })
-            .join("\n");
-    }
-
-    private processMultiLine(markdown: string) {
-        if (markdown.includes("$$")) {
-            return markdown
-                .split("$$")
-                .map((line, index) => {
-                    if (this.isOdd(index)) {
-                        return line;
-                    }
-                    return `\`${line}\``;
-                })
-                .join("$$")
-                .slice(1, -1);
-        }
-        return markdown;
-    }
-
-    private isOdd(number: number) {
-        return number & 1;
+        // Restore escaped dollars
+        return processed.replaceAll("~~ESCAPED_DOLLAR~~", "\\$");
     }
 }

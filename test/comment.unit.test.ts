@@ -31,7 +31,7 @@ test('Empty Slide comment', () => {
 
 	const parser = new CommentParser();
 
-	const input = `<!-- slide -->`;
+	const input = '<!-- slide -->';
 	const parsed = parser.parseLine(input);
 
 	const expected = Comment.of('slide');

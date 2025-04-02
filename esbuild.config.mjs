@@ -23,6 +23,7 @@ const map = {
     'src/scss/styles.scss': 'styles',
     'src/scss/layout/slides-extended.scss': 'css/slides-extended',
     'src/plugin/reveal.js-elapsed-time-bar/elapsed-time-bar.js': 'plugin/elapsed-time-bar/elapsed-time-bar',
+    'src/plugin/load-mathjax.js': 'plugin/load-mathjax',
 };
 
 const themeDir = 'src/scss/theme/';

@@ -1,6 +1,6 @@
 import { loadFront } from 'yaml-front-matter';
 import { omit } from 'src/util';
-import { Options } from '../src/@types';
+import type { Options } from '../src/@types';
 
 export function prepare(input: string): { options: Options; markdown: string } {
 	const { yamlOptions, markdown } = parseYamlFrontMatter(input);

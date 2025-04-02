@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Basic Markdown Syntax > Code Blocks 1`] = `
+exports[`Code Block Syntax > Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
@@ -10,7 +10,7 @@ FROM ubuntu
 </div>"
 `;
 
-exports[`Basic Markdown Syntax > Code Blocks with multiple $ characters 1`] = `
+exports[`Code Block Syntax > Code Blocks with $ and underscores 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
@@ -20,49 +20,38 @@ USER $USER_NAME:$USER_NAME
 </div>"
 `;
 
-exports[`Basic Markdown Syntax > Math with Code Blocks 1`] = `
+exports[`Code Block Syntax > Math with Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
-$egin{vmatrix}a & b\\
-c & d
-end{vmatrix}=ad-bc$
+$$\\begin{vmatrix}a & b\\\\\\c & d\\end{vmatrix}=ad-bc$$
 
 \`\`\`dockerfile
 USER $USER_NAME:$USER_NAME
 \`\`\`
 
-You can also do inline math like \`$s^{-2}_{n}sum_{i=1}^{n}$\`
+You can also do inline math like $s^{-2}\\_{n}\\sum\\_{i=1}^{n}$
 </div>"
 `;
 
-exports[`Basic Markdown Syntax > Math with Multiple Code Blocks 1`] = `
+exports[`Code Block Syntax > Math with Mixed Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
-$egin{vmatrix}a & b\\
-c & d
-end{vmatrix}=ad-bc$
+$$\\begin{vmatrix}a & b\\\\\\c & d\\end{vmatrix}=ad-bc$$
 
+\`\`\`\`md
 \`\`\`dockerfile
 USER $USER_NAME:$USER_NAME
 \`\`\`
+\`\`\`\`
 
-You can also do inline math like \`$s^{-2}_{n}sum_{i=1}^{n}$\`
-
-\`\`\`bash
-eval "$(/home/$USER_NAME/.rbenv/bin/rbenv init -)"
-\`\`\`
-
-That was ruby, now we have javascript:
-
-\`\`\`
-console.log("Hello world!")
-\`\`\`
+You can also use inline syntax (\`$s^{-2}_{n}\\sum_{i=1}^{n}$\`)
+to do inline math like $s^{-2}\\_{n}\\sum\\_{i=1}^{n}$
 </div>"
 `;
 
-exports[`Code Block Syntax > Headers 1`] = `
+exports[`Code Block Syntax > codeblock-ish, not math 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
@@ -70,23 +59,12 @@ exports[`Code Block Syntax > Headers 1`] = `
 USER $USER_NAME:$USER_NAME
 \`\`\`
 
-The above does not show backticks
+The above does not show backticks.
+Underscores should not be escaped
 </div>"
 `;
 
-exports[`Code Block Syntax > Headers 2`] = `
-"<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
-
-\`\`\`
-USER \`$USER_NAME:$\`USER_NAME
-\`\`\`
-
-The above does show backticks
-</div>"
-`;
-
-exports[`Code Block Syntax > Headers 3`] = `
+exports[`Code Block Syntax > no type 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 

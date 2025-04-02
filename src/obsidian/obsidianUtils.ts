@@ -7,7 +7,11 @@ import {
     type TFile,
     resolveSubpath,
 } from "obsidian";
-import type { MediaCollector, SlidesExtendedSettings } from "../@types";
+import type {
+    MediaCollector,
+    Options,
+    SlidesExtendedSettings,
+} from "../@types";
 import { DISABLED_IMAGE_COLLECTOR } from "../slidesExtended-constants";
 import { MarkdownProcessor } from "./markdownProcessor";
 
@@ -18,6 +22,24 @@ export function getMediaCollector(): MediaCollector {
 
 function setMediaCollector(newInstance: MediaCollector) {
     instance = newInstance;
+}
+
+export function processBySlide(
+    markdown: string,
+    options: Options,
+    processOneSlide: (slide: string) => string,
+) {
+    return markdown
+        .split(new RegExp(options.separator, "gmi"))
+        .map((slidegroup) => {
+            return slidegroup
+                .split(new RegExp(options.verticalSeparator, "gmi"))
+                .map((slide) => {
+                    return processOneSlide(slide);
+                })
+                .join(options.verticalSeparator);
+        })
+        .join(options.separator);
 }
 
 export class ObsidianUtils implements MediaCollector {

@@ -54,6 +54,7 @@ export class MarkdownProcessor {
     private defaultBackgroundProcessor: DefaultBackgroundProcessor;
     private referenceProcessor: ReferenceProcessor;
     private skipSlideProcessor: SkipSlideProcessor;
+    private stripLatexBackTicks: Processor;
 
     constructor(utils: ObsidianUtils) {
         this.multipleFileProcessor = new MultipleFileProcessor(utils);
@@ -79,15 +80,23 @@ export class MarkdownProcessor {
         this.defaultBackgroundProcessor = new DefaultBackgroundProcessor();
         this.referenceProcessor = new ReferenceProcessor();
         this.skipSlideProcessor = new SkipSlideProcessor();
+        this.stripLatexBackTicks = {
+            process: (markdown: string, _: Options) => {
+                return markdown.replaceAll("%`%", "");
+            },
+        };
     }
 
     process(markdown: string, options: Options) {
         YamlStore.getInstance().options = options;
+
+        let processedMarkdown = this.trimEnding(markdown, options);
         if (options.log) {
-            this.log("begin", "", markdown);
+            this.log("begin", markdown, processedMarkdown);
         }
+
         // First phase: Template processing
-        let processedMarkdown = this.processTemplates(markdown, options);
+        processedMarkdown = this.processTemplates(processedMarkdown, options);
 
         // Second phase: Core processors that modify slide structure
         processedMarkdown = this.processSlideStructure(
@@ -99,15 +108,27 @@ export class MarkdownProcessor {
         processedMarkdown = this.processContent(processedMarkdown, options);
 
         if (options.log) {
-            this.log("end", "", markdown);
+            this.log("end", markdown, processedMarkdown);
         }
         return processedMarkdown;
+    }
+
+    private processWithLog(
+        before: string,
+        options: Options,
+        step: ProcessStep,
+    ): string {
+        const after = step.processor.process(before, options);
+        if (options.log) {
+            this.log(step.name, before, after);
+        }
+        return after;
     }
 
     private processTemplates(markdown: string, options: Options): string {
         // Process multi-file includes and templates
         // Trim trailing separators
-        let before = this.trimEnding(markdown, options);
+        let before = markdown;
         let after: string;
 
         let circuitCounter = 0;
@@ -118,14 +139,16 @@ export class MarkdownProcessor {
             }
 
             // Process multiple file includes first
-            const afterMultipleFileProcessor =
-                this.multipleFileProcessor.process(before);
+            after = this.processWithLog(before, options, {
+                name: "multipleFileProcessor",
+                processor: this.multipleFileProcessor,
+            });
 
             // Then process templates
-            after = this.templateProcessor.process(
-                afterMultipleFileProcessor,
-                options,
-            );
+            after = this.processWithLog(after, options, {
+                name: "templateProcessor",
+                processor: this.templateProcessor,
+            });
 
             // Remove default templates after first pass to prevent re-application
             options.defaultTemplate = null;
@@ -142,18 +165,6 @@ export class MarkdownProcessor {
             this.log("merge & template", markdown, after);
         }
         return after || before;
-    }
-
-    private processWithLog(
-        before: string,
-        options: Options,
-        step: ProcessStep,
-    ): string {
-        const after = step.processor.process(before, options);
-        if (options.log) {
-            this.log(step.name, before, after);
-        }
-        return after;
     }
 
     private processSlideStructure(markdown: string, options: Options): string {
@@ -246,6 +257,10 @@ export class MarkdownProcessor {
             },
             // Process charts
             { name: "chartProcessor", processor: this.chartProcessor },
+            {
+                name: "stripLatexBackTicks",
+                processor: this.stripLatexBackTicks,
+            },
         ].reduce(
             (md, step) => this.processWithLog(md, options, step),
             markdown,
@@ -282,15 +297,12 @@ export class MarkdownProcessor {
             }
         }
 
-        if (options.log) {
-            this.log("trimEnding", input, markdown);
-        }
         return markdown;
     }
 
     log(name: string, before: string, after: string) {
         if (before !== after) {
-            console.debug(`${name}: ${after}`);
+            console.debug(name, JSON.stringify({ before, after }));
         }
     }
 }

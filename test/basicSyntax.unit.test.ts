@@ -2,6 +2,7 @@ import { MarkdownProcessor } from 'src/obsidian/markdownProcessor';
 import { when } from 'ts-mockito';
 import { MockedObsidianUtils, obsidianUtils as utilsInstance } from './__mocks__/mockObsidianUtils';
 import { prepare } from './testUtils';
+import { readFileSync } from 'node:fs';
 
 test('Basic Markdown Syntax > Headers', () => {
     const input = `# This is a heading 1
@@ -313,11 +314,8 @@ test('Basic Markdown Syntax > Footnotes in Tables', () => {
 });
 
 test('Basic Markdown Syntax > Math', () => {
-    const input = `$$\begin{vmatrix}a & b\\
-c & d
-end{vmatrix}=ad-bc$$
-
-You can also do inline math like $s^{-2}_{n}sum_{i=1}^{n}$`;
+    // escape literals in javascript interpreted string
+    const input = readFileSync('test/fixtures/mathjax.md', 'utf8');
 
     const { options, markdown } = prepare(input);
     const sut = new MarkdownProcessor(utilsInstance);
