@@ -324,6 +324,17 @@ test('Basic Markdown Syntax > Math', () => {
     return expect(result).toMatchSnapshot();
 });
 
+test('Basic Markdown Syntax > Math complicated', () => {
+    // escape literals in javascript interpreted string
+    const input = readFileSync('test/fixtures/mathjax-hardmode.md', 'utf8');
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
+});
+
 test('Basic Markdown Syntax > Mermaid', () => {
     const input = `---
 theme: beige

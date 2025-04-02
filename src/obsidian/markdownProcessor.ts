@@ -175,11 +175,6 @@ export class MarkdownProcessor {
                 name: "skipSlideProcessor",
                 processor: this.skipSlideProcessor,
             },
-            // Process reference blocks
-            {
-                name: "referenceProcessor",
-                processor: this.referenceProcessor,
-            },
             // Add debug grid if enabled
             {
                 name: "debugViewProcessor",
@@ -204,6 +199,8 @@ export class MarkdownProcessor {
     private processContent(markdown: string, options: Options): string {
         // Process content elements in a specific order
         return [
+            // Process LaTeX content
+            { name: "latexProcessor", processor: this.latexProcessor },
             // Process callouts
             {
                 name: "calloutProcessor",
@@ -213,6 +210,8 @@ export class MarkdownProcessor {
             { name: "emojiProcessor", processor: this.emojiProcessor },
             // Process icon shortcodes
             { name: "iconsProcessor", processor: this.iconsProcessor },
+            // Process formatting
+            { name: "formatProcessor", processor: this.formatProcessor },
             // Convert mermaid code blocks
             {
                 name: "mermaidProcessor",
@@ -237,10 +236,11 @@ export class MarkdownProcessor {
                 name: "internalLinkProcessor",
                 processor: this.internalLinkProcessor,
             },
-            // Process LaTeX content
-            { name: "latexProcessor", processor: this.latexProcessor },
-            // Process formatting
-            { name: "formatProcessor", processor: this.formatProcessor },
+            // Process reference blockrefs
+            {
+                name: "referenceProcessor",
+                processor: this.referenceProcessor,
+            },
             // Process fragments
             {
                 name: "fragmentProcessor",

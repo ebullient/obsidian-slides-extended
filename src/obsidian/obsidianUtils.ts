@@ -28,7 +28,7 @@ export function processBySlide(
     markdown: string,
     options: Options,
     processOneSlide: (slide: string) => string,
-) {
+): string {
     return markdown
         .split(new RegExp(options.separator, "gmi"))
         .map((slidegroup) => {
@@ -40,6 +40,43 @@ export function processBySlide(
                 .join(options.verticalSeparator);
         })
         .join(options.separator);
+}
+
+export function skipMathCodeBlocks(
+    markdown: string,
+    processRemainingText: (markdown: string) => string,
+): string {
+    return skipCodeBlocks(markdown, (md) => {
+        const parts = md.split(/(%`%[\s\S]+?%`%)/g);
+        for (let i = 0; i < parts.length; i++) {
+            if (parts[i].startsWith("%`%")) {
+                // Don't modify protected math segments at all
+            } else {
+                parts[i] = processRemainingText(parts[i]);
+            }
+        }
+        return parts.join("");
+    });
+}
+
+export function skipCodeBlocks(
+    markdown: string,
+    processRemainingText: (markdown: string) => string,
+): string {
+    const codeBlockRegex =
+        /^(\s*)(`{3,})(.*?)[\r\n][\s\S]*?(?:\r|\n|\r\n)\1\2(?=$|[\r\n])/gm;
+    const match = codeBlockRegex.exec(markdown);
+    if (match) {
+        return (
+            processRemainingText(markdown.substring(0, match.index)) +
+            match[0] +
+            skipCodeBlocks(
+                markdown.substring(match.index + match[0].length),
+                processRemainingText,
+            )
+        );
+    }
+    return processRemainingText(markdown);
 }
 
 export class ObsidianUtils implements MediaCollector {

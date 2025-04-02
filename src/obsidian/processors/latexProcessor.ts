@@ -25,13 +25,20 @@ export class LatexProcessor implements Processor {
             return markdown;
         }
 
-        const regex =
-            /(?<=(^|\r|\n|\r\n))\s*`{3,}.*?(\r|\n|\r\n)[\s\S]*?(\r|\n|\r\n)`{3,}(?=($|\r|\n|\r\n))/;
+        const codeBlockRegex =
+            /^(\s*)(`{3,})(.*?)[\r\n][\s\S]*?(?:\r|\n|\r\n)\s*\2(?=$|[\r\n])/gm;
+        const inlineCodeRegex = /`[^`\n]+?`/g;
 
         const codeBlocks: string[] = [];
-        let result = markdown.replace(regex, (match) => {
-            const placeholder = `CODE_BLOCK_PLACEHOLDER_${codeBlocks.length}`;
+        const inlineCodeBlocks: string[] = [];
+        let result = markdown.replace(codeBlockRegex, (match) => {
+            const placeholder = `~~CODE~BLOCK~${codeBlocks.length}~~`;
             codeBlocks.push(match);
+            return placeholder;
+        });
+        result = result.replace(inlineCodeRegex, (match) => {
+            const placeholder = `~~INLINE~BLOCK~${inlineCodeBlocks.length}~~`;
+            inlineCodeBlocks.push(match);
             return placeholder;
         });
 
@@ -39,9 +46,14 @@ export class LatexProcessor implements Processor {
         result = this.transformLatex(result);
 
         // Restore code blocks
-        codeBlocks.forEach((block, index) => {
-            result = result.replace(`CODE_BLOCK_PLACEHOLDER_${index}`, block);
-        });
+        for (let i = 0; i < codeBlocks.length; i++) {
+            const placeholder = `~~CODE~BLOCK~${i}~~`;
+            result = result.replace(placeholder, () => codeBlocks[i]);
+        }
+        for (let i = 0; i < inlineCodeBlocks.length; i++) {
+            const placeholder = `~~INLINE~BLOCK~${i}~~`;
+            result = result.replace(placeholder, () => inlineCodeBlocks[i]);
+        }
 
         return result;
     }
@@ -57,29 +69,35 @@ export class LatexProcessor implements Processor {
         //    when matching underscores.
 
         // First handle display math
-        processed = processed.replace(
-            /\$\$([\s\S]*?)\$\$/g,
+        processed = processed.replace(/\$\$([\s\S]*?)\$\$/g, (_, content) => {
+            const fixedContent = content
+                .replace(/\n\s*/g, "")
+                .replace(this.TWO_BACKSLASHES, this.THREE_BACKSLASHES);
+            return `%\`%$$${fixedContent}$$%\`%`;
+        });
+
+        // Add a marker for already processed content to prevent further matching
+        const markedProcessed = processed.replace(/%`%(.*?)%`%/g, (match) => {
+            return `~~PROTECTED_MATH~~${encodeURIComponent(match)}~~END_PROTECTED~~`;
+        });
+
+        // Then handle inline math after protecting already processed content
+        const inlineProcessed = markedProcessed.replace(
+            /\$([^$]+?)\$/g,
             (match, content) => {
-                const fixedContent = content
-                    .replace(/\n\s*/g, "")
-                    .replace(/_/g, "\\_")
-                    .replace(this.TWO_BACKSLASHES, this.THREE_BACKSLASHES);
-                return `%\`%$$${fixedContent}$$%\`%`;
+                const fixedContent = content.replace(/_/g, "\\_");
+                return `%\`%$${fixedContent}$%\`%`;
             },
         );
 
-        // Then handle inline math: avoid matching within already processed content
-        processed = processed.replace(
-            /([^`]|^)\$(.*?[^\\])\$(?!`)/g,
-            (match, before, content) => {
-                return `${before}%\`%$${content.replace(/_/g, "\\_")}$%\`%`;
+        // Restore the protected content
+        processed = inlineProcessed.replace(
+            /~~PROTECTED_MATH~~(.*?)~~END_PROTECTED~~/g,
+            (_, encoded) => {
+                return decodeURIComponent(encoded);
             },
         );
 
-        // Handle inline math
-        processed = processed.replace(this.singleLine, "%`%$$$1$$%`%");
-
-        // Restore escaped dollars
         return processed.replaceAll("~~ESCAPED_DOLLAR~~", "\\$");
     }
 }
