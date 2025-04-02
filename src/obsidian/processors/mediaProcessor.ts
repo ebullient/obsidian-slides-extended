@@ -198,6 +198,13 @@ export class MediaProcessor implements Processor {
             if (!comment.hasStyle("object-fit")) {
                 comment.addStyle("object-fit", "scale-down");
             }
+            if (isVideo(filePath)) {
+                if (!comment.hasAttribute("controls")) {
+                    comment.addAttribute("controls", "");
+                } else if (comment.getAttribute("controls") === "false") {
+                    comment.deleteAttribute("controls");
+                }
+            }
 
             const html = isVideo(filePath)
                 ? `<video ${this.parser.buildAttributes(comment)}><source src="${filePath}" alt="${alt}" type="${type}" /></video>\n`

@@ -142,9 +142,9 @@ Scale image to a width of 100 px
 
 ---
 
-Scale image to a width of 300x100 px
+Scale image to a width of 300x100 px, disable controls
 
-![[video.mp4|300x100]] <!-- element style="object-fit: cover" controls="" -->
+![[video.mp4|300x100]] <!-- element style="object-fit: cover" controls="false" -->
 
 `;
 
