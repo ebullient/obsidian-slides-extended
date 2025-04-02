@@ -9,7 +9,8 @@
     "scripts": {
         "preinstall": "npx only-allow pnpm",
         "dev": "node esbuild.config.mjs",
-        "build": "npx @biomejs/biome check ./src && node esbuild.config.mjs production",
+        "prebuild": "npx @biomejs/biome check ./src && npm run test",
+        "build": "node esbuild.config.mjs production",
         "fix": "npx @biomejs/biome check --write ./src",
         "format": "npx @biomejs/biome format ./src",
         "lint": "npx @biomejs/biome lint ./src",
