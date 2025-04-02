@@ -7,22 +7,22 @@
 @use '_tables.scss';
 
 :root {
-	--dbg-size: 1;
+    --dbg-size: 1;
 }
 
 .dbg,
 .dbg * {
-	--dbg-size: 1px;
-	outline: 1px solid red;
+    --dbg-size: 1px;
+    outline: 1px solid red;
 }
 
 .reset-margin {
-	--r-block-margin: 0;
-	--r-heading-margin: 0;
+    --r-block-margin: 0;
+    --r-heading-margin: 0;
 }
 
 .flex-even>* {
-	flex: 1;
+    flex: 1;
 }
 
 /** Override overlay setting from reveal.js */
@@ -35,6 +35,12 @@ element.style {
     visibility: visible;
     pointer-events: none;
 }
+
 .reveal>.overlay {
     backdrop-filter: unset;
+}
+
+.mermaid {
+    width: 100%;
+    height: auto;
 }
