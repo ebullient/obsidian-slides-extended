@@ -28,7 +28,7 @@
 /** Override overlay setting from reveal.js */
 
 element.style {
-    cursor: url(http://127.0.0.1:3000/plugin/chalkboard/img/boardmarker-black.png), auto;
+    cursor: url("/plugin/chalkboard/img/boardmarker-black.png"), auto;
     background: rgba(0, 0, 0, 0);
     z-index: 24;
     opacity: 1;

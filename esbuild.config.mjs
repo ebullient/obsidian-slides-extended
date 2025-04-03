@@ -26,6 +26,21 @@ const map = {
     'src/plugin/load-mathjax.js': 'plugin/load-mathjax',
 };
 
+const resolveRevealJsPlugins = {
+    name: 'resolveRevealJsPlugins',
+    setup(build) {
+        //
+        build.onResolve({ filter: /^\/plugin\/.*.png/ }, args => {
+            return { path: args.path, external: true }
+        })
+
+        // Mark all paths starting with "http://" or "https://" as external
+        build.onResolve({ filter: /^https?:\/\// }, args => {
+            return { path: args.path, external: true }
+        })
+    },
+}
+
 const themeDir = 'src/scss/theme/';
 const files = readdirSync(themeDir);
 for (const file of files) {
@@ -37,8 +52,8 @@ for (const file of files) {
 }
 
 const entryPoints = Object.entries(map)
-    .map(([k,v]) => {
-        return { 'in': k, 'out': v};
+    .map(([k, v]) => {
+        return { 'in': k, 'out': v };
     });
 
 const parameters = {
@@ -74,6 +89,7 @@ const parameters = {
     treeShaking: true,
     outdir: dir,
     plugins: [
+        resolveRevealJsPlugins,
         sassPlugin({
             filter: /.(s[ac]ss|css)$/,
             loadPaths: [
