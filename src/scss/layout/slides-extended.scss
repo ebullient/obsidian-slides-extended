@@ -26,6 +26,9 @@
 }
 
 /** Override overlay setting from reveal.js */
+#notescanvas, #chalkboard {
+    position: fixed
+}
 
 element.style {
     cursor: url("/plugin/chalkboard/img/boardmarker-black.png"), auto;
@@ -44,3 +47,4 @@ element.style {
     width: 100%;
     height: auto;
 }
+
