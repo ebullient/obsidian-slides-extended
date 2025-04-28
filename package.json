@@ -48,7 +48,7 @@
         "auto-changelog": "^2.5.0",
         "builtin-modules": "^5.0.0",
         "dotenv": "^16.5.0",
-        "esbuild": "^0.25.2",
+        "esbuild": "^0.25.3",
         "esbuild-plugin-copy": "^2.1.1",
         "esbuild-sass-plugin": "^3.3.1",
         "highlight.js": "^11.11.1",
