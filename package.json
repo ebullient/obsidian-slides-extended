@@ -77,14 +77,14 @@
         "color": "^4.2.3",
         "fastify": "^4.29.0",
         "fs-extra": "^11.3.0",
-        "glob": "11.0.1",
+        "glob": "11.0.2",
         "js-yaml": "^4.1.0",
         "jszip": "^3.10.1",
         "mustache": "^4.2.0",
         "yaml-front-matter": "^4.1.1"
     },
     "resolutions": {
-        "glob": "11.0.1",
+        "glob": "11.0.2",
         "iconv-lite": "0.6.3",
         "raw-body": "2.5.2"
     }
