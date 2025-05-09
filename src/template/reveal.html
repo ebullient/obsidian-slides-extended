@@ -217,7 +217,7 @@
                 smartypants: false,
             },
             mermaid: {
-                theme: isLight ? 'default' : 'dark',
+                theme: isLight(bgColor) ? 'default' : 'dark',
             },
             {{#enableCustomControls}}
             customcontrols: {
