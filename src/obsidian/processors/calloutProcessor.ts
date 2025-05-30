@@ -43,28 +43,22 @@ export class CalloutProcessor implements Processor {
             const title = this.titleFrom(type, titleLine);
             const color = this.colorFrom(type);
 
-            result.push(`<div class="callout ${color}">`);
+            result.push(`<div class="callout ${color}" data-type="${type}">`);
             result.push('<div class="callout-title">');
             result.push('<div class="callout-icon">');
-            result.push("");
             result.push(icon);
-            result.push("");
             result.push("</div>");
             result.push('<div class="callout-title-inner">');
-            result.push("");
             result.push(title);
-            result.push("");
             result.push("</div>");
             result.push("</div>");
 
             if (start !== end) {
                 result.push('<div class="callout-content">');
                 for (let i = start + 1; i <= end; i++) {
-                    result.push("");
                     const line = lines[i].trim().substring(1).trim();
                     result.push(line);
                 }
-                result.push("");
                 result.push("</div>");
             }
             result.push("</div>");
