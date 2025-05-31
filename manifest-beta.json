@@ -1,7 +1,7 @@
 {
   "id": "slides-extended",
   "name": "Slides Extended",
-  "version": "2.1.12",
+  "version": "2.1.13",
   "minAppVersion": "1.5.7",
   "description": "Create markdown-based presentations using reveal.js",
   "author": "Matthäus Szturc, continued by Erin Schnabel",
