@@ -58,7 +58,7 @@
         "obsidian-utilities": "^1.1.5",
         "reveal.js": "^5.2.1",
         "reveal.js-menu": "^2.1.0",
-        "reveal.js-mermaid-plugin": "^11.4.1",
+        "reveal.js-mermaid-plugin": "^11.6.0",
         "reveal.js-plugins": "^4.2.5",
         "reveal.js-pointer": "^0.1.4",
         "sass": "^1.89.0",
