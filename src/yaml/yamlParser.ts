@@ -145,7 +145,7 @@ export class YamlParser {
                 yamlOptions: omit(document, ["__content"]),
                 markdown: document.__content || input,
             };
-        } catch (error) {
+        } catch (_error) {
             return {
                 yamlOptions: {},
                 markdown: input,

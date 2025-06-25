@@ -11,7 +11,7 @@ export class SkipSlideProcessor implements Processor {
 
         markdown
             .split(new RegExp(options.separator, "gmi"))
-            .map((slidegroup, index) => {
+            .map((slidegroup) => {
                 return slidegroup
                     .split(new RegExp(options.verticalSeparator, "gmi"))
                     .map((slide) => {

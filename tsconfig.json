@@ -14,7 +14,7 @@
         "importHelpers": true,
         "lib": [
             "DOM",
-            "es2021"
+            "es2022"
         ],
         "types": [
             "node",

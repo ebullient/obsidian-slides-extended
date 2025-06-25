@@ -84,7 +84,7 @@ export class LatexProcessor implements Processor {
         // Then handle inline math after protecting already processed content
         const inlineProcessed = markedProcessed.replace(
             /\$([^$]+?)\$/g,
-            (match, content) => {
+            (_match, content) => {
                 const fixedContent = content.replace(/_/g, "\\_");
                 return `%\`%$${fixedContent}$%\`%`;
             },

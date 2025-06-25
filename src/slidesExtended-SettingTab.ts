@@ -8,8 +8,8 @@ import {
 import { FolderInputSuggest } from "obsidian-utilities";
 import type { SlidesExtendedSettings } from "./@types";
 import {
-    ThemeInputSuggest,
     getThemeFiles,
+    ThemeInputSuggest,
 } from "./obsidian/suggesters/ThemeSuggester";
 import type { SlidesExtendedPlugin } from "./slidesExtended-Plugin";
 

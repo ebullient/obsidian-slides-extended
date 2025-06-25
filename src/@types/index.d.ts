@@ -3,10 +3,11 @@ export interface EmbeddedSlideParameters {
     page?: number;
 }
 
-interface QueryString {
+export interface QueryString {
     embed: boolean;
     export: boolean;
 }
+
 export interface SlidesExtendedSettings {
     port: string;
     autoReload: boolean;
@@ -32,11 +33,11 @@ export interface SlidesExtendedSettings {
 }
 
 export type ChartJsOptions = {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types
     elements?: any;
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types
     plugins?: any;
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types
     scales?: any;
 };
 
@@ -66,7 +67,7 @@ export type Options = {
     width: number;
     enableCustomControls: boolean;
     transition: string;
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types
     [key: string]: any;
 };
 

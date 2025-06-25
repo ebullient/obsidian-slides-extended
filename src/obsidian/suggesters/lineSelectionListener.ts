@@ -19,8 +19,8 @@ export class LineSelectionListener extends EditorSuggest<string> {
 
     onTrigger(
         cursor: EditorPosition,
-        editor: Editor,
-        file: TFile,
+        _editor: Editor,
+        _file: TFile,
     ): EditorSuggestTriggerInfo {
         const instance = this.plugin.getViewInstance();
 
@@ -34,16 +34,16 @@ export class LineSelectionListener extends EditorSuggest<string> {
     }
 
     getSuggestions(
-        context: EditorSuggestContext,
+        _context: EditorSuggestContext,
     ): string[] | Promise<string[]> {
         throw new Error("Method not implemented.");
     }
 
-    renderSuggestion(value: string, el: HTMLElement): void {
+    renderSuggestion(_value: string, _el: HTMLElement): void {
         throw new Error("Method not implemented.");
     }
 
-    selectSuggestion(value: string, evt: MouseEvent | KeyboardEvent): void {
+    selectSuggestion(_value: string, _evt: MouseEvent | KeyboardEvent): void {
         throw new Error("Method not implemented.");
     }
 }

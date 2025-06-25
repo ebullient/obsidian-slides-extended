@@ -4,8 +4,8 @@ import {
     type App,
     FileSystemAdapter,
     Platform,
-    type TFile,
     resolveSubpath,
+    type TFile,
 } from "obsidian";
 import type {
     MediaCollector,
@@ -325,7 +325,7 @@ export class ObsidianUtils implements MediaCollector {
         const fileUrlRegex = /(!\[[^\]]*?\]\()(file:.+?\.md(?:#.+?)?)(\))/i;
 
         // Replace wikilinks with markdown links
-        markdown = markdown.replace(wikilinkFileRegex, (match, p1, p2) => {
+        markdown = markdown.replace(wikilinkFileRegex, (_match, p1, p2) => {
             const filePath = p1;
             const alias = p2 ? p2.slice(1) : "";
             const url = new URL(filePath);

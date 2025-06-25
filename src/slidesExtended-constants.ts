@@ -54,7 +54,7 @@ export const DEFAULTS: Options = {
 };
 
 export const DISABLED_IMAGE_COLLECTOR: MediaCollector = {
-    addMedia(value: string): void {},
+    addMedia(_value: string): void {},
     getAll(): string[] {
         return [];
     },

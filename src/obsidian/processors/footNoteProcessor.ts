@@ -8,10 +8,10 @@ export class FootnoteProcessor implements Processor {
 
         markdown
             .split(new RegExp(options.separator, "gmi"))
-            .map((slidegroup, index) => {
+            .map((slidegroup, _index) => {
                 return slidegroup
                     .split(new RegExp(options.verticalSeparator, "gmi"))
-                    .map((slide, index) => {
+                    .map((slide, _index) => {
                         if (this.regex.test(slide)) {
                             const newSlide = this.transformFootNotes(slide);
                             output = output.replace(slide, newSlide);
@@ -42,7 +42,7 @@ export class FootnoteProcessor implements Processor {
             }
             input = input
                 .split("\n")
-                .map((line, index) => {
+                .map((line) => {
                     if (line.includes(reResult[0])) {
                         if (line.includes(`${reResult[0]}: `)) {
                             if (!footNotes.has(reResult[1])) {

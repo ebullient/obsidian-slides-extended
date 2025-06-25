@@ -7,10 +7,10 @@ export class DebugViewProcessor implements Processor {
         if (options.showGrid) {
             markdown
                 .split(new RegExp(options.separator, "gmi"))
-                .map((slidegroup, index) => {
+                .map((slidegroup, _index) => {
                     return slidegroup
                         .split(new RegExp(options.verticalSeparator, "gmi"))
-                        .map((slide, index) => {
+                        .map((slide, _index) => {
                             const [md, notes] = this.extractNotes(
                                 slide,
                                 options,

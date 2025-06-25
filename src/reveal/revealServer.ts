@@ -1,9 +1,8 @@
-import Fastify, { type FastifyInstance } from "fastify";
-
 import { Buffer } from "node:buffer";
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { type ListDir, type ListFile, fastifyStatic } from "@fastify/static";
+import { fastifyStatic, type ListDir, type ListFile } from "@fastify/static";
+import Fastify, { type FastifyInstance } from "fastify";
 import { Notice, Platform, type TAbstractFile } from "obsidian";
 import type { QueryString } from "../@types";
 import type { ObsidianUtils } from "../obsidian/obsidianUtils";

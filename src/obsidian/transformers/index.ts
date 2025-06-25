@@ -84,7 +84,7 @@ export class Properties {
     }
 
     public getStyles(): string {
-        const result = Array<string>();
+        const result: string[] = [];
 
         for (const [key, value] of this.style) {
             result.push(`${key}: ${value}`);
@@ -94,7 +94,7 @@ export class Properties {
     }
 
     public getAttributes(): string {
-        const result = Array<string>();
+        const result: string[] = [];
 
         for (const [key, value] of this.attributes) {
             if (key === "onTarget") {
@@ -109,7 +109,7 @@ export class Properties {
 
 class AttributeTransformers {
     private allTransformers: Array<AttributeTransformer> =
-        new Array<AttributeTransformer>();
+        [] as AttributeTransformer[];
 
     constructor() {
         this.allTransformers.push(new ClassTransformer());

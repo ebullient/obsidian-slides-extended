@@ -223,7 +223,7 @@ export class RevealPreviewView extends ItemView {
     }
 
     getIdxOfRegex(regex: RegExp, source: string): number[] {
-        const idxs: Array<number> = new Array<number>();
+        const idxs: Array<number> = [] as number[];
         let m: RegExpExecArray | null;
         do {
             m = regex.exec(source);

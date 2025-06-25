@@ -6,8 +6,8 @@ import Mustache from "mustache";
 import type { QueryString } from "../@types";
 import type { MarkdownProcessor } from "../obsidian/markdownProcessor";
 import {
-    type ObsidianUtils,
     getMediaCollector,
+    type ObsidianUtils,
 } from "../obsidian/obsidianUtils";
 import { DEFAULTS } from "../slidesExtended-constants";
 import { has, isEmpty } from "../util";
@@ -203,7 +203,7 @@ export class RevealRenderer {
         return md.slidify(markdown, slidifyOptions);
     }
 
-    private getCssPaths(css: string | string[], remote = false) {
+    private getCssPaths(css: string | string[], _remote = false) {
         let input: string[] = [];
         if (!css) {
             return input;

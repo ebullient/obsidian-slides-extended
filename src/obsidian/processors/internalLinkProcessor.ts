@@ -12,7 +12,7 @@ export class InternalLinkProcessor implements Processor {
 
     process(markdown: string, options: Options) {
         if (options.enableLinks) {
-            return markdown.replaceAll(this.regex, (sub, first, second) => {
+            return markdown.replaceAll(this.regex, (_sub, first, second) => {
                 return `[${second}](obsidian://open?vault=${encodeURI(this.utils.vaultName)}&file=${encodeURI(
                     first === undefined ? second : first,
                 )})`;

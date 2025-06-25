@@ -6,7 +6,7 @@ import {
     type EditorSuggestTriggerInfo,
     type TFile,
 } from "obsidian";
-import { type DictionaryEntry, byInput } from "./dict/Dictionary";
+import { byInput, type DictionaryEntry } from "./dict/Dictionary";
 import { dict } from "./dict/SlidesExtendedDictionary";
 
 type Parameters = {
@@ -55,7 +55,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
         try {
             json = JSON.parse(ctx.query);
             // eslint-disable-next-line no-empty
-        } catch (error) {}
+        } catch (_error) {}
 
         if (json) {
             const tag = dict.children.filter(
@@ -103,7 +103,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
     }
     selectSuggestion(
         element: DictionaryEntry,
-        evt: MouseEvent | KeyboardEvent,
+        _evt: MouseEvent | KeyboardEvent,
     ): void {
         if (!this.context) return;
 
@@ -113,7 +113,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
         try {
             json = JSON.parse(this.context.query);
             // eslint-disable-next-line no-empty
-        } catch (error) {}
+        } catch (_error) {}
 
         if (json) {
             if (json.value.value != null) {
@@ -191,7 +191,7 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
     onTrigger(
         cursor: EditorPosition,
         editor: Editor,
-        file: TFile,
+        _file: TFile,
     ): EditorSuggestTriggerInfo | null {
         const selectedLine = editor.getLine(cursor.line);
         const cursorPosition = cursor.ch;

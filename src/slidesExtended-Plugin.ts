@@ -1,4 +1,4 @@
-import { Plugin, type TAbstractFile, addIcon } from "obsidian";
+import { addIcon, Plugin, type TAbstractFile } from "obsidian";
 import type { SlidesExtendedSettings } from "./@types";
 import { EmbeddedSlideProcessor } from "./obsidian/embeddedSlideProcessor";
 import { ObsidianUtils } from "./obsidian/obsidianUtils";
@@ -9,13 +9,13 @@ import {
     RevealPreviewView,
 } from "./reveal/revealPreviewView";
 import { RevealServer } from "./reveal/revealServer";
-import { SlidesExtendedDistribution } from "./slidesExtended-Distribution";
-import { SlidesExtendedSettingTab } from "./slidesExtended-SettingTab";
 import {
     DEFAULT_SETTINGS,
     ICON_DATA,
     REFRESH_ICON,
 } from "./slidesExtended-constants";
+import { SlidesExtendedDistribution } from "./slidesExtended-Distribution";
+import { SlidesExtendedSettingTab } from "./slidesExtended-SettingTab";
 
 export class SlidesExtendedPlugin extends Plugin {
     settings: SlidesExtendedSettings;

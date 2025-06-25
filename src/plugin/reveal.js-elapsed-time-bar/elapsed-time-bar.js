@@ -101,7 +101,7 @@ const ElapsedTimeBar = {
      */
     loop() {
         if (this.isPaused) return;
-        const now = +new Date();
+        const now = Date.now();
         const elapsedTime = now - this.startTime - this.pauseTimeDuration;
         if (elapsedTime > this.allottedTime) {
             this.timeProgressBar.style.width = "100%";
@@ -132,7 +132,7 @@ const ElapsedTimeBar = {
         this.isFinished = false;
         this.isPaused = false;
         this.allottedTime = allottedTime;
-        this.startTime = +new Date() - elapsedTime;
+        this.startTime = Date.now() - elapsedTime;
         this.pauseTimeDuration = 0;
         this.setBarColor();
         this.loop();
@@ -145,7 +145,7 @@ const ElapsedTimeBar = {
     pause() {
         if (this.isPaused) return;
         this.isPaused = true;
-        this.pauseTime = +new Date();
+        this.pauseTime = Date.now();
         this.setBarColor();
     },
 
@@ -154,7 +154,7 @@ const ElapsedTimeBar = {
 
         // add paused time duration
         this.isPaused = false;
-        this.pauseTimeDuration += new Date() - this.pauseTime;
+        this.pauseTimeDuration += Date.now() - this.pauseTime;
         this.pauseTime = null;
         this.setBarColor();
         this.loop();

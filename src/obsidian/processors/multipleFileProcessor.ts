@@ -20,7 +20,7 @@ export class MultipleFileProcessor implements Processor {
     process(markdown: string): string {
         return markdown
             .split("\n")
-            .map((line, index) => {
+            .map((line, _index) => {
                 // replace file:// with /local-file-url in markdown links
                 line = line.replace(
                     this.fileUrlRegex,

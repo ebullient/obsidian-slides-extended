@@ -55,7 +55,7 @@ export class ThemeInputSuggest extends FuzzyInputSuggest<string> {
     getItemText(item: string): string {
         return item;
     }
-    renderNote(noteEL: HTMLElement, result: FuzzyMatch<string>): void {
+    renderNote(_noteEL: HTMLElement, _result: FuzzyMatch<string>): void {
         //no-op
     }
     renderTitle(titleEl: HTMLElement, result: FuzzyMatch<string>): void {

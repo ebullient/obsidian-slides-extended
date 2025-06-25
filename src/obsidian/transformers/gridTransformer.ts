@@ -177,7 +177,7 @@ export class GridTransformer implements AttributeTransformer {
             result.set("maxWidth", 100);
             result.set("maxHeight", 100);
             return this.readValues(drag, drop, result, this.toRelativeValue);
-        } catch (ex) {
+        } catch (_ex) {
             return undefined;
         }
     }
@@ -233,7 +233,7 @@ export class GridTransformer implements AttributeTransformer {
                 }
             }
             return result;
-        } catch (ex) {
+        } catch (_ex) {
             return undefined;
         }
     }

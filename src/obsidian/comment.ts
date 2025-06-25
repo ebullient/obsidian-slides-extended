@@ -77,7 +77,7 @@ export class CommentParser {
             const attributes = this.parseAttributes(properties);
 
             return new Comment(type, attributes);
-        } catch (ex) {
+        } catch (_ex) {
             console.error(`ERROR: Cannot parse comment: ${comment}`);
             return null;
         }
