@@ -377,8 +377,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@bufbuild/protobuf@2.6.0':
-    resolution: {integrity: sha512-6cuonJVNOIL7lTj5zgo/Rc2bKAo4/GvN+rKCrUj7GdEHRzCk8zKOfFwUsL9nAVk5rSIsRmlgcpLzTRysopEeeg==}
+  '@bufbuild/protobuf@2.6.1':
+    resolution: {integrity: sha512-DaG6XlyKpz08bmHY5SGX2gfIllaqtDJ/KwVoxsmP22COOLYwDBe7yD3DZGwXem/Xq7QOc9cuR7R3MpAv5CFfDw==}
 
   '@codemirror/state@6.5.2':
     resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
@@ -1514,8 +1514,8 @@ packages:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
 
-  form-data@2.5.3:
-    resolution: {integrity: sha512-XHIrMD0NpDrNM/Ckf7XJiBbLl57KEhT3+i3yY+eWm+cqYZJQTZrKo8Y8AWKnuV5GT4scfuUGt9LzNoIx3dU1nQ==}
+  form-data@2.5.5:
+    resolution: {integrity: sha512-jqdObeR2rxZZbPSGL+3VckHMYtu+f9//KXBsVny6JSX/pa38Fy+bGjuG8eW/H6USNQWhLi8Num++cU2yOCNz4A==}
     engines: {node: '>= 0.12'}
 
   forwarded@0.2.0:
@@ -3078,7 +3078,7 @@ snapshots:
   '@biomejs/cli-win32-x64@2.1.1':
     optional: true
 
-  '@bufbuild/protobuf@2.6.0': {}
+  '@bufbuild/protobuf@2.6.1': {}
 
   '@codemirror/state@6.5.2':
     dependencies:
@@ -3648,7 +3648,7 @@ snapshots:
       '@types/caseless': 0.12.5
       '@types/node': 24.0.7
       '@types/tough-cookie': 4.0.5
-      form-data: 2.5.3
+      form-data: 2.5.5
 
   '@types/stack-utils@2.0.3': {}
 
@@ -4260,11 +4260,12 @@ snapshots:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
-  form-data@2.5.3:
+  form-data@2.5.5:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
       mime-types: 2.1.35
       safe-buffer: 5.2.1
 
@@ -5227,7 +5228,7 @@ snapshots:
 
   sass-embedded@1.86.1:
     dependencies:
-      '@bufbuild/protobuf': 2.6.0
+      '@bufbuild/protobuf': 2.6.1
       buffer-builder: 0.2.0
       colorjs.io: 0.5.2
       immutable: 5.1.3
