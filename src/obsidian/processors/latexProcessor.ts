@@ -2,7 +2,6 @@ import type { Options, Processor } from "src/@types";
 import { processBySlide } from "../obsidianUtils";
 
 export class LatexProcessor implements Processor {
-    private singleLine = /\$(.*?)\$/g;
     private TWO_BACKSLASHES = /\\\\/g;
     private THREE_BACKSLASHES = "\\\\\\";
 
