@@ -39,7 +39,7 @@
         "@popperjs/core": "^2.11.8",
         "@types/color": "^4.2.0",
         "@types/fs-extra": "^11.0.4",
-        "@types/glob": "^8.1.0",
+        "@types/glob": "^9.0.0",
         "@types/jest": "^30.0.0",
         "@types/mustache": "^4.2.6",
         "@types/node": "^24.1.0",
