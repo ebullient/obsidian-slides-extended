@@ -53,7 +53,7 @@
         "esbuild-sass-plugin": "^3.3.1",
         "highlight.js": "^11.11.1",
         "jest": "^30.0.5",
-        "mathjax": "^3.2.2",
+        "mathjax": "^4.0.0",
         "obsidian": "^1.8.7",
         "obsidian-utilities": "^1.1.5",
         "reveal.js": "^5.2.1",
