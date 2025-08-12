@@ -61,7 +61,7 @@
         "reveal.js-mermaid-plugin": "^11.6.0",
         "reveal.js-plugins": "^4.6.0",
         "reveal.js-pointer": "^0.1.4",
-        "sass": "^1.89.2",
+        "sass": "^1.90.0",
         "ts-jest": "^29.4.1",
         "ts-mockito": "^2.6.1",
         "ts-node": "^10.9.2",
