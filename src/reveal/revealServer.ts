@@ -61,7 +61,7 @@ export class RevealServer {
         this._server.get<{ Querystring: QueryString }>(
             "/*",
             async (request, reply) => {
-                // @ts-ignore
+                // @ts-expect-error
                 const file = request.params["*"];
 
                 const renderMarkdownFile = async (filePath: string) => {

@@ -140,7 +140,7 @@ export class RevealPreviewView extends ItemView {
         }
         if (resultKey) {
             const keys = resultKey.split(",");
-            return [Number.parseInt(keys[0]), Number.parseInt(keys[1])];
+            return [Number.parseInt(keys[0], 10), Number.parseInt(keys[1], 10)];
         }
         return [0, 0];
     }
@@ -155,8 +155,8 @@ export class RevealPreviewView extends ItemView {
         const offset = source.substring(0, yamlLength).split(/^/gm).length;
         const slides = this.getSlideLines(markdown, separators);
 
-        const hX = Number.parseInt(h) || 0;
-        const vX = Number.parseInt(v) || 0;
+        const hX = Number.parseInt(h, 10) || 0;
+        const vX = Number.parseInt(v, 10) || 0;
 
         return slides.get([hX, vX].join(",")) + offset;
     }
@@ -279,7 +279,7 @@ export class RevealPreviewView extends ItemView {
         viewContent.addClass("reveal-preview-view");
         viewContent.createEl("iframe", {
             attr: {
-                // @ts-ignore:
+                // @ts-expect-error:
                 src: this.url,
                 sandbox: "allow-scripts allow-same-origin allow-popups",
             },
