@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Template only with content 1`] = `""<!-- .slide: class=\\"drop\\" -->\\n<div class=\\"\\" style=\\"position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center\\" absolute=\\"true\\">\\n\\n# Before\\n        \\n\\n    # MyContent\\n\\n        # After\\n</div>""`;
 
