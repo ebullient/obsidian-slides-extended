@@ -31,6 +31,9 @@ env:
 
 jobs:
   build:
+    permissions:
+      contents: write
+      actions: write
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.build.outputs.version }}
