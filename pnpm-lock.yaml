@@ -17,8 +17,8 @@ importers:
         specifier: ^6.5.2
         version: 6.5.2
       '@codemirror/view':
-        specifier: ^6.38.2
-        version: 6.38.2
+        specifier: ^6.38.3
+        version: 6.38.3
       '@fastify/static':
         specifier: ^7.0.4
         version: 7.0.4
@@ -115,7 +115,7 @@ importers:
         version: 4.0.0
       obsidian:
         specifier: ^1.8.7
-        version: 1.8.7(@codemirror/state@6.5.2)(@codemirror/view@6.38.2)
+        version: 1.8.7(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)
       obsidian-utilities:
         specifier: ^1.1.5
         version: 1.1.5
@@ -373,14 +373,14 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@bufbuild/protobuf@2.8.0':
-    resolution: {integrity: sha512-r1/0w5C9dkbcdjyxY8ZHsC5AOWg4Pnzhm2zu7LO4UHSounp2tMm6Y+oioV9zlGbLveE7YaWRDUk48WLxRDgoqg==}
+  '@bufbuild/protobuf@2.9.0':
+    resolution: {integrity: sha512-rnJenoStJ8nvmt9Gzye8nkYd6V22xUAnu4086ER7h1zJ508vStko4pMvDeQ446ilDTFpV5wnoc5YS7XvMwwMqA==}
 
   '@codemirror/state@6.5.2':
     resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
 
-  '@codemirror/view@6.38.2':
-    resolution: {integrity: sha512-bTWAJxL6EOFLPzTx+O5P5xAO3gTqpatQ2b/ARQ8itfU/v2LlpS3pH2fkL0A3E/Fx8Y2St2KES7ZEV0sHTsSW/A==}
+  '@codemirror/view@6.38.3':
+    resolution: {integrity: sha512-x2t87+oqwB1mduiQZ6huIghjMt4uZKFEdj66IcXw7+a5iBEvv9lh7EWDRHI7crnD4BMGpnyq/RzmCGbiEZLcvQ==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -3041,13 +3041,13 @@ snapshots:
   '@biomejs/cli-win32-x64@2.2.4':
     optional: true
 
-  '@bufbuild/protobuf@2.8.0': {}
+  '@bufbuild/protobuf@2.9.0': {}
 
   '@codemirror/state@6.5.2':
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
-  '@codemirror/view@6.38.2':
+  '@codemirror/view@6.38.3':
     dependencies:
       '@codemirror/state': 6.5.2
       crelt: 1.0.6
@@ -4900,10 +4900,10 @@ snapshots:
       undici-types: 5.28.4
       w3c-keyname: 2.2.8
 
-  obsidian@1.8.7(@codemirror/state@6.5.2)(@codemirror/view@6.38.2):
+  obsidian@1.8.7(@codemirror/state@6.5.2)(@codemirror/view@6.38.3):
     dependencies:
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.2
+      '@codemirror/view': 6.38.3
       '@types/codemirror': 5.60.8
       moment: 2.29.4
 
@@ -5150,7 +5150,7 @@ snapshots:
 
   sass-embedded@1.86.1:
     dependencies:
-      '@bufbuild/protobuf': 2.8.0
+      '@bufbuild/protobuf': 2.9.0
       buffer-builder: 0.2.0
       colorjs.io: 0.5.2
       immutable: 5.1.3
