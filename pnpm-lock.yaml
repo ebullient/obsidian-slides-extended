@@ -135,8 +135,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       sass:
-        specifier: ^1.92.1
-        version: 1.92.1
+        specifier: ^1.93.2
+        version: 1.93.2
       ts-jest:
         specifier: ^29.4.3
         version: 29.4.3(@babel/core@7.28.4)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@30.2.0(@babel/core@7.28.4))(esbuild@0.25.10)(jest-util@30.2.0)(jest@30.2.0(@types/node@24.5.2)(ts-node@10.9.2(@types/node@24.5.2)(typescript@5.9.2)))(typescript@5.9.2)
@@ -2527,8 +2527,8 @@ packages:
     engines: {node: '>=16.0.0'}
     hasBin: true
 
-  sass@1.92.1:
-    resolution: {integrity: sha512-ffmsdbwqb3XeyR8jJR6KelIXARM9bFQe8A6Q3W4Klmwy5Ckd5gz7jgUNHo4UOqutU5Sk1DtKLbpDP0nLCg1xqQ==}
+  sass@1.93.2:
+    resolution: {integrity: sha512-t+YPtOQHpGW1QWsh1CHQ5cPIr9lbbGZLZnbihP/D/qZj/yuV68m8qarcV17nvkOX81BCrvzAlq2klCQFZghyTg==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -4101,7 +4101,7 @@ snapshots:
       esbuild: 0.25.10
       resolve: 1.22.10
       safe-identifier: 0.4.2
-      sass: 1.92.1
+      sass: 1.93.2
       sass-embedded: 1.86.1
 
   esbuild@0.25.10:
@@ -5284,7 +5284,7 @@ snapshots:
       sass-embedded-win32-ia32: 1.86.1
       sass-embedded-win32-x64: 1.86.1
 
-  sass@1.92.1:
+  sass@1.93.2:
     dependencies:
       chokidar: 4.0.3
       immutable: 5.1.3
