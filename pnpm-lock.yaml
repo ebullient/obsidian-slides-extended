@@ -57,8 +57,8 @@ importers:
         specifier: ^2.2.4
         version: 2.2.4
       '@fortawesome/fontawesome-free':
-        specifier: ^7.0.1
-        version: 7.0.1
+        specifier: ^7.1.0
+        version: 7.1.0
       '@popperjs/core':
         specifier: ^2.11.8
         version: 2.11.8
@@ -573,8 +573,8 @@ packages:
   '@fastify/static@7.0.4':
     resolution: {integrity: sha512-p2uKtaf8BMOZWLs6wu+Ihg7bWNBdjNgCwDza4MJtTqg+5ovKmcbgbR9Xs5/smZ1YISfzKOCNYmZV8LaCj+eJ1Q==}
 
-  '@fortawesome/fontawesome-free@7.0.1':
-    resolution: {integrity: sha512-RLmb9U6H2rJDnGxEqXxzy7ANPrQz7WK2/eTjdZqyU9uRU5W+FkAec9uU5gTYzFBH7aoXIw2WTJSCJR4KPlReQw==}
+  '@fortawesome/fontawesome-free@7.1.0':
+    resolution: {integrity: sha512-+WxNld5ZCJHvPQCr/GnzCTVREyStrAJjisUPtUxG5ngDA8TMlPnKp6dddlTpai4+1GNmltAeuk1hJEkBohwZYA==}
     engines: {node: '>=6'}
 
   '@isaacs/balanced-match@4.0.1':
@@ -3231,7 +3231,7 @@ snapshots:
       fastq: 1.19.1
       glob: 11.0.3
 
-  '@fortawesome/fontawesome-free@7.0.1': {}
+  '@fortawesome/fontawesome-free@7.1.0': {}
 
   '@isaacs/balanced-match@4.0.1': {}
 
