@@ -35,7 +35,7 @@
     },
     "devDependencies": {
         "@biomejs/biome": "^2.2.4",
-        "@fortawesome/fontawesome-free": "^7.0.1",
+        "@fortawesome/fontawesome-free": "^7.1.0",
         "@popperjs/core": "^2.11.8",
         "@types/color": "^4.2.0",
         "@types/fs-extra": "^11.0.4",
