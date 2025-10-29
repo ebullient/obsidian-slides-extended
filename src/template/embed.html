@@ -69,6 +69,7 @@
     <script src="{{{base}}}dist/reveal.js"></script>
     <script src="{{{base}}}plugin/notes/notes.js"></script>
     <script src="{{{base}}}plugin/markdown/markdown.js"></script>
+    <script src="{{{base}}}plugin/obsidian-markdown.js"></script>
     <script src="{{{base}}}plugin/highlight/highlight.js"></script>
 
     <script src="{{{base}}}plugin/zoom/zoom.js"></script>
@@ -122,7 +123,7 @@
             center: true,
             transition: 'default', // none/fade/slide/convex/concave/zoom
             plugins: [
-                RevealMarkdown,
+                ObsidianMarkdown,
                 RevealHighlight,
                 RevealZoom,
                 RevealNotes,
@@ -130,7 +131,9 @@
                 RevealMermaid,
                 RevealChart,
             ],
-
+            markdown: {
+                gfm: true,
+            },
             mathjax3: {
                 mathjax: '{{{base}}}plugin/math/mathjax/tex-chtml-full.js',
             },

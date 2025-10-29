@@ -366,11 +366,14 @@ test('Basic Markdown Syntax > Callouts', () => {
     > This warning is aligned left
     <!-- element style="width:20%;font-size:24px" align="left"-->
 
-    <br>
-
     > [!error]
     > Callouts support manipulation through annotations
     <!-- element style="width:20%;font-size:24px" rotate="15"-->
+
+    > [!danger] Attention **please** !
+    > This is a ~~dangerous~~ **test** ==here== !
+
+    > [!info] Single line should work, too
 
     <grid drag="30 30" drop="11 68" style="font-size:36px">
     > [!example]

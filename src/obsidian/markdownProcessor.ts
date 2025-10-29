@@ -3,7 +3,6 @@ import { YamlStore } from "../yaml/yamlStore";
 import type { ObsidianUtils } from "./obsidianUtils";
 import { AutoClosingProcessor } from "./processors/autoClosingProcessor";
 import { BlockProcessor } from "./processors/blockProcessor";
-import { CalloutProcessor } from "./processors/calloutProcessor";
 import { ChartProcessor } from "./processors/chartProcessor";
 import { CommentProcessor } from "./processors/commentProcessor";
 import { DebugViewProcessor } from "./processors/debugViewProcessor";
@@ -48,7 +47,6 @@ export class MarkdownProcessor {
     private emojiProcessor: EmojiProcessor;
     private iconsProcessor: IconsProcessor;
     private debugViewProcessor: DebugViewProcessor;
-    private calloutProcessor: CalloutProcessor;
     private templateProcessor: TemplateProcessor;
     private chartProcessor: ChartProcessor;
     private defaultBackgroundProcessor: DefaultBackgroundProcessor;
@@ -74,7 +72,6 @@ export class MarkdownProcessor {
         this.emojiProcessor = new EmojiProcessor();
         this.iconsProcessor = new IconsProcessor();
         this.debugViewProcessor = new DebugViewProcessor();
-        this.calloutProcessor = new CalloutProcessor();
         this.templateProcessor = new TemplateProcessor(utils);
         this.chartProcessor = new ChartProcessor();
         this.defaultBackgroundProcessor = new DefaultBackgroundProcessor();
@@ -201,11 +198,6 @@ export class MarkdownProcessor {
         return [
             // Process LaTeX content
             { name: "latexProcessor", processor: this.latexProcessor },
-            // Process callouts
-            {
-                name: "calloutProcessor",
-                processor: this.calloutProcessor,
-            },
             // Convert emoji shortcodes
             { name: "emojiProcessor", processor: this.emojiProcessor },
             // Process icon shortcodes

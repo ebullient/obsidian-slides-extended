@@ -108,6 +108,7 @@
     <script src="{{{base}}}dist/reveal.js"></script>
     <script src="{{{base}}}plugin/notes/notes.js"></script>
     <script src="{{{base}}}plugin/markdown/markdown.js"></script>
+    <script src="{{{base}}}plugin/obsidian-markdown.js"></script>
     <script src="{{{base}}}plugin/highlight/highlight.js"></script>
 
     <script src="{{{base}}}plugin/zoom/zoom.js"></script>
@@ -178,7 +179,7 @@
             center: true,
             transition: 'default', // none/fade/slide/convex/concave/zoom
             plugins: [
-                RevealMarkdown,
+                ObsidianMarkdown,
                 RevealHighlight,
                 RevealZoom,
                 RevealNotes,
@@ -211,10 +212,6 @@
             },
             markdown: {
                 gfm: true,
-                mangle: false,
-                pedantic: false,
-                smartLists: false,
-                smartypants: false,
             },
             mermaid: {
                 theme: isLight(bgColor) ? 'default' : 'dark',
