@@ -89,9 +89,9 @@ Insert image that lies outside of your vault
 
 ---
 
-Insert image with obsidian markdown syntax
+Insert image with obsidian markdown syntax, twice
 
-![[Image.jpg]]
+![[Image.jpg]] ![[Image.jpg]]
 
 ---
 

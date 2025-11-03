@@ -8,7 +8,7 @@ export class MediaProcessor implements Processor {
     private parser: CommentParser;
 
     private markdownMediaRegex =
-        /(!)?\[([^\]]*)\]\((.*(?:jpg|png|jpeg|gif|bmp|webp|svg|avi|mp4|ogg|mov|webm)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
+        /(!)?\[([^\]]*)\]\((.*?(?:jpg|png|jpeg|gif|bmp|webp|svg|avi|mp4|ogg|mov|webm)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
 
     private wikilinkMediaRegex =
         /\[\[(.*?(?:jpg|png|jpeg|webp|gif|bmp|svg|avi|mp4|ogg|mov|webm))\|?([^\]]*)??\]\]/gi;

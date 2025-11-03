@@ -78,3 +78,9 @@ This will include the contents of the blockref
 [[included]] [[included|alias]]
 
 ---
+
+## Images
+
+![[100x100.png]] ![[100x100.png]]
+
+---
