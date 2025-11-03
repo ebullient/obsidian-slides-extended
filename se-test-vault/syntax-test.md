@@ -47,3 +47,28 @@ _emphasis_ **bold** ==highlight==
 
 $$f'(x), \frac{dy}{dx},\dot{x}, y' ...$$
 
+---
+
+## Included H1
+
+This will include everything under H1
+
+![[included#H1]]
+
+---
+
+## Included H2
+
+This will include everything under H2
+
+![[included#H2]]
+
+---
+
+## Included block
+
+This will include the contents of the blockref
+
+![[included#^blockquote]]
+
+---
