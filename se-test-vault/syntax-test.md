@@ -72,3 +72,9 @@ This will include the contents of the blockref
 ![[included#^blockquote]]
 
 ---
+
+## Links
+
+[[included]] [[included|alias]]
+
+---

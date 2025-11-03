@@ -179,6 +179,9 @@ This [[Internal link]] will be displayed as normal text
 
 This [[Internal link|Link]] will use its alias for displaying
 
+Two links on the same line (normal link, alias)
+[[link_1]] [[link_2|alias]]
+
 `;
 
     const { options, markdown } = prepare(input);
