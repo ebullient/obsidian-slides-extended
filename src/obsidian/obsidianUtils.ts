@@ -297,7 +297,7 @@ export class ObsidianUtils implements MediaCollector {
         }
         const cache = this.app.metadataCache.getFileCache(tfile);
         const resolved = resolveSubpath(cache, header);
-        console.log("parseFile, cache, resolved", cache, resolved);
+        console.debug("parseFile, cache, resolved", cache, resolved);
 
         if (resolved && resolved.start && resolved.start.line != null) {
             if (resolved.end && resolved.end.line != null) {

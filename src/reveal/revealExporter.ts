@@ -48,7 +48,7 @@ export class RevealExporter {
         );
 
         for (const img of imgList) {
-            console.log("export", img);
+            console.debug("export", img);
             if (img.startsWith("http")) {
                 continue;
             }

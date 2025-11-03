@@ -22,7 +22,6 @@ window.ObsidianMarkdown = window.ObsidianMarkdown || {
                     renderer({ meta, tokens = [] }) {
                         // Parse the title as inline markdown (for bold, italic, etc.)
                         const parsedTitle = marked.parseInline(meta.title);
-                        console.log(meta.title, parsedTitle);
 
                         let tmpl = `<div class="callout ${meta.color}" data-type="${meta.type}">\n`;
 
@@ -38,7 +37,6 @@ window.ObsidianMarkdown = window.ObsidianMarkdown || {
                         }
 
                         tmpl += "</div>\n";
-                        console.log(tmpl);
                         return tmpl;
                     },
                 },

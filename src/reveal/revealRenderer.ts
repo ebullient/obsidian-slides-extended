@@ -51,7 +51,7 @@ export class RevealRenderer {
             this.utils.resetImageCollection();
         }
 
-        const content = (await readFile(filePath.toString())).toString();
+        const content = (await readFile(filePath.toString())).toString().trim();
         let rendered = await this.render(
             content,
             renderForPrint,
