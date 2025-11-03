@@ -5,10 +5,11 @@ window.ObsidianMarkdown = window.ObsidianMarkdown || {
         // Create the markdown plugin (this is confusing with binds)
         const self = window.ObsidianMarkdown;
         const revealMarkdownPlugin = RevealMarkdown();
+        const marked = revealMarkdownPlugin.marked;
 
         // Special Obsidian markdown parsing that should be done
         // when reveal.js is rendering slides
-        revealMarkdownPlugin.marked.use({
+        marked.use({
             walkTokens(token) {
                 if (token.type === "blockquote") {
                     return self.processCallout(this, self, token);
@@ -20,13 +21,8 @@ window.ObsidianMarkdown = window.ObsidianMarkdown || {
                     level: "block",
                     renderer({ meta, tokens = [] }) {
                         // Parse the title as inline markdown (for bold, italic, etc.)
-                        const parsedTitle = this.parser.parseInline([
-                            {
-                                type: "text",
-                                raw: meta.title,
-                                text: meta.title,
-                            },
-                        ]);
+                        const parsedTitle = marked.parseInline(meta.title);
+                        console.log(meta.title, parsedTitle);
 
                         let tmpl = `<div class="callout ${meta.color}" data-type="${meta.type}">\n`;
 
@@ -42,6 +38,7 @@ window.ObsidianMarkdown = window.ObsidianMarkdown || {
                         }
 
                         tmpl += "</div>\n";
+                        console.log(tmpl);
                         return tmpl;
                     },
                 },

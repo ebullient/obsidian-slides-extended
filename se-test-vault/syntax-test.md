@@ -11,11 +11,11 @@ frontmatter: go
 _emphasis_ **bold** ==highlight==   
 *emphasis*  __bold__ ~~strikethrough~~
 
-> [!danger] Attention **for real**!
+> [!danger] Attention *for ==real==*!
 > _emphasis_ **bold** ==highlight==   
 > *emphasis*  __bold__ ~~strikethrough~~
 
-> [!warning] Single lines should work, too
+> [!warning] Single *lines* should **work**, too
 
 --
 
@@ -40,3 +40,10 @@ _emphasis_ **bold** ==highlight==
 > [!cite]
 > Here is an Cite for an Callout in a Slide. Callouts support dark and white backgrounds and could be sized by annotations
 </grid>
+
+---
+
+## Math
+
+$$f'(x), \frac{dy}{dx},\dot{x}, y' ...$$
+

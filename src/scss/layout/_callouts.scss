@@ -1,6 +1,7 @@
 body {
     --callout-background-color: 255, 255, 255;
     --callout-radius: 2px;
+    --callout-title-direction: left;
 }
 
 .callout-color1 {
@@ -88,6 +89,7 @@ blockquote {
 .callout-title-inner {
     flex: 1 1 0;
     font-weight: 700;
+    text-align: var(--callout-title-direction);
 }
 
 .callout-content {
