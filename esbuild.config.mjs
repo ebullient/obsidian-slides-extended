@@ -188,9 +188,8 @@ const parameters = {
         }),
         copy({
             assets: {
-                from: ['node_modules/mathjax/es5/**/*'],
-                to: ['./plugin/math/mathjax'],
-                keepStructure: true
+                from: ['node_modules/mathjax/**/*'],
+                to: ['./plugin/math/mathjax/'],
             }
         }),
         copy({

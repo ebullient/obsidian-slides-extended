@@ -1,4 +1,11 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+    existsSync,
+    mkdirSync,
+    readFileSync,
+    renameSync,
+    rmSync,
+    writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import JSZip from "jszip";
 import { requestUrl } from "obsidian";
@@ -32,27 +39,71 @@ export class SlidesExtendedDistribution {
     async update() {
         const version = this.plugin.manifest.version;
         const downloadUrl = `https://github.com/ebullient/obsidian-slides-extended/releases/download/${version}/slides-extended.zip`;
-        const response = await requestUrl(downloadUrl);
-        if (response.status !== 200) {
-            console.error(`Failed to download ${downloadUrl}`);
-            return;
+
+        // Backup existing dist directory before attempting update
+        // Use dist-backup instead of dist/.backup to avoid issues with trailing slashes
+        const backupDir = path.join(this.pluginDirectory, "dist-backup");
+        let didBackup = false;
+
+        if (existsSync(this.distDirectory)) {
+            console.debug(
+                "Backing up existing distribution files before update",
+            );
+            // Remove any existing backup first
+            if (existsSync(backupDir)) {
+                rmSync(backupDir, { recursive: true, force: true });
+            }
+            renameSync(this.distDirectory, backupDir);
+            didBackup = true;
         }
 
-        const zip = new JSZip();
-        const contents = await zip.loadAsync(response.arrayBuffer);
-        const pluginDirectory = this.pluginDirectory;
-
-        for (const filename of Object.keys(contents.files)) {
-            if (!contents.files[filename].dir) {
-                zip.file(filename)
-                    .async("nodebuffer")
-                    .then((content) => {
-                        const dest = path.join(pluginDirectory, filename);
-                        const dir = path.dirname(dest);
-                        mkdirSync(dir, { recursive: true });
-                        writeFileSync(dest, content);
-                    });
+        try {
+            const response = await requestUrl(downloadUrl);
+            if (response.status !== 200) {
+                throw new Error(
+                    `Failed to download ${downloadUrl}: HTTP ${response.status}`,
+                );
             }
+
+            const zip = new JSZip();
+            const contents = await zip.loadAsync(response.arrayBuffer);
+            const pluginDirectory = this.pluginDirectory;
+
+            for (const filename of Object.keys(contents.files)) {
+                if (!contents.files[filename].dir) {
+                    zip.file(filename)
+                        .async("nodebuffer")
+                        .then((content) => {
+                            const dest = path.join(pluginDirectory, filename);
+                            const dir = path.dirname(dest);
+                            mkdirSync(dir, { recursive: true });
+                            writeFileSync(dest, content);
+                        });
+                }
+            }
+
+            // Update successful, remove backup
+            if (didBackup && existsSync(backupDir)) {
+                console.debug("Update successful, removing backup");
+                rmSync(backupDir, { recursive: true, force: true });
+            }
+        } catch (error) {
+            console.error("Failed to update distribution files:", error);
+
+            // Restore backup on failure
+            if (didBackup && existsSync(backupDir)) {
+                console.debug("Restoring backup due to update failure");
+                // Remove partial update if it exists
+                if (existsSync(this.distDirectory)) {
+                    rmSync(this.distDirectory, {
+                        recursive: true,
+                        force: true,
+                    });
+                }
+                renameSync(backupDir, this.distDirectory);
+            }
+
+            throw error;
         }
     }
 }
