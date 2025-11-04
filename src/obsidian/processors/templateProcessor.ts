@@ -150,6 +150,13 @@ export class TemplateProcessor implements Processor {
                 fileWithExtension = `${fileWithExtension}.md`;
             }
             let templateContent = this.utils.parseFile(fileWithExtension, null);
+
+            if (templateContent == null) {
+                throw new Error(
+                    `Template file not found: [[${file}]] (resolved to: ${fileWithExtension})`,
+                );
+            }
+
             templateContent =
                 this.multipleFileProcessor.process(templateContent);
             templateContent = templateContent
@@ -187,9 +194,9 @@ export class TemplateProcessor implements Processor {
             name = `<% ${name.trim()} %>`;
             result = result.replaceAll(
                 optionalName,
-                `${content}\n${optionalName}`,
+                () => `${content}\n${optionalName}`,
             );
-            result = result.replaceAll(name, content);
+            result = result.replaceAll(name, () => content);
             result = result.replaceAll(match, "");
         }
         result = this.footnoteProcessor.transformFootNotes(result);

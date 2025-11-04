@@ -412,6 +412,8 @@ test('Slides Extended Feature >  Show Debug Grid', () => {
 
 This slide shows the debug view feature
 
+$$\lim_{t \to \infty} (w(t) - y(t)) = 0$$
+
 `;
 
     const { options, markdown } = prepare(input);

@@ -20,7 +20,7 @@ export class DebugViewProcessor implements Processor {
                             if (notes.length > 0) {
                                 newSlide += `\n\n${notes}`;
                             }
-                            output = output.replace(slide, newSlide);
+                            output = output.replace(slide, () => newSlide);
                             return newSlide;
                         })
                         .join(options.verticalSeparator);

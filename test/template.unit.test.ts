@@ -87,7 +87,7 @@ test('Template with variable set', () => {
 # MyContent
 
 ::: footer
-# Hello
+$$\lim_{t \to \infty} (w(t) - y(t)) = 0$$
 :::
 
 `;

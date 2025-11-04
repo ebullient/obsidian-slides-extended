@@ -43,12 +43,6 @@ _emphasis_ **bold** ==highlight==
 
 ---
 
-## Math
-
-$$f'(x), \frac{dy}{dx},\dot{x}, y' ...$$
-
----
-
 ## Included H1
 
 This will include everything under H1
