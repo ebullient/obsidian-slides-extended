@@ -44,7 +44,7 @@ jobs:
 
     - uses: pnpm/action-setup@v4
       with:
-          version: 8
+          version: 10
 
     - name: Use Node.js
       uses: actions/setup-node@v6
@@ -70,7 +70,9 @@ jobs:
         git config user.name ${{ env.GH_BOT_NAME }}
         git config user.email ${{ env.GH_BOT_EMAIL }}
 
-        pnpm install
+        pnpm install --frozen-lockfile
+        pnpm run build
+
         if [[ "$VERSION" == "test" ]]; then
           RETRY=true
           npm run preversion

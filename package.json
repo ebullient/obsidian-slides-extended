@@ -9,11 +9,12 @@
     "scripts": {
         "preinstall": "npx only-allow pnpm",
         "dev": "node esbuild.config.mjs",
-        "prebuild": "npx @biomejs/biome check ./src && npm run test",
+        "prebuild": "pnpm exec biome check ./src",
         "build": "node esbuild.config.mjs production",
-        "fix": "npx @biomejs/biome check --write ./src",
-        "format": "npx @biomejs/biome format ./src",
-        "lint": "npx @biomejs/biome lint ./src",
+        "postbuild": "pnpm run test",
+        "fix": "pnpm exec biome check --write ./src",
+        "format": "pnpm exec biome format ./src",
+        "lint": "pnpm exec biome lint ./src",
         "test": "jest",
         "coverage": "jest --coverage",
         "preversion": "pnpm run test && node esbuild.config.mjs production",
@@ -83,7 +84,7 @@
         "mustache": "^4.2.0",
         "yaml-front-matter": "^4.1.1"
     },
-    "resolutions": {
+    "overrides": {
         "glob": "11.0.3",
         "iconv-lite": "0.6.3",
         "raw-body": "2.5.2"
