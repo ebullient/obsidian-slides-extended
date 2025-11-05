@@ -32,6 +32,10 @@
         "backfillLimit": false,
         "commitLimit": false,
         "ignoreCommitPattern": "(🔖|👷|changelog|.* README\\.).*",
+        "replaceText": {
+            "([;.,] [rR]esolves) #\\d+\\.?\\s*$": "$1",
+            "([;.,] [Ff]ixes) #\\d+\\.?\\s*$": "$1"
+        },
         "startingDate": "2024-02-17"
     },
     "devDependencies": {
