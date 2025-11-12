@@ -19,7 +19,32 @@
     {{/remoteCSSPaths}}
 
     <script defer src="{{{base}}}dist/fontawesome/all.min.js"></script>
-    <script defer src="{{{base}}}plugin/load-mathjax.js"></script>
+    {{#preamble}}
+    <script id="mathjax-preamble" type="text/template">
+        {{{preamble}}}
+    </script>
+    <script>
+        window.MathJax = {
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                    const preamble = document.getElementById('mathjax-preamble').innerHTML;
+                    if (preamble && preamble.trim().length > 0) {
+                        MathJax.tex2chtml(preamble);
+                    }
+                }
+            }
+        };
+    </script>
+    {{/preamble}}
+    <script>
+        (function() {
+            const script = document.createElement('script');
+            script.defer = true;
+            script.src = `{{{base}}}plugin/load-mathjax.js?v=${new Date().getTime()}`;
+            document.head.appendChild(script);
+        })();
+    </script>
 
     <script type="text/javascript">
 

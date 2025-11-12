@@ -30,10 +30,14 @@ describe("Build Validation", () => {
                 for (const match of matches) {
                     const path = match[1];
 
-                    it(`should have ${path} in build output`, () => {
-                        const fullPath = join(BUILD_DIR, path);
-                        expect(existsSync(fullPath)).toBe(true);
-                    });
+                    // The load-mathjax.js script is now loaded dynamically with a cache-busting
+                    // timestamp, so we can't statically verify its path.
+                    if (!path.startsWith("plugin/load-mathjax.js")) {
+                        it(`should have ${path} in build output`, () => {
+                            const fullPath = join(BUILD_DIR, path);
+                            expect(existsSync(fullPath)).toBe(true);
+                        });
+                    }
                 }
             });
         }
