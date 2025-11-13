@@ -115,8 +115,6 @@ export class RevealRenderer {
             base = "/";
         }
 
-        const preamble = await this.utils.getPreamble();
-
         const context = Object.assign(options, {
             title,
             slides,
@@ -132,7 +130,6 @@ export class RevealRenderer {
             enablePointer,
             enableTimeBar,
             revealOptionsStr: JSON.stringify(revealOptions),
-            preamble,
         });
 
         const template = await this.getPageTemplate(renderEmbedded);

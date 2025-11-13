@@ -29,24 +29,11 @@
     {{/remoteCSSPaths}}
 
     <script defer src="{{{base}}}dist/fontawesome/all.min.js"></script>
-    {{#preamble}}
-    <script id="mathjax-preamble" type="text/template">
-        {{{preamble}}}
-    </script>
+    {{#preamblePath}}
     <script>
-        window.MathJax = {
-            startup: {
-                ready: () => {
-                    MathJax.startup.defaultReady();
-                    const preamble = document.getElementById('mathjax-preamble').innerHTML;
-                    if (preamble && preamble.trim().length > 0) {
-                        MathJax.tex2chtml(preamble);
-                    }
-                }
-            }
-        };
+        window.mathJaxPreamblePath = '{{{preamblePath}}}';
     </script>
-    {{/preamble}}
+    {{/preamblePath}}
     <script>
         (function() {
             const script = document.createElement('script');
