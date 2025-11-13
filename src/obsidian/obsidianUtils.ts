@@ -186,6 +186,23 @@ export class ObsidianUtils implements MediaCollector {
         return this.settings;
     }
 
+    async getPreamble(): Promise<string> {
+        if (!this.settings.preamblePath) {
+            return "";
+        }
+        try {
+            const preamble = await this.app.vault.adapter.read(
+                this.settings.preamblePath,
+            );
+            return preamble;
+        } catch (_e) {
+            console.warn(
+                `Slides Extended: Preamble file not found at '${this.settings.preamblePath}'. Ignoring.`,
+            );
+            return "";
+        }
+    }
+
     private getTFile(filename: string): TFile | null {
         if (filename.startsWith("[[") && filename.endsWith("]]")) {
             filename = filename.substring(2, filename.length - 2).trim();
@@ -241,6 +258,10 @@ export class ObsidianUtils implements MediaCollector {
         }
 
         return file;
+    }
+
+    getExportDirectory(override?: string): string {
+        return override ?? this.exportDir;
     }
 
     getAbsolutePath(relativePath: string): string {
