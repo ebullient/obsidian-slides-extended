@@ -28,10 +28,12 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     paneMode: "split",
     themeDirectory: "",
     center: true,
+    preamblePath: "preamble.sty",
 };
 export const DEFAULTS: Options = {
     bg: "",
     center: true,
+    preamble: "",
     css: "",
     defaultTemplate: "",
     enableCustomControls: true,
