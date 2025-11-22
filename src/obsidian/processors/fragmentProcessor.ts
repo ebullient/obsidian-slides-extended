@@ -4,7 +4,7 @@ import { CommentParser } from "../comment";
 export class FragmentProcessor implements Processor {
     private parser: CommentParser;
     private fragmentCounter = 1;
-    private orderedListRegex = /^\d\) /g;
+    private orderedListRegex = /^\d+\) /g;
     private codeBlockRegex = /```[^\n]*(?:\n[^`]*\n)```/g;
 
     constructor() {

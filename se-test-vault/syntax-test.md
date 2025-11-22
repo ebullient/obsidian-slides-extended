@@ -78,3 +78,21 @@ This will include the contents of the blockref
 ![[100x100.png]] ![[100x100.png]]
 
 ---
+
+## Slide numbers
+
+1) abc
+2) de
+3) f
+4) f
+5) f
+6) f
+7) f
+8) f
+9) f
+10) f
+11) f
+12) f
+13) f
+
+---
