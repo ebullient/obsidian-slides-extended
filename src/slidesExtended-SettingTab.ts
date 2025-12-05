@@ -259,6 +259,22 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                     });
             });
 
+        containerEl.createEl("h2", { text: "MathJax" });
+
+        new Setting(containerEl)
+            .setName("Preamble path")
+            .setDesc(
+                "Path to MathJax preamble file. This file will be included in your slides. (Requires reload!)",
+            )
+            .addText((text) =>
+                text
+                    .setPlaceholder("preamble.sty")
+                    .setValue(this.newSettings.preamblePath)
+                    .onChange((value) => {
+                        this.newSettings.preamblePath = value;
+                    }),
+            );
+
         containerEl.createEl("h2", { text: "Plugins" });
 
         new Setting(containerEl)

@@ -30,6 +30,7 @@ export interface SlidesExtendedSettings {
     paneMode: "split" | "tab" | "sidebar";
     themeDirectory: string;
     center: boolean;
+    preamblePath: string;
 }
 
 export type ChartJsOptions = {
@@ -67,6 +68,7 @@ export type Options = {
     width: number;
     enableCustomControls: boolean;
     transition: string;
+    preamble: string;
     // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types
     [key: string]: any;
 };
