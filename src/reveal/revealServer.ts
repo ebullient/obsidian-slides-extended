@@ -117,7 +117,10 @@ export class RevealServer {
                     if (sourceDir !== utils.vaultDirectory) {
                         const srcPath = path.join(sourceDir, file);
                         if (existsSync(srcPath)) {
-                            fetch = srcPath.replace(utils.vaultDirectory, "");
+                            fetch = path
+                                .relative(utils.vaultDirectory, srcPath)
+                                .split(path.sep)
+                                .join("/");
                         }
                     }
                     console.debug(
