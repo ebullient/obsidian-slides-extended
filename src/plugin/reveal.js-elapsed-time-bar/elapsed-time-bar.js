@@ -92,8 +92,50 @@ const ElapsedTimeBar = {
 
         timeProgressContainer.appendChild(this.timeProgressBar);
 
-        // start timer
-        this.start(config.allottedTime);
+        // start timer (convert to milliseconds)
+        this.start(this.convertToMilliseconds(config.allottedTime));
+    },
+
+    /**
+     * Convert time value to milliseconds
+     * @param {number|string} value - Time as number (seconds) or string with unit (e.g., "30m", "1h", "90s")
+     * @returns {number} Time in milliseconds
+     */
+    convertToMilliseconds(value) {
+        // If it's a number, assume seconds
+        if (typeof value === "number") {
+            return value * 1000;
+        }
+
+        // If it's a string, parse it
+        if (typeof value === "string") {
+            const match = value.match(/^(\d+)\s*(\w+)?/i);
+            if (match) {
+                const num = Number.parseInt(match[1], 10);
+                const unit = match[2] ? match[2].toLowerCase() : "s"; // default to seconds
+
+                switch (unit) {
+                    case "h":
+                        return num * 60 * 60 * 1000;
+                    case "m":
+                        return num * 60 * 1000;
+                    case "s":
+                        return num * 1000;
+                    case "ms":
+                        return num;
+                    default:
+                        // Unrecognized unit, default to seconds
+                        console.warn(
+                            "Unrecognized unit when specifying alloted time",
+                            value,
+                        );
+                        return num * 1000;
+                }
+            }
+        }
+
+        // Fallback: assume seconds
+        return value * 1000;
     },
 
     /**
@@ -125,8 +167,8 @@ const ElapsedTimeBar = {
 
     /**
      * start(reset) timer with new allotted time.
-     * @param {number} allottedTime
-     * @param {number} [elapsedTime=0]
+     * @param {number} allottedTime - Time in milliseconds
+     * @param {number} [elapsedTime=0] - Elapsed time in milliseconds
      */
     start(allottedTime, elapsedTime = 0) {
         this.isFinished = false;
