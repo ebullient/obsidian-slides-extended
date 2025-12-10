@@ -1,6 +1,6 @@
 {
     "name": "slides-extended",
-    "version": "2.2.3",
+    "version": "2.2.4",
     "description": "Create markdown-based presentations with reveal.js in Obsidian",
     "author": "Erin Schnabel",
     "license": "MIT",
