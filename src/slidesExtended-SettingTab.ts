@@ -270,8 +270,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             .setName("Controls")
             .setDesc("Display presentation control arrows.")
             .addButton((btn) => {
-                btn.setButtonText("enableCustomControls")
-                    .setDisabled(true);
+                btn.setButtonText("enableCustomControls").setDisabled(true);
             })
             .addToggle((value) =>
                 value.setValue(this.newSettings.controls).onChange((value) => {
@@ -283,8 +282,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             .setName("Chalkboard")
             .setDesc("Display a chalkboard and related controls.")
             .addButton((btn) => {
-                btn.setButtonText("enableChalkboard")
-                    .setDisabled(true);
+                btn.setButtonText("enableChalkboard").setDisabled(true);
             })
             .addToggle((value) =>
                 value
@@ -300,8 +298,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                 "Display an elapsed time bar; set 'timeForPresentation' property in seconds (500), minutes (55m), or hours (1h).",
             )
             .addButton((btn) => {
-                btn.setButtonText("enableTimeBar")
-                    .setDisabled(true);
+                btn.setButtonText("enableTimeBar").setDisabled(true);
             })
             .addToggle((value) =>
                 value
@@ -315,8 +312,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             .setName("Laser pointer")
             .setDesc("Change your mouse into a laser pointer (Toggle with Q).")
             .addButton((btn) => {
-                btn.setButtonText("enablePointer")
-                    .setDisabled(true);
+                btn.setButtonText("enablePointer").setDisabled(true);
             })
             .addToggle((value) =>
                 value
@@ -330,8 +326,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             .setName("Menu")
             .setDesc("Display a presentation menu button.")
             .addButton((btn) => {
-                btn.setButtonText("enableMenu")
-                    .setDisabled(true);
+                btn.setButtonText("enableMenu").setDisabled(true);
             })
             .addToggle((value) =>
                 value
@@ -345,8 +340,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             .setName("Overview")
             .setDesc("When enabled, display a presentation overview button.")
             .addButton((btn) => {
-                btn.setButtonText("enableOverview")
-                    .setDisabled(true);
+                btn.setButtonText("enableOverview").setDisabled(true);
             })
             .addToggle((value) =>
                 value
@@ -360,8 +354,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             .setName("Progress bar (progress)")
             .setDesc("When enabled, display a presentation progress bar.")
             .addButton((btn) => {
-                btn.setButtonText("progress")
-                    .setDisabled(true);
+                btn.setButtonText("progress").setDisabled(true);
             })
             .addToggle((value) =>
                 value.setValue(this.newSettings.progress).onChange((value) => {
@@ -373,8 +366,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             .setName("Slide numbers")
             .setDesc("Display the page number of the current slide.")
             .addButton((btn) => {
-                btn.setButtonText("slideNumber")
-                    .setDisabled(true);
+                btn.setButtonText("slideNumber").setDisabled(true);
             })
             .addToggle((value) =>
                 value
