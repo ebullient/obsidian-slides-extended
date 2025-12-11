@@ -9,6 +9,7 @@ body:
         ## Before you start
 
         - Check for plugin updates and make sure you're running the latest version of the plugin.
+        - Make sure you are using _both_ the latest version of Obsidian AND the latest Obsidian installer!
         - Restart Obsidian and see if the issue persists.
         - Look at existing bug reports to see if your issue has already been reported.
         - Is this actually a bug? If this is something that you wish the plugin could do, please submit a feature request instead.
@@ -81,7 +82,16 @@ body:
     attributes:
       label: Obsidian Version
       description: Which Obsidian version are you using?
-      placeholder: 0.15.9
+      placeholder: 1.10.6
+    validations:
+      required: true
+
+  - type: input
+    id: obsidian-installer-version
+    attributes:
+      label: Obsidian Installer Version
+      description: Which Obsidian installer version are you using?
+      placeholder: 1.9.14
     validations:
       required: true
 
