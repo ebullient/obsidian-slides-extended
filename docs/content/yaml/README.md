@@ -16,8 +16,8 @@ You can customize many setting for your current slide deck by adding one or more
 | minScale | Bounds for smallest possible scale to apply to content | number | 0.2 |
 | maxScale | Bounds for largest possible scale to apply to content | number | 2.0 |
 | notesSeparator | Sets the note delimiter | string | note: |
-| separator | Sets the slide separator | string | ^( ?\| )---( ?\| )$ |
-| verticalSeparator | Sets the vertical slide separator | string | ^( ?\| )--( ?\| )$ |
+| separator | Sets the slide separator | string | "\r?\n---\r?\n" |
+| verticalSeparator | Sets the vertical slide separator | string | "\r?\n--\r?\n" |
 | enableLinks | Enable backlinks in slides | true / false | false |
 | theme | Sets the theme | [see theme docs](../themes/README.md) | black |
 | highlightTheme | Sets the highlight theme | [see theme docs](../themes/README.md) | zenburn |
