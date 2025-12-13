@@ -2,9 +2,6 @@ import type { Options, Processor } from "src/@types";
 import { processBySlide } from "../obsidianUtils";
 
 export class LatexProcessor implements Processor {
-    private TWO_BACKSLASHES = /\\\\/g;
-    private THREE_BACKSLASHES = "\\\\\\";
-
     process(markdown: string, options: Options) {
         let output = markdown;
         processBySlide(markdown, options, (slide) => {
@@ -69,9 +66,12 @@ export class LatexProcessor implements Processor {
 
         // First handle display math
         processed = processed.replace(/\$\$([\s\S]*?)\$\$/g, (_, content) => {
-            const fixedContent = content
+            // Remove newlines and normalize whitespace (MathJax doesn't require newlines)
+            // The key fix is doubling backslashes: \\ → \\\\ (was \\ → \\\)
+            // This ensures \\ survives reveal.js markdown processing to reach MathJax
+            let fixedContent = content
                 .replace(/\n\s*/g, "")
-                .replace(this.TWO_BACKSLASHES, this.THREE_BACKSLASHES);
+                .replace(/(?<!\\\\)\\\\(?!\\\\)/g, "\\\\\\\\");
             return `%\`%$$${fixedContent}$$%\`%`;
         });
 

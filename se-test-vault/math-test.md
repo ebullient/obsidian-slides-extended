@@ -35,3 +35,12 @@ $$\lim_{t \to \infty} (w(t) - y(t)) = 0$$
 ## Test
 
 Problems with inline code  `$ ... $`
+
+---
+
+$$
+\begin{align}
+	A &= B \\
+	  &= C
+\end{align}
+$$
