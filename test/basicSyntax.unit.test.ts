@@ -338,6 +338,24 @@ test('Basic Markdown Syntax > Math complicated', () => {
     return expect(result).toMatchSnapshot();
 });
 
+test('Basic Markdown Syntax > Math markdown-special chars are preserved', () => {
+    const input = `Inline $a~b~c$ and $a*b*c$
+
+$$a~b~c$$
+
+$$a*b*c$$`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = sut.process(markdown, options);
+
+    expect(result).toContain('$a&#126;b&#126;c$');
+    expect(result).toContain('$a&#42;b&#42;c$');
+    expect(result).toContain('$$a&#126;b&#126;c$$');
+    expect(result).toContain('$$a&#42;b&#42;c$$');
+});
+
 test('Basic Markdown Syntax > Mermaid', () => {
     const input = `---
 theme: beige
