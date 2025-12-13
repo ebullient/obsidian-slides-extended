@@ -24,7 +24,7 @@ exports[`Code Block Syntax > Math with Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
-$$\\begin{vmatrix}a & b\\\\\\c & d\\end{vmatrix}=ad-bc$$
+$$\\begin{vmatrix}a & b\\\\\\\\c & d\\end{vmatrix}=ad-bc$$
 
 \`\`\`dockerfile
 USER $USER_NAME:$USER_NAME
@@ -38,7 +38,7 @@ exports[`Code Block Syntax > Math with Mixed Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
-$$\\begin{vmatrix}a & b\\\\\\c & d\\end{vmatrix}=ad-bc$$
+$$\\begin{vmatrix}a & b\\\\\\\\c & d\\end{vmatrix}=ad-bc$$
 
 \`\`\`\`md
 \`\`\`dockerfile
