@@ -192,6 +192,14 @@ const parameters = {
                 to: ['./plugin/math/mathjax/'],
             }
         }),
+
+        copy({
+            assets: {
+                from: ['node_modules/katex/dist/**/*'],
+                to: ['./plugin/math/katex/dist/'],
+                keepStructure: true,
+            }
+        }),
         copy({
             assets: {
                 from: ['node_modules/reveal.js-menu/*'],

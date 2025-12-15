@@ -127,6 +127,7 @@ export class YamlParser {
             "enableCustomControls",
             "enableTimeBar",
             "enablePointer",
+            "mathEngine",
         ];
 
         const globalSettings = pick(this.settings, properties);

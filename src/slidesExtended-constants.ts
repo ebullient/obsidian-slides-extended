@@ -28,6 +28,7 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     paneMode: "split",
     themeDirectory: "",
     center: true,
+    mathEngine: "katex",
 };
 export const DEFAULTS: Options = {
     bg: "",
@@ -51,6 +52,7 @@ export const DEFAULTS: Options = {
     transition: "slide",
     verticalSeparator: "\r?\n--\r?\n",
     width: 960,
+    mathEngine: "katex",
 };
 
 export const DISABLED_IMAGE_COLLECTOR: MediaCollector = {

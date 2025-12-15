@@ -45,6 +45,7 @@ describe("Build Validation", () => {
             "plugin/math/math.js",
             "plugin/math/mathjax/tex-chtml.js",
             "plugin/load-mathjax.js",
+            "plugin/math/katex/dist/katex.min.js",
             "plugin/obsidian-markdown.js",
             "template/reveal.html",
             "template/embed.html",
