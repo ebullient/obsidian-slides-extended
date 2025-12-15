@@ -58,6 +58,7 @@
         "esbuild-sass-plugin": "^3.3.1",
         "highlight.js": "^11.11.1",
         "jest": "^30.2.0",
+        "katex": "^0.16.27",
         "mathjax": "^4.0.0",
         "obsidian": "^1.10.3",
         "obsidian-utilities": "^1.1.5",

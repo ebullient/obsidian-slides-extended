@@ -108,7 +108,11 @@ export class RevealRenderer {
             enableMenu,
             enableTimeBar,
             enablePointer,
+            mathEngine,
         } = settings;
+
+        const isKaTeX = mathEngine === "katex";
+        const isMathJax = mathEngine === "mathjax";
 
         let base = "";
         if (!getMediaCollector().shouldCollect()) {
@@ -129,6 +133,8 @@ export class RevealRenderer {
             enableMenu,
             enablePointer,
             enableTimeBar,
+            isKaTeX,
+            isMathJax,
             revealOptionsStr: JSON.stringify(revealOptions),
         });
 

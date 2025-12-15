@@ -375,5 +375,19 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                         this.newSettings.slideNumber = value;
                     }),
             );
+
+        new Setting(containerEl)
+            .setName("Math Engine")
+            .setDesc("Select the math rendering engine.")
+            .addDropdown((cb) => {
+                cb.addOption("katex", "KaTeX")
+                    .addOption("mathjax", "MathJax")
+                    .setValue(this.newSettings.mathEngine)
+                    .onChange((value) => {
+                        this.newSettings.mathEngine = value as
+                            | "katex"
+                            | "mathjax";
+                    });
+            });
     }
 }

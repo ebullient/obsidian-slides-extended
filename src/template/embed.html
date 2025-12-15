@@ -19,7 +19,6 @@
     {{/remoteCSSPaths}}
 
     <script defer src="{{{base}}}dist/fontawesome/all.min.js"></script>
-    <script defer src="{{{base}}}plugin/load-mathjax.js"></script>
 
     <script type="text/javascript">
 
@@ -74,6 +73,9 @@
 
     <script src="{{{base}}}plugin/zoom/zoom.js"></script>
     <script src="{{{base}}}plugin/math/math.js"></script>
+    {{#isMathJax}}
+    <script defer src="{{{base}}}plugin/load-mathjax.js"></script>
+    {{/isMathJax}}
     <script src="{{{base}}}plugin/mermaid/mermaid.js"></script>
     <script src="{{{base}}}plugin/chart/chart.umd.js"></script>
     <script src="{{{base}}}plugin/chart/plugin.js"></script>
@@ -127,16 +129,29 @@
                 RevealHighlight,
                 RevealZoom,
                 RevealNotes,
+                {{#isKaTeX}}
+                RevealMath.KaTeX,
+                {{/isKaTeX}}
+                {{#isMathJax}}
                 RevealMath.MathJax3,
+                {{/isMathJax}}
                 RevealMermaid,
                 RevealChart,
             ],
             markdown: {
                 gfm: true,
             },
+            {{#isKaTeX}}
+            katex: {
+                local: '{{{base}}}plugin/math/katex',
+                extensions: ["mhchem"],
+            },
+            {{/isKaTeX}}
+            {{#isMathJax}}
             mathjax3: {
                 mathjax: '{{{base}}}plugin/math/mathjax/tex-chtml.js',
             },
+            {{/isMathJax}}
         };
 
         // options from URL query string
@@ -152,6 +167,19 @@
     </script>
 
     <script>
+        /**
+         * KaTeX Equation Numbering Note
+         * 
+         * KaTeX maintains a global equation counter for \begin{equation} environments.
+         * When navigating between slides, reveal.js math plugin may re-render math, causing 
+         * equation numbers to change randomly.
+         * 
+         * Note: Regular $$ blocks don't have equation numbers - only \begin{equation} does.
+         * 
+         * If you experience issues with equation numbers changing:
+         * Use manual \tag{} commands: \begin{equation}\tag{1} ... \end{equation}
+         */
+        
         Reveal.initialize(options);
     </script>
     <!-- created with {{! ignore me }}Slides Extended embed.html template -->

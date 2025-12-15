@@ -48,3 +48,19 @@ element.style {
     height: auto;
 }
 
+
+// For KaTeX equation numbering
+.reveal .katex-display:not(.leqno) > .katex > .katex-html:has(> .tag) {
+    /* Reserve right gutter for equation numbers to prevent overlap */
+    padding-right: 2em;
+}
+
+.reveal .katex-display.leqno > .katex > .katex-html > .tag {
+    left: 0 !important;
+    right: auto !important;
+}
+
+.reveal .katex-display.leqno > .katex > .katex-html:has(> .tag) {
+    /* Reserve left gutter for left-aligned equation numbers */
+    padding-left: 2em;
+}
