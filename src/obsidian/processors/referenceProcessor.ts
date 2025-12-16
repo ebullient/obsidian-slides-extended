@@ -2,7 +2,7 @@ import type { Options, Processor } from "src/@types";
 import { processBySlide, skipMathCodeBlocks } from "../obsidianUtils";
 
 export class ReferenceProcessor implements Processor {
-    private refRegex = /\^[\w-]+\s/g;
+    private refRegex = /(?:^|\s)\^[\w-]+$/gm;
 
     process(markdown: string, options: Options) {
         let output = markdown;

@@ -96,3 +96,13 @@ This will include the contents of the blockref
 13) f
 
 ---
+
+## Some edge cases
+
+Should render as `n^2` in all 4 cases:
+
+|`n^2`|` n^2`|`n^2 `|` n^2 `|
+
+[PR #265](https://github.com/ebullient/obsidian-slides-extended/pull/265)
+
+---

@@ -413,3 +413,15 @@ test('Basic Markdown Syntax > Callouts', () => {
     const result = JSON.stringify(sut.process(markdown, options));
     return expect(result).toMatchSnapshot();
 });
+
+test('Basic Markdown Syntax > Math spacing regression simple', () => {
+    const input = `
+\`n^2\`
+\`n^2 \`
+`;
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
+});
