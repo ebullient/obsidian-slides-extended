@@ -21,6 +21,7 @@ export class FormatProcessor implements Processor {
         return markdown
             .replaceAll(this.boldRegex, (_, args) => `**${args.trim()}**`)
             .replaceAll(this.markRegex, "<mark>$1</mark>")
-            .replaceAll(this.commentRegex, "");
+            .replaceAll(this.commentRegex, "")
+            .replaceAll("\n", "  \n");
     }
 }
