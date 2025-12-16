@@ -96,3 +96,8 @@ This will include the contents of the blockref
 13) f
 
 ---
+
+## New Line
+
+Line 1
+Line 2
