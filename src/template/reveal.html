@@ -29,6 +29,9 @@
     {{/remoteCSSPaths}}
 
     <script defer src="{{{base}}}dist/fontawesome/all.min.js"></script>
+    {{#isMathJax}}
+    <script defer src="{{{base}}}plugin/load-mathjax.js"></script>
+    {{/isMathJax}}
 
     <script type="text/javascript">
         function pageInIframe() {
@@ -112,9 +115,6 @@
 
     <script src="{{{base}}}plugin/zoom/zoom.js"></script>
     <script src="{{{base}}}plugin/math/math.js"></script>
-    {{#isMathJax}}
-    <script defer src="{{{base}}}plugin/load-mathjax.js"></script>
-    {{/isMathJax}}
     <script src="{{{base}}}plugin/mermaid/mermaid.js"></script>
     <script src="{{{base}}}plugin/chart/chart.umd.js"></script>
     <script src="{{{base}}}plugin/chart/plugin.js"></script>
