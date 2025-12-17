@@ -15,11 +15,10 @@ package-lock.json
 # coverage report
 coverage
 
-dist/
-build/
+dist
+build
 coverage/
 .nyc_output/
-dist
 old
 examples/
 *.out
