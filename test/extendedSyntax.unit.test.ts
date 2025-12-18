@@ -273,6 +273,10 @@ test('Extended Markdown Syntax >  Fragmented list', () => {
 + Second
 + Third
 
+> + Callout-1
+> + Callout-2
+> + Callout-3
+
 ---
 
 # Fragmented unordered list with ignored code block
@@ -301,6 +305,7 @@ test('Extended Markdown Syntax >  Fragmented list', () => {
 2) Second
 3) Third
 4) Fourth
+
 `;
 
     const { options, markdown } = prepare(input);

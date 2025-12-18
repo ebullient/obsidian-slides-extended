@@ -4,7 +4,8 @@ import { CommentParser } from "../comment";
 export class FragmentProcessor implements Processor {
     private parser: CommentParser;
     private fragmentCounter = 1;
-    private orderedListRegex = /^\d+\) /g;
+    private orderedListRegex = /^\d+\) /;
+    private fragmentRegex = /^(>\s*)?\+ /;
     private codeBlockRegex = /```[^\n]*(?:\n[^`]*\n)```/g;
 
     constructor() {
@@ -43,9 +44,10 @@ export class FragmentProcessor implements Processor {
                     return line;
                 }
 
+                const trim = line.trim();
                 if (
-                    line.trim().startsWith("+ ") ||
-                    this.orderedListRegex.test(line.trim())
+                    this.fragmentRegex.test(trim) ||
+                    this.orderedListRegex.test(trim)
                 ) {
                     return this.transformLine(line);
                 }
@@ -77,11 +79,9 @@ export class FragmentProcessor implements Processor {
 
         // See here: https://github.com/hakimel/reveal.js/issues/1848. This makes sure that reveals work when dealing with formatting in the list (e.g. bold / italic / code, etc.)
         const extra_replacement = `&shy;${this.parser.commentToString(comment)}`;
-        line = line.replace("+ ", `- ${extra_replacement}`);
-        line = line.replaceAll(
-            this.orderedListRegex,
-            `1. ${extra_replacement}`,
-        );
+
+        line = line.replace(this.fragmentRegex, `$1- ${extra_replacement}`);
+        line = line.replace(this.orderedListRegex, `1. ${extra_replacement}`);
 
         const output = line;
         return output;

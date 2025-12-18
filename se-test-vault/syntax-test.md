@@ -106,3 +106,14 @@ Should render as `n^2` in all 4 cases:
 [PR #265](https://github.com/ebullient/obsidian-slides-extended/pull/265)
 
 ---
+
+## Unordered List fragments
+
+- list fragments 
++ work fine here
+
+>[!note] Callouts
+> - list fragments should also
+> + work in callouts
+
+Note: this will not work for ordered lists.
