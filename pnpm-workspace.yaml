@@ -7,7 +7,7 @@ ignoredBuiltDependencies:
   - unrs-resolver
 
 overrides:
-  glob: 11.0.3
+  glob: '>=11.1.0'
   iconv-lite: 0.6.3
   raw-body: 2.5.2
   simple-swizzle@=0.2.3: '>=0.2.4'
