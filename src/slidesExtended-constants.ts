@@ -8,6 +8,7 @@ export const REFRESH_ICON =
 
 export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     port: "3000",
+    host: "localhost",
     autoReload: true,
     autoStart: true,
     exportDirectory: "/export",

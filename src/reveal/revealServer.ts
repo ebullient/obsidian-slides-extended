@@ -11,12 +11,14 @@ import { RevealRenderer } from "./revealRenderer";
 export class RevealServer {
     private _server: FastifyInstance;
     private readonly _port: number;
+    private readonly _host: string;
     private readonly _url: URL;
     private _revealRenderer: RevealRenderer;
     private filePath: string;
 
-    constructor(utils: ObsidianUtils, port: number, url: URL) {
+    constructor(utils: ObsidianUtils, port: number, host: string, url: URL) {
         this._port = port;
+        this._host = host;
         this._url = url;
         this._revealRenderer = new RevealRenderer(utils);
         this.filePath = null;
@@ -166,7 +168,7 @@ export class RevealServer {
             return;
         }
         try {
-            await this._server.listen({ host: "localhost", port: this._port });
+            await this._server.listen({ host: this._host, port: this._port });
             console.info(
                 "Slides Extended is ready to go.",
                 this._server.listeningOrigin.replace(

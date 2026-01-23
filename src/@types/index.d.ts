@@ -10,6 +10,7 @@ export interface QueryString {
 
 export interface SlidesExtendedSettings {
     port: string;
+    host: string;
     autoReload: boolean;
     autoStart: boolean;
     exportDirectory: string;

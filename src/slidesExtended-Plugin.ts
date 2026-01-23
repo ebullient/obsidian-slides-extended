@@ -26,6 +26,7 @@ export class SlidesExtendedPlugin extends Plugin {
     private target: TAbstractFile;
     private slideProcessor: EmbeddedSlideProcessor;
     private port: number;
+    private host: string;
     private serverUrl: URL;
 
     async onload() {
@@ -36,7 +37,8 @@ export class SlidesExtendedPlugin extends Plugin {
 
         const numPort = Number(this.settings.port);
         this.port = Number.isNaN(numPort) ? 3000 : numPort;
-        this.serverUrl = new URL(`http://localhost:${this.port}`);
+        this.host = this.settings.host || "localhost";
+        this.serverUrl = new URL(`http://${this.host}:${this.port}`);
 
         this.obsidianUtils = new ObsidianUtils(this.app, this.settings);
 
@@ -207,6 +209,7 @@ export class SlidesExtendedPlugin extends Plugin {
         this.revealServer = new RevealServer(
             this.obsidianUtils,
             this.port,
+            this.host,
             this.url,
         );
     };
@@ -277,6 +280,12 @@ export class SlidesExtendedPlugin extends Plugin {
         console.debug("Slides Extended: settings saved");
 
         await this.stopServer();
+
+        const numPort = Number(this.settings.port);
+        this.port = Number.isNaN(numPort) ? 3000 : numPort;
+        this.host = this.settings.host || "localhost";
+        this.serverUrl = new URL(`http://${this.host}:${this.port}`);
+
         this.obsidianUtils = new ObsidianUtils(this.app, this.settings);
         this.configureServer();
         await this.initServer();

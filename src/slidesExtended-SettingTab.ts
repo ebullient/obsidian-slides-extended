@@ -93,6 +93,20 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             );
 
         new Setting(containerEl)
+            .setName("Server host")
+            .setDesc(
+                "Specify the host for the server to listen on. Default is localhost. Use 0.0.0.0 to allow external connections.",
+            )
+            .addText((text) =>
+                text
+                    .setPlaceholder("localhost")
+                    .setValue(this.newSettings.host)
+                    .onChange((value) => {
+                        this.newSettings.host = value;
+                    }),
+            );
+
+        new Setting(containerEl)
             .setName("Auto reload")
             .setDesc(
                 "When enabled, the slide preview window automatically updates upon detecting changes in the source file.",
