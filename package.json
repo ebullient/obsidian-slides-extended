@@ -77,7 +77,7 @@
     "dependencies": {
         "@codemirror/state": "^6.5.4",
         "@codemirror/view": "^6.39.11",
-        "@fastify/static": "^7.0.4",
+        "@fastify/static": "^9.0.0",
         "@types/js-yaml": "^4.0.9",
         "chart.js": "^4.5.1",
         "color": "^4.2.3",
