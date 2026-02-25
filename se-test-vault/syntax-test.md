@@ -1,5 +1,6 @@
 ---
 frontmatter: go
+theme: beige.css
 ---
 
 # One-off tests
