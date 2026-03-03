@@ -13,6 +13,7 @@ export class RevealServer {
     private readonly _port: number;
     private readonly _host: string;
     private readonly _url: URL;
+    private readonly _utils: ObsidianUtils;
     private _revealRenderer: RevealRenderer;
     private filePath: string;
 
@@ -20,12 +21,16 @@ export class RevealServer {
         this._port = port;
         this._host = host;
         this._url = url;
+        this._utils = utils;
         this._revealRenderer = new RevealRenderer(utils);
         this.filePath = null;
+        this.initServer();
+    }
 
+    private initServer() {
         this._server = Fastify({});
         this._server.register(fastifyStatic, {
-            root: utils.vaultDirectory,
+            root: this._utils.vaultDirectory,
             decorateReply: true,
             serve: false,
         });
@@ -48,7 +53,7 @@ export class RevealServer {
 
         for (const dir of ["plugin", "dist", "css"]) {
             this._server.register(fastifyStatic, {
-                root: path.join(utils.pluginDirectory, dir),
+                root: path.join(this._utils.pluginDirectory, dir),
                 prefix: `/${dir}`,
                 wildcard: true,
                 index: false,
@@ -104,23 +109,23 @@ export class RevealServer {
                 } else if (file.startsWith("embed/") && file.endsWith(".md")) {
                     console.debug("fetching embed file", file);
                     const filePath = path.join(
-                        utils.vaultDirectory,
+                        this._utils.vaultDirectory,
                         file.replace("embed/", ""),
                     );
                     await renderMarkdownFile(filePath);
                 } else if (file.endsWith(".md")) {
                     // top-level slide
-                    this.filePath = path.join(utils.vaultDirectory, file);
+                    this.filePath = path.join(this._utils.vaultDirectory, file);
                     console.debug("New presentation: ", file, this.filePath);
                     await renderMarkdownFile(this.filePath);
                 } else {
                     let fetch = file;
                     const sourceDir = path.dirname(this.filePath);
-                    if (sourceDir !== utils.vaultDirectory) {
+                    if (sourceDir !== this._utils.vaultDirectory) {
                         const srcPath = path.join(sourceDir, file);
                         if (existsSync(srcPath)) {
                             fetch = path
-                                .relative(utils.vaultDirectory, srcPath)
+                                .relative(this._utils.vaultDirectory, srcPath)
                                 .split(path.sep)
                                 .join("/");
                         }
@@ -129,7 +134,7 @@ export class RevealServer {
                         "Serve file",
                         file,
                         sourceDir,
-                        utils.vaultDirectory,
+                        this._utils.vaultDirectory,
                         fetch,
                     );
                     reply.sendFile(fetch);
@@ -168,6 +173,8 @@ export class RevealServer {
             return;
         }
         try {
+            // Fastify cannot be restarted after close; create a fresh instance
+            this.initServer();
             await this._server.listen({ host: this._host, port: this._port });
             console.info(
                 "Slides Extended is ready to go.",
