@@ -25,11 +25,11 @@ Short Syntax
 
 	![](fas fa-envelope fa-4x)<!-- .element: color="coral"-->
 
-HTML Synthax
+HTML Syntax
 
  	<i color="coral" class="fas fa-envelope fa-4x"/>
 
-ShortCode Synthax
+ShortCode Syntax
 
 	:fas_envelope:
  
@@ -108,7 +108,7 @@ Short Syntax
 
 	![](fas fa-envelope fa-4x)<!-- .element: color="coral" -->
 
-HTML Synthax
+HTML Syntax
 
  	<i color="coral" class="fas fa-envelope fa-4x"></i>
  </script></section><section  data-markdown><script type="text/template">
