@@ -20,6 +20,9 @@ const getFiles = (
     const result = new Set<string>();
 
     for (const directory of directories) {
+        if (!fs.existsSync(directory)) {
+            continue;
+        }
         for (const file of fs.readdirSync(directory)) {
             if (include(directory, file)) {
                 result.add(file);

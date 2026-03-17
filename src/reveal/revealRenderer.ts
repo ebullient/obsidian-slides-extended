@@ -1,6 +1,6 @@
 import path, { basename, extname, join } from "node:path";
 
-import { exists, readFile } from "fs-extra";
+import { exists, existsSync, readFile } from "fs-extra";
 import { glob } from "glob";
 import Mustache from "mustache";
 import type { QueryString } from "../@types";
@@ -86,9 +86,13 @@ export class RevealRenderer {
         const revealOptions = this.yaml.getRevealOptions(options);
 
         const { title } = options;
-        const themeUrl = this.getThemeUrl(options.theme);
-        const highlightThemeUrl = this.getHighlightThemeUrl(
+        const themeUrl = this.findAsset(
+            options.theme,
+            this.utils.getThemeSearchPath(),
+        );
+        const highlightThemeUrl = this.findAsset(
             options.highlightTheme,
+            this.utils.getHighlightSearchPath(),
         );
 
         const slidifyOptions = this.yaml.getSlidifyOptions(options);
@@ -97,10 +101,22 @@ export class RevealRenderer {
         const processedMarkdown = this.processor.process(prefetched, options);
         const slides = this.slidify(processedMarkdown, slidifyOptions);
 
-        const cssPaths = this.getCssPaths(options.css);
-        const remoteCSSPaths = this.getCssPaths(options.remoteCSS);
-        const scriptPaths = this.getCssPaths(options.scripts);
-        const remoteScriptPaths = this.getCssPaths(options.remoteScripts);
+        const cssPaths = this.getAssetPaths(
+            options.css,
+            this.utils.getLocalCssSearchPath(),
+        );
+        const remoteCSSPaths = this.getAssetPaths(
+            options.remoteCSS,
+            this.utils.getLocalCssSearchPath(),
+        );
+        const scriptPaths = this.getAssetPaths(
+            options.scripts,
+            this.utils.getScriptSearchPath(),
+        );
+        const remoteScriptPaths = this.getAssetPaths(
+            options.remoteScripts,
+            this.utils.getScriptSearchPath(),
+        );
 
         const settings = this.yaml.getTemplateSettings(options);
 
@@ -148,8 +164,8 @@ export class RevealRenderer {
             ...(highlightThemeUrl && !this.isValidUrl(highlightThemeUrl)
                 ? [highlightThemeUrl]
                 : []),
-            ...cssPaths.filter((p) => !this.isValidUrl(p)),
-            ...scriptPaths.filter((p) => !this.isValidUrl(p)),
+            ...cssPaths.filter((p: string) => !this.isValidUrl(p)),
+            ...scriptPaths.filter((p: string) => !this.isValidUrl(p)),
         ];
 
         const template = await this.getPageTemplate(renderEmbedded);
@@ -166,35 +182,29 @@ export class RevealRenderer {
         }
     }
 
-    private getHighlightThemeUrl(theme: string) {
-        return this.getThemeUrl(theme, this.utils.getHighlightSearchPath());
-    }
-
-    private getThemeUrl(
-        theme: string,
-        searchPath = this.utils.getThemeSearchPath(),
-    ) {
-        if (this.isValidUrl(theme)) {
-            return theme;
+    private findAsset(name: string, searchPath: string[]) {
+        if (this.isValidUrl(name)) {
+            return name;
         }
 
-        for (const themeDir of searchPath) {
-            const revealThemes = glob.sync("*.css", {
-                cwd: themeDir,
-            });
+        for (const dir of searchPath) {
+            // Direct path match (handles subdirectories like css/custom.css)
+            const directPath = path.join(dir, name);
+            if (existsSync(directPath)) {
+                return this.toExternalPath(directPath);
+            }
 
-            // We're doing some compensation + matching here
-            const key = basename(theme).replace(extname(theme), "");
-            const revealTheme = revealThemes.find(
-                (themePath) =>
-                    basename(themePath).replace(extname(themePath), "") === key,
+            // Basename glob match (existing behavior for short names like "black")
+            const files = glob.sync("*.css", { cwd: dir });
+            const key = basename(name).replace(extname(name), "");
+            const match = files.find(
+                (f) => basename(f).replace(extname(f), "") === key,
             );
-
-            if (revealTheme) {
-                return this.toExternalPath(path.join(themeDir, revealTheme));
+            if (match) {
+                return this.toExternalPath(path.join(dir, match));
             }
         }
-        return theme;
+        return name;
     }
 
     private toExternalPath(urlPath: string): string {
@@ -224,22 +234,22 @@ export class RevealRenderer {
         return md.slidify(markdown, slidifyOptions);
     }
 
-    private getCssPaths(css: string | string[], _remote = false) {
+    private getAssetPaths(assets: string | string[], searchPath: string[]) {
         let input: string[] = [];
-        if (!css) {
+        if (!assets) {
             return input;
         }
-        if (typeof css === "string") {
-            input = css.split(",");
+        if (typeof assets === "string") {
+            input = assets.split(",");
         } else {
-            input = css;
+            input = assets;
         }
 
-        return input.map((css) => {
-            if (this.isValidUrl(css)) {
-                return css;
+        return input.map((asset) => {
+            if (this.isValidUrl(asset)) {
+                return asset;
             }
-            return this.getThemeUrl(css, this.utils.getLocalCssSearchPath());
+            return this.findAsset(asset, searchPath);
         });
     }
 }

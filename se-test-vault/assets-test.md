@@ -1,9 +1,9 @@
 ---
 theme: beige.css
 css:
-- assets/css/custom.css
+- css/custom.css
 scripts:
-- assets/js/custom.js
+- js/custom.js
 ---
 
 # Custom Assets Test

@@ -27,7 +27,7 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     showGrid: false,
     autoComplete: "inPreview",
     paneMode: "split",
-    themeDirectory: "",
+    assetsDirectory: "",
     center: true,
     mathEngine: "katex",
     scripts: "",

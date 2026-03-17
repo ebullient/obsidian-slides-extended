@@ -92,6 +92,7 @@ export class ObsidianUtils implements MediaCollector {
     private readonly highlightSearchPath;
     private readonly themeSearchPath;
     private readonly htmlTemplateSearchPath;
+    private readonly scriptSearchPath;
 
     private images = new Set<string>();
     private isCollecting = false;
@@ -129,16 +130,22 @@ export class ObsidianUtils implements MediaCollector {
             path.join(this.distDir, "theme"), // reveal.js themes
         ];
         this.htmlTemplateSearchPath = [path.join(this.pluginDir, "template")];
+        this.scriptSearchPath = [] as string[];
 
-        if (this.settings.themeDirectory) {
-            const vaultThemeDir = path.join(
+        if (this.settings.assetsDirectory) {
+            const assetsDir = path.join(
                 this.vaultDir,
-                this.settings.themeDirectory,
+                this.settings.assetsDirectory,
             );
-            this.cssSearchPath.unshift(vaultThemeDir);
-            this.highlightSearchPath.unshift(vaultThemeDir);
-            this.themeSearchPath.unshift(vaultThemeDir);
-            this.htmlTemplateSearchPath.unshift(`${vaultThemeDir}/html`);
+            const cssSub = path.join(assetsDir, "css");
+            this.cssSearchPath.unshift(cssSub, assetsDir);
+            this.highlightSearchPath.unshift(cssSub, assetsDir);
+            this.themeSearchPath.unshift(cssSub, assetsDir);
+            this.htmlTemplateSearchPath.unshift(path.join(assetsDir, "html"));
+            this.scriptSearchPath.unshift(
+                path.join(assetsDir, "js"),
+                assetsDir,
+            );
         }
 
         setMediaCollector(this);
@@ -180,6 +187,9 @@ export class ObsidianUtils implements MediaCollector {
     }
     getHtmlTemplateSearchPath(): string[] {
         return this.htmlTemplateSearchPath;
+    }
+    getScriptSearchPath(): string[] {
+        return this.scriptSearchPath;
     }
 
     getSettings(): SlidesExtendedSettings {

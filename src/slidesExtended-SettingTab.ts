@@ -167,9 +167,9 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
         };
 
         new Setting(containerEl)
-            .setName("Theme directory")
+            .setName("Assets directory")
             .setDesc(
-                'Specify the vault directory for custom themes. Highlight themes should include "highlight" or "hljs" in their name.',
+                "Specify a vault directory for custom themes, CSS, scripts, and HTML templates. CSS files are searched in css/ and the directory root. Scripts are searched in js/. HTML templates in html/.",
             )
             .addSearch((cb) => {
                 const folders: TFolder[] = this.app.vault
@@ -182,9 +182,9 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                     modal.close();
                 });
                 cb.setPlaceholder("Folder")
-                    .setValue(this.newSettings.themeDirectory)
+                    .setValue(this.newSettings.assetsDirectory)
                     .onChange((value) => {
-                        this.newSettings.themeDirectory = value;
+                        this.newSettings.assetsDirectory = value;
                         for (const key in themeSettings) {
                             themeSettings[key].setDesc(themeDesc(key, value));
                         }
@@ -228,7 +228,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
 
         themeSettings.slide = new Setting(containerEl)
             .setName("Default slide theme")
-            .setDesc(themeDesc("slide", this.newSettings.themeDirectory))
+            .setDesc(themeDesc("slide", this.newSettings.assetsDirectory))
             .addSearch((cb) => {
                 const modal = new ThemeInputSuggest(
                     this.app,
@@ -248,7 +248,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
 
         themeSettings.highlight = new Setting(containerEl)
             .setName("Default highlight theme")
-            .setDesc(themeDesc("highlight", this.newSettings.themeDirectory))
+            .setDesc(themeDesc("highlight", this.newSettings.assetsDirectory))
             .addSearch((cb) => {
                 const modal = new ThemeInputSuggest(
                     this.app,

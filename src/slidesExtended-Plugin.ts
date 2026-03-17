@@ -268,11 +268,12 @@ export class SlidesExtendedPlugin extends Plugin {
     }
 
     async loadSettings() {
-        this.settings = Object.assign(
-            {},
-            DEFAULT_SETTINGS,
-            await this.loadData(),
-        );
+        const data = await this.loadData();
+        this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
+        // Migrate renamed setting
+        if (data?.themeDirectory && !data?.assetsDirectory) {
+            this.settings.assetsDirectory = data.themeDirectory;
+        }
     }
 
     async saveSettings() {

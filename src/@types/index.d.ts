@@ -29,7 +29,7 @@ export interface SlidesExtendedSettings {
     showGrid: boolean;
     autoComplete: string;
     paneMode: "split" | "tab" | "sidebar";
-    themeDirectory: string;
+    assetsDirectory: string;
     center: boolean;
     mathEngine: "katex" | "mathjax";
     scripts: string;
