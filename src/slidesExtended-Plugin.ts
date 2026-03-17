@@ -79,6 +79,30 @@ export class SlidesExtendedPlugin extends Plugin {
             },
         });
         this.addCommand({
+            id: "print-active-presentation",
+            name: "Print active presentation",
+            callback: async () => {
+                await this.showView();
+                const instance = this.getViewInstance();
+                if (!instance) {
+                    return;
+                }
+                instance.printPresentation();
+            },
+        });
+        this.addCommand({
+            id: "export-active-presentation-html",
+            name: "Export active presentation as html",
+            callback: async () => {
+                await this.showView();
+                const instance = this.getViewInstance();
+                if (!instance) {
+                    return;
+                }
+                instance.exportAsHtml();
+            },
+        });
+        this.addCommand({
             id: "stop-server-preview",
             name: "Stop slide preview server",
             callback: async () => this.revealServer.stop(),

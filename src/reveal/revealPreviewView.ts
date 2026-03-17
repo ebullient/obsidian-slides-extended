@@ -33,7 +33,7 @@ export class RevealPreviewView extends ItemView {
         this.onCloseListener = onCloseListener;
 
         this.addAction("globe", "Open in browser", () => {
-            window.open(home);
+            this.openInBrowser();
         });
 
         this.addAction("grid", "Show grid", () => {
@@ -68,19 +68,27 @@ export class RevealPreviewView extends ItemView {
         menu.addItem((item) => {
             item.setIcon("document")
                 .setTitle("Print presentation")
-                .onClick(() => {
-                    window.open(`${this.home.toString()}?print-pdf`);
-                });
+                .onClick(() => this.printPresentation());
         });
         menu.addItem((item) => {
             item.setIcon("install")
                 .setTitle("Export as html")
-                .onClick(() => {
-                    const url = new URL(this.url);
-                    url.searchParams.append("export", "true");
-                    this.setUrl(url.toString());
-                });
+                .onClick(() => this.exportAsHtml());
         });
+    }
+
+    openInBrowser() {
+        window.open(this.home);
+    }
+
+    printPresentation() {
+        window.open(`${this.home.toString()}?print-pdf`);
+    }
+
+    exportAsHtml() {
+        const url = new URL(this.url);
+        url.searchParams.set("export", "true");
+        this.setUrl(url.toString());
     }
 
     onMessage(msg: MessageEvent) {
