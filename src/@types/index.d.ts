@@ -32,6 +32,8 @@ export interface SlidesExtendedSettings {
     themeDirectory: string;
     center: boolean;
     mathEngine: "katex" | "mathjax";
+    scripts: string;
+    remoteScripts: string;
 }
 
 export type ChartJsOptions = {
@@ -59,6 +61,8 @@ export type Options = {
     margin: number;
     notesSeparator: string;
     remoteCSS: string | string[];
+    scripts: string | string[];
+    remoteScripts: string | string[];
     separator: string;
     showGrid: boolean;
     template: string;

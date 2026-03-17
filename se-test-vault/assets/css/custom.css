@@ -1,0 +1,7 @@
+/* Custom CSS for testing css frontmatter option */
+.reveal .custom-styled {
+    color: #e74c3c;
+    font-style: italic;
+    border-left: 4px solid #e74c3c;
+    padding-left: 0.5em;
+}

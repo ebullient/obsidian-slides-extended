@@ -30,6 +30,8 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     themeDirectory: "",
     center: true,
     mathEngine: "katex",
+    scripts: "",
+    remoteScripts: "",
 };
 export const DEFAULTS: Options = {
     bg: "",
@@ -44,6 +46,8 @@ export const DEFAULTS: Options = {
     margin: 0.04,
     notesSeparator: "note:",
     remoteCSS: "",
+    scripts: "",
+    remoteScripts: "",
     separator: "\r?\n---\r?\n",
     showGrid: false,
     template: "reveal.html",

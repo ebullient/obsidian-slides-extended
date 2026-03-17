@@ -20,7 +20,12 @@ export class RevealExporter {
         this.vaultDirectory = utils.vaultDirectory;
     }
 
-    public async export(filePath: string, html: string, imgList: string[]) {
+    public async export(
+        filePath: string,
+        html: string,
+        imgList: string[],
+        localAssetPaths: string[] = [],
+    ) {
         const ext = path.extname(filePath);
         const folderName = path.basename(filePath).replaceAll(ext, "");
         const folderDir = path.join(this.exportDirectory, folderName);
@@ -91,6 +96,27 @@ export class RevealExporter {
             }
             console.debug("img", img, imgPath, sourceDir !== vaultDir);
             await copy(imgPath, path.join(folderDir, img));
+        }
+
+        for (const asset of localAssetPaths) {
+            if (
+                asset.startsWith("http") ||
+                asset.startsWith("dist/") ||
+                asset.startsWith("css/") ||
+                asset.startsWith("plugin/")
+            ) {
+                continue;
+            }
+            let assetPath = path.join(vaultDir, asset);
+            if (sourceDir !== vaultDir) {
+                const relative = path.join(sourceDir, asset);
+                if (existsSync(relative)) {
+                    assetPath = relative;
+                }
+            }
+            if (existsSync(assetPath)) {
+                await copy(assetPath, path.join(folderDir, asset));
+            }
         }
 
         window.open(`file://${folderDir}`);

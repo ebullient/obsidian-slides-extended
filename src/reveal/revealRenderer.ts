@@ -52,7 +52,7 @@ export class RevealRenderer {
         }
 
         const content = (await readFile(filePath.toString())).toString().trim();
-        let rendered = await this.render(
+        let { html, localAssetPaths } = await this.render(
             content,
             renderForPrint,
             renderForEmbed,
@@ -62,24 +62,25 @@ export class RevealRenderer {
             this.utils.disableImageCollection();
             await this.exporter.export(
                 filePath,
-                rendered,
+                html,
                 getMediaCollector().getAll(),
+                localAssetPaths,
             );
-            rendered = await this.render(
+            ({ html } = await this.render(
                 content,
                 renderForPrint,
                 renderForEmbed,
-            );
+            ));
         }
 
-        return rendered;
+        return html;
     }
 
     async render(
         input: string,
         renderForPrint: boolean,
         renderEmbedded: boolean,
-    ) {
+    ): Promise<{ html: string; localAssetPaths: string[] }> {
         const { yamlOptions, markdown } = this.yaml.parseYamlFrontMatter(input);
         const options = this.yaml.getSlideOptions(yamlOptions, renderForPrint);
         const revealOptions = this.yaml.getRevealOptions(options);
@@ -98,6 +99,8 @@ export class RevealRenderer {
 
         const cssPaths = this.getCssPaths(options.css);
         const remoteCSSPaths = this.getCssPaths(options.remoteCSS);
+        const scriptPaths = this.getCssPaths(options.scripts);
+        const remoteScriptPaths = this.getCssPaths(options.remoteScripts);
 
         const settings = this.yaml.getTemplateSettings(options);
 
@@ -126,6 +129,8 @@ export class RevealRenderer {
             highlightThemeUrl,
             cssPaths,
             remoteCSSPaths,
+            scriptPaths,
+            remoteScriptPaths,
             base,
             enableCustomControls,
             enableChalkboard,
@@ -138,8 +143,18 @@ export class RevealRenderer {
             revealOptionsStr: JSON.stringify(revealOptions),
         });
 
+        const localAssetPaths = [
+            ...(themeUrl && !this.isValidUrl(themeUrl) ? [themeUrl] : []),
+            ...(highlightThemeUrl && !this.isValidUrl(highlightThemeUrl)
+                ? [highlightThemeUrl]
+                : []),
+            ...cssPaths.filter((p) => !this.isValidUrl(p)),
+            ...scriptPaths.filter((p) => !this.isValidUrl(p)),
+        ];
+
         const template = await this.getPageTemplate(renderEmbedded);
-        return Mustache.render(template, context);
+        const html = Mustache.render(template, context);
+        return { html, localAssetPaths };
     }
 
     private isValidUrl(input: string): boolean {

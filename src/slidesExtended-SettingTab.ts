@@ -191,6 +191,39 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                     });
             });
 
+        new Setting(containerEl)
+            .setName("Custom scripts")
+            .setHeading()
+            .setDesc(
+                "Load additional scripts into all presentations. Override per-note using property names.",
+            );
+
+        new Setting(containerEl)
+            .setName("Scripts")
+            .setDesc(
+                "Comma-separated local script paths (resolved from vault or theme directory).",
+            )
+            .addText((text) =>
+                text
+                    .setPlaceholder("my-plugin.js, utils.js")
+                    .setValue(this.newSettings.scripts)
+                    .onChange((value) => {
+                        this.newSettings.scripts = value;
+                    }),
+            );
+
+        new Setting(containerEl)
+            .setName("Remote scripts")
+            .setDesc("Comma-separated external script URLs.")
+            .addText((text) =>
+                text
+                    .setPlaceholder("https://cdn.example.com/lib.js")
+                    .setValue(this.newSettings.remoteScripts)
+                    .onChange((value) => {
+                        this.newSettings.remoteScripts = value;
+                    }),
+            );
+
         new Setting(containerEl).setName("Slides").setHeading();
 
         themeSettings.slide = new Setting(containerEl)

@@ -136,6 +136,13 @@
     {{/enableTimeBar}}
     {{/timeForPresentation}}
 
+    {{#scriptPaths}}
+    <script src="{{{base}}}{{{.}}}"></script>
+    {{/scriptPaths}}
+    {{#remoteScriptPaths}}
+    <script src="{{{.}}}"></script>
+    {{/remoteScriptPaths}}
+
     <script>
         function extend() {
             const target = {};

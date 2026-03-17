@@ -80,6 +80,13 @@
     <script src="{{{base}}}plugin/chart/chart.umd.js"></script>
     <script src="{{{base}}}plugin/chart/plugin.js"></script>
 
+    {{#scriptPaths}}
+    <script src="{{{base}}}{{{.}}}"></script>
+    {{/scriptPaths}}
+    {{#remoteScriptPaths}}
+    <script src="{{{.}}}"></script>
+    {{/remoteScriptPaths}}
+
     <script>
         function extend() {
             const target = {};
