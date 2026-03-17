@@ -34,38 +34,35 @@ theme: night
 
 ## Custom themes
 
-Open the settings for Slides Extended Plugin, and choose a folder to use as your "Theme Directory".
-When trying to find themes, it will look here first.
+Open the settings for Slides Extended Plugin, and choose a folder to use as your "Assets directory".
+This directory is used to find custom themes, CSS, scripts, and HTML templates.
 
-- The theme suggester will list themes in from:
-    - your configured theme directory,
-    - `.obsidian/plugins/slides-extended/css` and
-    - `.obsidian/plugins/slides-extended/dist/theme`.
+When the assets directory is set (e.g., `assets`), the plugin searches for CSS/theme files in:
 
-Please keep your customized themes in your configured theme directory. Do not directly edit themes in the plugin directory, as the changes are easily lost across devices or if the plugin is uninstalled.
+1. `assets/css/` (subdirectory)
+2. `assets/` (directory root)
+3. `.obsidian/plugins/slides-extended/css`
+4. `.obsidian/plugins/slides-extended/dist/theme`
+
+Please keep your customized themes in your assets directory. Do not directly edit themes in the plugin directory, as the changes are easily lost across devices or if the plugin is uninstalled.
 
 > [!TIP]
-> - Name your theme uniquely. 
+> - Name your theme uniquely.
 > - If want to reference pre-packaged fonts or @import from a prepackaged theme, use `/dist/theme/...` as the starting path.
 
 **Example:**
 
 1. Create a directory in your vault called `assets/css`
-2. Create a CSS file called **my-theme.css** in that directory:
-3. Open settings for Slides Extended Plugin, and choose `assets/css` as the "Theme Directory"
+2. Create a CSS file called **my-theme.css** in that directory
+3. Open settings for Slides Extended Plugin, and choose `assets` as the "Assets directory"
 4. You should be able to select `my-theme.css` as the default theme in slide settings (suggester)
 5. Alternatively, you can specify the theme as a property in your slides markdown file:
 
 ```md
 ---
-theme: css/my-theme.css
+theme: my-theme.css
 ---
 ```
-
-> [!TIP]
-> There is some weirdness here with regard to paths that is 
-> leftover from Advanced Slides. The structure above
-> (with the css root) works.
 
 ## Remote themes
 
@@ -96,27 +93,53 @@ By default Slides Extended comes with a variety of different highlight themes bu
 
 ### Custom Highlight Theme
 
-Add custom highlight themes as css files containing `highlight` or `hljs` in the name to your 
-Custom Theme directory (like `assets/css` from the previous section).
+Add custom highlight themes as css files containing `highlight` or `hljs` in the name to your assets directory (e.g., `assets/css`).
 
-For example, if you create `assets/css/github.highlight.css` with a github highlight theme, specify it in your frontmatter
-this way:
+For example, if you create `assets/css/github.highlight.css` with a github highlight theme, specify it in your frontmatter:
 
 ```md
 ---
-highlightTheme: css/github.css
+highlightTheme: github.highlight.css
 ---
 ```
 
 ## Additional CSS snippets
 
-You can add additional css fragments similarly.
-
-Assuming you've created a css file in `assets/css` (configured as your theme directory) called `my-talk.css`, add it to your presentation this way:
+You can add additional CSS files to your presentation. Place them in your assets directory (e.g., `assets/css`):
 
 ```md
 ---
 css:
-  - css/my-talk.css
+  - my-talk.css
 ---
 ```
+
+You can also specify multiple files, or use paths relative to the assets directory:
+
+```md
+---
+css:
+  - my-talk.css
+  - css/extra.css
+---
+```
+
+## Custom Scripts
+
+You can inject custom JavaScript into your presentations. Scripts are searched in the `js/` subdirectory of your assets directory, or relative to the assets directory root.
+
+```md
+---
+scripts:
+  - my-plugin.js
+remoteScripts:
+  - https://d3js.org/d3.v7.min.js
+---
+```
+
+- `scripts` — local script files (resolved from `assets/js/` or `assets/`)
+- `remoteScripts` — external script URLs loaded directly
+
+Scripts are loaded after all built-in Reveal.js plugins but before `Reveal.initialize()`, so custom scripts can define new Reveal.js plugins.
+
+Both `scripts` and `remoteScripts` can also be configured globally in the plugin settings, applying to all presentations.
