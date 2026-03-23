@@ -36,7 +36,7 @@ export class SlidesExtendedPlugin extends Plugin {
         addIcon("refresh", REFRESH_ICON);
 
         const numPort = Number(this.settings.port);
-        this.port = Number.isNaN(numPort) ? 3000 : numPort;
+        this.port = Number.isNaN(numPort) ? 5174 : numPort;
         this.host = this.settings.host || "localhost";
         this.serverUrl = new URL(`http://${this.host}:${this.port}`);
 
@@ -307,7 +307,7 @@ export class SlidesExtendedPlugin extends Plugin {
         await this.stopServer();
 
         const numPort = Number(this.settings.port);
-        this.port = Number.isNaN(numPort) ? 3000 : numPort;
+        this.port = Number.isNaN(numPort) ? 5174 : numPort;
         this.host = this.settings.host || "localhost";
         this.serverUrl = new URL(`http://${this.host}:${this.port}`);
 

@@ -79,18 +79,18 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             );
 
         new Setting(containerEl)
-            .setName("Server port")
-            .setDesc(
-                "Specify the port number for the server to listen on. Default is 3000.",
-            )
-            .addText((text) =>
-                text
-                    .setPlaceholder("3000")
-                    .setValue(this.newSettings.port)
-                    .onChange((value) => {
-                        this.newSettings.port = value;
-                    }),
-            );
+			.setName("Server port")
+			.setDesc(
+				"Specify the port number for the server to listen on. Default is 5174.",
+			)
+			.addText((text) =>
+				text
+					.setPlaceholder("5174")
+					.setValue(this.newSettings.port)
+					.onChange((value) => {
+						this.newSettings.port = value;
+					}),
+			);
 
         new Setting(containerEl)
             .setName("Server host")
