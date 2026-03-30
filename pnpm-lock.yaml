@@ -63,9 +63,6 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
-      '@types/glob':
-        specifier: ^9.0.0
-        version: 9.0.0
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
@@ -106,8 +103,8 @@ importers:
         specifier: ^30.2.0
         version: 30.2.0(@types/node@25.3.0)(ts-node@10.9.2(@types/node@25.3.0)(typescript@5.9.3))
       katex:
-        specifier: ^0.16.28
-        version: 0.16.28
+        specifier: ^0.16.33
+        version: 0.16.33
       mathjax:
         specifier: ^4.1.1
         version: 4.1.1
@@ -878,10 +875,6 @@ packages:
 
   '@types/fs-extra@11.0.4':
     resolution: {integrity: sha512-yTbItCNreRooED33qjunPthRcSjERP1r4MqCZc7wv0u2sUkzTFp45tgUfS5+r7FrZPdmCCNflLhVSP/o+SemsQ==}
-
-  '@types/glob@9.0.0':
-    resolution: {integrity: sha512-00UxlRaIUvYm4R4W9WYkN8/J+kV8fmOQ7okeH6YFtGWFMt3odD45tpG5yA5wnL7HE6lLgjaTW5n14ju2hl2NNA==}
-    deprecated: This is a stub types definition. glob provides its own type definitions, so you do not need this installed.
 
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
@@ -1854,8 +1847,8 @@ packages:
   jszip@3.10.1:
     resolution: {integrity: sha512-xXDvecyTpGLrqFrvkrUSoxxfJI5AH7U8zxxtVclpsUtMCq4JQ290LY8AW5c7Ggnr/Y/oK+bQMbqK2qmtk3pN4g==}
 
-  katex@0.16.28:
-    resolution: {integrity: sha512-YHzO7721WbmAL6Ov1uzN/l5mY5WWWhJBSW+jq4tkfZfsxmo1hu6frS0EOswvjBUnWE6NtjEs48SFn5CQESRLZg==}
+  katex@0.16.33:
+    resolution: {integrity: sha512-q3N5u+1sY9Bu7T4nlXoiRBXWfwSefNGoKeOwekV+gw0cAXQlz2Ww6BLcmBxVDeXBMUDQv6fK5bcNaJLxob3ZQA==}
     hasBin: true
 
   leven@3.1.0:
@@ -3539,10 +3532,6 @@ snapshots:
       '@types/jsonfile': 6.1.4
       '@types/node': 25.3.0
 
-  '@types/glob@9.0.0':
-    dependencies:
-      glob: 13.0.6
-
   '@types/istanbul-lib-coverage@2.0.6': {}
 
   '@types/istanbul-lib-report@3.0.3':
@@ -4694,7 +4683,7 @@ snapshots:
       readable-stream: 2.3.8
       setimmediate: 1.0.5
 
-  katex@0.16.28:
+  katex@0.16.33:
     dependencies:
       commander: 8.3.0
 
