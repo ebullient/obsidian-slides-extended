@@ -103,8 +103,8 @@ importers:
         specifier: ^30.2.0
         version: 30.2.0(@types/node@25.3.5)(ts-node@10.9.2(@types/node@25.3.5)(typescript@5.9.3))
       katex:
-        specifier: ^0.16.33
-        version: 0.16.33
+        specifier: ^0.16.37
+        version: 0.16.37
       mathjax:
         specifier: ^4.1.1
         version: 4.1.1
@@ -1826,8 +1826,8 @@ packages:
   jszip@3.10.1:
     resolution: {integrity: sha512-xXDvecyTpGLrqFrvkrUSoxxfJI5AH7U8zxxtVclpsUtMCq4JQ290LY8AW5c7Ggnr/Y/oK+bQMbqK2qmtk3pN4g==}
 
-  katex@0.16.33:
-    resolution: {integrity: sha512-q3N5u+1sY9Bu7T4nlXoiRBXWfwSefNGoKeOwekV+gw0cAXQlz2Ww6BLcmBxVDeXBMUDQv6fK5bcNaJLxob3ZQA==}
+  katex@0.16.37:
+    resolution: {integrity: sha512-TIGjO2cCGYono+uUzgkE7RFF329mLLWGuHUlSr6cwIVj9O8f0VQZ783rsanmJpFUo32vvtj7XT04NGRPh+SZFg==}
     hasBin: true
 
   leven@3.1.0:
@@ -4658,7 +4658,7 @@ snapshots:
       readable-stream: 2.3.8
       setimmediate: 1.0.5
 
-  katex@0.16.33:
+  katex@0.16.37:
     dependencies:
       commander: 8.3.0
 
