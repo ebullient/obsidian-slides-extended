@@ -3,7 +3,7 @@ import path, { basename, extname, join } from "node:path";
 import { exists, existsSync, readFile } from "fs-extra";
 import { glob } from "glob";
 import Mustache from "mustache";
-import type { QueryString } from "../@types";
+import type { Options, QueryString } from "../@types";
 import type { MarkdownProcessor } from "../obsidian/markdownProcessor";
 import {
     getMediaCollector,
@@ -99,7 +99,18 @@ export class RevealRenderer {
 
         const prefetched = await this.utils.fetchRemoteMarkdown(markdown);
         const processedMarkdown = this.processor.process(prefetched, options);
-        const slides = this.slidify(processedMarkdown, slidifyOptions);
+        const rawSlides = this.slidify(processedMarkdown, slidifyOptions);
+        // Stamp separator attributes on every <section data-markdown> element so that
+        // browser-side reveal.js re-processes each pre-split slide with the same
+        // separators, preventing the default '\r?\n---\r?\n' from splitting slide
+        // content that contains '---' as a horizontal rule or thematic break.
+        const separatorAttrs = this.buildSeparatorAttributes(slidifyOptions);
+        const slides = separatorAttrs
+            ? rawSlides.replace(
+                  /<section data-markdown>/g,
+                  `<section ${separatorAttrs} data-markdown>`,
+              )
+            : rawSlides;
 
         const cssPaths = this.getAssetPaths(
             options.css,
@@ -228,6 +239,26 @@ export class RevealRenderer {
             `Template file ${relativePath} not found in search path: ${searchPath}.`,
         );
         return "";
+    }
+
+    private buildSeparatorAttributes(slidifyOptions: Partial<Options>): string {
+        const attrs: string[] = [];
+        if (slidifyOptions.separator) {
+            attrs.push(
+                `data-separator="${slidifyOptions.separator.replace(/"/g, "&quot;")}"`,
+            );
+        }
+        if (slidifyOptions.verticalSeparator) {
+            attrs.push(
+                `data-separator-vertical="${slidifyOptions.verticalSeparator.replace(/"/g, "&quot;")}"`,
+            );
+        }
+        if (slidifyOptions.notesSeparator) {
+            attrs.push(
+                `data-separator-notes="${slidifyOptions.notesSeparator.replace(/"/g, "&quot;")}"`,
+            );
+        }
+        return attrs.join(" ");
     }
 
     private slidify(markdown: string, slidifyOptions: unknown) {
