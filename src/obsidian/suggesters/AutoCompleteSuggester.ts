@@ -193,6 +193,10 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
         editor: Editor,
         _file: TFile,
     ): EditorSuggestTriggerInfo | null {
+        if (!this.isActive) {
+            return null;
+        }
+
         const selectedLine = editor.getLine(cursor.line);
         const cursorPosition = cursor.ch;
 
@@ -205,8 +209,20 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
             };
         }
 
+        // Only trigger word-level completions when the current word starts with
+        // a slide-relevant prefix (<, <!--, or :::) to avoid clobbering other
+        // suggest modals on every keystroke.
         const startPosition =
             selectedLine.substring(0, cursorPosition).lastIndexOf(" ") + 1;
+        const currentWord = selectedLine.substring(
+            startPosition,
+            cursorPosition,
+        );
+
+        if (!currentWord.startsWith("<") && !currentWord.startsWith(":::")) {
+            return null;
+        }
+
         const endPosition =
             selectedLine.substring(cursorPosition).indexOf(" ") +
             cursorPosition +
@@ -216,13 +232,12 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
             { line: cursor.line, ch: startPosition },
             { line: cursor.line, ch: endPosition },
         );
-        const matchData = {
+
+        return {
             start: { line: cursor.line, ch: startPosition },
             end: { line: cursor.line, ch: endPosition },
             query: range,
         };
-
-        return matchData;
     }
 
     readTag(selectedLine: string) {
@@ -300,11 +315,8 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
                     }
                     valEnd = valStart;
                 } else {
-                    //Reset if Cursor behind last Property
-                    property = undefined;
-                    propStart = undefined;
-                    propEnd = undefined;
-
+                    // Bare word with no '=' — this is a partial property being typed.
+                    // Keep propStart/propEnd so selectSuggestion can replace it.
                     propValue = undefined;
                     valStart = undefined;
                     valEnd = undefined;

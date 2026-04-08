@@ -118,3 +118,5 @@ Should render as `n^2` in all 4 cases:
 > + work in callouts
 
 Note: this will not work for ordered lists.
+
+---

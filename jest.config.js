@@ -9,4 +9,7 @@ module.exports = {
 
     modulePaths: ['<rootDir>', 'node_modules'],
     moduleDirectories: ['src', 'node_modules'],
+    moduleNameMapper: {
+        '^obsidian$': '<rootDir>/test/__mocks__/obsidian.ts',
+    },
 };

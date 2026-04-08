@@ -2,8 +2,8 @@ import { addIcon, Plugin, type TAbstractFile } from "obsidian";
 import type { SlidesExtendedSettings } from "./@types";
 import { EmbeddedSlideProcessor } from "./obsidian/embeddedSlideProcessor";
 import { ObsidianUtils } from "./obsidian/obsidianUtils";
+import { AutoCompleteSuggest } from "./obsidian/suggesters/AutoCompleteSuggester";
 import { LineSelectionListener } from "./obsidian/suggesters/lineSelectionListener";
-// import { AutoCompleteSuggest } from './obsidian/suggesters/AutoCompleteSuggester';
 import {
     REVEAL_PREVIEW_VIEW,
     RevealPreviewView,
@@ -22,7 +22,7 @@ export class SlidesExtendedPlugin extends Plugin {
     obsidianUtils: ObsidianUtils;
 
     private revealServer: RevealServer;
-    // private autoCompleteSuggester: AutoCompleteSuggest;
+    private autoCompleteSuggester: AutoCompleteSuggest;
     private target: TAbstractFile;
     private slideProcessor: EmbeddedSlideProcessor;
     private port: number;
@@ -151,14 +151,12 @@ export class SlidesExtendedPlugin extends Plugin {
             console.debug("Slides Extended caught an error", err);
         }
 
-        // this.autoCompleteSuggester = new AutoCompleteSuggest(this.app);
+        this.autoCompleteSuggester = new AutoCompleteSuggest(this.app);
 
-        // if (this.settings.autoComplete == 'always') {
-        //     this.autoCompleteSuggester.activate();
-        // } else {
-        //     this.autoCompleteSuggester.deactivate();
-        // }
-        // this.registerEditorSuggest(this.autoCompleteSuggester);
+        if (this.settings.autoComplete !== "never") {
+            this.autoCompleteSuggester.activate();
+        }
+        this.registerEditorSuggest(this.autoCompleteSuggester);
     };
 
     getViewInstance(): RevealPreviewView {
@@ -194,21 +192,21 @@ export class SlidesExtendedPlugin extends Plugin {
         const instance = this.getViewInstance();
         if (instance) {
             this.app.workspace.detachLeavesOfType(REVEAL_PREVIEW_VIEW);
-            // if (this.settings.autoComplete == 'inPreview') {
-            //     this.autoCompleteSuggester.deactivate();
-            // }
+            if (this.settings.autoComplete === "inPreview") {
+                this.autoCompleteSuggester.deactivate();
+            }
         } else {
-            // if (this.settings.autoComplete != 'never') {
-            //     this.autoCompleteSuggester.activate();
-            // }
+            if (this.settings.autoComplete !== "never") {
+                this.autoCompleteSuggester.activate();
+            }
             await this.showView();
         }
     }
 
     hideView() {
-        // if (this.settings.autoComplete == 'inPreview') {
-        //     this.autoCompleteSuggester.deactivate();
-        // }
+        if (this.settings.autoComplete === "inPreview") {
+            this.autoCompleteSuggester.deactivate();
+        }
     }
 
     async showView() {
