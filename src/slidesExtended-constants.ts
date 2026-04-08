@@ -32,6 +32,8 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     mathEngine: "katex",
     scripts: "",
     remoteScripts: "",
+    separator: "",
+    verticalSeparator: "",
 };
 export const DEFAULTS: Options = {
     bg: "",

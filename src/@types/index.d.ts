@@ -34,6 +34,8 @@ export interface SlidesExtendedSettings {
     mathEngine: "katex" | "mathjax";
     scripts: string;
     remoteScripts: string;
+    separator: string;
+    verticalSeparator: string;
 }
 
 export type ChartJsOptions = {

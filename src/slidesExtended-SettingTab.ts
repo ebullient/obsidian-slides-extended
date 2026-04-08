@@ -307,6 +307,34 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             });
 
         new Setting(containerEl)
+            .setName("Default horizontal slide separator")
+            .setDesc(
+                "Regex pattern used to split horizontal slides. Default: \\r?\\n---\\r?\\n. Override per-note with the 'separator' property.",
+            )
+            .addText((text) =>
+                text
+                    .setPlaceholder("\\r?\\n---\\r?\\n")
+                    .setValue(this.newSettings.separator)
+                    .onChange((value) => {
+                        this.newSettings.separator = value;
+                    }),
+            );
+
+        new Setting(containerEl)
+            .setName("Default vertical slide separator")
+            .setDesc(
+                "Regex pattern used to split vertical slides. Default: \\r?\\n--\\r?\\n. Override per-note with the 'verticalSeparator' property.",
+            )
+            .addText((text) =>
+                text
+                    .setPlaceholder("\\r?\\n--\\r?\\n")
+                    .setValue(this.newSettings.verticalSeparator)
+                    .onChange((value) => {
+                        this.newSettings.verticalSeparator = value;
+                    }),
+            );
+
+        new Setting(containerEl)
             .setName("Presentation Plugins")
             .setHeading()
             .setDesc(
