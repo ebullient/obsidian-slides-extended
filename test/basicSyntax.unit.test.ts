@@ -156,6 +156,42 @@ Scale image to a width of 300x100 px, disable controls
 });
 
 
+test('Basic Markdown Syntax > Audio', () => {
+    when(MockedObsidianUtils.findMediaFile('narration.mp3')).thenCall(arg => {
+        return '/documentation/narration.mp3';
+    });
+
+    when(MockedObsidianUtils.findMediaFile('sound.ogg')).thenCall(arg => {
+        return '/documentation/sound.ogg';
+    });
+
+    const input = `
+Insert audio with obsidian markdown syntax
+
+![[narration.mp3]]
+
+---
+
+Audio with autoplay via data attribute
+
+![[narration.mp3]] <!-- element data-autoplay -->
+
+---
+
+Audio with controls disabled
+
+![[sound.ogg]] <!-- element controls="false" -->
+
+`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
+});
+
+
 test('Basic Markdown Syntax > Links', () => {
     const input = `External Links
 

@@ -97,8 +97,20 @@ export function isVideo(path: string) {
         path.endsWith("avi") ||
         path.endsWith("mp4") ||
         path.endsWith("mov") ||
-        path.endsWith("ogg") ||
+        path.endsWith("ogv") ||
         path.endsWith("webm")
+    );
+}
+
+export function isAudio(path: string) {
+    return (
+        path.endsWith("mp3") ||
+        path.endsWith("ogg") ||
+        path.endsWith("oga") ||
+        path.endsWith("wav") ||
+        path.endsWith("m4a") ||
+        path.endsWith("flac") ||
+        path.endsWith("opus")
     );
 }
 
@@ -122,6 +134,9 @@ export function mimeTypeFor(fileName: string) {
             return "video/mp4";
         case "ogv":
             return "video/ogg";
+        case "ogg":
+        case "oga":
+            return "audio/ogg";
         case "png":
             return "image/png";
         case "svg":
@@ -130,6 +145,16 @@ export function mimeTypeFor(fileName: string) {
             return "video/webm";
         case "webp":
             return "image/webp";
+        case "mp3":
+            return "audio/mpeg";
+        case "wav":
+            return "audio/wav";
+        case "m4a":
+            return "audio/mp4";
+        case "flac":
+            return "audio/flac";
+        case "opus":
+            return "audio/ogg; codecs=opus";
         default:
             return "";
     }

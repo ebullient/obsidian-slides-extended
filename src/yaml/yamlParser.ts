@@ -123,6 +123,7 @@ export class YamlParser {
         const properties = [
             "enableOverview",
             "enableChalkboard",
+            "enableAudioSlideshow",
             "enableMenu",
             "enableCustomControls",
             "enableTimeBar",

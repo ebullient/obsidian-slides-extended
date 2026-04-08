@@ -1,5 +1,12 @@
 import type { Processor } from "src/@types";
-import { isIcon, isImage, isUrl, isVideo, mimeTypeFor } from "src/util";
+import {
+    isAudio,
+    isIcon,
+    isImage,
+    isUrl,
+    isVideo,
+    mimeTypeFor,
+} from "src/util";
 import { CommentParser } from "../comment";
 import type { ObsidianUtils } from "../obsidianUtils";
 
@@ -8,10 +15,10 @@ export class MediaProcessor implements Processor {
     private parser: CommentParser;
 
     private markdownMediaRegex =
-        /(!)?\[([^\]]*)\]\((.*?(?:jpg|png|jpeg|gif|bmp|webp|svg|avi|mp4|ogg|mov|webm)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
+        /(!)?\[([^\]]*)\]\((.*?(?:jpg|png|jpeg|gif|bmp|webp|svg|avi|mp4|ogv|mov|webm|mp3|ogg|oga|wav|m4a|flac|opus)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
 
     private wikilinkMediaRegex =
-        /\[\[(.*?(?:jpg|png|jpeg|webp|gif|bmp|svg|avi|mp4|ogg|mov|webm))\|?([^\]]*)??\]\]/gi;
+        /\[\[(.*?(?:jpg|png|jpeg|webp|gif|bmp|svg|avi|mp4|ogv|mov|webm|mp3|ogg|oga|wav|m4a|flac|opus))\|?([^\]]*)??\]\]/gi;
 
     constructor(utils: ObsidianUtils) {
         this.utils = utils;
@@ -84,16 +91,17 @@ export class MediaProcessor implements Processor {
             let filePath = mediaPath;
             const icon = isIcon(filePath);
             const video = isVideo(filePath);
+            const audio = isAudio(filePath);
             const image = isUrl(filePath) || isImage(filePath);
 
-            if (!icon && !image && !video) {
-                // This is not an icon or an image. Leave it.
+            if (!icon && !image && !video && !audio) {
+                // This is not an media file. Leave it.
                 result += line.substring(lastIndex, m.index) + match;
                 lastIndex = this.markdownMediaRegex.lastIndex;
                 continue;
             }
 
-            if ((image || video) && !isUrl(filePath)) {
+            if ((image || video || audio) && !isUrl(filePath)) {
                 // This is a regular file (of some kind)
                 // it will include /local-file-url references, too
                 filePath = this.utils.findMediaFile(mediaPath);
@@ -108,8 +116,8 @@ export class MediaProcessor implements Processor {
             }
 
             let update = "";
-            if (embed === "!" && (icon || image || video)) {
-                update = this.createImageElement(filePath, alt, commentString);
+            if (embed === "!" && (icon || image || video || audio)) {
+                update = this.createMediaElement(filePath, alt, commentString);
             } else {
                 update = this.updateMarkdownLink(
                     line,
@@ -140,7 +148,7 @@ export class MediaProcessor implements Processor {
         return updated;
     }
 
-    private createImageElement(
+    private createMediaElement(
         filePath: string,
         alt: string,
         commentString: string,
@@ -164,41 +172,46 @@ export class MediaProcessor implements Processor {
         if (isIcon(filePath)) {
             result = `<i class="${filePath}" ${this.parser.buildAttributes(comment)}></i>\n`;
         } else {
-            if (comment.hasStyle("width") && !comment.hasStyle("object-fit")) {
-                comment.addStyle("object-fit", "fill");
-            }
+            if (!isAudio(filePath)) {
+                if (
+                    comment.hasStyle("width") &&
+                    !comment.hasStyle("object-fit")
+                ) {
+                    comment.addStyle("object-fit", "fill");
+                }
 
-            if (!comment.hasStyle("align-self")) {
-                if (comment.hasAttribute("align")) {
-                    const align = comment.getAttribute("align");
+                if (!comment.hasStyle("align-self")) {
+                    if (comment.hasAttribute("align")) {
+                        const align = comment.getAttribute("align");
 
-                    switch (align) {
-                        case "left":
-                            comment.addStyle("align-self", "start");
-                            break;
-                        case "right":
-                            comment.addStyle("align-self", "end");
-                            break;
-                        case "center":
-                            comment.addStyle("align-self", "center");
-                            break;
-                        case "stretch":
-                            comment.addStyle("align-self", "stretch");
-                            comment.addStyle("object-fit", "cover");
-                            comment.addStyle("height", "100%");
-                            comment.addStyle("width", "100%");
-                            break;
-                        default:
-                            break;
+                        switch (align) {
+                            case "left":
+                                comment.addStyle("align-self", "start");
+                                break;
+                            case "right":
+                                comment.addStyle("align-self", "end");
+                                break;
+                            case "center":
+                                comment.addStyle("align-self", "center");
+                                break;
+                            case "stretch":
+                                comment.addStyle("align-self", "stretch");
+                                comment.addStyle("object-fit", "cover");
+                                comment.addStyle("height", "100%");
+                                comment.addStyle("width", "100%");
+                                break;
+                            default:
+                                break;
+                        }
+                        comment.deleteAttribute("align");
                     }
-                    comment.deleteAttribute("align");
+                }
+
+                if (!comment.hasStyle("object-fit")) {
+                    comment.addStyle("object-fit", "scale-down");
                 }
             }
-
-            if (!comment.hasStyle("object-fit")) {
-                comment.addStyle("object-fit", "scale-down");
-            }
-            if (isVideo(filePath)) {
+            if (isVideo(filePath) || isAudio(filePath)) {
                 if (!comment.hasAttribute("controls")) {
                     comment.addAttribute("controls", "");
                 } else if (comment.getAttribute("controls") === "false") {
@@ -206,9 +219,14 @@ export class MediaProcessor implements Processor {
                 }
             }
 
-            const html = isVideo(filePath)
-                ? `<video ${this.parser.buildAttributes(comment)}><source src="${filePath}" alt="${alt}" type="${type}" /></video>\n`
-                : `<img src="${filePath}" alt="${alt}" ${this.parser.buildAttributes(comment)}>\n`;
+            let html: string;
+            if (isAudio(filePath)) {
+                html = `<audio ${this.parser.buildAttributes(comment)}><source src="${filePath}" type="${type}" /></audio>\n`;
+            } else if (isVideo(filePath)) {
+                html = `<video ${this.parser.buildAttributes(comment)}><source src="${filePath}" alt="${alt}" type="${type}" /></video>\n`;
+            } else {
+                html = `<img src="${filePath}" alt="${alt}" ${this.parser.buildAttributes(comment)}>\n`;
+            }
             result = html;
         }
         return result;

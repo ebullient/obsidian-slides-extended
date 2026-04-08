@@ -127,6 +127,9 @@
     {{#enableChalkboard}}
     <script src="{{{base}}}plugin/chalkboard/plugin.js"></script>
     {{/enableChalkboard}}
+    {{#enableAudioSlideshow}}
+    <script src="{{{base}}}plugin/audio-slideshow/plugin.js"></script>
+    {{/enableAudioSlideshow}}
     {{#enablePointer}}
     <script src="{{{base}}}plugin/reveal-pointer/pointer.js"></script>
     {{/enablePointer}}
@@ -209,6 +212,9 @@
                 {{#enableChalkboard}}
                 RevealChalkboard,
                 {{/enableChalkboard}}
+                {{#enableAudioSlideshow}}
+                RevealAudioSlideshow,
+                {{/enableAudioSlideshow}}
                 {{#timeForPresentation}}
                 {{#enableTimeBar}}
                 ElapsedTimeBar
@@ -265,8 +271,13 @@
             {{#enableMenu}}
             menu: {
                 loadIcons: false
-            }
+            },
             {{/enableMenu}}
+            {{#enableAudioSlideshow}}
+            audio: {
+                defaultAudios: false,
+            },
+            {{/enableAudioSlideshow}}
         };
 
         if ( pageInIframe() ) {

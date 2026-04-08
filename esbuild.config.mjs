@@ -188,6 +188,13 @@ const parameters = {
         }),
         copy({
             assets: {
+                from: ['node_modules/reveal.js-plugins/audio-slideshow/plugin.js',
+                       'node_modules/reveal.js-plugins/audio-slideshow/recorder.js'],
+                to: ['./plugin/audio-slideshow/'],
+            }
+        }),
+        copy({
+            assets: {
                 from: ['node_modules/mathjax/**/*'],
                 to: ['./plugin/math/mathjax/'],
             }

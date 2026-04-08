@@ -133,6 +133,7 @@ export class RevealRenderer {
 
         const {
             enableChalkboard,
+            enableAudioSlideshow,
             enableCustomControls,
             enableOverview,
             enableMenu,
@@ -161,6 +162,7 @@ export class RevealRenderer {
             base,
             enableCustomControls,
             enableChalkboard,
+            enableAudioSlideshow,
             enableOverview,
             enableMenu,
             enablePointer,

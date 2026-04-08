@@ -80,6 +80,10 @@
     <script src="{{{base}}}plugin/chart/chart.umd.js"></script>
     <script src="{{{base}}}plugin/chart/plugin.js"></script>
 
+    {{#enableAudioSlideshow}}
+    <script src="{{{base}}}plugin/audio-slideshow/plugin.js"></script>
+    {{/enableAudioSlideshow}}
+
     {{#scriptPaths}}
     <script src="{{{base}}}{{{.}}}"></script>
     {{/scriptPaths}}
@@ -102,16 +106,13 @@
         }
 
         function isLight(color) {
-            let hex = color.replace('#', '');
+            // normalize to rgb(a)
+            const optionEl = document.createElement("option");
+            optionEl.style.color = color;
+            const normalizedColor = optionEl.style.color;
 
-            // convert #fff => #ffffff
-            if (hex.length == 3) {
-                hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
-            }
+            const [_, c_r, c_g, c_b] = normalizedColor.match(/(\d+), (\d+), (\d+)/);
 
-            const c_r = parseInt(hex.substr(0, 2), 16);
-            const c_g = parseInt(hex.substr(2, 2), 16);
-            const c_b = parseInt(hex.substr(4, 2), 16);
             const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
             return brightness > 155;
         }
@@ -144,6 +145,9 @@
                 {{/isMathJax}}
                 RevealMermaid,
                 RevealChart,
+                {{#enableAudioSlideshow}}
+                RevealAudioSlideshow,
+                {{/enableAudioSlideshow}}
             ],
             markdown: {
                 gfm: true,
@@ -159,6 +163,11 @@
                 mathjax: '{{{base}}}plugin/math/mathjax/tex-chtml.js',
             },
             {{/isMathJax}}
+            {{#enableAudioSlideshow}}
+            audio: {
+                defaultAudios: false,
+            },
+            {{/enableAudioSlideshow}}
         };
 
         // options from URL query string
@@ -176,17 +185,17 @@
     <script>
         /**
          * KaTeX Equation Numbering Note
-         * 
+         *
          * KaTeX maintains a global equation counter for \begin{equation} environments.
-         * When navigating between slides, reveal.js math plugin may re-render math, causing 
+         * When navigating between slides, reveal.js math plugin may re-render math, causing
          * equation numbers to change randomly.
-         * 
+         *
          * Note: Regular $$ blocks don't have equation numbers - only \begin{equation} does.
-         * 
+         *
          * If you experience issues with equation numbers changing:
          * Use manual \tag{} commands: \begin{equation}\tag{1} ... \end{equation}
          */
-        
+
         Reveal.initialize(options);
     </script>
     <!-- created with {{! ignore me }}Slides Extended embed.html template -->

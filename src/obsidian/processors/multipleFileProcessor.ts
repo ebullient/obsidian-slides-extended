@@ -1,5 +1,5 @@
 import type { Processor } from "src/@types";
-import { isIcon, isImage, isUrl, isVideo } from "src/util";
+import { isAudio, isIcon, isImage, isUrl, isVideo } from "src/util";
 import type { ObsidianUtils } from "../obsidianUtils";
 
 export class MultipleFileProcessor implements Processor {
@@ -66,7 +66,13 @@ export class MultipleFileProcessor implements Processor {
                 header = split[1];
             }
 
-            if (isImage(link) || isIcon(link) || isUrl(link) || isVideo(link)) {
+            if (
+                isImage(link) ||
+                isIcon(link) ||
+                isUrl(link) ||
+                isVideo(link) ||
+                isAudio(link)
+            ) {
                 return matched;
             }
 
