@@ -18,11 +18,6 @@ on:
         default: true
         required: true
         type: boolean
-      retry:
-        description: "Retry release (clear created tag)"
-        default: false
-        required: true
-        type: boolean
 
 env:
   GH_BOT_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
@@ -33,134 +28,115 @@ jobs:
   build:
     permissions:
       contents: write
-      actions: write
+      id-token: write
+      attestations: write
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.build.outputs.version }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      # persist-credentials required: this step pushes commits and tags
+      # zizmor: ignore[artipacked]
       with:
         fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
       with:
-          version: 10
+        version: 10
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
       with:
-          node-version: '20'
-          cache: 'pnpm'
+        node-version: 24
+        cache: "pnpm"
 
     # Build the plugin
     - name: Build and Tag
       id: build
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RETRY: ${{ github.event.inputs.retry }}
-        VERSION: ${{ github.event.inputs.version }}
-        MANIFEST: ${{ github.event.inputs.update_manifest }}
-        BRAT: ${{ github.event.inputs.update_brat }}
+        INPUT_VERSION: ${{ github.event.inputs.version }}
+        INPUT_UPDATE_MANIFEST: ${{ github.event.inputs.update_manifest }}
+        INPUT_UPDATE_BRAT: ${{ github.event.inputs.update_brat }}
       run: |
-        echo "version: $VERSION"
-        echo "retry: $RETRY"
-        echo "update_manifest: $MANIFEST"
-        echo "update_brat: $BRAT"
+        echo "version: $INPUT_VERSION"
+        echo "update_manifest: $INPUT_UPDATE_MANIFEST"
+        echo "update_brat: $INPUT_UPDATE_BRAT"
 
-        git config user.name ${{ env.GH_BOT_NAME }}
-        git config user.email ${{ env.GH_BOT_EMAIL }}
+        git config user.name "$GH_BOT_NAME"
+        git config user.email "$GH_BOT_EMAIL"
 
         pnpm install --frozen-lockfile
-        pnpm run build
 
-        if [[ "$VERSION" == "test" ]]; then
-          RETRY=true
-          npm run preversion
-        else
-          if [[ "$RETRY" = "true" ]]; then
-            npm run preversion
-          else
-            npm version $VERSION --no-git-tag-version
-          fi
-          VERSION=$(grep '^    "version"' package.json | cut -d'"' -f4)
-          echo next version is $VERSION
+        npm version "$INPUT_VERSION" --no-git-tag-version
+        VERSION=$(grep '"version"' package.json | head -1 | cut -d'"' -f4)
+        echo "version $VERSION"
+
+        if git rev-parse "refs/tags/$VERSION" > /dev/null 2>&1; then
+          echo "🛑 Tag $VERSION already exists. Delete the release and tag manually, then re-run."
+          exit 1
         fi
 
-        TAG_EXISTS=$(git rev-parse "refs/tags/$VERSION" > /dev/null 2>&1; echo $?)
-        if [[ "$TAG_EXISTS" = "0" ]]; then
-          if [[ "$RETRY" = "true" ]]; then
-            gh release delete $VERSION --yes > /dev/null 2>&1 || true
-            git tag -d $VERSION > /dev/null 2>&1 || true
-            if git push --delete origin $VERSION
-            then
-              echo "🔥 Tag $VERSION deleted"
-            else
-              echo "🛑 Failed to delete $VERSION"
-              exit 1
-            fi
-          else
-            echo "🛑 Tag $VERSION already exists"
-            exit 1
-          fi
+        if [ "$INPUT_UPDATE_MANIFEST" = "true" ]; then
+          # shellcheck disable=SC2086
+          sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest.json
+        fi
+        if [ "$INPUT_UPDATE_BRAT" = "true" ]; then
+          # shellcheck disable=SC2086
+          sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest-beta.json
         fi
 
-        if [[ "$VERSION" != "test" ]]; then
-          sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' distVersion.json
-          if [ "$MANIFEST" = "true" ]; then
-            sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest.json
-          fi
-          if [ "$BRAT" = "true" ]; then
-            sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest-beta.json
-          fi
+        git add .
+        git status
+        git commit -m "🔖 $VERSION"
+        git push
 
-          git add .
-          git status
-          git commit -m "🔖 $VERSION"
-          git push
-        fi
-
-        git tag $VERSION
+        git tag "$VERSION"
         git push --tags
 
-        if [[ "$VERSION" == "test" ]]; then
-            touch release-notes.md
-        else
-            npm run brat-notes -- ${VERSION}
-        fi
-        echo "version=${VERSION}" >> $GITHUB_OUTPUT
-
+        npm run brat-notes -- "${VERSION}"
+        echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
 
     # Package the required files into a zip
     - name: Package
       run: |
+        cp ./build/main.js ./build/styles.css .
         mkdir tmp
         cp -r ./build/css ./build/dist ./build/plugin ./build/template distVersion.json tmp/
         cd tmp
-        zip -r ../${{ env.ZIP_ARTIFACT }} *
+        zip -r "../${ZIP_ARTIFACT}" *
         cd ..
+
+
+    # Attest build provenance for release artifacts
+    - name: Attest build artifacts
+      uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26  # v4.1.0
+      with:
+        subject-path: |
+          ${{ env.ZIP_ARTIFACT }}
+          ./main.js
+          ./styles.css
 
     # Create the release on github
     - name: Create Release
       id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        MANIFEST: ${{ github.event.inputs.update_manifest }}
-        BRAT: ${{ github.event.inputs.update_brat }}
+        INPUT_UPDATE_MANIFEST: ${{ github.event.inputs.update_manifest }}
+        RELEASE_VERSION: ${{ steps.build.outputs.version }}
       run: |
         prerelease=true
-        if [ "$MANIFEST" ]; then
+        if [ "$INPUT_UPDATE_MANIFEST" = "true" ]; then
             prerelease=false
         fi
 
-        gh release create "${{ steps.build.outputs.version }}" \
+        gh release create "$RELEASE_VERSION" \
             -F ./release-notes.md \
-            --title "Release ${{ steps.build.outputs.version }}" \
+            --title "$RELEASE_VERSION" \
             --verify-tag \
-            --prerelease=${prerelease}
-
-        gh release upload "${{ steps.build.outputs.version }}" --clobber \
-            "./${{ env.ZIP_ARTIFACT }}" \
-            './build/main.js#main.js' \
-            './build/styles.css#styles.css' \
+            --prerelease=${prerelease} \
+            "${ZIP_ARTIFACT}" \
+            './main.js' \
+            './styles.css' \
             './manifest.json' \
             './manifest-beta.json'
