@@ -3,7 +3,7 @@
   "name": "Slides Extended",
   "version": "2.3.3",
   "minAppVersion": "1.10.0",
-  "description": "Create markdown-based presentations using reveal.js",
+  "description": "Create markdown-based presentations using reveal.js.",
   "author": "Matthäus Szturc, continued by Erin Schnabel",
   "authorUrl": "https://github.com/ebullient",
   "isDesktopOnly": true
