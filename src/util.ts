@@ -98,7 +98,8 @@ export function isVideo(path: string) {
         path.endsWith("mp4") ||
         path.endsWith("mov") ||
         path.endsWith("ogv") ||
-        path.endsWith("webm")
+        path.endsWith("webm") ||
+        path.endsWith("mkv")
     );
 }
 
@@ -155,6 +156,8 @@ export function mimeTypeFor(fileName: string) {
             return "audio/flac";
         case "opus":
             return "audio/ogg; codecs=opus";
+        case "mkv":
+            return ""; // must be empty, video/x-matroshka does not work
         default:
             return "";
     }
