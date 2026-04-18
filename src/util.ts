@@ -156,8 +156,6 @@ export function mimeTypeFor(fileName: string) {
             return "audio/flac";
         case "opus":
             return "audio/ogg; codecs=opus";
-        case "mkv":
-            return ""; // must be empty, video/x-matroshka does not work
         default:
             return "";
     }
