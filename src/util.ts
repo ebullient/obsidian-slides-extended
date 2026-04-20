@@ -98,7 +98,8 @@ export function isVideo(path: string) {
         path.endsWith("mp4") ||
         path.endsWith("mov") ||
         path.endsWith("ogv") ||
-        path.endsWith("webm")
+        path.endsWith("webm") ||
+        path.endsWith("mkv")
     );
 }
 
