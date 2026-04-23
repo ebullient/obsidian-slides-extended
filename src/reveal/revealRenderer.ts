@@ -221,9 +221,12 @@ export class RevealRenderer {
     }
 
     private toExternalPath(urlPath: string): string {
+        // On Windows, path.join() uses '\' but vaultDirectory has a trailing '/';
+        // normalize both sides so the replace always matches.
         return urlPath
-            .replace(this.utils.pluginDirectory, "")
-            .replace(this.utils.vaultDirectory, "");
+            .replace(/\\/g, "/")
+            .replace(this.utils.pluginDirectory.replace(/\\/g, "/"), "")
+            .replace(this.utils.vaultDirectory.replace(/\\/g, "/"), "");
     }
 
     private async getPageTemplate(embed = false) {
