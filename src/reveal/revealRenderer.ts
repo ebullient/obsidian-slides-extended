@@ -221,17 +221,12 @@ export class RevealRenderer {
     }
 
     private toExternalPath(urlPath: string): string {
-        // Normalize path separators to forward slashes before stripping base
-        // directories. On Windows, path.join() normalises all separators to '\',
-        // but vaultDirectory is constructed as `${getBasePath()}/` (trailing
-        // forward slash). The mismatch means the string-replace never matches on
-        // Windows and the full absolute path leaks into the <link> href → 404.
-        // Normalising both sides to '/' is a no-op on macOS/Linux (path.sep is
-        // already '/') so this does not change behaviour on non-Windows platforms.
-        const normalized = urlPath.split(path.sep).join("/");
-        return normalized
-            .replace(this.utils.pluginDirectory.split(path.sep).join("/"), "")
-            .replace(this.utils.vaultDirectory.split(path.sep).join("/"), "");
+        // On Windows, path.join() uses '\' but vaultDirectory has a trailing '/';
+        // normalize both sides so the replace always matches.
+        return urlPath
+            .replace(/\\/g, "/")
+            .replace(this.utils.pluginDirectory.replace(/\\/g, "/"), "")
+            .replace(this.utils.vaultDirectory.replace(/\\/g, "/"), "");
     }
 
     private async getPageTemplate(embed = false) {
