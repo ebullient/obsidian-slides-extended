@@ -2,7 +2,6 @@ import type { Options, Processor } from "src/@types";
 import { processBySlide, skipMathCodeBlocks } from "../obsidianUtils";
 
 export class FormatProcessor implements Processor {
-    private boldRegex = /(?<=[^_]|^)__([^_]+)__(?!_)/gm;
     private markRegex = /==([^=]*)==/gm;
     private commentRegex = /%%([^%]*)%%/gm;
 
@@ -19,7 +18,6 @@ export class FormatProcessor implements Processor {
 
     private formatText(markdown: string): string {
         return markdown
-            .replaceAll(this.boldRegex, (_, args) => `**${args.trim()}**`)
             .replaceAll(this.markRegex, "<mark>$1</mark>")
             .replaceAll(this.commentRegex, "");
     }

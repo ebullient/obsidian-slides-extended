@@ -9,12 +9,13 @@ theme: beige.css
 
 # Callouts
 
-_emphasis_ **bold** ==highlight==   
-*emphasis*  __bold__ ~~strikethrough~~
+_emphasis_ **bold** ==highlight==  ***triple***  
+*emphasis*  __bold__ ~~strikethrough~~ ___triple___  
+word__not_bold<!-- element class="animate__fadeIn" -->
 
 > [!danger] Attention *for ==real==*!
-> _emphasis_ **bold** ==highlight==   
-> *emphasis*  __bold__ ~~strikethrough~~
+> _emphasis_ **bold** ==highlight==  _**triple**_  
+> *emphasis*  __bold__ ~~strikethrough~~ *__triple__*
 
 > [!warning] Single *lines* should **work**, too
 

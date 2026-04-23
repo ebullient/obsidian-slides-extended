@@ -22,11 +22,11 @@ test('Basic Markdown Syntax > Headers', () => {
 test('Basic Markdown Syntax > Text style', () => {
     const input = `*This text will be italic*
 
-_This will also be italic_
+_This will also be italic_ _**strong italic**_
 
-**This text will be bold**
+**This text will be bold** ***strong italic***
 
-__This will also be bold__
+__This will also be bold__ ___strong italic___
 
 %%This is a Comment(Can't see it)%%
 
