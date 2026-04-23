@@ -15,7 +15,7 @@ export class MediaProcessor implements Processor {
     private parser: CommentParser;
 
     private markdownMediaRegex =
-        /(!)?\[([^\]]*)\]\((.*?(?:jpg|png|jpeg|gif|bmp|webp|svg|avi|mp4|ogv|mov|webm|mp3|ogg|oga|wav|m4a|flac|opus|mkv)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
+        /(!)?\[([^\]]*)\]\(((?:[^)(]|\([^)]*\))*?(?:jpg|png|jpeg|gif|bmp|webp|svg|avi|mp4|ogv|mov|webm|mp3|ogg|oga|wav|m4a|flac|opus|mkv)?)(?: ".*?")?\)\s?(<!--.*-->)?/gi;
 
     private wikilinkMediaRegex =
         /\[\[(.*?(?:jpg|png|jpeg|webp|gif|bmp|svg|avi|mp4|ogv|mov|webm|mp3|ogg|oga|wav|m4a|flac|opus|mkv))\|?([^\]]*)??\]\]/gi;

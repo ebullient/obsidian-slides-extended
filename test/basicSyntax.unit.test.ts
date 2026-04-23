@@ -114,6 +114,39 @@ Scale image to a width of 300x100 px
     return expect(result).toMatchSnapshot();
 });
 
+test('Basic Markdown Syntax > Images with parens in filename', () => {
+    when(MockedObsidianUtils.findMediaFile('image(1).jpg')).thenCall(arg => {
+        return '/documentation/image(1).jpg';
+    });
+
+    when(MockedObsidianUtils.findMediaFile('image (1).jpg')).thenCall(arg => {
+        return '/documentation/image (1).jpg';
+    });
+
+    when(MockedObsidianUtils.findMediaFile('image.jpg')).thenCall(arg => {
+        return '/documentation/image.jpg';
+    });
+
+    const input = `
+![[image(1).jpg]]
+
+---
+
+![[image (1).jpg]]
+
+---
+
+![image](image.jpg) (note)
+
+`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
+});
+
 test('Basic Markdown Syntax > Videos', () => {
     when(MockedObsidianUtils.findMediaFile('/local-file-url/Users/testUser/Desktop/video.mp4')).thenCall(arg => {
         return '/local-file-url/Users/testUser/Desktop/video.mp4';
