@@ -71,11 +71,9 @@ export class RevealPreviewView extends ItemView {
         );
 
         this.registerEvent(
-            this.app.workspace.on("active-leaf-change", () => {
-                const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-                if (view) {
-                    this.onLineChanged(view.editor.getCursor().line);
-                }
+            this.app.workspace.on("active-leaf-change", (leaf: WorkspaceLeaf | null) => {
+                if (!(leaf?.view instanceof MarkdownView)) return;
+                this.onLineChanged((leaf.view as MarkdownView).editor.getCursor().line);
             }),
         );
     }
@@ -147,7 +145,9 @@ export class RevealPreviewView extends ItemView {
 
         if (view && iframe) {
             const masterFile = this.getMasterFile();
-            const [x, y] = masterFile
+            const isChapterFile = masterFile !== null &&
+                this.normalizeFilename(view.file.name) !== this.normalizeFilename(masterFile.name);
+            const [x, y] = isChapterFile
                 ? this.getTargetSlideMultiFile(line, view, masterFile)
                 : this.getTargetSlide(line, view.data);
             iframe.contentWindow.postMessage(
