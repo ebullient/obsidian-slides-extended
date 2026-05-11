@@ -6,7 +6,7 @@ alwaysopen: false
 pre: "<i class='fa fa-paint-brush' ></i> "
 ---
 
-Slides Extended comes with a varity of diffrent themes built in:
+Slides Extended comes with a variety of different themes built in:
 
 - black (default)
 - white
