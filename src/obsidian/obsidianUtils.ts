@@ -286,6 +286,16 @@ export class ObsidianUtils implements MediaCollector {
         return file ? base + file.path : path;
     }
 
+    readFileRawByPath(filePath: string): string | null {
+        const absPath = this.absolute(filePath);
+        if (!absPath) return null;
+        try {
+            return readFileSync(absPath, { encoding: "utf-8" });
+        } catch {
+            return null;
+        }
+    }
+
     parseFile(filename: string, header: string) {
         const tfile = this.getTFile(filename);
 
