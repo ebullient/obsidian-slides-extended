@@ -1,4 +1,4 @@
-import { load } from "js-yaml";
+import { parseYaml } from "obsidian";
 import type { EmbeddedSlideParameters } from "../@types";
 import type { SlidesExtendedPlugin } from "../slidesExtended-Plugin";
 
@@ -30,12 +30,14 @@ export class EmbeddedSlideProcessor {
                 },
             });
         } catch (e) {
-            el.createEl("h2", { text: `Parameters invalid: ${e.message}` });
+            el.createEl("h2", {
+                text: `Parameters invalid: ${e instanceof Error ? e.message : String(e)}`,
+            });
         }
     };
 
     readParameters(src: string): EmbeddedSlideParameters {
-        const params = load(src) as EmbeddedSlideParameters;
+        const params = parseYaml(src) as EmbeddedSlideParameters;
         const slide = this.plugin.obsidianUtils.findFile(
             params.slide.toString(),
         );

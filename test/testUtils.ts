@@ -1,5 +1,4 @@
-import { loadFront } from 'yaml-front-matter';
-import { omit } from 'src/util';
+import { load } from 'js-yaml';
 import type { Options } from '../src/@types';
 
 export function prepare(input: string): { options: Options; markdown: string } {
@@ -12,10 +11,14 @@ function parseYamlFrontMatter(input: string): {
 	yamlOptions: any;
 	markdown: string;
 } {
-	const document = loadFront(input.replace(/^\uFEFF/, ''));
+	const stripped = input.replace(/^\uFEFF/, '');
+	const match = /^---\r?\n([\w\W]+?)\r?\n---\r?\n?([\w\W]*)/.exec(stripped);
+	if (!match) {
+		return { yamlOptions: {}, markdown: stripped };
+	}
 	return {
-		yamlOptions: omit(document, ['__content']),
-		markdown: document.__content || input,
+		yamlOptions: (load(match[1]) as any) ?? {},
+		markdown: match[2] || stripped,
 	};
 }
 

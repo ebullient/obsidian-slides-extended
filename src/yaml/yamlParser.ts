@@ -1,8 +1,8 @@
-import { loadFront } from "yaml-front-matter";
+import { parseYaml } from "obsidian";
 
 import type { Options, SlidesExtendedSettings } from "../@types";
 import { DEFAULTS } from "../slidesExtended-constants";
-import { isEmpty, isNil, omit, omitBy, pick } from "../util";
+import { isEmpty, isNil, omitBy, pick } from "../util";
 
 export class YamlParser {
     private settings: SlidesExtendedSettings;
@@ -141,17 +141,20 @@ export class YamlParser {
         yamlOptions: unknown;
         markdown: string;
     } {
+        const stripped = input.replace(/^\uFEFF/, "");
+        const match = /^---\r?\n([\w\W]+?)\r?\n---\r?\n?([\w\W]*)/.exec(
+            stripped,
+        );
+        if (!match) {
+            return { yamlOptions: {}, markdown: stripped };
+        }
         try {
-            const document = loadFront(input.replace(/^\uFEFF/, ""));
             return {
-                yamlOptions: omit(document, ["__content"]),
-                markdown: document.__content || input,
+                yamlOptions: parseYaml(match[1]) ?? {},
+                markdown: match[2] || stripped,
             };
         } catch (_error) {
-            return {
-                yamlOptions: {},
-                markdown: input,
-            };
+            return { yamlOptions: {}, markdown: stripped };
         }
     }
 }

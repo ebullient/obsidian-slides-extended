@@ -1,3 +1,5 @@
+export { load as parseYaml } from "js-yaml";
+
 export class EditorSuggest<T> {
     context: unknown = null;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
