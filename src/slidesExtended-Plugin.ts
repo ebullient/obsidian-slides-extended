@@ -203,7 +203,7 @@ export class SlidesExtendedPlugin extends Plugin {
 
     hideView() {
         if (this.settings.autoComplete === "inPreview") {
-            this.autoCompleteSuggester.deactivate();
+            this.autoCompleteSuggester?.deactivate();
         }
     }
 
