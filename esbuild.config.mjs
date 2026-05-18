@@ -21,9 +21,9 @@ const map = {
     'src/main.ts': 'main',
     'src/scss/styles.scss': 'styles',
     'src/scss/layout/slides-extended.scss': 'css/slides-extended',
-    'reveal-plugin/reveal.js-elapsed-time-bar/elapsed-time-bar.js': 'plugin/elapsed-time-bar/elapsed-time-bar',
-    'reveal-plugin/load-mathjax.js': 'plugin/load-mathjax',
-    'reveal-plugin/obsidian-markdown.js': 'plugin/obsidian-markdown',
+    'reveal/plugin/reveal.js-elapsed-time-bar/elapsed-time-bar.js': 'plugin/elapsed-time-bar/elapsed-time-bar',
+    'reveal/plugin/load-mathjax.js': 'plugin/load-mathjax',
+    'reveal/plugin/obsidian-markdown.js': 'plugin/obsidian-markdown',
 };
 
 const resolveRevealJsPlugins = {
@@ -116,7 +116,7 @@ const parameters = {
         }),
         copy({
             assets: {
-                from: ['src/template/**/*'],
+                from: ['reveal/template/**/*'],
                 to: ['./template/']
             }
         }),

@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import Mustache from "mustache";
 
-const TEMPLATE_DIR = "./src/template";
+const TEMPLATE_DIR = "./reveal/template";
 
 describe("Script injection in templates", () => {
     describe("reveal.html", () => {

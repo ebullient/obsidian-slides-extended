@@ -2,7 +2,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const BUILD_DIR = process.env.OUTDIR || "./build";
-const TEMPLATE_DIR = "./src/template";
+const TEMPLATE_DIR = "./reveal/template";
 
 describe("Build Validation", () => {
     describe("Template References", () => {
