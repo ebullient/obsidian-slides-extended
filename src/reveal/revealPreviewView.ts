@@ -4,8 +4,8 @@ import {
     type Menu,
     type WorkspaceLeaf,
 } from "obsidian";
-import type { SlidesExtendedPlugin } from "src/slidesExtended-Plugin";
 import type { Options, SlidesExtendedSettings } from "../@types";
+import type { SlidesExtendedPlugin } from "../slidesExtended-Plugin";
 import { YamlParser } from "../yaml/yamlParser";
 
 export const REVEAL_PREVIEW_VIEW = "reveal-preview-view";
@@ -14,6 +14,7 @@ export class RevealPreviewView extends ItemView {
     url = "about:blank";
     private home: URL;
     private onCloseListener: () => void;
+    private boundOnMessage = (ev: MessageEvent) => this.onMessage(ev);
 
     private urlRegex = /#\/(\d*)(?:\/(\d*))?(?:\/(\d*))?/;
     private yaml: YamlParser;
@@ -51,13 +52,10 @@ export class RevealPreviewView extends ItemView {
             });
         }
 
-        window.addEventListener("message", this.onMessage.bind(this));
+        window.addEventListener("message", this.boundOnMessage);
     }
 
-    onPaneMenu(
-        menu: Menu,
-        source: "more-options" | "tab-header" | string,
-    ): void {
+    onPaneMenu(menu: Menu, source: string): void {
         super.onPaneMenu(menu, source);
 
         if (source !== "more-options") {
@@ -72,7 +70,7 @@ export class RevealPreviewView extends ItemView {
         });
         menu.addItem((item) => {
             item.setIcon("install")
-                .setTitle("Export as html")
+                .setTitle("Export as HTML")
                 .onClick(() => this.exportAsHtml());
         });
     }
@@ -92,14 +90,15 @@ export class RevealPreviewView extends ItemView {
     }
 
     onMessage(msg: MessageEvent) {
-        if (msg.data.includes("?export")) {
-            this.setUrl(msg.data.split("?")[0]);
+        const data = String(msg.data);
+        if (data.includes("?export")) {
+            this.setUrl(data.split("?")[0]);
             return;
         }
 
-        this.setUrl(msg.data, false);
+        this.setUrl(data, false);
 
-        const url = new URL(msg.data);
+        const url = new URL(data);
         let filename = decodeURI(url.pathname);
         filename = filename.substring(filename.lastIndexOf("/") + 1);
 
@@ -270,7 +269,7 @@ export class RevealPreviewView extends ItemView {
     }
 
     async onClose() {
-        window.removeEventListener("message", this.onMessage);
+        window.removeEventListener("message", this.boundOnMessage);
         this.onCloseListener();
     }
 

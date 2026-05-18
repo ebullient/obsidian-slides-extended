@@ -32,7 +32,8 @@ export class SlidesExtendedDistribution {
             return true;
         }
         const rawdata = readFileSync(versionFile, { encoding: "utf-8" });
-        const distVersion = JSON.parse(rawdata).version;
+        const distVersion = (JSON.parse(rawdata) as { version: string })
+            .version;
         return distVersion !== this.plugin.manifest.version;
     }
 
@@ -69,18 +70,21 @@ export class SlidesExtendedDistribution {
             const contents = await zip.loadAsync(response.arrayBuffer);
             const pluginDirectory = this.pluginDirectory;
 
+            const writes: Promise<void>[] = [];
             for (const filename of Object.keys(contents.files)) {
-                if (!contents.files[filename].dir) {
-                    zip.file(filename)
-                        .async("nodebuffer")
-                        .then((content) => {
+                const entry = zip.file(filename);
+                if (entry && !contents.files[filename].dir) {
+                    writes.push(
+                        entry.async("nodebuffer").then((content) => {
                             const dest = path.join(pluginDirectory, filename);
                             const dir = path.dirname(dest);
                             mkdirSync(dir, { recursive: true });
                             writeFileSync(dest, content);
-                        });
+                        }),
+                    );
                 }
             }
+            await Promise.all(writes);
 
             // Update successful, remove backup
             if (didBackup && existsSync(backupDir)) {

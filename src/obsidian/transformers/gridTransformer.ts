@@ -1,4 +1,5 @@
-import { YamlStore } from "src/yaml/yamlStore";
+import type { Alignment } from "../../@types";
+import { YamlStore } from "../../yaml/yamlStore";
 import type { AttributeTransformer, Properties } from "./index";
 
 export class GridTransformer implements AttributeTransformer {
@@ -74,14 +75,20 @@ export class GridTransformer implements AttributeTransformer {
                 case "row":
                     element.addStyle("display", "flex");
                     element.addStyle("flex-direction", "row");
-                    element.addStyle("align-items", alignItems);
+                    element.addStyle(
+                        "align-items",
+                        this.alignToString(alignItems),
+                    );
                     element.addStyle("justify-content", justifyCtx);
                     element.addClass("flex-even");
                     break;
                 default: // col
                     element.addStyle("display", "flex");
                     element.addStyle("flex-direction", "column");
-                    element.addStyle("align-items", alignItems);
+                    element.addStyle(
+                        "align-items",
+                        this.alignToString(alignItems),
+                    );
                     element.addStyle("justify-content", justifyCtx);
                     break;
             }
@@ -94,10 +101,14 @@ export class GridTransformer implements AttributeTransformer {
         }
     }
 
+    alignToString(alignment: Alignment): string {
+        return alignment ?? "center";
+    }
+
     getAlignment(
         input: string,
         flow: string,
-    ): [string, string, string, string] {
+    ): [Alignment, Alignment, Alignment, Alignment] {
         const direction = flow ?? "col";
 
         switch (input) {
@@ -162,7 +173,11 @@ export class GridTransformer implements AttributeTransformer {
         }
     }
 
-    read(drag: string, drop: string, isAbsolute: boolean): Map<string, number> {
+    read(
+        drag: string,
+        drop: string,
+        isAbsolute: boolean,
+    ): Map<string, number> | undefined {
         try {
             const result = new Map<string, number>();
 
@@ -177,7 +192,7 @@ export class GridTransformer implements AttributeTransformer {
             result.set("maxWidth", 100);
             result.set("maxHeight", 100);
             return this.readValues(drag, drop, result, this.toRelativeValue);
-        } catch (_ex) {
+        } catch {
             return undefined;
         }
     }
@@ -187,7 +202,7 @@ export class GridTransformer implements AttributeTransformer {
         drop: string,
         result: Map<string, number>,
         valueTransformer: (max: number, input: string) => number,
-    ): Map<string, number> {
+    ): Map<string, number> | undefined {
         try {
             const [, width, height] = this.gridAttributeRegex.exec(drag);
             const [, x, y, name] = this.gridAttributeRegex.exec(drop);
@@ -233,12 +248,12 @@ export class GridTransformer implements AttributeTransformer {
                 }
             }
             return result;
-        } catch (_ex) {
+        } catch {
             return undefined;
         }
     }
 
-    toRelativeValue(max: number, input: string): number {
+    toRelativeValue(this: void, max: number, input: string): number {
         if (input.toLowerCase().endsWith("px")) {
             return (
                 (Number(input.toLowerCase().replace("px", "").trim()) / max) *
@@ -248,7 +263,7 @@ export class GridTransformer implements AttributeTransformer {
         return Number(input);
     }
 
-    toPixel(max: number, input: string): number {
+    toPixel(this: void, max: number, input: string): number {
         if (input.toLowerCase().endsWith("px")) {
             return Number(input.toLowerCase().replace("px", "").trim());
         }

@@ -40,7 +40,7 @@ export class BackgroundTransformer implements AttributeTransformer {
     readColor(bg: string) {
         try {
             return Color(bg);
-        } catch (_) {
+        } catch {
             return null;
         }
     }

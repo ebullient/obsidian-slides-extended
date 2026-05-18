@@ -39,12 +39,9 @@ export interface SlidesExtendedSettings {
 }
 
 export type ChartJsOptions = {
-    // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types
-    elements?: any;
-    // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types
-    plugins?: any;
-    // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types
-    scales?: any;
+    elements?: unknown;
+    plugins?: unknown;
+    scales?: unknown;
 };
 
 export interface Processor {
@@ -76,8 +73,7 @@ export type Options = {
     enableCustomControls: boolean;
     transition: string;
     mathEngine: "katex" | "mathjax";
-    // biome-ignore lint/suspicious/noExplicitAny: minimal adaptation to Chart.js types
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 export interface MediaCollector {
@@ -87,3 +83,5 @@ export interface MediaCollector {
 
     getAll(): string[];
 }
+
+export type Alignment = string | undefined;

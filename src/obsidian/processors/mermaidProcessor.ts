@@ -1,4 +1,4 @@
-import type { Processor } from "src/@types";
+import type { Processor } from "../../@types";
 
 export class MermaidProcessor implements Processor {
     process(markdown: string) {

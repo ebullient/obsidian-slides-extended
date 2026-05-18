@@ -1,4 +1,4 @@
-import type { Processor } from "src/@types";
+import type { Processor } from "../../@types";
 
 export class IconsProcessor implements Processor {
     private regex = /:(fas|far|fal|fad|fab)_([\w-]+):/g;

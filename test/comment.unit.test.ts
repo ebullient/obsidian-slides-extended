@@ -1,5 +1,5 @@
-import { CommentParser, Comment } from 'src/obsidian/comment';
-import { YamlStore } from 'src/yaml/yamlStore';
+import { CommentParser, Comment } from '../src/obsidian/comment';
+import { YamlStore } from '../src/yaml/yamlStore';
 import { getSlideOptions } from './testUtils';
 
 test('Parse Comment', () => {

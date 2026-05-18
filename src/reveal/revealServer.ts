@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { fastifyStatic, type ListDir, type ListFile } from "@fastify/static";
 import Fastify, { type FastifyInstance } from "fastify";
-import { Notice, Platform, type TAbstractFile } from "obsidian";
+import { Notice, Platform, requestUrl, type TAbstractFile } from "obsidian";
 import type { QueryString } from "../@types";
 import type { ObsidianUtils } from "../obsidian/obsidianUtils";
 import { RevealRenderer } from "./revealRenderer";
@@ -68,8 +68,7 @@ export class RevealServer {
         this._server.get<{ Querystring: QueryString }>(
             "/*",
             async (request, reply) => {
-                // @ts-expect-error
-                const file = request.params["*"];
+                const file = (request.params as Record<string, string>)["*"];
 
                 const renderMarkdownFile = async (filePath: string) => {
                     const markup = await this._revealRenderer.renderFile(
@@ -84,27 +83,27 @@ export class RevealServer {
                         "local-file-url",
                         Platform.resourcePathPrefix,
                     );
-                    const result = await fetch(urlpath).catch((error) => {
-                        console.error("local file error", error);
-                        return new Response(error, {
-                            status: error.status,
-                            statusText: error.messge,
-                        });
-                    });
-                    console.debug("Serving local file", file, urlpath, result);
-                    if (result.ok) {
-                        if (result.blob) {
-                            const blob = await result.blob();
-                            const bytes = await blob.arrayBuffer();
-                            reply.type(blob.type).send(Buffer.from(bytes));
+                    try {
+                        const result = await requestUrl(urlpath);
+                        console.debug(
+                            "Serving local file",
+                            file,
+                            urlpath,
+                            result.status,
+                        );
+                        if (result.status >= 200 && result.status < 300) {
+                            const bytes = result.arrayBuffer;
+                            reply.send(Buffer.from(bytes));
                         } else {
-                            console.info(
-                                "open a bug to handle this kind of response. Include this message",
-                                result,
-                            );
+                            reply.status(result.status).send();
                         }
-                    } else {
-                        reply.status(result.status).send(result.statusText);
+                    } catch (error) {
+                        const msg =
+                            error instanceof Error
+                                ? error.message
+                                : String(error);
+                        console.error("local file error", urlpath, msg);
+                        reply.status(404).send();
                     }
                 } else if (file.startsWith("embed/") && file.endsWith(".md")) {
                     console.debug("fetching embed file", file);
@@ -119,12 +118,12 @@ export class RevealServer {
                     console.debug("New presentation: ", file, this.filePath);
                     await renderMarkdownFile(this.filePath);
                 } else {
-                    let fetch = file;
+                    let serveFile = file;
                     const sourceDir = path.dirname(this.filePath);
                     if (sourceDir !== this._utils.vaultDirectory) {
                         const srcPath = path.join(sourceDir, file);
                         if (existsSync(srcPath)) {
-                            fetch = path
+                            serveFile = path
                                 .relative(this._utils.vaultDirectory, srcPath)
                                 .split(path.sep)
                                 .join("/");
@@ -135,9 +134,9 @@ export class RevealServer {
                         file,
                         sourceDir,
                         this._utils.vaultDirectory,
-                        fetch,
+                        serveFile,
                     );
-                    reply.sendFile(fetch);
+                    reply.sendFile(serveFile);
                 }
                 return reply;
             },
@@ -176,7 +175,7 @@ export class RevealServer {
             // Fastify cannot be restarted after close; create a fresh instance
             this.initServer();
             await this._server.listen({ host: this._host, port: this._port });
-            console.info(
+            console.debug(
                 "Slides Extended is ready to go.",
                 this._server.listeningOrigin.replace(
                     /(127\.0\.0\.1|\[::1\])/,
@@ -193,7 +192,7 @@ export class RevealServer {
 
     async stop() {
         if (this.running) {
-            console.info("stopping Slides Extended server", this.running);
+            console.debug("stopping Slides Extended server");
             await this._server.close();
         } else {
             console.debug("Slides Extended server is not running");

@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 import path from "node:path";
 import {
     copy,
@@ -6,7 +7,7 @@ import {
     outputFileSync,
     writeFile,
 } from "fs-extra";
-import { Platform } from "obsidian";
+import { Platform, requestUrl } from "obsidian";
 import type { ObsidianUtils } from "../obsidian/obsidianUtils";
 
 export class RevealExporter {
@@ -62,28 +63,24 @@ export class RevealExporter {
                     "/local-file-url",
                     Platform.resourcePathPrefix,
                 );
-                const result = await fetch(urlpath).catch((error) => {
-                    return new Response(null, {
-                        status: 404,
-                        statusText: error.messge,
-                    });
-                });
-                if (result.ok) {
-                    if (result.blob) {
-                        const blob = await result.blob();
-                        const bytes = await blob.arrayBuffer();
+                try {
+                    const result = await requestUrl(urlpath);
+                    if (result.status >= 200 && result.status < 300) {
                         outputFileSync(
                             path.join(folderDir, img),
-                            Buffer.from(bytes),
+                            Buffer.from(result.arrayBuffer),
                         );
                     } else {
-                        console.info(
-                            "open a bug to handle this kind of response. Include this message",
-                            result,
+                        console.error(
+                            "Failed to fetch local file",
+                            urlpath,
+                            result.status,
                         );
                     }
-                } else {
-                    console.error(result.statusText);
+                } catch (error) {
+                    const msg =
+                        error instanceof Error ? error.message : String(error);
+                    console.error("Failed to fetch local file", urlpath, msg);
                 }
                 continue;
             }

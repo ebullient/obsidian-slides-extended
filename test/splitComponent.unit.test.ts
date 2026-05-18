@@ -1,4 +1,4 @@
-import { MarkdownProcessor } from 'src/obsidian/markdownProcessor';
+import { MarkdownProcessor } from '../src/obsidian/markdownProcessor';
 import { prepare } from './testUtils';
 import { obsidianUtils as utilsInstance } from './__mocks__/mockObsidianUtils';
 

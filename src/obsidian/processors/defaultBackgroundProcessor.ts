@@ -1,5 +1,5 @@
-import type { Options, Processor } from "src/@types";
-import { CommentParser } from "src/obsidian/comment";
+import type { Options, Processor } from "../../@types";
+import { CommentParser } from "../../obsidian/comment";
 
 export class DefaultBackgroundProcessor implements Processor {
     private slideCommentRegex = /<!--\s*(?:\.)?slide.*-->/;

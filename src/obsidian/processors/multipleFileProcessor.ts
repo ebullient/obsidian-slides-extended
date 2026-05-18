@@ -1,5 +1,5 @@
-import type { Processor } from "src/@types";
-import { isAudio, isIcon, isImage, isUrl, isVideo } from "src/util";
+import type { Processor } from "../../@types";
+import { isAudio, isIcon, isImage, isUrl, isVideo } from "../../util";
 import type { ObsidianUtils } from "../obsidianUtils";
 
 export class MultipleFileProcessor implements Processor {
@@ -24,7 +24,12 @@ export class MultipleFileProcessor implements Processor {
                 // replace file:// with /local-file-url in markdown links
                 line = line.replace(
                     this.fileUrlRegex,
-                    (_, linkText, fileUrl, titleAndClosing) => {
+                    (
+                        _: string,
+                        linkText: string,
+                        fileUrl: string,
+                        titleAndClosing: string,
+                    ) => {
                         const transformedUrl =
                             this.transformAbsoluteFilePath(fileUrl);
                         return `${linkText}${transformedUrl}${titleAndClosing}`;
@@ -33,7 +38,11 @@ export class MultipleFileProcessor implements Processor {
                 // replace file:// with /local-file-url in all wikilinks (images or not)
                 line = line.replace(
                     this.wikilinkFileRegex,
-                    (_, filePath, aliasWithPipe) => {
+                    (
+                        _: string,
+                        filePath: string,
+                        aliasWithPipe: string | undefined,
+                    ) => {
                         const alias = aliasWithPipe ? aliasWithPipe : "";
                         const transformedPath =
                             this.transformAbsoluteFilePath(filePath);
@@ -58,8 +67,8 @@ export class MultipleFileProcessor implements Processor {
             comment = line.substring(line.indexOf("<!--"));
         }
 
-        return line.replaceAll(match, (matched, link) => {
-            let header: string = null;
+        return line.replaceAll(match, (matched: string, link: string) => {
+            let header: string | null = null;
             if (link.includes("#")) {
                 const split = link.split("#");
                 link = split[0];

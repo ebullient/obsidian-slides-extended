@@ -1,6 +1,6 @@
-import type { Options, Processor } from "src/@types";
-import { CommentParser } from "src/obsidian/comment";
-import type { ObsidianUtils } from "src/obsidian/obsidianUtils";
+import type { Options, Processor } from "../../@types";
+import { CommentParser } from "../../obsidian/comment";
+import type { ObsidianUtils } from "../../obsidian/obsidianUtils";
 import { FootnoteProcessor } from "./footNoteProcessor";
 import { MultipleFileProcessor } from "./multipleFileProcessor";
 
@@ -84,12 +84,12 @@ export class TemplateProcessor implements Processor {
                     .map((slide) => {
                         if (this.templateCommentRegex.test(slide)) {
                             try {
-                                // eslint-disable-next-line prefer-const
-                                let [md, notes] = this.extractNotes(
+                                const [main, notes] = this.extractNotes(
                                     slide,
                                     options,
                                 );
 
+                                let md = main;
                                 let circuitCounter = 0;
                                 while (this.templateCommentRegex.test(md)) {
                                     circuitCounter++;
@@ -180,8 +180,9 @@ export class TemplateProcessor implements Processor {
                 this.propertyRegex.lastIndex++;
             }
 
-            // eslint-disable-next-line prefer-const
-            let [match, name, content] = m;
+            const [match, n, c] = m;
+            let name = n;
+            let content = c;
 
             if (name.includes("<!--")) {
                 name = name.substring(0, name.indexOf("<!--"));
@@ -190,6 +191,7 @@ export class TemplateProcessor implements Processor {
             if (name.trim() === "block") continue;
 
             content = `::: block\n${content}`;
+
             const optionalName = `<%? ${name.trim()} %>`;
             name = `<% ${name.trim()} %>`;
             result = result.replaceAll(
@@ -208,7 +210,7 @@ export class TemplateProcessor implements Processor {
             }
             const key = m[1].trim();
             if (options[key] != null) {
-                result = result.replaceAll(m[0], `${options[key]}`);
+                result = result.replaceAll(m[0], options[key] as string);
             }
         }
 

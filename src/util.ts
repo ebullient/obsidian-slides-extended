@@ -1,68 +1,69 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: utility/lodash-like function */
 // Native / no lodash
 import { basename } from "node:path";
 
-export function has(object: Record<string, any>, key: string): boolean {
+export function has(object: object, key: string): boolean {
     const keyParts = key.split(".");
+    const rec = object as Record<string, unknown>;
 
     return (
         !!object &&
         (keyParts.length > 1
-            ? has(object[key.split(".")[0]], keyParts.slice(1).join("."))
+            ? has(rec[key.split(".")[0]] as object, keyParts.slice(1).join("."))
             : Object.hasOwn(object, key))
     );
 }
 
-export function pick(object: Record<string, any>, keys: string[]) {
+export function pick(object: object, keys: string[]) {
+    const rec = object as Record<string, unknown>;
     return keys.reduce(
         (obj, key) => {
-            // biome-ignore lint/suspicious/noPrototypeBuiltins: utility/lodash-like function
-            if (object?.hasOwnProperty(key)) {
-                obj[key] = object[key];
+            if (Object.hasOwn(object, key)) {
+                obj[key] = rec[key];
             }
             return obj;
         },
-        {} as Record<string, any>,
+        {} as Record<string, unknown>,
     );
 }
 
-export function omit(object: Record<string, any>, keys: string[]) {
-    return Object.keys(object).reduce(
+export function omit(object: object, keys: string[]) {
+    const rec = object as Record<string, unknown>;
+    return Object.keys(rec).reduce(
         (obj, key) => {
             if (!keys.includes(key)) {
-                obj[key] = object[key];
+                obj[key] = rec[key];
             }
             return obj;
         },
-        {} as Record<string, any>,
+        {} as Record<string, unknown>,
     );
 }
 
-export function omitBy(
-    object: Record<string, any>,
-    predicate: (value: any) => boolean,
-) {
-    return Object.keys(object).reduce(
+export function omitBy(object: object, predicate: (value: unknown) => boolean) {
+    const rec = object as Record<string, unknown>;
+    return Object.keys(rec).reduce(
         (obj, key) => {
-            if (!predicate(object[key])) {
-                obj[key] = object[key];
+            if (!predicate(rec[key])) {
+                obj[key] = rec[key];
             }
             return obj;
         },
-        {} as Record<string, any>,
+        {} as Record<string, unknown>,
     );
 }
 
-export function isNil(value: any) {
+export function isNil(value: unknown) {
     return value === null || value === undefined;
 }
 
-export function isEmpty(value: any) {
+export function isEmpty(value: unknown) {
     return (
         isNil(value) ||
         value === "" ||
         (Array.isArray(value) && value.length === 0) ||
-        (typeof value === "object" && Object.keys(value).length === 0)
+        (typeof value === "object" &&
+            value !== null &&
+            Object.keys(value).length === 0)
     );
 }
 

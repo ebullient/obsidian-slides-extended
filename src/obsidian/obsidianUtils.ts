@@ -4,6 +4,7 @@ import {
     type App,
     FileSystemAdapter,
     Platform,
+    requestUrl,
     resolveSubpath,
     type TFile,
 } from "obsidian";
@@ -286,7 +287,7 @@ export class ObsidianUtils implements MediaCollector {
         return file ? base + file.path : path;
     }
 
-    parseFile(filename: string, header: string) {
+    parseFile(filename: string, header: string | null) {
         const tfile = this.getTFile(filename);
 
         if (!tfile) {
@@ -335,12 +336,14 @@ export class ObsidianUtils implements MediaCollector {
         const fileUrlRegex = /(!\[[^\]]*?\]\()(file:.+?\.md(?:#.+?)?)(\))/i;
 
         // Replace wikilinks with markdown links
-        markdown = markdown.replace(wikilinkFileRegex, (_match, p1, p2) => {
-            const filePath = p1;
-            const alias = p2 ? p2.slice(1) : "";
-            const url = new URL(filePath);
-            return `![${alias}](${url})`;
-        });
+        markdown = markdown.replace(
+            wikilinkFileRegex,
+            (_match, p1: string, p2: string) => {
+                const alias = p2 ? p2.slice(1) : "";
+                const url = new URL(p1);
+                return `![${alias}](${url})`;
+            },
+        );
 
         // Replace markdown links with markdown content
         if (fileUrlRegex.test(markdown)) {
@@ -371,26 +374,19 @@ export class ObsidianUtils implements MediaCollector {
         }
         const urlpath = fileUrl.replace("file://", Platform.resourcePathPrefix);
 
-        const result = await fetch(urlpath).catch((error) => {
-            return new Response(null, {
-                status: 404,
-                statusText: error.messge,
-            });
-        });
-        if (result.ok) {
-            if (result.blob) {
-                const blob = await result.blob();
-                const bytes = await blob.arrayBuffer();
-                const content = Buffer.from(bytes).toString();
-                if (this.yamlRegex.test(content)) {
-                    return this.yamlRegex.exec(content)[1];
+        try {
+            const result = await requestUrl(urlpath);
+            if (result.status >= 200 && result.status < 300) {
+                const content = Buffer.from(result.arrayBuffer).toString();
+                const match = this.yamlRegex.exec(content);
+                if (match) {
+                    return match[1];
                 }
                 return content;
             }
-            console.info(
-                "open a bug to handle this kind of response. Include this message",
-                result,
-            );
+        } catch (error) {
+            const msg = error instanceof Error ? error.message : String(error);
+            console.debug("readRemoteFile failed", urlpath, msg);
         }
         return null;
     }

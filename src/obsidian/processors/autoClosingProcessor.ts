@@ -1,4 +1,4 @@
-import type { Processor } from "src/@types";
+import type { Processor } from "../../@types";
 
 export class AutoClosingProcessor implements Processor {
     private regex = /<(\s*?([\w]*)[^>]*?)\/(?<=\/)>/gm;

@@ -1,4 +1,4 @@
-import type { Options, Processor } from "src/@types";
+import type { Options, Processor } from "../../@types";
 import { processBySlide, skipMathCodeBlocks } from "../obsidianUtils";
 
 export class ReferenceProcessor implements Processor {

@@ -1,4 +1,4 @@
-import type { Options, Processor } from "src/@types";
+import type { Options, Processor } from "../../@types";
 import { processBySlide } from "../obsidianUtils";
 
 export class LatexProcessor implements Processor {
@@ -78,20 +78,26 @@ export class LatexProcessor implements Processor {
         };
 
         // Handle display math $$...$$
-        processed = processed.replace(/\$\$([\s\S]*?)\$\$/g, (_, content) => {
-            const fixedContent = content.replace(/\n\s*/g, " ");
-            return `%\`%$$${processMathContent(fixedContent)}$$%\`%`;
-        });
+        processed = processed.replace(
+            /\$\$([\s\S]*?)\$\$/g,
+            (_, content: string) => {
+                const fixedContent = content.replace(/\n\s*/g, " ");
+                return `%\`%$$${processMathContent(fixedContent)}$$%\`%`;
+            },
+        );
 
         // Add a marker for already processed content
-        const markedProcessed = processed.replace(/%`%(.*?)%`%/g, (match) => {
-            return `~~PROTECTED_MATH~~${encodeURIComponent(match)}~~END_PROTECTED~~`;
-        });
+        const markedProcessed = processed.replace(
+            /%`%(.*?)%`%/g,
+            (match: string) => {
+                return `~~PROTECTED_MATH~~${encodeURIComponent(match)}~~END_PROTECTED~~`;
+            },
+        );
 
         // Handle inline math $...$
         const inlineProcessed = markedProcessed.replace(
             /\$([^$]+?)\$/g,
-            (_match, content) => {
+            (_match: string, content: string) => {
                 return `%\`%$${processMathContent(content)}$%\`%`;
             },
         );
@@ -99,7 +105,7 @@ export class LatexProcessor implements Processor {
         // Restore protected content
         processed = inlineProcessed.replace(
             /~~PROTECTED_MATH~~(.*?)~~END_PROTECTED~~/g,
-            (_, encoded) => decodeURIComponent(encoded),
+            (_: string, encoded: string) => decodeURIComponent(encoded),
         );
 
         return processed.replaceAll("~~ESCAPED_DOLLAR~~", "\\$");
@@ -138,13 +144,19 @@ export class LatexProcessor implements Processor {
         // Restore verb segments, escaping underscores inside them
         return replaced.replace(
             new RegExp(`${placeholderPrefix}(\\d+)${placeholderSuffix}`, "g"),
-            (_, index) => {
+            (_: string, index: string) => {
                 const verbSegment = segments[Number.parseInt(index, 10)];
                 // Escape underscores inside the verbatim content: _ -> \_
                 // so reveal.js markdown doesn't interpret them as emphasis
                 return verbSegment.replace(
                     /(\\verb\*?)([^A-Za-z0-9\s])([\s\S]*?)(\2)/g,
-                    (_, cmd, delim, inner, endDelim) => {
+                    (
+                        _m: string,
+                        cmd: string,
+                        delim: string,
+                        inner: string,
+                        endDelim: string,
+                    ) => {
                         return `${cmd}${delim}${inner.replace(
                             /_/g,
                             "\\_",

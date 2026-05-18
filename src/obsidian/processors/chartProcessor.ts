@@ -1,8 +1,19 @@
-import type { ChartJsOptions, Options, Processor } from "src/@types";
+import type { Options, Processor } from "../../@types";
+
+type ChartElementOptions = Record<string, Record<string, unknown>>;
+type ChartScaleOptions = Record<string, Record<string, unknown>>;
+type ChartLegendOptions = { display?: boolean; position?: string };
+type ChartPluginOptions = { legend?: ChartLegendOptions };
+
+type ChartOptions = {
+    elements: ChartElementOptions;
+    plugins?: ChartPluginOptions;
+    scales?: ChartScaleOptions;
+};
 
 type ChartObject = {
     data: DataObject;
-    options: ChartJsOptions;
+    options: ChartOptions;
 };
 
 type DataEntry = {
@@ -76,7 +87,7 @@ export class ChartProcessor implements Processor {
                 if (value.trim() === "true") {
                     for (let i = 0; i < 7; i++) {
                         const style = getComputedStyle(
-                            document.body,
+                            activeDocument.body,
                         ).getPropertyValue(`--chart-color-${i + 1}`);
                         if (style !== "") {
                             colorMap[i] = style;
@@ -103,7 +114,7 @@ export class ChartProcessor implements Processor {
                     const [, title, data] = m;
 
                     chart.data.datasets.push({
-                        data: JSON.parse(data),
+                        data: JSON.parse(data) as number[],
                         label: title,
                         backgroundColor: colorMap[i],
                     });
@@ -114,11 +125,15 @@ export class ChartProcessor implements Processor {
 
                 if (this.spanGapsRegex.test(chartMarkup)) {
                     const [, key, value] = this.spanGapsRegex.exec(chartMarkup);
-                    chart.options.elements[type][key] = JSON.parse(value);
+                    chart.options.elements[type][key] = JSON.parse(
+                        value,
+                    ) as unknown;
                 }
                 if (this.tensionRegex.test(chartMarkup)) {
                     const [, key, value] = this.tensionRegex.exec(chartMarkup);
-                    chart.options.elements[type][key] = JSON.parse(value);
+                    chart.options.elements[type][key] = JSON.parse(
+                        value,
+                    ) as unknown;
                 }
                 if (this.beginAtZeroRegex.test(chartMarkup)) {
                     const [, key, value] =
@@ -132,7 +147,7 @@ export class ChartProcessor implements Processor {
                         chart.options.scales.y = {};
                     }
 
-                    chart.options.scales.y[key] = JSON.parse(value);
+                    chart.options.scales.y[key] = JSON.parse(value) as unknown;
                 }
                 if (this.legendRegex.test(chartMarkup)) {
                     const [, , value] = this.legendRegex.exec(chartMarkup);
@@ -145,7 +160,9 @@ export class ChartProcessor implements Processor {
                         chart.options.plugins.legend = {};
                     }
 
-                    chart.options.plugins.legend.display = JSON.parse(value);
+                    chart.options.plugins.legend.display = JSON.parse(
+                        value,
+                    ) as boolean;
                 }
 
                 if (this.legendPositionRegex.test(chartMarkup)) {
@@ -176,8 +193,8 @@ export class ChartProcessor implements Processor {
                         chart.options.scales.x = {};
                     }
 
-                    chart.options.scales.x[key] = JSON.parse(value);
-                    chart.options.scales.y[key] = JSON.parse(value);
+                    chart.options.scales.x[key] = JSON.parse(value) as unknown;
+                    chart.options.scales.y[key] = JSON.parse(value) as unknown;
                 }
                 if (this.heightRegex.test(chartMarkup)) {
                     const [, , value] = this.heightRegex.exec(chartMarkup);

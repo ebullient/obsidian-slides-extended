@@ -1,4 +1,4 @@
-import type { Options, Processor } from "src/@types";
+import type { Options, Processor } from "../../@types";
 import { CommentParser } from "../comment";
 
 export class FragmentProcessor implements Processor {

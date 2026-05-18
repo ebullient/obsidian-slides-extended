@@ -1,4 +1,4 @@
-import type { Options, Processor } from "src/@types";
+import type { Options, Processor } from "../../@types";
 import type { ObsidianUtils } from "../obsidianUtils";
 
 export class InternalLinkProcessor implements Processor {
@@ -12,11 +12,14 @@ export class InternalLinkProcessor implements Processor {
 
     process(markdown: string, options: Options) {
         if (options.enableLinks) {
-            return markdown.replaceAll(this.regex, (_sub, first, second) => {
-                return `[${second}](obsidian://open?vault=${encodeURI(this.utils.vaultName)}&file=${encodeURI(
-                    first === undefined ? second : first,
-                )})`;
-            });
+            return markdown.replaceAll(
+                this.regex,
+                (_sub, first: string | undefined, second: string) => {
+                    return `[${second}](obsidian://open?vault=${encodeURI(this.utils.vaultName)}&file=${encodeURI(
+                        first === undefined ? second : first,
+                    )})`;
+                },
+            );
         }
         return markdown.replaceAll(this.regex, "$2");
     }

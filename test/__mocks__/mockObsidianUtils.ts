@@ -1,4 +1,4 @@
-import { ObsidianUtils } from 'src/obsidian/obsidianUtils';
+import { ObsidianUtils } from '../../src/obsidian/obsidianUtils';
 import { anyString, anything, instance, mock, when } from 'ts-mockito';
 
 export const MockedObsidianUtils = mock(ObsidianUtils);

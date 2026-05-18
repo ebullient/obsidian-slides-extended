@@ -30,6 +30,14 @@ export default defineConfig([
                 "warn",
                 {
                     brands: ["Slides Extended", "reveal.js"],
+                    acronyms: ["CSS", "HTML", "Q"],
+                    ignoreWords: [
+                        "localhost",
+                        "none", "fade", "slide", "convex", "concave", "zoom",
+                        "slow", "default", "fast",
+                        "black", "zenburn",
+                        "progress",
+                    ],
                 },
             ],
         },

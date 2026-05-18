@@ -1,4 +1,4 @@
-import type { Processor } from "src/@types";
+import type { Processor } from "../../@types";
 import {
     isAudio,
     isIcon,
@@ -6,7 +6,7 @@ import {
     isUrl,
     isVideo,
     mimeTypeFor,
-} from "src/util";
+} from "../../util";
 import { CommentParser } from "../comment";
 import type { ObsidianUtils } from "../obsidianUtils";
 
@@ -32,7 +32,7 @@ export class MediaProcessor implements Processor {
                 // Transform [[myImage.png]] to [](myImage.png) (media only)
                 return line.replace(
                     this.wikilinkMediaRegex,
-                    (_, image, altText) => {
+                    (_, image: string, altText: string | undefined) => {
                         const alias = altText ?? "";
                         return `[${alias}](${image})`;
                     },
@@ -56,7 +56,7 @@ export class MediaProcessor implements Processor {
 
         if (ext) {
             let width: string;
-            let height: string;
+            let height: string | undefined;
             if (ext.includes("x")) {
                 [width, height] = ext.split("x");
             } else {
@@ -85,7 +85,6 @@ export class MediaProcessor implements Processor {
                 this.markdownMediaRegex.lastIndex++;
             }
 
-            // eslint-disable-next-line prefer-const
             let [match, embed, alt, mediaPath, commentString] = m;
 
             let filePath = mediaPath;

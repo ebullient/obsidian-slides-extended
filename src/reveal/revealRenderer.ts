@@ -150,7 +150,7 @@ export class RevealRenderer {
             base = "/";
         }
 
-        const context = Object.assign(options, {
+        const context: object = Object.assign(options, {
             title,
             slides,
             themeUrl,
@@ -190,7 +190,7 @@ export class RevealRenderer {
         try {
             new URL(input);
             return true;
-        } catch (_) {
+        } catch {
             return false;
         }
     }
@@ -241,7 +241,7 @@ export class RevealRenderer {
         }
 
         console.error(
-            `Template file ${relativePath} not found in search path: ${searchPath}.`,
+            `Template file ${relativePath} not found in search path: ${searchPath.join(", ")}.`,
         );
         return "";
     }
@@ -266,7 +266,7 @@ export class RevealRenderer {
         return attrs.join(" ");
     }
 
-    private slidify(markdown: string, slidifyOptions: unknown) {
+    private slidify(markdown: string, slidifyOptions: unknown): string {
         return md.slidify(markdown, slidifyOptions);
     }
 

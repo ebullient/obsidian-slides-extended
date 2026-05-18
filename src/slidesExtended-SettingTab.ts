@@ -19,7 +19,7 @@ function isFolder(file: TAbstractFile): file is TFolder {
 }
 export class SlidesExtendedSettingTab extends PluginSettingTab {
     plugin: SlidesExtendedPlugin;
-    newSettings: SlidesExtendedSettings;
+    newSettings!: SlidesExtendedSettings;
 
     constructor(app: App, plugin: SlidesExtendedPlugin) {
         super(app, plugin);
@@ -32,12 +32,14 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
 
     /** Save on exit */
     hide(): void {
-        this.save();
+        void this.save();
     }
 
     /** Show/validate setting changes */
     display(): void {
-        this.newSettings = JSON.parse(JSON.stringify(this.plugin.settings));
+        this.newSettings = JSON.parse(
+            JSON.stringify(this.plugin.settings),
+        ) as SlidesExtendedSettings;
         this.drawElements();
     }
 
@@ -50,9 +52,9 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             .setName("Slide preview mode")
             .setDesc("Select the slide preview pane display mode.")
             .addDropdown((cb) => {
-                cb.addOption("tab", "as Tab")
-                    .addOption("split", "split Workspace")
-                    .addOption("sidebar", "right sidebar")
+                cb.addOption("tab", "As tab")
+                    .addOption("split", "Split workspace")
+                    .addOption("sidebar", "Right sidebar")
                     .setValue(this.newSettings.paneMode)
                     .onChange((value) => {
                         if (
@@ -68,10 +70,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             });
 
         new Setting(containerEl)
-            .setName("Automatically start server")
-            .setDesc(
-                "When enabled, the server for rendering slides will automatically start when Obsidian starts.",
-            )
+            .setName("Automatically start the preview server")
             .addToggle((value) =>
                 value.setValue(this.newSettings.autoStart).onChange((value) => {
                     this.newSettings.autoStart = value;
@@ -335,7 +334,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             );
 
         new Setting(containerEl)
-            .setName("Presentation Plugins")
+            .setName("Presentation plugins")
             .setHeading()
             .setDesc(
                 "Control presentation plugins. Override per-note using property names (e.g., enableCustomControls).",
@@ -385,7 +384,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName("Laser pointer")
-            .setDesc("Change your mouse into a laser pointer (Toggle with Q).")
+            .setDesc("Change your mouse into a laser pointer (toggle with Q).")
             .addButton((btn) => {
                 btn.setButtonText("enablePointer").setDisabled(true);
             })
@@ -452,7 +451,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             );
 
         new Setting(containerEl)
-            .setName("Math Engine")
+            .setName("Math engine")
             .setDesc("Select the math rendering engine.")
             .addDropdown((cb) => {
                 cb.addOption("katex", "KaTeX")

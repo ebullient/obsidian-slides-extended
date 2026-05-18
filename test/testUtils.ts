@@ -1,5 +1,5 @@
 import { load } from 'js-yaml';
-import type { Options } from '../src/@types';
+import { Options } from '../src/@types';
 
 export function prepare(input: string): { options: Options; markdown: string } {
 	const { yamlOptions, markdown } = parseYamlFrontMatter(input);

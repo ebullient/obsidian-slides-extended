@@ -45,16 +45,12 @@ export class SlidesExtendedPlugin extends Plugin {
         this.registerView(
             REVEAL_PREVIEW_VIEW,
             (leaf) =>
-                new RevealPreviewView(
-                    leaf,
-                    this.url,
-                    this,
-                    this.settings,
-                    this.hideView.bind(this),
+                new RevealPreviewView(leaf, this.url, this, this.settings, () =>
+                    this.hideView(),
                 ),
         );
         this.registerEvent(
-            this.app.vault.on("modify", this.onChange.bind(this)),
+            this.app.vault.on("modify", (file) => this.onChange(file)),
         );
         this.registerEditorSuggest(new LineSelectionListener(this.app, this));
 
@@ -92,7 +88,7 @@ export class SlidesExtendedPlugin extends Plugin {
         });
         this.addCommand({
             id: "export-active-presentation-html",
-            name: "Export active presentation as html",
+            name: "Export active presentation as HTML",
             callback: async () => {
                 await this.showView();
                 const instance = this.getViewInstance();
@@ -114,7 +110,9 @@ export class SlidesExtendedPlugin extends Plugin {
         });
 
         this.addSettingTab(new SlidesExtendedSettingTab(this.app, this));
-        this.app.workspace.onLayoutReady(this.layoutReady);
+        this.app.workspace.onLayoutReady(() => {
+            void this.layoutReady();
+        });
 
         this.slideProcessor = new EmbeddedSlideProcessor(this);
         this.registerMarkdownCodeBlockProcessor(
@@ -135,14 +133,14 @@ export class SlidesExtendedPlugin extends Plugin {
             const version = this.manifest.version;
             const distribution = new SlidesExtendedDistribution(this);
 
-            console.log(
+            console.debug(
                 "Slides Extended v%s, needsReload=%s",
                 version,
                 distribution.isOutdated(),
             );
             if (distribution.isOutdated()) {
                 await distribution.update();
-                console.log("Slides Extended updated to v%s", version);
+                console.debug("Slides Extended updated to v%s", version);
             }
 
             this.configureServer();
@@ -279,18 +277,20 @@ export class SlidesExtendedPlugin extends Plugin {
                     active: false,
                 });
         }
-        this.app.workspace.revealLeaf(
+        void this.app.workspace.revealLeaf(
             this.app.workspace.getLeavesOfType(REVEAL_PREVIEW_VIEW)[0],
         );
     }
 
-    async onunload() {
+    onunload() {
         console.debug("unloading Slides Extended");
-        await this.stopServer();
+        void this.stopServer();
     }
 
     async loadSettings() {
-        const data = await this.loadData();
+        const data = (await this.loadData()) as Partial<
+            SlidesExtendedSettings & { themeDirectory?: string }
+        > | null;
         this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
         // Migrate renamed setting
         if (data?.themeDirectory && !data?.assetsDirectory) {
@@ -314,7 +314,7 @@ export class SlidesExtendedPlugin extends Plugin {
         await this.initServer();
         const instance = this.getViewInstance();
         if (instance) {
-            await instance.onChange();
+            instance.onChange();
         }
     }
 

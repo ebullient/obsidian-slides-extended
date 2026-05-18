@@ -1,4 +1,4 @@
-import type { Options, Processor } from "src/@types";
+import type { Options, Processor } from "../../@types";
 
 export class FootnoteProcessor implements Processor {
     private regex = /\[\^([^\]]*)]/im;

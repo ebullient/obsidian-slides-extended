@@ -53,22 +53,23 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
         let json: Parameters;
 
         try {
-            json = JSON.parse(ctx.query);
-            // eslint-disable-next-line no-empty
-        } catch (_error) {}
+            json = JSON.parse(ctx.query) as Parameters;
+        } catch {
+            // no-op
+        }
 
         if (json) {
             const tag = dict.children.filter(
                 (x) => x.property === json.tag.value,
             );
             if (tag && tag.length > 0) {
-                const map = tag.first().dictionary;
+                const map = tag[0].dictionary;
                 if (json.value.value != null && json.value.value.length === 0) {
                     const result = map.children.filter(
                         (x) => x.property === json.property.value,
                     );
                     if (result && result.length > 0) {
-                        return result.first().dictionary;
+                        return result[0].dictionary;
                     }
                 } else if (json.value.value) {
                     const result = map.children.filter(
@@ -109,11 +110,12 @@ export class AutoCompleteSuggest extends EditorSuggest<DictionaryEntry> {
 
         const cursor = this.context.editor.getCursor();
 
-        let json: Parameters;
+        let json: Parameters | null = null;
         try {
-            json = JSON.parse(this.context.query);
-            // eslint-disable-next-line no-empty
-        } catch (_error) {}
+            json = JSON.parse(this.context.query) as Parameters;
+        } catch {
+            // no-op
+        }
 
         if (json) {
             if (json.value.value != null) {

@@ -77,7 +77,7 @@ This will include the contents of the blockref
 
 ## Images
 
-![[100x100.png]] ![[100x100.png]]
+<span>![[100x100.png]] ![[100x100.png]]</span>
 
 ![[100x100 (1).png]] ![[100x100 (1).png]]
 

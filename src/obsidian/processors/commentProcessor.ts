@@ -1,5 +1,5 @@
-import type { Processor } from "src/@types";
-import { CommentParser } from "src/obsidian/comment";
+import type { Processor } from "../../@types";
+import { CommentParser } from "../../obsidian/comment";
 
 export class CommentProcessor implements Processor {
     private parser: CommentParser = new CommentParser();

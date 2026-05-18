@@ -1,4 +1,4 @@
-import { AutoCompleteSuggest } from "src/obsidian/suggesters/AutoCompleteSuggester";
+import { AutoCompleteSuggest } from "../src/obsidian/suggesters/AutoCompleteSuggester";
 
 function makeEditor(line: string) {
     return {

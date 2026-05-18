@@ -1,4 +1,4 @@
-import type { Processor } from "src/@types";
+import type { Processor } from "../../@types";
 
 // Taken from obsidian-emoji-shortcodes
 // Generated from: https://api.github.com/emojis

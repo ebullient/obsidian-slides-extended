@@ -23,7 +23,7 @@ export class YamlParser {
             globalSettings,
             options,
             printOptions,
-        );
+        ) as Options;
     }
 
     private getPrintOptions() {
@@ -153,7 +153,7 @@ export class YamlParser {
                 yamlOptions: parseYaml(match[1]) ?? {},
                 markdown: match[2] || stripped,
             };
-        } catch (_error) {
+        } catch {
             return { yamlOptions: {}, markdown: stripped };
         }
     }

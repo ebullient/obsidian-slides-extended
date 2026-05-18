@@ -39,7 +39,7 @@ export function byInput(
                 : x.value.toLowerCase().startsWith(input.toLowerCase());
         }
         return x.name
-            ? x.name.toLowerCase().contains(input.toLowerCase())
-            : x.value.toLowerCase().contains(input.toLowerCase());
+            ? x.name.toLowerCase().includes(input.toLowerCase())
+            : x.value.toLowerCase().includes(input.toLowerCase());
     };
 }

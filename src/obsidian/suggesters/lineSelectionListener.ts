@@ -26,7 +26,7 @@ export class LineSelectionListener extends EditorSuggest<string> {
 
         if (instance) {
             if (instance.url === "about:blank") {
-                this.plugin.showView();
+                void this.plugin.showView();
             }
             instance.onLineChanged(cursor.line);
         }

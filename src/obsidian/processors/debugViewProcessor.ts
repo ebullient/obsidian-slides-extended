@@ -1,4 +1,4 @@
-import type { Options, Processor } from "src/@types";
+import type { Options, Processor } from "../../@types";
 
 export class DebugViewProcessor implements Processor {
     process(markdown: string, options: Options) {
