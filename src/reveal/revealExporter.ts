@@ -1,12 +1,7 @@
 import { Buffer } from "node:buffer";
+import { existsSync } from "node:fs";
+import { cp, mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import {
-    copy,
-    emptyDir,
-    existsSync,
-    outputFileSync,
-    writeFile,
-} from "fs-extra";
 import { Platform, requestUrl } from "obsidian";
 import type { ObsidianUtils } from "../obsidian/obsidianUtils";
 
@@ -35,22 +30,26 @@ export class RevealExporter {
 
         console.debug("export", sourceDir, vaultDir, folderDir);
 
-        await emptyDir(folderDir);
+        await rm(folderDir, { recursive: true, force: true });
+        await mkdir(folderDir, { recursive: true });
         await writeFile(path.join(folderDir, "index.html"), html);
 
         // TODO: let's track what css, scripts, and plugins are actually used
         // rather than copying everything.
-        await copy(
+        await cp(
             path.join(this.pluginDirectory, "css"),
             path.join(folderDir, "css"),
+            { recursive: true },
         );
-        await copy(
+        await cp(
             path.join(this.pluginDirectory, "dist"),
             path.join(folderDir, "dist"),
+            { recursive: true },
         );
-        await copy(
+        await cp(
             path.join(this.pluginDirectory, "plugin"),
             path.join(folderDir, "plugin"),
+            { recursive: true },
         );
 
         for (const img of imgList) {
@@ -66,8 +65,10 @@ export class RevealExporter {
                 try {
                     const result = await requestUrl(urlpath);
                     if (result.status >= 200 && result.status < 300) {
-                        outputFileSync(
-                            path.join(folderDir, img),
+                        const outPath = path.join(folderDir, img);
+                        await mkdir(path.dirname(outPath), { recursive: true });
+                        await writeFile(
+                            outPath,
                             Buffer.from(result.arrayBuffer),
                         );
                     } else {
@@ -92,7 +93,9 @@ export class RevealExporter {
                 }
             }
             console.debug("img", img, imgPath, sourceDir !== vaultDir);
-            await copy(imgPath, path.join(folderDir, img));
+            const imgDest = path.join(folderDir, img);
+            await mkdir(path.dirname(imgDest), { recursive: true });
+            await cp(imgPath, imgDest);
         }
 
         for (const asset of localAssetPaths) {
@@ -112,7 +115,9 @@ export class RevealExporter {
                 }
             }
             if (existsSync(assetPath)) {
-                await copy(assetPath, path.join(folderDir, asset));
+                const assetDest = path.join(folderDir, asset);
+                await mkdir(path.dirname(assetDest), { recursive: true });
+                await cp(assetPath, assetDest);
             }
         }
 

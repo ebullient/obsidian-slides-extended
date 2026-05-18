@@ -51,9 +51,7 @@
         "@fortawesome/fontawesome-free": "^7.2.0",
         "@popperjs/core": "^2.11.8",
         "@types/color": "^4.2.1",
-        "@types/fs-extra": "^11.0.4",
         "@types/jest": "^30.0.0",
-        "@types/js-yaml": "^4.0.9",
         "@types/mustache": "^4.2.6",
         "@types/node": "^25.6.0",
         "@types/request": "^2.48.13",
@@ -67,7 +65,7 @@
         "globals": "^17.6.0",
         "highlight.js": "^11.11.1",
         "jest": "^30.3.0",
-        "js-yaml": "^4.1.1",
+        "yaml": "^2.7.1",
         "katex": "^0.16.45",
         "mathjax": "^4.1.1",
         "obsidian": "^1.12.3",
@@ -89,8 +87,6 @@
         "chart.js": "^4.5.1",
         "color": "^4.2.3",
         "fastify": "^5.8.5",
-        "fs-extra": "^11.3.4",
-        "glob": "^13.0.6",
         "jszip": "^3.10.1",
         "mustache": "^4.2.0"
     }

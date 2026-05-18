@@ -1,4 +1,4 @@
-export { load as parseYaml } from "js-yaml";
+export { parse as parseYaml } from "yaml";
 
 export class EditorSuggest<T> {
     context: unknown = null;

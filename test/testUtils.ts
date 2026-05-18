@@ -1,4 +1,4 @@
-import { load } from 'js-yaml';
+import { parse } from 'yaml';
 import { Options } from '../src/@types';
 
 export function prepare(input: string): { options: Options; markdown: string } {
@@ -17,7 +17,7 @@ function parseYamlFrontMatter(input: string): {
 		return { yamlOptions: {}, markdown: stripped };
 	}
 	return {
-		yamlOptions: (load(match[1]) as any) ?? {},
+		yamlOptions: (parse(match[1]) as any) ?? {},
 		markdown: match[2] || stripped,
 	};
 }

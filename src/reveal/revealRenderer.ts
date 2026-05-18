@@ -1,7 +1,6 @@
+import { existsSync, readdirSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import path, { basename, extname, join } from "node:path";
-
-import { exists, existsSync, readFile } from "fs-extra";
-import { glob } from "glob";
 import Mustache from "mustache";
 import type { Options, QueryString } from "../@types";
 import type { MarkdownProcessor } from "../obsidian/markdownProcessor";
@@ -208,7 +207,9 @@ export class RevealRenderer {
             }
 
             // Basename glob match (existing behavior for short names like "black")
-            const files = glob.sync("*.css", { cwd: dir });
+            const files = existsSync(dir)
+                ? readdirSync(dir).filter((f) => f.endsWith(".css"))
+                : [];
             const key = basename(name).replace(extname(name), "");
             const match = files.find(
                 (f) => basename(f).replace(extname(f), "") === key,
@@ -235,8 +236,10 @@ export class RevealRenderer {
         const searchPath = this.utils.getHtmlTemplateSearchPath();
         for (const dir of searchPath) {
             const templateFile = join(dir, relativePath);
-            if (await exists(templateFile)) {
+            try {
                 return (await readFile(templateFile.toString())).toString();
+            } catch {
+                // file not found in this dir, try next
             }
         }
 
