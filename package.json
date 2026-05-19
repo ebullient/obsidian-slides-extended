@@ -29,13 +29,6 @@
     "bugs": {
         "url": "https://github.com/ebullient/obsidian-theme-ebullientworks/issues"
     },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "@parcel/watcher",
-            "esbuild",
-            "unrs-resolver"
-        ]
-    },
     "auto-changelog": {
         "backfillLimit": false,
         "commitLimit": false,
