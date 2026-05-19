@@ -107,14 +107,26 @@ export class RevealServer {
                     }
                 } else if (file.startsWith("embed/") && file.endsWith(".md")) {
                     console.debug("fetching embed file", file);
-                    const filePath = path.join(
+                    const embedFilePath = path.resolve(
                         this._utils.vaultDirectory,
                         file.replace("embed/", ""),
                     );
-                    await renderMarkdownFile(filePath);
+                    if (!embedFilePath.startsWith(this._utils.vaultDirectory)) {
+                        reply.status(403).send();
+                        return reply;
+                    }
+                    await renderMarkdownFile(embedFilePath);
                 } else if (file.endsWith(".md")) {
                     // top-level slide
-                    this.filePath = path.join(this._utils.vaultDirectory, file);
+                    const resolvedPath = path.resolve(
+                        this._utils.vaultDirectory,
+                        file,
+                    );
+                    if (!resolvedPath.startsWith(this._utils.vaultDirectory)) {
+                        reply.status(403).send();
+                        return reply;
+                    }
+                    this.filePath = resolvedPath;
                     console.debug("New presentation: ", file, this.filePath);
                     await renderMarkdownFile(this.filePath);
                 } else {
