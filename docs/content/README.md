@@ -15,7 +15,7 @@
 - Excalidraw Support
 - Mermaid Support
 - Block Support: `::: block`
-- Obidian <-> Reveal.js integration
+- Obsidian <-> Reveal.js integration
     - Footnote Support: `Here's a footnote[^1]`
     - Pass options To Slide Compiler through frontmatter (properties)
     - Support for wiki links
