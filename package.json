@@ -40,7 +40,7 @@
         "startingDate": "2024-02-17"
     },
     "devDependencies": {
-        "@biomejs/biome": "^2.4.12",
+        "@biomejs/biome": "^2.4.13",
         "@fortawesome/fontawesome-free": "^7.2.0",
         "@popperjs/core": "^2.11.8",
         "@types/color": "^4.2.1",
