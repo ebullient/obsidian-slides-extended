@@ -111,7 +111,11 @@ export class RevealServer {
                         this._utils.vaultDirectory,
                         file.replace("embed/", ""),
                     );
-                    if (!embedFilePath.startsWith(this._utils.vaultDirectory)) {
+                    if (
+                        !embedFilePath.startsWith(
+                            path.normalize(this._utils.vaultDirectory),
+                        )
+                    ) {
                         reply.status(403).send();
                         return reply;
                     }
@@ -122,7 +126,11 @@ export class RevealServer {
                         this._utils.vaultDirectory,
                         file,
                     );
-                    if (!resolvedPath.startsWith(this._utils.vaultDirectory)) {
+                    if (
+                        !resolvedPath.startsWith(
+                            path.normalize(this._utils.vaultDirectory),
+                        )
+                    ) {
                         reply.status(403).send();
                         return reply;
                     }
