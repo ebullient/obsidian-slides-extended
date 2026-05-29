@@ -1,5 +1,6 @@
 // Native / no lodash
 import { basename } from "node:path";
+import { FONTAWESOME_PREFIXES } from "./slidesExtended-constants";
 
 export function has(object: object, key: string): boolean {
     const keyParts = key.split(".");
@@ -72,13 +73,7 @@ export function isUrl(path: string): boolean {
 }
 
 export function isIcon(path: string) {
-    return (
-        path.startsWith("fas") ||
-        path.startsWith("far") ||
-        path.startsWith("fal") ||
-        path.startsWith("fad") ||
-        path.startsWith("fab")
-    );
+    return FONTAWESOME_PREFIXES.some((prefix) => path.startsWith(prefix));
 }
 
 export function isImage(path: string) {
