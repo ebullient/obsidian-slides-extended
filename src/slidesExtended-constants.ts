@@ -71,3 +71,5 @@ export const DISABLED_IMAGE_COLLECTOR: MediaCollector = {
         return false;
     },
 };
+
+export const FONTAWESOME_PREFIXES = ["fas", "far", "fal", "fad", "fab"];
