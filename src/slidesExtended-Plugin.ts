@@ -1,7 +1,8 @@
-import { addIcon, Plugin, type TAbstractFile } from "obsidian";
+import { addIcon, Notice, Plugin, type TAbstractFile } from "obsidian";
 import type { SlidesExtendedSettings } from "./@types";
 import { EmbeddedSlideProcessor } from "./obsidian/embeddedSlideProcessor";
 import { ObsidianUtils } from "./obsidian/obsidianUtils";
+import { assignSlideIds } from "./obsidian/slideIdGenerator";
 import { AutoCompleteSuggest } from "./obsidian/suggesters/AutoCompleteSuggester";
 import { LineSelectionListener } from "./obsidian/suggesters/lineSelectionListener";
 import {
@@ -16,6 +17,7 @@ import {
 } from "./slidesExtended-constants";
 import { SlidesExtendedDistribution } from "./slidesExtended-Distribution";
 import { SlidesExtendedSettingTab } from "./slidesExtended-SettingTab";
+import { YamlParser } from "./yaml/yamlParser";
 
 export class SlidesExtendedPlugin extends Plugin {
     settings: SlidesExtendedSettings;
@@ -96,6 +98,40 @@ export class SlidesExtendedPlugin extends Plugin {
                     return;
                 }
                 instance.exportAsHtml();
+            },
+        });
+        this.addCommand({
+            id: "insert-slide-ids",
+            name: "Insert slide data-ids",
+            editorCallback: async (editor) => {
+                const markdown = editor.getValue();
+
+                // Get separators defined in frontmatter or fall back to defaults
+                const yamlParser = new YamlParser(this.settings);
+                const { yamlOptions } =
+                    yamlParser.parseYamlFrontMatter(markdown);
+                const options = yamlParser.getSlideOptions(yamlOptions);
+
+                const separator = options.separator || "\\r?\\n---\\r?\\n";
+                const verticalSeparator =
+                    options.verticalSeparator || "\\r?\\n--\\r?\\n";
+
+                const { modifiedMarkdown, hasChanges } = assignSlideIds(
+                    markdown,
+                    separator,
+                    verticalSeparator,
+                );
+
+                if (hasChanges) {
+                    const cursor = editor.getCursor();
+                    const scrollInfo = editor.getScrollInfo();
+                    editor.setValue(modifiedMarkdown);
+                    editor.setCursor(cursor);
+                    editor.scrollTo(scrollInfo.left, scrollInfo.top);
+                    new Notice("Slide data-ids inserted successfully.");
+                } else {
+                    new Notice("All slides already have data-ids.");
+                }
             },
         });
         this.addCommand({
