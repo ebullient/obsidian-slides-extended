@@ -124,7 +124,6 @@ The core of Slides Extended is a multi-phase markdown processing pipeline in [sr
 **Phase 2: Slide Structure**
 - `SkipSlideProcessor` - Removes slides marked to be hidden
 - `DebugViewProcessor` - Adds debug grid if enabled
-- `AutoClosingProcessor` - Auto-closes self-closing HTML tags
 - `DefaultBackgroundProcessor` - Applies default backgrounds
 
 **Phase 3: Content Processing** (executed in this specific order)

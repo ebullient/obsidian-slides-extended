@@ -1,7 +1,6 @@
 import type { Options, Processor } from "../@types";
 import { YamlStore } from "../yaml/yamlStore";
 import type { ObsidianUtils } from "./obsidianUtils";
-import { AutoClosingProcessor } from "./processors/autoClosingProcessor";
 import { BlockProcessor } from "./processors/blockProcessor";
 import { ChartProcessor } from "./processors/chartProcessor";
 import { CommentProcessor } from "./processors/commentProcessor";
@@ -43,7 +42,6 @@ export class MarkdownProcessor {
     private gridProcessor: GridProcessor;
     private commentProcessor: CommentProcessor;
     private dropProcessor: DropProcessor;
-    private autoClosingProcessor: AutoClosingProcessor;
     private emojiProcessor: EmojiProcessor;
     private iconsProcessor: IconsProcessor;
     private debugViewProcessor: DebugViewProcessor;
@@ -68,7 +66,6 @@ export class MarkdownProcessor {
         this.gridProcessor = new GridProcessor();
         this.commentProcessor = new CommentProcessor();
         this.dropProcessor = new DropProcessor();
-        this.autoClosingProcessor = new AutoClosingProcessor();
         this.emojiProcessor = new EmojiProcessor();
         this.iconsProcessor = new IconsProcessor();
         this.debugViewProcessor = new DebugViewProcessor();
@@ -176,11 +173,6 @@ export class MarkdownProcessor {
             {
                 name: "debugViewProcessor",
                 processor: this.debugViewProcessor,
-            },
-            // Auto-close self-closing tags
-            {
-                name: "autoClosingProcessor",
-                processor: this.autoClosingProcessor,
             },
             // Apply default backgrounds
             {
