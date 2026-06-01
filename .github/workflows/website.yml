@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - docs
     paths:
       - "docs/**"
 
@@ -13,7 +13,7 @@ permissions: read-all
 jobs:
   bump:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.repository == 'ebullient/obsidian-slides-extended'
+    if: github.ref == 'refs/heads/docs' && github.repository == 'ebullient/obsidian-slides-extended'
     steps:
       - name: Bump website
         env:
