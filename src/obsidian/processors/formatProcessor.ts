@@ -8,18 +8,14 @@ export class FormatProcessor implements Processor {
     private highlightedRegex = /==([\s\S]*?)==/g;
     private commentRegex = /%%([\s\S]*?)%%/g;
 
-    process(markdown: string, options?: Options) {
+    process(markdown: string, options: Options) {
         let output = markdown;
-        if (options) {
-            processBySlide(markdown, options, (slide) => {
-                let newSlide = slide;
-                newSlide = skipMathCodeBlocks(slide, (md) =>
-                    this.formatText(md),
-                );
-                output = output.replace(slide, () => newSlide);
-                return newSlide;
-            });
-        }
+        processBySlide(markdown, options, (slide) => {
+            let newSlide = slide;
+            newSlide = skipMathCodeBlocks(slide, (md) => this.formatText(md));
+            output = output.replace(slide, () => newSlide);
+            return newSlide;
+        });
         return output;
     }
 
