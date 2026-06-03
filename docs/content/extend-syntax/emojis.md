@@ -11,7 +11,7 @@ Render shortcodes as emoji in your slides.
     :smile: => 😄
 
 > [!TIP]
-> If you want to have full support for shortcode's autocompletion or viewing them in reading mode, phibr0's [Obsidian Emoji Shortcodes](https://github.com/phibr0/obsidian-emoji-shortcodes) plugin is the perfect companion. 
+> If you want to have full support for the shortcodes' autocompletion or viewing them in reading mode, phibr0's [Obsidian Emoji Shortcodes](https://github.com/phibr0/obsidian-emoji-shortcodes) plugin is the perfect companion. 
 
 ## Supported shortcodes
 
