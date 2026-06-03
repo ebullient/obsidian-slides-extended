@@ -91,8 +91,8 @@ importers:
         specifier: ^0.16.45
         version: 0.16.45
       mathjax:
-        specifier: ^4.1.1
-        version: 4.1.1
+        specifier: ^4.1.2
+        version: 4.1.2
       obsidian:
         specifier: ^1.12.3
         version: 1.12.3(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)
@@ -750,8 +750,8 @@ packages:
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
 
-  '@mathjax/mathjax-newcm-font@4.1.1':
-    resolution: {integrity: sha512-LeV5AWzoR7k/k2tg5mW0Ad3Jr9oK9guW/zBUIP8aoiIZcZIhvAV9dlbtUSqSe1wgEBUP1KOcJXcrE/NxOqkxlQ==}
+  '@mathjax/mathjax-newcm-font@4.1.2':
+    resolution: {integrity: sha512-lZHMjNP2XbABHA3kVn40rbse5ERUeMEmrGH03qLkCwxq4/5Z/eNLr0akw1MmQcqTwCbvkx1BFcmJ7RCfbRlw3Q==}
 
   '@microsoft/eslint-plugin-sdl@1.1.0':
     resolution: {integrity: sha512-dxdNHOemLnBhfY3eByrujX9KyLigcNtW8sU+axzWv5nLGcsSBeKW2YYyTpfPo1hV8YPOmIGnfA4fZHyKVtWqBQ==}
@@ -2034,6 +2034,9 @@ packages:
   immutable@5.1.5:
     resolution: {integrity: sha512-t7xcm2siw+hlUM68I+UEOK+z84RzmN59as9DZ7P1l0994DKUWV7UXBMQZVxaoMSRQ+PBZbHCOoBt7a2wxOMt+A==}
 
+  immutable@5.1.6:
+    resolution: {integrity: sha512-q1swsS8K7L8usSHuOqF2TAoCCkonYz0SG38wLAggaa4Wml70zixIvt2ql4coQ2C2B3hTjltJry4r6bULwgAXLQ==}
+
   import-cwd@3.0.0:
     resolution: {integrity: sha512-4pnzH16plW+hgvRECbDWpQl3cqtvSofHWh44met7ESfZ8UZOWWddm8hEyDTqREJ9RbYHY8gi8DqmaelApoOGMg==}
     engines: {node: '>=8'}
@@ -2488,8 +2491,8 @@ packages:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
 
-  mathjax@4.1.1:
-    resolution: {integrity: sha512-NyvA8c39LUUM/m+oCg7sfA13hmw7yGkre5kiRWN9qzChCyhce39lecnbjgMA/oEUgq9Vyetk6u78apwcIXpW/A==}
+  mathjax@4.1.2:
+    resolution: {integrity: sha512-EQDS8xBpVg179BXoLeZ9JlwUFftOC5qylw20UlAMDhrTuooENigOocY79aNkkFSyvj/AST/89ZAo12+r5bPI4w==}
 
   mdn-data@2.0.30:
     resolution: {integrity: sha512-GaqWWShW4kv/G9IEucWScBx9G1/vsFZZJUO+tD26M8J8z3Kw5RDQjaoZe03YAClgeS/SWPOcb4nkFBTEi5DUEA==}
@@ -4307,7 +4310,7 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.2': {}
 
-  '@mathjax/mathjax-newcm-font@4.1.1': {}
+  '@mathjax/mathjax-newcm-font@4.1.2': {}
 
   '@microsoft/eslint-plugin-sdl@1.1.0(eslint@9.39.4)':
     dependencies:
@@ -5855,6 +5858,8 @@ snapshots:
 
   immutable@5.1.5: {}
 
+  immutable@5.1.6: {}
+
   import-cwd@3.0.0:
     dependencies:
       import-from: 3.0.0
@@ -6505,9 +6510,9 @@ snapshots:
 
   math-intrinsics@1.1.0: {}
 
-  mathjax@4.1.1:
+  mathjax@4.1.2:
     dependencies:
-      '@mathjax/mathjax-newcm-font': 4.1.1
+      '@mathjax/mathjax-newcm-font': 4.1.2
 
   mdn-data@2.0.30: {}
 
@@ -7002,7 +7007,7 @@ snapshots:
       '@bufbuild/protobuf': 2.12.0
       buffer-builder: 0.2.0
       colorjs.io: 0.5.2
-      immutable: 5.1.5
+      immutable: 5.1.6
       rxjs: 7.8.2
       supports-color: 8.1.1
       sync-child-process: 1.0.2

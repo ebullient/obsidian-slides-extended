@@ -60,7 +60,7 @@
         "jest": "^30.3.0",
         "yaml": "^2.7.1",
         "katex": "^0.16.45",
-        "mathjax": "^4.1.1",
+        "mathjax": "^4.1.2",
         "obsidian": "^1.12.3",
         "obsidian-utilities": "^1.1.5",
         "reveal.js": "^5.2.1",
