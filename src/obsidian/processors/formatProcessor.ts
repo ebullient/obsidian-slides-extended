@@ -1,9 +1,12 @@
+// Process formatting
+// See docs/content/basic-syntax/textStyle.md
+
 import type { Options, Processor } from "../../@types";
 import { processBySlide, skipMathCodeBlocks } from "../obsidianUtils";
 
 export class FormatProcessor implements Processor {
-    private markRegex = /==([^=]*)==/gm;
-    private commentRegex = /%%([^%]*)%%/gm;
+    private highlightedRegex = /==([\s\S]*?)==/g;
+    private commentRegex = /%%([\s\S]*?)%%/g;
 
     process(markdown: string, options: Options) {
         let output = markdown;
@@ -18,7 +21,7 @@ export class FormatProcessor implements Processor {
 
     private formatText(markdown: string): string {
         return markdown
-            .replaceAll(this.markRegex, "<mark>$1</mark>")
+            .replaceAll(this.highlightedRegex, "<mark>$1</mark>")
             .replaceAll(this.commentRegex, "");
     }
 }
