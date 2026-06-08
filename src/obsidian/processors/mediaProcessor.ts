@@ -93,6 +93,18 @@ export class MediaProcessor implements Processor {
             const audio = isAudio(filePath);
             const image = isUrl(filePath) || isImage(filePath);
 
+            let update = "";
+            if (
+                embed === "!" &&
+                isUrl(filePath) &&
+                filePath.startsWith("https://www.youtube.com/watch?v=")
+            ) {
+                // This is an embedded YouTube link, render it as background.
+                const YTUrl = new URL(filePath);
+                const videoID = YTUrl.searchParams.get("v");
+                update = `<!-- slide data-background-iframe="https://www.youtube.com/embed/${videoID}" data-background-interactive -->`;
+            }
+
             if (!icon && !image && !video && !audio) {
                 // This is not an media file. Leave it.
                 result += line.substring(lastIndex, m.index) + match;
@@ -114,16 +126,21 @@ export class MediaProcessor implements Processor {
                 embed = " ";
             }
 
-            let update = "";
-            if (embed === "!" && (icon || image || video || audio)) {
-                update = this.createMediaElement(filePath, alt, commentString);
-            } else {
-                update = this.updateMarkdownLink(
-                    line,
-                    match,
-                    mediaPath,
-                    filePath,
-                );
+            if (update === "") {
+                if (embed === "!" && (icon || image || video || audio)) {
+                    update = this.createMediaElement(
+                        filePath,
+                        alt,
+                        commentString,
+                    );
+                } else {
+                    update = this.updateMarkdownLink(
+                        line,
+                        match,
+                        mediaPath,
+                        filePath,
+                    );
+                }
             }
 
             // Append the text before the match and the updated match
