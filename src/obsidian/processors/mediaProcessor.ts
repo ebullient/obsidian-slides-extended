@@ -72,6 +72,7 @@ export class MediaProcessor implements Processor {
     }
 
     private htmlify(line: string) {
+        const YTHost = "www.youtube.com";
         let result = "";
         let lastIndex = 0;
 
@@ -94,15 +95,13 @@ export class MediaProcessor implements Processor {
             const image = isUrl(filePath) || isImage(filePath);
 
             let update = "";
-            if (
-                embed === "!" &&
-                isUrl(filePath) &&
-                filePath.startsWith("https://www.youtube.com/watch?v=")
-            ) {
-                // This is an embedded YouTube link, render it as background.
-                const YTUrl = new URL(filePath);
-                const videoID = YTUrl.searchParams.get("v");
-                update = `<!-- slide data-background-iframe="https://www.youtube.com/embed/${videoID}" data-background-interactive -->`;
+            if (embed === "!" && isUrl(filePath)) {
+                // If this is an _embedded_ YouTube link, render it as background.
+                const url = new URL(filePath);
+                update =
+                    url.host === YTHost
+                        ? `<!-- slide data-background-iframe="https://${url.host}/embed/${url.searchParams.get("v")}" data-background-interactive -->`
+                        : "";
             }
 
             if (!icon && !image && !video && !audio) {
