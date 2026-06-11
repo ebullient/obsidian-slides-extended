@@ -224,6 +224,15 @@ Audio with controls disabled
     return expect(result).toMatchSnapshot();
 });
 
+test("Basic Markdown Syntax > YouTube", () => {
+    const input = `![](https://www.youtube.com/watch?v=jNQXAC9IVRw)`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = JSON.stringify(sut.process(markdown, options));
+    return expect(result).toMatchSnapshot();
+});
 
 test('Basic Markdown Syntax > Links', () => {
     const input = `External Links

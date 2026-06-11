@@ -72,6 +72,7 @@ export class MediaProcessor implements Processor {
     }
 
     private htmlify(line: string) {
+        const YTHost = "www.youtube.com";
         let result = "";
         let lastIndex = 0;
 
@@ -92,6 +93,16 @@ export class MediaProcessor implements Processor {
             const video = isVideo(filePath);
             const audio = isAudio(filePath);
             const image = isUrl(filePath) || isImage(filePath);
+
+            let update = "";
+            if (embed === "!" && isUrl(filePath)) {
+                // If this is an _embedded_ YouTube link, render it as background.
+                const url = new URL(filePath);
+                update =
+                    url.host === YTHost
+                        ? `<!-- slide data-background-iframe="https://${YTHost}/embed/${url.searchParams.get("v")}" data-background-interactive -->`
+                        : "";
+            }
 
             if (!icon && !image && !video && !audio) {
                 // This is not an media file. Leave it.
@@ -114,16 +125,21 @@ export class MediaProcessor implements Processor {
                 embed = " ";
             }
 
-            let update = "";
-            if (embed === "!" && (icon || image || video || audio)) {
-                update = this.createMediaElement(filePath, alt, commentString);
-            } else {
-                update = this.updateMarkdownLink(
-                    line,
-                    match,
-                    mediaPath,
-                    filePath,
-                );
+            if (update === "") {
+                if (embed === "!" && (icon || image || video || audio)) {
+                    update = this.createMediaElement(
+                        filePath,
+                        alt,
+                        commentString,
+                    );
+                } else {
+                    update = this.updateMarkdownLink(
+                        line,
+                        match,
+                        mediaPath,
+                        filePath,
+                    );
+                }
             }
 
             // Append the text before the match and the updated match
