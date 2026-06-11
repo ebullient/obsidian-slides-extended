@@ -100,7 +100,7 @@ export class MediaProcessor implements Processor {
                 const url = new URL(filePath);
                 update =
                     url.host === YTHost
-                        ? `<!-- slide data-background-iframe="https://${url.host}/embed/${url.searchParams.get("v")}" data-background-interactive -->`
+                        ? `<!-- slide data-background-iframe="https://${YTHost}/embed/${url.searchParams.get("v")}" data-background-interactive -->`
                         : "";
             }
 
