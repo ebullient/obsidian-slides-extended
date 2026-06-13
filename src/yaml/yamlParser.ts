@@ -34,6 +34,7 @@ export class YamlParser {
             enablePointer: false,
             enableCustomControls: false,
             enableTimeBar: false,
+            enableTldreveal: false,
             controls: false,
         };
     }
@@ -127,6 +128,7 @@ export class YamlParser {
             "enableMenu",
             "enableCustomControls",
             "enableTimeBar",
+            "enableTldreveal",
             "enablePointer",
             "mathEngine",
         ];

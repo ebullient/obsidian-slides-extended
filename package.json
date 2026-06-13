@@ -81,6 +81,7 @@
         "color": "^4.2.3",
         "fastify": "^5.8.5",
         "jszip": "^3.10.1",
-        "mustache": "^4.2.0"
+        "mustache": "^4.2.0",
+        "tldreveal": "^1.2.0"
     }
 }

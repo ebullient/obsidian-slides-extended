@@ -228,6 +228,12 @@ const parameters = {
             }
         }),
         copy({
+            assets: {
+                from: ['node_modules/tldreveal/dist/bundle/*'],
+                to: ['./plugin/tldreveal/'],
+            }
+        }),
+        copy({
             assets: prod ? {} : {
                 from: ['.hotreload'],
                 to: ['.hotreload'],

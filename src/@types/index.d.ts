@@ -19,6 +19,7 @@ export interface SlidesExtendedSettings {
     enableMenu: boolean;
     enablePointer: boolean;
     enableTimeBar: boolean;
+    enableTldreveal: boolean;
     theme: string;
     highlightTheme: string;
     transition: string;
