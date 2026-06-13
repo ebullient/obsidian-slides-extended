@@ -50,7 +50,7 @@
         "@types/request": "^2.48.13",
         "@typescript-eslint/parser": "^8.59.3",
         "auto-changelog": "^2.5.0",
-        "esbuild": "^0.28.0",
+        "esbuild": "^0.28.1",
         "esbuild-plugin-copy": "^2.1.1",
         "esbuild-sass-plugin": "^3.7.0",
         "eslint": "^9.39.4",
