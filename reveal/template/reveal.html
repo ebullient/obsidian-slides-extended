@@ -16,6 +16,9 @@
     {{#enableChalkboard}}
     <link rel="stylesheet" href="{{{base}}}plugin/chalkboard/style.css">
     {{/enableChalkboard}}
+    {{#enableTldreveal}}
+    <link rel="stylesheet" href="{{{base}}}plugin/tldreveal/index.css" />
+    {{/enableTldreveal}}
 
     {{#enablePointer}}
     <link rel="stylesheet" href="{{{base}}}plugin/reveal-pointer/pointer.css" />
@@ -138,6 +141,9 @@
     <script src="{{{base}}}plugin/elapsed-time-bar/elapsed-time-bar.js"></script>
     {{/enableTimeBar}}
     {{/timeForPresentation}}
+    {{#enableTldreveal}}
+    <script src="{{{base}}}plugin/tldreveal/index.js"></script>
+    {{/enableTldreveal}}
 
     {{#scriptPaths}}
     <script src="{{{base}}}{{{.}}}"></script>
@@ -219,9 +225,12 @@
                 {{/enableAudioSlideshow}}
                 {{#timeForPresentation}}
                 {{#enableTimeBar}}
-                ElapsedTimeBar
+                ElapsedTimeBar,
                 {{/enableTimeBar}}
                 {{/timeForPresentation}}
+                {{#enableTldreveal}}
+                Tldreveal.Tldreveal(),
+                {{/enableTldreveal}}
             ],
             {{#timeForPresentation}}
             allottedTime: "{{{.}}}",

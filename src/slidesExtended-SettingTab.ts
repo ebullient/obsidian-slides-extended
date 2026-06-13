@@ -463,5 +463,19 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                             | "mathjax";
                     });
             });
+
+        new Setting(containerEl)
+            .setName("Tldreveal")
+            .setDesc("Draw on your presentation by pressing 'd'.")
+            .addButton((btn) => {
+                btn.setButtonText("enableTldreveal").setDisabled(true);
+            })
+            .addToggle((value) =>
+                value
+                    .setValue(this.newSettings.enableTldreveal)
+                    .onChange((value) => {
+                        this.newSettings.enableTldreveal = value;
+                    }),
+            );
     }
 }

@@ -17,6 +17,7 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     enableMenu: false,
     enablePointer: false,
     enableTimeBar: false,
+    enableTldreveal: false,
     theme: "black",
     highlightTheme: "zenburn",
     transition: "slide",

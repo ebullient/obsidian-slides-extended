@@ -137,6 +137,7 @@ export class RevealRenderer {
             enableOverview,
             enableMenu,
             enableTimeBar,
+            enableTldreveal,
             enablePointer,
             mathEngine,
         } = settings;
@@ -166,6 +167,7 @@ export class RevealRenderer {
             enableMenu,
             enablePointer,
             enableTimeBar,
+            enableTldreveal,
             isKaTeX,
             isMathJax,
             revealOptionsStr: JSON.stringify(revealOptions),
