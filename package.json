@@ -46,7 +46,7 @@
         "@types/color": "^4.2.1",
         "@types/jest": "^30.0.0",
         "@types/mustache": "^4.2.6",
-        "@types/node": "^25.6.0",
+        "@types/node": "^25.8.0",
         "@types/request": "^2.48.13",
         "@typescript-eslint/parser": "^8.59.3",
         "auto-changelog": "^2.5.0",
