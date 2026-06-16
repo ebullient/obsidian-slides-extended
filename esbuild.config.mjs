@@ -21,25 +21,7 @@ const map = {
     'src/main.ts': 'main',
     'src/scss/styles.scss': 'styles',
     'src/scss/layout/slides-extended.scss': 'css/slides-extended',
-    'reveal/plugin/reveal.js-elapsed-time-bar/elapsed-time-bar.js': 'plugin/elapsed-time-bar/elapsed-time-bar',
-    'reveal/plugin/load-mathjax.js': 'plugin/load-mathjax',
-    'reveal/plugin/obsidian-markdown.js': 'plugin/obsidian-markdown',
 };
-
-const resolveRevealJsPlugins = {
-    name: 'resolveRevealJsPlugins',
-    setup(build) {
-        //
-        build.onResolve({ filter: /^\/plugin\/.*.png/ }, args => {
-            return { path: args.path, external: true }
-        })
-
-        // Mark all paths starting with "http://" or "https://" as external
-        build.onResolve({ filter: /^https?:\/\// }, args => {
-            return { path: args.path, external: true }
-        })
-    },
-}
 
 const themeDir = 'src/scss/theme/';
 const files = readdirSync(themeDir);
@@ -89,7 +71,6 @@ const parameters = {
     treeShaking: true,
     outdir: dir,
     plugins: [
-        resolveRevealJsPlugins,
         sassPlugin({
             filter: /.(s[ac]ss|css)$/,
             loadPaths: [
@@ -116,115 +97,8 @@ const parameters = {
         }),
         copy({
             assets: {
-                from: ['reveal/template/**/*'],
-                to: ['./template/']
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/reveal.js/dist/**/*'],
-                to: ['./dist/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/reveal.js/css/**/*'],
-                to: ['./dist/css/'],
-                keepStructure: true
-            }
-        }),
-        copy({
-            assets: {
                 from: ['src/scss/theme/source/fonts/**/*'],
                 to: ['./dist/theme/fonts/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/highlight.js/styles/vs2015.css'],
-                to: ['./plugin/highlight/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/@fortawesome/fontawesome-free/js/all.min.js'],
-                to: ['./dist/fontawesome/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: [
-                    'node_modules/reveal.js/plugin/**/*',
-                ],
-                to: ['./plugin/'],
-                keepStructure: true
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/reveal.js-plugins/chalkboard/**/*'],
-                to: ['./plugin/chalkboard/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/chart.js/dist/chart.umd.js'],
-                to: ['./plugin/chart/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/reveal.js-plugins/chart/*'],
-                to: ['./plugin/chart/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/reveal.js-plugins/customcontrols/*'],
-                to: ['./plugin/customcontrols/'],
-                keepStructure: true
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/reveal.js-plugins/audio-slideshow/plugin.js',
-                       'node_modules/reveal.js-plugins/audio-slideshow/recorder.js'],
-                to: ['./plugin/audio-slideshow/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/mathjax/**/*'],
-                to: ['./plugin/math/mathjax/'],
-            }
-        }),
-
-        copy({
-            assets: {
-                from: ['node_modules/katex/dist/**/*'],
-                to: ['./plugin/math/katex/dist/'],
-                keepStructure: true,
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/reveal.js-menu/*'],
-                to: ['./plugin/menu/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: ['node_modules/reveal.js-mermaid-plugin/plugin/mermaid/*'],
-                to: ['./plugin/mermaid/'],
-            }
-        }),
-        copy({
-            assets: {
-                from: [
-                    'node_modules/reveal.js-pointer/dist/pointer.js',
-                    'node_modules/reveal.js-pointer/dist/pointer.css',
-                ],
-                to: ['./plugin/reveal-pointer/'],
             }
         }),
         copy({

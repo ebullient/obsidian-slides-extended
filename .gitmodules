@@ -1,0 +1,4 @@
+[submodule "reveal-dist"]
+	path = reveal-dist
+	url = git@github.com:ebullient/obsidian-slides-extended.git
+	branch = reveal-dist
