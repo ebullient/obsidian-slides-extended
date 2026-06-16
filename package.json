@@ -18,7 +18,7 @@
         "@types/node": "^25.8.0",
         "jest": "^30.4.2",
         "ts-jest": "^29.4.9",
-        "typescript": "^5.9.3",
+        "typescript": "^6.0.3",
         "@fortawesome/fontawesome-free": "^7.2.0",
         "chart.js": "^4.5.1",
         "esbuild": "^0.28.1",
