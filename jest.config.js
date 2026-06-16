@@ -1,7 +1,7 @@
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'node',
-    modulePathIgnorePatterns: ["<rootDir>/docs/", "<rootDir>/test-vault/"],
+    modulePathIgnorePatterns: ["<rootDir>/docs/", "<rootDir>/test-vault/", "<rootDir>/reveal-dist/"],
 
     coveragePathIgnorePatterns: ["src/obsidianUtils.ts"],
 	coverageDirectory: "coverage",
