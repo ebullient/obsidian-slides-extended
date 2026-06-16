@@ -30,6 +30,18 @@ for (const file of files) {
 const entryPoints = Object.entries(map)
     .map(([k, v]) => ({ 'in': k, 'out': v }));
 
+const resolveRevealJsPlugins = {
+    name: 'resolveRevealJsPlugins',
+    setup(build) {
+        build.onResolve({ filter: /^\/plugin\/.*.png/ }, args => {
+            return { path: args.path, external: true }
+        })
+        build.onResolve({ filter: /^https?:\/\// }, args => {
+            return { path: args.path, external: true }
+        })
+    },
+}
+
 const parameters = {
     entryPoints,
     bundle: true,
@@ -42,6 +54,7 @@ const parameters = {
     treeShaking: true,
     outdir: dir,
     plugins: [
+        resolveRevealJsPlugins,
         sassPlugin({
             filter: /.(s[ac]ss|css)$/,
             loadPaths: [
