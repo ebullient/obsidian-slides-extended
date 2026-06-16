@@ -2,10 +2,6 @@
 
 ![GitHub all releases](https://img.shields.io/github/downloads/ebullient/obsidian-slides-extended/total?color=success)
 
-🚧 Fork in progress, there will be some dust 🚧
-
-Docs, especially, are pretty borked. ;)
-
 <img src="https://raw.githubusercontent.com/ebullient/obsidian-slides-extended/main/imgs/demo.gif" alt="demo">
 
 Slides Extended is the perfect slide deck extension for [Obsidian](https://obsidian.md)
