@@ -2,9 +2,7 @@ import esbuild from "esbuild";
 import process from "node:process";
 import { builtinModules } from "node:module";
 import { copy } from 'esbuild-plugin-copy';
-import { basename } from 'node:path';
 import { sassPlugin } from 'esbuild-sass-plugin';
-import { readdirSync } from "node:fs";
 
 try { process.loadEnvFile(); } catch { /* no .env file */ }
 
@@ -20,18 +18,7 @@ const dir = process.env.OUTDIR ? process.env.OUTDIR : "./build";
 const map = {
     'src/main.ts': 'main',
     'src/scss/styles.scss': 'styles',
-    'src/scss/layout/slides-extended.scss': 'css/slides-extended',
 };
-
-const themeDir = 'src/scss/theme/';
-const files = readdirSync(themeDir);
-for (const file of files) {
-    if (file.endsWith('.scss')) {
-        const source = themeDir + file;
-        const target = `dist/theme/${basename(file).replaceAll('.scss', '')}`;
-        map[source] = target;
-    }
-}
 
 const entryPoints = Object.entries(map)
     .map(([k, v]) => {
@@ -93,12 +80,6 @@ const parameters = {
             assets: {
                 from: ['distVersion.json'],
                 to: ['./distVersion.json']
-            }
-        }),
-        copy({
-            assets: {
-                from: ['src/scss/theme/source/fonts/**/*'],
-                to: ['./dist/theme/fonts/'],
             }
         }),
         copy({
