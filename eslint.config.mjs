@@ -8,6 +8,7 @@ export default defineConfig([
     globalIgnores([
         "dist/",
         "docs/",
+        "reveal-dist/",
         "reveal-plugin/",
         "se-test-vault/",
         "test/",
