@@ -109,8 +109,8 @@ jobs:
         pnpm build
         git config user.name "$GH_BOT_NAME"
         git config user.email "$GH_BOT_EMAIL"
-        git tag "$RELEASE_VERSION"
-        git push origin "$RELEASE_VERSION"
+        git tag "reveal-dist/$RELEASE_VERSION"
+        git push origin "reveal-dist/$RELEASE_VERSION"
         cd ..
 
     # Package the required files into a zip

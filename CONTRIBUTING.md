@@ -11,11 +11,32 @@ Thank you for your interest in contributing to Slides Extended! This guide will 
 
 ### Setup
 
-1. Clone the repository
-2. Install dependencies:
+1. Clone the repository with submodules:
+
+   ```bash
+   git clone --recurse-submodules git@github.com:ebullient/obsidian-slides-extended.git
+   ```
+
+   Or, if you already cloned without submodules:
+
+   ```bash
+   git submodule update --init
+   ```
+
+2. Install dependencies for the main plugin:
+
    ```bash
    pnpm install
    ```
+
+3. Build the reveal.js distribution assets (required for the plugin to serve presentations):
+
+   ```bash
+   cd reveal-dist && pnpm install && pnpm build && cd ..
+   ```
+
+   This populates `reveal-dist/build/` with `css/`, `dist/`, `plugin/`, and `template/`
+   which the plugin's HTTP server serves at runtime.
 
 ## Development Workflow
 
@@ -49,9 +70,11 @@ pnpm build
 For testing the plugin in Obsidian during development:
 
 1. Set the `OUTDIR` environment variable to your Obsidian vault's plugin directory:
+
    ```bash
    export OUTDIR="/path/to/your/vault/.obsidian/plugins/slides-extended"
    ```
+
 2. Run `pnpm dev` to watch and build automatically
 3. The plugin will hot-reload in Obsidian (requires the `.hotreload` file which is created automatically)
 
@@ -65,6 +88,7 @@ This project uses [Biome](https://biomejs.dev/) for linting and formatting (a mo
 - Auto-organize imports
 
 Before submitting a PR, ensure:
+
 ```bash
 pnpm fix    # Fix any auto-fixable issues
 pnpm test   # All tests pass
@@ -76,6 +100,7 @@ pnpm build  # Production build succeeds
 ### Test Structure
 
 Tests are located in the [test/](test/) directory:
+
 - `*.unit.test.ts` - Unit test files
 - `__snapshots__/` - Jest snapshot files for regression testing
 - `__mocks__/` - Mock implementations (e.g., Obsidian utilities)
@@ -91,6 +116,7 @@ When adding new features or processors:
 4. Mock `ObsidianUtils` when needed (it's excluded from coverage as it depends on Obsidian APIs)
 
 Example test structure:
+
 ```typescript
 import { MarkdownProcessor } from '../src/obsidian/markdownProcessor';
 import { mockObsidianUtils } from './__mocks__/mockObsidianUtils';
@@ -116,40 +142,44 @@ describe('MyFeature', () => {
 
 The core of Slides Extended is a multi-phase markdown processing pipeline in [src/obsidian/markdownProcessor.ts](src/obsidian/markdownProcessor.ts). Understanding this is key to contributing:
 
-**Phase 1: Template Processing**
-- Runs iteratively with circuit breaker (max 10 iterations) to handle nested templates
-- `MultipleFileProcessor` - Handles file includes (`![[other-file]]`)
-- `TemplateProcessor` - Applies templates from YAML frontmatter
+1. **Phase 1: Template Processing**
 
-**Phase 2: Slide Structure**
-- `SkipSlideProcessor` - Removes slides marked to be hidden
-- `DebugViewProcessor` - Adds debug grid if enabled
-- `AutoClosingProcessor` - Auto-closes self-closing HTML tags
-- `DefaultBackgroundProcessor` - Applies default backgrounds
+    - Runs iteratively with circuit breaker (max 10 iterations) to handle nested templates
+    - `MultipleFileProcessor` - Handles file includes (`![[other-file]]`)
+    - `TemplateProcessor` - Applies templates from YAML frontmatter
 
-**Phase 3: Content Processing** (executed in this specific order)
-- `LatexProcessor` - LaTeX/MathJax equations
-- `EmojiProcessor` - Emoji shortcode conversion
-- `IconsProcessor` - FontAwesome icons
-- `FormatProcessor` - Text formatting
-- `MermaidProcessor` - Mermaid diagrams
-- `BlockProcessor` - Block-level transformations
-- `FootnoteProcessor` - Footnote handling
-- `ExcalidrawProcessor` - Excalidraw drawing embeds
-- `MediaProcessor` - Images/videos
-- `InternalLinkProcessor` - Obsidian wikilinks
-- `ReferenceProcessor` - Block references
-- `FragmentProcessor` - Reveal.js fragments (animations)
-- `DropProcessor` - Drop layouts
-- `GridProcessor` - Grid layouts
-- `CommentProcessor` - Slide comments
-- `ChartProcessor` - Chart.js integration
+2. **Phase 2: Slide Structure**
+
+    - `SkipSlideProcessor` - Removes slides marked to be hidden
+    - `DebugViewProcessor` - Adds debug grid if enabled
+    - `AutoClosingProcessor` - Auto-closes self-closing HTML tags
+    - `DefaultBackgroundProcessor` - Applies default backgrounds
+
+3. **Phase 3: Content Processing** (executed in this specific order)
+
+    - `LatexProcessor` - LaTeX/MathJax equations
+    - `EmojiProcessor` - Emoji shortcode conversion
+    - `IconsProcessor` - FontAwesome icons
+    - `FormatProcessor` - Text formatting
+    - `MermaidProcessor` - Mermaid diagrams
+    - `BlockProcessor` - Block-level transformations
+    - `FootnoteProcessor` - Footnote handling
+    - `ExcalidrawProcessor` - Excalidraw drawing embeds
+    - `MediaProcessor` - Images/videos
+    - `InternalLinkProcessor` - Obsidian wikilinks
+    - `ReferenceProcessor` - Block references
+    - `FragmentProcessor` - Reveal.js fragments (animations)
+    - `DropProcessor` - Drop layouts
+    - `GridProcessor` - Grid layouts
+    - `CommentProcessor` - Slide comments
+    - `ChartProcessor` - Chart.js integration
 
 **Important**: The order of processors matters! For example, `LatexProcessor` must run before `MediaProcessor` to avoid conflicts. Each processor implements the `Processor` interface with a `process(markdown: string, options: Options): string` method.
 
 ### Adding a New Processor
 
 1. Create your processor in [src/obsidian/processors/](src/obsidian/processors/):
+
    ```typescript
    import type { Options, Processor } from '../../@types';
 
@@ -172,10 +202,14 @@ The core of Slides Extended is a multi-phase markdown processing pipeline in [sr
 
 ### Adding Reveal.js Plugins or Assets
 
-If you need to add new reveal.js plugins or external assets:
+Reveal.js distribution assets live in the [`reveal-dist`](reveal-dist/) submodule
+(branch `reveal-dist` on this repo). Changes to reveal assets go there, not in the
+main plugin source.
 
-1. Add the npm package to dependencies in [package.json](package.json)
-2. Update [esbuild.config.mjs](esbuild.config.mjs) to copy the necessary files:
+1. `cd reveal-dist`
+2. Add the npm package to `reveal-dist/package.json`
+3. Update `reveal-dist/esbuild.config.mjs` to copy the necessary files:
+
    ```javascript
    copy({
        assets: {
@@ -185,24 +219,31 @@ If you need to add new reveal.js plugins or external assets:
    })
    ```
 
+4. Run `pnpm install && pnpm build` inside `reveal-dist/` to verify the output
+
 ## Project Structure
 
-```
+```txt
+reveal-dist/                     # git submodule (branch: reveal-dist)
+├── plugin/                      # Custom reveal.js plugins (source)
+├── template/                    # Mustache HTML templates (source)
+├── package.json                 # Minimal deps: reveal.js ecosystem only
+└── esbuild.config.mjs           # Builds css/, dist/, plugin/, template/ to build/
+
 src/
 ├── main.ts                      # Plugin entry point
 ├── slidesExtended-Plugin.ts     # Core plugin class
-├── reveal/                      # Reveal.js integration
+├── reveal/                      # Reveal.js integration (plugin-side)
 │   ├── revealPreviewView.ts     # Preview view
 │   ├── revealServer.ts          # Fastify HTTP server
 │   ├── revealRenderer.ts        # Markdown-to-HTML conversion
 │   └── revealExporter.ts        # PDF/HTML export
 ├── obsidian/                    # Obsidian-specific processing
 │   ├── markdownProcessor.ts     # Core pipeline orchestrator
-│   ├── processors/              # 23+ processor modules
+│   ├── processors/              # 15+ processor modules
 │   ├── transformers/            # Style/attribute transformers
 │   └── suggesters/              # Editor autocompletion
 ├── yaml/                        # Configuration management
-├── template/                    # Mustache HTML templates
 ├── scss/                        # Styles and themes
 └── @types/                      # TypeScript type definitions
 ```
@@ -242,9 +283,9 @@ src/
 - Use clear, descriptive commit messages
 - Focus on the "why" rather than the "what"
 - Examples:
-  - "Fix greedy embed pattern matching"
-  - "Add support for custom chart colors"
-  - "Improve error handling in media processor"
+    - "Fix greedy embed pattern matching"
+    - "Add support for custom chart colors"
+    - "Improve error handling in media processor"
 
 ## Release Process
 
