@@ -59,7 +59,7 @@
         "highlight.js": "^11.11.1",
         "jest": "^30.4.2",
         "yaml": "^2.7.1",
-        "katex": "^0.16.45",
+        "katex": "^0.16.47",
         "mathjax": "^4.1.2",
         "obsidian": "^1.13.1",
         "obsidian-utilities": "^1.1.5",
