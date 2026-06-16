@@ -1,7 +1,9 @@
 import esbuild from "esbuild";
 import process from "node:process";
 import { copy } from 'esbuild-plugin-copy';
+import { basename } from 'node:path';
 import { sassPlugin } from 'esbuild-sass-plugin';
+import { readdirSync } from "node:fs";
 
 try { process.loadEnvFile(); } catch { /* no .env file */ }
 
@@ -12,7 +14,18 @@ const map = {
     'plugin/reveal.js-elapsed-time-bar/elapsed-time-bar.js': 'plugin/elapsed-time-bar/elapsed-time-bar',
     'plugin/load-mathjax.js': 'plugin/load-mathjax',
     'plugin/obsidian-markdown.js': 'plugin/obsidian-markdown',
+    'scss/layout/slides-extended.scss': 'css/slides-extended',
 };
+
+const themeDir = 'scss/theme/';
+const files = readdirSync(themeDir);
+for (const file of files) {
+    if (file.endsWith('.scss')) {
+        const source = themeDir + file;
+        const target = `dist/theme/${basename(file).replaceAll('.scss', '')}`;
+        map[source] = target;
+    }
+}
 
 const entryPoints = Object.entries(map)
     .map(([k, v]) => ({ 'in': k, 'out': v }));
@@ -33,6 +46,7 @@ const parameters = {
             filter: /.(s[ac]ss|css)$/,
             loadPaths: [
                 'node_modules/reveal.js/css',
+                'scss',
             ],
         }),
         copy({
@@ -133,6 +147,12 @@ const parameters = {
                     'node_modules/reveal.js-pointer/dist/pointer.css',
                 ],
                 to: ['./plugin/reveal-pointer/'],
+            }
+        }),
+        copy({
+            assets: {
+                from: ['scss/theme/fonts/**/*'],
+                to: ['./dist/theme/fonts/'],
             }
         }),
         copy({

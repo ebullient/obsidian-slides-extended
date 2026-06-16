@@ -1,0 +1,61 @@
+body {
+	--split-div-size: 0;
+	--split-gap-size: 1em;
+}
+
+.reveal split {
+    max-width: 100%;
+    max-height: 100%;
+
+    &[no-margin] {
+        --split-gap-size: 0;
+        &>* {
+            --r-block-margin: 0;
+        }
+    }
+    &[wrap] {
+        display: grid;
+        grid-gap: var(--split-gap-size);
+        >* {
+            margin: auto;
+        }
+    }
+    @for $i from 1 through 10 {
+        &[wrap="#{$i}"] {
+            grid-template-columns: repeat(#{$i}, 1fr);
+        }
+    }
+    &:not([wrap]) {
+        display: flex;
+        flex-flow: row wrap;
+        align-content: center;
+        gap: var(--split-gap-size);
+
+        &[even]>* {
+            flex: 1
+        }
+        @for $i from 1 through 10 {
+            &[left="#{$i}"]>*:first-child {
+                flex: #{$i};
+            }
+
+            &[middle="#{$i}"]>*:nth-child(2) { // middle must win if present
+                flex: #{$i}!important;
+            }
+
+            &[right="#{$i}"]>*:nth-child(2) { // 2nd, middle will override
+                flex: #{$i};
+            }
+
+            &[right="#{$i}"]>*:nth-child(3) { // has middle, this becomes 3rd element
+                flex: #{$i};
+            }
+        }
+    }
+}
+
+@for $i from 0 through 5 {
+    .reveal split[gap="#{$i}"] {
+        --split-gap-size: #{$i}em;
+    }
+}
