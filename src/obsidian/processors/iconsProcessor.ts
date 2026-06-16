@@ -3,8 +3,7 @@ import { FONTAWESOME_PREFIXES } from "../../slidesExtended-constants";
 
 export class IconsProcessor implements Processor {
     private regex = new RegExp(
-        // biome-ignore lint/suspicious/noUselessEscapeInString: \w is a regex word character, not a string escape
-        `:(${FONTAWESOME_PREFIXES.join("|")})_([\w-]+):`,
+        `:(${FONTAWESOME_PREFIXES.join("|")})_([\\w-]+):`,
         "g",
     );
 
