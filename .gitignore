@@ -1,0 +1,30 @@
+*.DS_Store
+target
+ref
+.idea
+.vscode
+
+# npm / pnpm
+node_modules
+package-lock.json
+.pnpm-store
+.env
+
+# test specific
+.obsidian
+
+# coverage report
+coverage
+
+dist
+build
+coverage/
+.nyc_output/
+old
+examples/
+*.out
+
+slides-extended/
+slides-extended.zip
+settings.local.json
+export

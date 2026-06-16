@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>{{{title}}}</title>
+    <link rel="stylesheet" href="{{{base}}}dist/reset.css">
+    <link rel="stylesheet" href="{{{base}}}dist/reveal.css" />
+    <link rel="stylesheet" href="{{{base}}}css/slides-extended.css" />
+    <link rel="stylesheet" href="{{{base}}}{{{themeUrl}}}" id="theme" />
+    <link rel="stylesheet" href="{{{base}}}{{{highlightThemeUrl}}}" />
+
+    {{#cssPaths}}
+    <link rel="stylesheet" href="{{{base}}}{{{.}}}" />
+    {{/cssPaths}}
+    {{#remoteCSSPaths}}
+    <link rel="stylesheet" href="{{{.}}}" />
+    {{/remoteCSSPaths}}
+
+    <script defer src="{{{base}}}dist/fontawesome/all.min.js"></script>
+    {{#isMathJax}}
+    <script defer src="{{{base}}}plugin/load-mathjax.js"></script>
+    {{/isMathJax}}
+
+    <script type="text/javascript">
+
+        function fitElements() {
+            const itemsToFit = document.getElementsByClassName('fitText');
+            for (const item in itemsToFit) {
+                if (Object.hasOwnProperty.call(itemsToFit, item)) {
+                    const element = itemsToFit[item];
+                    fitElement(element, 1, 1000);
+                    element.classList.remove('fitText');
+                }
+            }
+        }
+
+        function fitElement(element, start, end) {
+
+            let size = (end + start) / 2;
+            element.style.fontSize = `${size}px`;
+
+            if (Math.abs(start - end) < 1) {
+                while (element.scrollHeight > element.offsetHeight) {
+                    size--;
+                    element.style.fontSize = `${size}px`;
+                }
+                return;
+            }
+
+            if (element.scrollHeight > element.offsetHeight) {
+                fitElement(element, start, size);
+            } else {
+                fitElement(element, size, end);
+            }
+        }
+
+
+        document.onreadystatechange = () => {
+            fitElements();
+        };
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">{{{slides}}}</div>
+    </div>
+
+    <script src="{{{base}}}dist/reveal.js"></script>
+    <script src="{{{base}}}plugin/notes/notes.js"></script>
+    <script src="{{{base}}}plugin/markdown/markdown.js"></script>
+    <script src="{{{base}}}plugin/obsidian-markdown.js"></script>
+    <script src="{{{base}}}plugin/highlight/highlight.js"></script>
+
+    <script src="{{{base}}}plugin/zoom/zoom.js"></script>
+    <script src="{{{base}}}plugin/math/math.js"></script>
+    <script src="{{{base}}}plugin/mermaid/mermaid.js"></script>
+    <script src="{{{base}}}plugin/chart/chart.umd.js"></script>
+    <script src="{{{base}}}plugin/chart/plugin.js"></script>
+
+    {{#enableAudioSlideshow}}
+    <script src="{{{base}}}plugin/audio-slideshow/plugin.js"></script>
+    {{/enableAudioSlideshow}}
+
+    {{#scriptPaths}}
+    <script src="{{{base}}}{{{.}}}"></script>
+    {{/scriptPaths}}
+    {{#remoteScriptPaths}}
+    <script src="{{{.}}}"></script>
+    {{/remoteScriptPaths}}
+
+    <script>
+        function extend() {
+            const target = {};
+            for (let i = 0; i < arguments.length; i++) {
+                const source = arguments[i];
+                for (const key in source) {
+                    if (source.hasOwnProperty(key)) {
+                        target[key] = source[key];
+                    }
+                }
+            }
+            return target;
+        }
+
+        function isLight(color) {
+            // normalize to rgb(a)
+            const optionEl = document.createElement("option");
+            optionEl.style.color = color;
+            const normalizedColor = optionEl.style.color;
+
+            const match = normalizedColor.match(/(\d+), (\d+), (\d+)/);
+            if (!match) return false;
+            const [, c_r, c_g, c_b] = match;
+
+            const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+            return brightness > 155;
+        }
+
+        const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+
+        if (isLight(bgColor)) {
+            document.body.classList.add('has-light-background');
+        } else {
+            document.body.classList.add('has-dark-background');
+        }
+
+        // default options to init reveal.js
+        const defaultOptions = {
+            controls: false,
+            progress: false,
+            history: false,
+            center: true,
+            transition: 'default', // none/fade/slide/convex/concave/zoom
+            plugins: [
+                ObsidianMarkdown,
+                RevealHighlight,
+                RevealZoom,
+                RevealNotes,
+                {{#isKaTeX}}
+                RevealMath.KaTeX,
+                {{/isKaTeX}}
+                {{#isMathJax}}
+                RevealMath.MathJax3,
+                {{/isMathJax}}
+                RevealMermaid,
+                RevealChart,
+                {{#enableAudioSlideshow}}
+                RevealAudioSlideshow,
+                {{/enableAudioSlideshow}}
+            ],
+            markdown: {
+                gfm: true,
+            },
+            {{#isKaTeX}}
+            katex: {
+                local: '{{{base}}}plugin/math/katex',
+                extensions: ["mhchem"],
+            },
+            {{/isKaTeX}}
+            {{#isMathJax}}
+            mathjax3: {
+                mathjax: '{{{base}}}plugin/math/mathjax/tex-chtml.js',
+            },
+            {{/isMathJax}}
+            {{#enableAudioSlideshow}}
+            audio: {
+                defaultAudios: false,
+            },
+            {{/enableAudioSlideshow}}
+        };
+
+        // options from URL query string
+        const queryOptions = Reveal().getQueryHash() || {};
+
+        const options = extend(defaultOptions, {{{ revealOptionsStr }}}, queryOptions);
+        options.controls = false;
+        options.progress = false;
+        options.history = false;
+        options.overview = false;
+        options.slideNumber = false;
+        options.keyboard = false;
+    </script>
+
+    <script>
+        /**
+         * KaTeX Equation Numbering Note
+         *
+         * KaTeX maintains a global equation counter for \begin{equation} environments.
+         * When navigating between slides, reveal.js math plugin may re-render math, causing
+         * equation numbers to change randomly.
+         *
+         * Note: Regular $$ blocks don't have equation numbers - only \begin{equation} does.
+         *
+         * If you experience issues with equation numbers changing:
+         * Use manual \tag{} commands: \begin{equation}\tag{1} ... \end{equation}
+         */
+
+        Reveal.initialize(options);
+    </script>
+    <!-- created with {{! ignore me }}Slides Extended embed.html template -->
+</body>
+
+</html>
