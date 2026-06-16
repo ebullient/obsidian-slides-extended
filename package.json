@@ -61,7 +61,7 @@
         "yaml": "^2.7.1",
         "katex": "^0.16.45",
         "mathjax": "^4.1.2",
-        "obsidian": "^1.12.3",
+        "obsidian": "^1.13.1",
         "obsidian-utilities": "^1.1.5",
         "reveal.js": "^5.2.1",
         "reveal.js-menu": "^2.1.0",

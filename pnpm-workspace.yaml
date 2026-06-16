@@ -6,6 +6,9 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
 
+minimumReleaseAgeExclude:
+  - obsidian@1.13.1
+
 overrides:
   glob: '>=11.1.0'
   iconv-lite: 0.6.3
