@@ -2,6 +2,20 @@
 
 Thank you for your interest in contributing to Slides Extended! This guide will help you get started with development.
 
+## Know where your change belongs
+
+This repository has a few distinct codebases with a hard boundary between them:
+
+| Codebase | Branch | What lives there |
+|---|---|---|
+| `src/`, `test/`, `se-test-vault/` | `main` | Obsidian plugin — runs inside Obsidian as a Node.js/Electron process |
+| [`reveal-dist/`](reveal-dist/) submodule | `reveal-dist` | reveal.js assets — rendered only by a browser (iframe or exported HTML) |
+| docs source | `docs` | Documentation site (Hugo-based SSG; some translation required for edits) |
+
+- **Plugin code** (UI, settings, markdown processors, the preview panel): `src/` on `main`
+- **Browser-rendered presentation content** (reveal.js plugins, themes, layout CSS, HTML templates): `reveal-dist` submodule
+- **Documentation updates**: `docs` branch (Ex-hugo SSG, now mostly markdown; some translation of content is required for hosting)
+
 ## Getting Started
 
 ### Prerequisites
