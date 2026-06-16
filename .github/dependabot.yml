@@ -11,6 +11,13 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 30
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "reveal-dist"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 30
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
