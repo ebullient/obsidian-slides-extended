@@ -7,7 +7,7 @@ import {
     writeFileSync,
 } from "node:fs";
 import path from "node:path";
-import JSZip from "jszip";
+import JSZip from "@progress/jszip-esm";
 import { requestUrl } from "obsidian";
 import type { SlidesExtendedPlugin } from "./slidesExtended-Plugin";
 
@@ -35,6 +35,25 @@ export class SlidesExtendedDistribution {
         const distVersion = (JSON.parse(rawdata) as { version: string })
             .version;
         return distVersion !== this.plugin.manifest.version;
+    }
+
+    async extractZip(
+        buffer: ArrayBuffer,
+        writeFile: (dest: string, content: Uint8Array) => void,
+    ): Promise<void> {
+        const contents = await new JSZip().loadAsync(buffer);
+        const writes: Promise<void>[] = [];
+        for (const filename of Object.keys(contents.files)) {
+            const entry = contents.file(filename);
+            if (entry && !contents.files[filename].dir) {
+                writes.push(
+                    entry.async("uint8array").then((content) => {
+                        writeFile(filename, content);
+                    }),
+                );
+            }
+        }
+        await Promise.all(writes);
     }
 
     async update() {
@@ -66,25 +85,12 @@ export class SlidesExtendedDistribution {
                 );
             }
 
-            const zip = new JSZip();
-            const contents = await zip.loadAsync(response.arrayBuffer);
             const pluginDirectory = this.pluginDirectory;
-
-            const writes: Promise<void>[] = [];
-            for (const filename of Object.keys(contents.files)) {
-                const entry = zip.file(filename);
-                if (entry && !contents.files[filename].dir) {
-                    writes.push(
-                        entry.async("nodebuffer").then((content) => {
-                            const dest = path.join(pluginDirectory, filename);
-                            const dir = path.dirname(dest);
-                            mkdirSync(dir, { recursive: true });
-                            writeFileSync(dest, content);
-                        }),
-                    );
-                }
-            }
-            await Promise.all(writes);
+            await this.extractZip(response.arrayBuffer, (filename, content) => {
+                const dest = path.join(pluginDirectory, filename);
+                mkdirSync(path.dirname(dest), { recursive: true });
+                writeFileSync(dest, content);
+            });
 
             // Update successful, remove backup
             if (didBackup && existsSync(backupDir)) {
