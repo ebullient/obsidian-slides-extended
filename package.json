@@ -59,7 +59,7 @@
         "obsidian-utilities": "^1.1.5",
         "reveal.js": "^5.2.1",
         "sass": "^1.99.0",
-        "ts-jest": "^29.4.9",
+        "ts-jest": "^29.4.11",
         "ts-mockito": "^2.6.1",
         "ts-node": "^10.9.2",
         "tslib": "^2.8.1",
