@@ -87,10 +87,7 @@ Gatsby believed in the green light, the orgastic future that year by year recede
 It eluded us then, but that’s no matter — tomorrow we will run faster, stretch our arms further...
 And one fine morning — So we beat on.<!-- .element: style="font-size: 46px" align="justify" -->
 
-
 ```
-
-
 
 {{<revealjs theme="black" progress="true" controls="true">}}
 
@@ -135,7 +132,7 @@ HTML Syntax
   # Animating Icons
   
   
-   <i class="fas fa-spinner fa-spin fa-3x"></i>
+  <i class="fas fa-spinner fa-spin fa-3x"></i>
   <i class="fas fa-circle-notch fa-spin fa-3x"></i>
   <i class="fas fa-sync fa-spin fa-3x"></i>
   <i class="fas fa-cog fa-spin fa-3x"></i>
@@ -158,9 +155,6 @@ And one fine morning — So we beat on, boats against the current, borne back ce
 Gatsby believed in the green light, the orgastic future that year by year recedes before us.
 It eluded us then, but that’s no matter — tomorrow we will run faster, stretch our arms further...
 And one fine morning — So we beat on<!-- .element: style="font-size: 46px" align="justify" -->
-	
-
-
 
 </script></section>
 
@@ -169,10 +163,8 @@ And one fine morning — So we beat on<!-- .element: style="font-size: 46px" ali
 
 
 > [!TIP]
-> More documentation for Font Awesome [here](https://fontawesome.com/v5.15/how-to-use/on-the-web/referencing-icons/basic-use)
+> More documentation for Font Awesome [here](https://docs.fontawesome.com/web/add-icons/how-to)
 
 
 > [!TIP]
-> Overview of all icons [here](https://fontawesome.com/v5.15/icons?d=gallery&p=2&m=free)
-
-
+> Overview of all icons [here](https://fontawesome.com/search?ic=free-collection)
