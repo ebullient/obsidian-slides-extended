@@ -25,7 +25,7 @@
         "esbuild-plugin-copy": "^2.1.1",
         "esbuild-sass-plugin": "^3.7.0",
         "highlight.js": "^11.11.1",
-        "katex": "^0.16.45",
+        "katex": "^0.17.0",
         "mathjax": "^4.1.2",
         "reveal.js": "^5.2.1",
         "reveal.js-menu": "^2.1.0",
