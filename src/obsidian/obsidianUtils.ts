@@ -215,11 +215,11 @@ export class ObsidianUtils implements MediaCollector {
             item.path.contains(filename),
         );
 
-        let file: TFile = null;
+        let file: TFile | null = null;
 
         if (allHits.length === 1) {
             // Only one match
-            file = allHits.first();
+            file = allHits.first() ?? null;
         }
 
         if (!file && filename.toLowerCase().endsWith(".excalidraw")) {
@@ -228,13 +228,13 @@ export class ObsidianUtils implements MediaCollector {
                 x.path.contains(`${filename}.svg`),
             );
             if (hit) {
-                file = hit.first();
+                file = hit.first() ?? null;
             } else {
                 hit = filesNotInExportDir.filter((x) =>
                     x.path.contains(`${filename}.png`),
                 );
                 if (hit) {
-                    file = hit.first();
+                    file = hit.first() ?? null;
                 }
             }
         }
@@ -254,7 +254,7 @@ export class ObsidianUtils implements MediaCollector {
         return file;
     }
 
-    getAbsolutePath(relativePath: string): string {
+    getAbsolutePath(relativePath: string): string | null {
         const markdownFile = this.getTFile(relativePath);
         return this.absolute(markdownFile?.path);
     }
@@ -264,15 +264,15 @@ export class ObsidianUtils implements MediaCollector {
             return null;
         }
         const file = this.getTFile(path);
-        return file?.path;
+        return file?.path ?? null;
     }
 
-    absolute(relativePath: string) {
+    absolute(relativePath: string | undefined) {
         return relativePath ? this.fileSystem.getFullPath(relativePath) : null;
     }
 
     findFile(path: string) {
-        const file: TFile = this.getTFile(path);
+        const file = this.getTFile(path);
         console.debug("findFile", path, file);
         return file ? file.path : path;
     }
@@ -282,19 +282,18 @@ export class ObsidianUtils implements MediaCollector {
         if (!getMediaCollector().shouldCollect()) {
             base = "/";
         }
-        const file: TFile = this.getTFile(path);
+        const file = this.getTFile(path);
         console.debug("findMediaFile", path, file, base);
         return file ? base + file.path : path;
     }
 
     parseFile(filename: string, header: string | null) {
         const tfile = this.getTFile(filename);
-
-        if (!tfile) {
+        const absoluteFilePath = this.absolute(tfile?.path);
+        if (!tfile || !absoluteFilePath) {
             return null;
         }
 
-        const absoluteFilePath = this.absolute(tfile?.path);
         const fileContent = readFileSync(absoluteFilePath, {
             encoding: "utf-8",
         });
@@ -307,6 +306,9 @@ export class ObsidianUtils implements MediaCollector {
             return fileContent;
         }
         const cache = this.app.metadataCache.getFileCache(tfile);
+        if (!cache) {
+            return null;
+        }
         const resolved = resolveSubpath(cache, header);
         console.debug("parseFile, cache, resolved", cache, resolved);
 
@@ -367,7 +369,7 @@ export class ObsidianUtils implements MediaCollector {
         return markdown;
     }
 
-    async readRemoteFile(fileUrl: string): Promise<string> {
+    async readRemoteFile(fileUrl: string): Promise<string | null> {
         const anchorIndex = fileUrl.indexOf("#");
         if (anchorIndex > -1) {
             fileUrl = fileUrl.substring(0, anchorIndex);
