@@ -2,3 +2,7 @@
 	path = reveal-dist
 	url = git@github.com:ebullient/obsidian-slides-extended.git
 	branch = reveal-dist
+[submodule "docs"]
+	path = docs
+	url = git@github.com:ebullient/obsidian-slides-extended.git
+	branch = docs
