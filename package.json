@@ -40,7 +40,7 @@
         "startingDate": "2024-02-17"
     },
     "devDependencies": {
-        "@biomejs/biome": "^2.4.15",
+        "@biomejs/biome": "^2.4.16",
         "@types/color": "^4.2.1",
         "@types/jest": "^30.0.0",
         "@types/mustache": "^4.2.6",
