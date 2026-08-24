@@ -8,7 +8,7 @@ import {
     mimeTypeFor,
 } from "../../util";
 import { CommentParser } from "../comment";
-import type { ObsidianUtils } from "../obsidianUtils";
+import { type ObsidianUtils, skipCodeBlocks } from "../obsidianUtils";
 
 export class MediaProcessor implements Processor {
     private utils: ObsidianUtils;
@@ -26,6 +26,12 @@ export class MediaProcessor implements Processor {
     }
 
     process(markdown: string) {
+        return skipCodeBlocks(markdown, (remainingText) =>
+            this.processRemainingText(remainingText),
+        );
+    }
+
+    private processRemainingText(markdown: string) {
         return markdown
             .split("\n")
             .map((line) => {

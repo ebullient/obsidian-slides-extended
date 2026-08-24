@@ -64,20 +64,46 @@ export function skipCodeBlocks(
     markdown: string,
     processRemainingText: (markdown: string) => string,
 ): string {
-    const codeBlockRegex =
-        /^(\s*)(`{3,})(.*?)[\r\n][\s\S]*?(?:\r|\n|\r\n)\1\2(?=$|[\r\n])/gm;
-    const match = codeBlockRegex.exec(markdown);
-    if (match) {
-        return (
-            processRemainingText(markdown.substring(0, match.index)) +
-            match[0] +
-            skipCodeBlocks(
-                markdown.substring(match.index + match[0].length),
-                processRemainingText,
-            )
+    const openingFence = /^ {0,3}(`{3,}|~{3,})(.*)(?:\r\n|\r|\n|$)/gm;
+    let result = "";
+    let lastIndex = 0;
+
+    while (true) {
+        const openingMatch = openingFence.exec(markdown);
+        if (!openingMatch) {
+            break;
+        }
+
+        const marker = openingMatch[1];
+        const infoString = openingMatch[2];
+        if (marker.startsWith("`") && infoString.includes("`")) {
+            continue;
+        }
+
+        result += processRemainingText(
+            markdown.substring(lastIndex, openingMatch.index),
         );
+
+        const closingFence = new RegExp(
+            `^ {0,3}${marker[0]}{${marker.length},}[\\t ]*(?:\\r\\n|\\r|\\n|$)`,
+            "gm",
+        );
+        closingFence.lastIndex = openingFence.lastIndex;
+        const closingMatch = closingFence.exec(markdown);
+        const fenceEnd = closingMatch
+            ? closingMatch.index + closingMatch[0].length
+            : markdown.length;
+
+        result += markdown.substring(openingMatch.index, fenceEnd);
+        lastIndex = fenceEnd;
+        openingFence.lastIndex = fenceEnd;
+
+        if (!closingMatch) {
+            return result;
+        }
     }
-    return processRemainingText(markdown);
+
+    return result + processRemainingText(markdown.substring(lastIndex));
 }
 
 export class ObsidianUtils implements MediaCollector {
