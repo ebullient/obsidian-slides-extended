@@ -11,6 +11,10 @@ import {
 import { DEFAULTS } from "../slidesExtended-constants";
 import { has, isEmpty } from "../util";
 import { YamlParser } from "../yaml/yamlParser";
+import {
+    fenceAwareSlidify,
+    preventBrowserResplitting,
+} from "./fenceAwareSlidify";
 import { md } from "./markdown";
 import { RevealExporter } from "./revealExporter";
 
@@ -98,18 +102,12 @@ export class RevealRenderer {
 
         const prefetched = await this.utils.fetchRemoteMarkdown(markdown);
         const processedMarkdown = this.processor.process(prefetched, options);
-        const rawSlides = this.slidify(processedMarkdown, slidifyOptions);
-        // Stamp separator attributes on every <section data-markdown> element so that
-        // browser-side reveal.js re-processes each pre-split slide with the same
-        // separators, preventing the default '\r?\n---\r?\n' from splitting slide
-        // content that contains '---' as a horizontal rule or thematic break.
-        const separatorAttrs = this.buildSeparatorAttributes(slidifyOptions);
-        const slides = separatorAttrs
-            ? rawSlides.replace(
-                  /<section data-markdown>/g,
-                  `<section ${separatorAttrs} data-markdown>`,
-              )
-            : rawSlides;
+        const rawSlides = fenceAwareSlidify(
+            processedMarkdown,
+            slidifyOptions,
+            (content, options) => this.slidify(content, options),
+        );
+        const slides = preventBrowserResplitting(rawSlides);
 
         const cssPaths = this.getAssetPaths(
             options.css,
@@ -249,27 +247,10 @@ export class RevealRenderer {
         return "";
     }
 
-    private buildSeparatorAttributes(slidifyOptions: Partial<Options>): string {
-        const attrs: string[] = [];
-        if (slidifyOptions.separator) {
-            attrs.push(
-                `data-separator="${slidifyOptions.separator.replace(/"/g, "&quot;")}"`,
-            );
-        }
-        if (slidifyOptions.verticalSeparator) {
-            attrs.push(
-                `data-separator-vertical="${slidifyOptions.verticalSeparator.replace(/"/g, "&quot;")}"`,
-            );
-        }
-        if (slidifyOptions.notesSeparator) {
-            attrs.push(
-                `data-separator-notes="${slidifyOptions.notesSeparator.replace(/"/g, "&quot;")}"`,
-            );
-        }
-        return attrs.join(" ");
-    }
-
-    private slidify(markdown: string, slidifyOptions: unknown): string {
+    private slidify(
+        markdown: string,
+        slidifyOptions: Partial<Options>,
+    ): string {
         return md.slidify(markdown, slidifyOptions);
     }
 

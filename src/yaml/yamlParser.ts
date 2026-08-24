@@ -38,13 +38,18 @@ export class YamlParser {
         };
     }
 
-    getSlidifyOptions(options: Partial<Options>) {
+    getSlidifyOptions(
+        options: Partial<Options>,
+    ): Pick<Options, "notesSeparator" | "separator" | "verticalSeparator"> {
         const slidifyProps = [
             "separator",
             "verticalSeparator",
             "notesSeparator",
         ];
-        return pick(options, slidifyProps);
+        return pick(options, slidifyProps) as Pick<
+            Options,
+            "notesSeparator" | "separator" | "verticalSeparator"
+        >;
     }
 
     getRevealOptions(options: Partial<Options>) {
