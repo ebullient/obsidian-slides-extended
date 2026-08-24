@@ -1,5 +1,6 @@
 import type { Options, Processor } from "../@types";
 import { YamlStore } from "../yaml/yamlStore";
+import { protectFencedSeparators } from "./fencedCode";
 import type { ObsidianUtils } from "./obsidianUtils";
 import { AutoClosingProcessor } from "./processors/autoClosingProcessor";
 import { BlockProcessor } from "./processors/blockProcessor";
@@ -87,7 +88,11 @@ export class MarkdownProcessor {
     process(markdown: string, options: Options) {
         YamlStore.getInstance().options = options;
 
-        let processedMarkdown = this.trimEnding(markdown, options);
+        const protectedSeparators = protectFencedSeparators(markdown, options);
+        let processedMarkdown = this.trimEnding(
+            protectedSeparators.markdown,
+            options,
+        );
         if (options.log) {
             this.log("begin", markdown, processedMarkdown);
         }
@@ -103,6 +108,8 @@ export class MarkdownProcessor {
 
         // Third phase: Content processors
         processedMarkdown = this.processContent(processedMarkdown, options);
+
+        processedMarkdown = protectedSeparators.restore(processedMarkdown);
 
         if (options.log) {
             this.log("end", markdown, processedMarkdown);

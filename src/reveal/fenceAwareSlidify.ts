@@ -1,91 +1,11 @@
 import type { Options } from "../@types";
-
-type FenceRange = {
-    end: number;
-    start: number;
-};
+import { getFenceRanges, overlapsFence } from "../obsidian/fencedCode";
 
 type SlideGroup = string | string[];
 
 type Slidify = (markdown: string, options: Partial<Options>) => string;
 
 export const INERT_SEPARATOR = "(?!)";
-
-function escapeRegex(value: string): string {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function getFenceRanges(markdown: string): FenceRange[] {
-    const ranges: FenceRange[] = [];
-    const lineRegex = /[^\r\n]*(?:\r\n|\r|\n|$)/g;
-    let activeFence:
-        | {
-              character: string;
-              length: number;
-              start: number;
-          }
-        | undefined;
-    for (const lineMatch of markdown.matchAll(lineRegex)) {
-        if (lineMatch[0] === "") {
-            break;
-        }
-
-        const line = lineMatch[0].replace(/(?:\r\n|\r|\n)$/, "");
-
-        if (activeFence) {
-            const closingFence = new RegExp(
-                `^ {0,3}${escapeRegex(activeFence.character)}{${
-                    activeFence.length
-                },}[\\t ]*$`,
-            );
-
-            if (closingFence.test(line)) {
-                ranges.push({
-                    start: activeFence.start,
-                    // The closing fence belongs to the protected range, but its
-                    // line ending may be the leading newline of the following
-                    // slide separator.
-                    end: lineMatch.index + line.length,
-                });
-                activeFence = undefined;
-            }
-            continue;
-        }
-
-        const openingFence = /^(?: {0,3})(`{3,}|~{3,})(.*)$/.exec(line);
-        if (!openingFence) {
-            continue;
-        }
-
-        const marker = openingFence[1];
-        const infoString = openingFence[2];
-        if (marker.startsWith("`") && infoString.includes("`")) {
-            continue;
-        }
-
-        activeFence = {
-            character: marker[0],
-            length: marker.length,
-            start: lineMatch.index,
-        };
-    }
-
-    if (activeFence) {
-        ranges.push({ start: activeFence.start, end: markdown.length });
-    }
-
-    return ranges;
-}
-
-function overlapsFence(
-    match: RegExpExecArray,
-    fenceRanges: FenceRange[],
-): boolean {
-    const matchEnd = match.index + match[0].length;
-    return fenceRanges.some(
-        ({ start, end }) => match.index < end && matchEnd > start,
-    );
-}
 
 function getSeparatorMatches(
     markdown: string,

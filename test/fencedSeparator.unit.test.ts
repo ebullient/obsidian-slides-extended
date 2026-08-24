@@ -1,8 +1,11 @@
+import { MarkdownProcessor } from "../src/obsidian/markdownProcessor";
 import {
     fenceAwareSlidify,
     INERT_SEPARATOR,
     preventBrowserResplitting,
 } from "../src/reveal/fenceAwareSlidify";
+import { obsidianUtils as utilsInstance } from "./__mocks__/mockObsidianUtils";
+import { prepare } from "./testUtils";
 
 const notesSeparator = "note:";
 
@@ -31,7 +34,100 @@ function countMatches(value: string, pattern: RegExp): number {
     return value.match(pattern)?.length ?? 0;
 }
 
+function processPresentation(input: string): string {
+    const { options, markdown } = prepare(input);
+    const processor = new MarkdownProcessor(utilsInstance);
+    const processed = processor.process(markdown, options);
+
+    return preventBrowserResplitting(
+        fenceAwareSlidify(processed, options, (content, _slideOptions) => {
+            const safeContent = content.replace(
+                /<\/script>/g,
+                "__SCRIPT_END__",
+            );
+            return `<section  data-markdown><script type="text/template">${safeContent}</script></section>`;
+        }),
+    );
+}
+
 describe("fenced slide separators", () => {
+    test("protects the default separator through the complete processor pipeline", () => {
+        const input = `---
+title: "minimal example"
+verticalSeparator: "\\r?\\n###\\r?\\n"
+---
+
+# First vertical slide
+
+###
+
+# Second vertical slide
+
+\`\`\`yaml
+---
+fenced: Verbatim
+---
+\`\`\``;
+        const result = processPresentation(input);
+
+        expect(countMatches(result, /data-markdown/g)).toBe(2);
+        expect(result).toContain("```yaml\n---\nfenced: Verbatim\n---\n```");
+    });
+
+    test("still splits the default separator outside fences through the complete pipeline", () => {
+        const input = `# First horizontal slide
+
+---
+
+# Second horizontal slide
+
+\`\`\`yaml
+---
+fenced: Verbatim
+---
+\`\`\``;
+        const result = processPresentation(input);
+
+        expect(countMatches(result, /data-markdown/g)).toBe(2);
+        expect(result).toContain("```yaml\n---\nfenced: Verbatim\n---\n```");
+    });
+
+    test("protects custom horizontal and vertical separators in both fence styles", () => {
+        const input = `---
+separator: "\\r?\\n@@@\\r?\\n"
+verticalSeparator: "\\r?\\n###\\r?\\n"
+---
+
+# First horizontal slide
+
+@@@
+
+# Second horizontal slide
+
+###
+
+# Vertical slide
+
+\`\`\`text
+@@@
+verbatim horizontal separator
+\`\`\`
+
+~~~text
+###
+verbatim vertical separator
+~~~`;
+        const result = processPresentation(input);
+
+        expect(countMatches(result, /data-markdown/g)).toBe(3);
+        expect(result).toContain(
+            "```text\n@@@\nverbatim horizontal separator\n```",
+        );
+        expect(result).toContain(
+            "~~~text\n###\nverbatim vertical separator\n~~~",
+        );
+    });
+
     test("keeps default horizontal separators inert inside a backtick fence", () => {
         const input = `# First vertical slide
 
