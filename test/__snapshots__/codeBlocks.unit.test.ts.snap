@@ -1,5 +1,29 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`Code Block Syntax > ::: block syntax in backtick fence is left verbatim 1`] = `
+"<!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+\`\`\`markdown
+::: {.callout-note}
+Note content
+:::
+\`\`\`
+</div>"
+`;
+
+exports[`Code Block Syntax > ::: block syntax in tilde fence is left verbatim 1`] = `
+"<!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+~~~markdown
+::: {.callout-note}
+Note content
+:::
+~~~
+</div>"
+`;
+
 exports[`Code Block Syntax > Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
@@ -64,6 +88,53 @@ Underscores should not be escaped
 </div>"
 `;
 
+exports[`Code Block Syntax > fence introduced via embedded file is still protected 1`] = `
+"<!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+Top-level content before the embed.
+
+
+<!-- begin::[embedded-fenced-code.md] -->
+Embedded content begins here.
+
+\`\`\`markdown
+![Example](figs/nonexistent.svg)
+::: {.callout-note}
+Note content
+:::
+\`\`\`
+
+Embedded content ends here.
+<!-- end::[embedded-fenced-code.md] -->
+
+
+Top-level content after the embed.
+</div>"
+`;
+
+exports[`Code Block Syntax > media reference in backtick fence is left verbatim 1`] = `
+"<!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+\`\`\`markdown
+![Example](figs/nonexistent.svg)
+![[nonexistent.png]]
+\`\`\`
+</div>"
+`;
+
+exports[`Code Block Syntax > media reference in tilde fence is left verbatim 1`] = `
+"<!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+~~~markdown
+![Example](figs/nonexistent.svg)
+![[nonexistent.png]]
+~~~
+</div>"
+`;
+
 exports[`Code Block Syntax > no type 1`] = `
 "<!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
@@ -73,6 +144,29 @@ USER $USER_NAME:$USER_NAME
 \`\`\`
 
 The above does not show backticks
+</div>"
+`;
+
+exports[`Code Block Syntax > real media and ::: block still transform alongside fenced examples 1`] = `
+"<!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<img src="https://picsum.photos/id/1005/250/250" alt="Real image" style="object-fit: scale-down">
+
+
+<div class="block">
+
+Real block
+</div>
+
+
+
+\`\`\`markdown
+![Example](figs/nonexistent.svg)
+::: {.callout-note}
+Note content
+:::
+\`\`\`
 </div>"
 `;
 

@@ -1,4 +1,5 @@
 import type { Options, Processor } from "../../@types";
+import { extractFenceContent, transformFencedCodeByType } from "../fencedCode";
 
 type ChartElementOptions = Record<string, Record<string, unknown>>;
 type ChartScaleOptions = Record<string, Record<string, unknown>>;
@@ -51,24 +52,20 @@ export class ChartProcessor implements Processor {
     ];
 
     process(markdown: string, options: Options) {
-        return this.transformChart(markdown, options);
+        return transformFencedCodeByType(
+            markdown,
+            (type) => type === "chart",
+            (block) => {
+                const chartMarkup = extractFenceContent(block.fenceText);
+                return (
+                    this.transformChart(chartMarkup, options) ?? block.fenceText
+                );
+            },
+        );
     }
 
-    transformChart(markdown: string, options: Options): string {
-        const startIdx = markdown.indexOf("```chart");
-
-        if (startIdx < 0) {
-            return markdown;
-        }
-        const endIdx = markdown.indexOf("```", startIdx + 11);
-        if (endIdx < 0) {
-            return markdown;
-        }
+    transformChart(chartMarkup: string, options: Options): string | null {
         const colorMap = [...this.colorMap];
-
-        const before = markdown.substring(0, startIdx);
-        const after = markdown.substring(endIdx + 3);
-        const chartMarkup = markdown.substring(startIdx + 8, endIdx);
 
         if (this.typeRegex.test(chartMarkup)) {
             const [, type] = this.typeRegex.exec(chartMarkup);
@@ -201,13 +198,10 @@ export class ChartProcessor implements Processor {
                     options.height = +value;
                 }
 
-                const canvas = `<canvas style="max-height:${options.height}px" data-chart="${type}" >\n<!--\n${JSON.stringify(chart)}-->\n</canvas>`;
-
-                const result = `${before.trimEnd()}\n${canvas}\n${after.trimStart()}`;
-                return this.transformChart(result, options);
+                return `<canvas style="max-height:${options.height}px" data-chart="${type}" >\n<!--\n${JSON.stringify(chart)}-->\n</canvas>`;
             }
         }
-        return markdown;
+        return null;
     }
 }
 function parseLabels(labels: string): string[] {

@@ -1,5 +1,6 @@
 import type { Options, Processor } from "../@types";
 import { YamlStore } from "../yaml/yamlStore";
+import { protectFencedCode } from "./fencedCode";
 import type { ObsidianUtils } from "./obsidianUtils";
 import { AutoClosingProcessor } from "./processors/autoClosingProcessor";
 import { BlockProcessor } from "./processors/blockProcessor";
@@ -134,6 +135,9 @@ export class MarkdownProcessor {
             if (after) {
                 before = after;
             }
+
+            // Protect fenced code before this iteration's includes/templates run
+            before = protectFencedCode(before);
 
             // Process multiple file includes first
             after = this.processWithLog(before, options, {

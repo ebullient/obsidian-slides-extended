@@ -1,4 +1,5 @@
 import { MarkdownProcessor } from '../src/obsidian/markdownProcessor';
+import { restoreFencedCode } from '../src/obsidian/fencedCode';
 import { when } from 'ts-mockito';
 import { prepare } from './testUtils';
 import { MockedObsidianUtils, obsidianUtils as utilsInstance } from './__mocks__/mockObsidianUtils';
@@ -311,7 +312,7 @@ test('Extended Markdown Syntax >  Fragmented list', () => {
     const { options, markdown } = prepare(input);
     const sut = new MarkdownProcessor(utilsInstance);
 
-    const result = JSON.stringify(sut.process(markdown, options));
+    const result = JSON.stringify(restoreFencedCode(sut.process(markdown, options)));
     return expect(result).toMatchSnapshot();
 });
 
@@ -349,7 +350,7 @@ test('Extended Markdown Syntax >  Chart support', () => {
         data: [1,2,3,4,5,6,7,8,9]
       - title: Title 2
         data: [5,4,3,2,1,0,-1,-2,-3]
-\`\`\`
+    \`\`\`
 
     `;
 
@@ -366,13 +367,12 @@ test('Extended Markdown Syntax >  Chart support > Illegal Input', () => {
 
     \`\`\`chart
     type: bar
-    labels: [Monday,Tuesday,Wednesday,Thursday,Friday, Saturday, Sunday, "next Week", "next Month"]
     series:
       - title: Title 1
         data: [1,2,3,4,5,6,7,8,9]
       - title: Title 2
         data: [5,4,3,2,1,0,-1,-2,-3]
-\`
+    \`\`\`
 
     `;
 
@@ -401,7 +401,7 @@ test('Extended Markdown Syntax >  Chart support > Extended Settings', () => {
     legend: false
     legendPosition: left
     stacked: true
-\`\`\`
+    \`\`\`
 
     `;
 

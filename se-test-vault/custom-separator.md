@@ -19,3 +19,19 @@ We've changed the slide separator
 --
 
 Vertical slide separator is unchanged
+
+xxx
+
+## Fenced custom separator should not split the slide
+
+Point one
+
+```text
+xxx
+```
+
+Point two
+
+(expect: this heading, "Point one", the fenced block, and "Point two" all
+on ONE slide — the fenced `xxx` line must not create a slide boundary, even
+though it exactly matches the configured custom separator)

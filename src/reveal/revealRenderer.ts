@@ -99,14 +99,22 @@ export class RevealRenderer {
         const prefetched = await this.utils.fetchRemoteMarkdown(markdown);
         const processedMarkdown = this.processor.process(prefetched, options);
         const rawSlides = this.slidify(processedMarkdown, slidifyOptions);
-        // Stamp separator attributes on every <section data-markdown> element so that
-        // browser-side reveal.js re-processes each pre-split slide with the same
-        // separators, preventing the default '\r?\n---\r?\n' from splitting slide
-        // content that contains '---' as a horizontal rule or thematic break.
+        // Stamp data-separator* attributes on every slide so reveal.js's
+        // browser-side re-split (which runs unconditionally on page load)
+        // uses the same separators as this server-side split.
         const separatorAttrs = this.buildSeparatorAttributes(slidifyOptions);
+        // Matches both the single-space and two-space variants of
+        // "<section data-markdown>" that md.slidify() emits for
+        // top-level vs. vertically-nested slides.
+        //
+        // Fenced-code placeholders (src/obsidian/fencedCode.ts) are left
+        // undecoded here on purpose — the browser's re-split would corrupt
+        // real fence text containing separator-like content. Decoding
+        // happens client-side instead, in reveal-dist's ObsidianMarkdown
+        // plugin, after that re-split runs.
         const slides = separatorAttrs
             ? rawSlides.replace(
-                  /<section data-markdown>/g,
+                  /<section\s*data-markdown>/g,
                   `<section ${separatorAttrs} data-markdown>`,
               )
             : rawSlides;
