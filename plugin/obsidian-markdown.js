@@ -14,6 +14,9 @@ window.ObsidianMarkdown = window.ObsidianMarkdown || {
                 if (token.type === "blockquote") {
                     return self.processCallout(this, self, token);
                 }
+                if (token.type === "paragraph") {
+                    return self.processFencedCodePlaceholder(this, self, token);
+                }
             },
             extensions: [
                 {
@@ -40,11 +43,73 @@ window.ObsidianMarkdown = window.ObsidianMarkdown || {
                         return tmpl;
                     },
                 },
+                {
+                    // Decodes a fenced-code placeholder (see
+                    // src/obsidian/fencedCode.ts) after reveal.js's own
+                    // slidify() has already run, so a fence containing
+                    // separator-like text can't be split by it. Dispatches
+                    // to the normal code renderer so highlighting/line
+                    // numbers still work.
+                    name: "fencedcode",
+                    level: "block",
+                    renderer({ meta }) {
+                        return this.parser.renderer.code(
+                            meta.text,
+                            meta.lang,
+                            meta.escaped,
+                        );
+                    },
+                },
             ],
         });
 
-        // Delegate to the patched markdown plugin
         return revealMarkdownPlugin.init(deck);
+    },
+
+    // Matches src/obsidian/fencedCode.ts's placeholder grammar:
+    // FENCEDCODE<type>:<closed 0|1>:<base64>ECODDECNEF
+    fencedCodePlaceholderRegex: /^FENCEDCODE([^:]*):[01]:([A-Za-z0-9+/=]*)ECODDECNEF$/,
+
+    processFencedCodePlaceholder: (marked, self, token) => {
+        const match = self.fencedCodePlaceholderRegex.exec(token.text.trim());
+        if (!match) {
+            return;
+        }
+        const [, type, encoded] = match;
+        const fenceText = self.base64ToUtf8(encoded);
+
+        token.type = "fencedcode";
+        token.meta = {
+            text: self.fenceContent(fenceText),
+            lang: type,
+            escaped: false,
+        };
+        return token;
+    },
+
+    // Mirrors src/obsidian/fencedCode.ts's extractFenceContent().
+    fenceContent: (fenceText) => {
+        const openingMatch = /^(`{3,}|~{3,})[^\r\n]*(?:\r\n|\r|\n|$)/.exec(
+            fenceText,
+        );
+        if (!openingMatch) {
+            return fenceText;
+        }
+        const contentStart = openingMatch[0].length;
+
+        const closingRegex = new RegExp(
+            `(?<=\\r\\n|\\r|\\n)${openingMatch[1][0]}{3,}[ \\t]*$`,
+        );
+        const closingMatch = closingRegex.exec(fenceText);
+        const contentEnd = closingMatch ? closingMatch.index : fenceText.length;
+
+        return fenceText.slice(contentStart, contentEnd);
+    },
+
+    base64ToUtf8: (base64) => {
+        const binary = atob(base64);
+        const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+        return new TextDecoder("utf-8").decode(bytes);
     },
 
     calloutRegex: /^\[!([^\]]+)\]([+-])?\s*([^\n]*)\n?/,
