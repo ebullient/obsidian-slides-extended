@@ -84,6 +84,10 @@ jobs:
           # shellcheck disable=SC2086
           sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' manifest-beta.json
         fi
+        # distVersion.json must match whichever manifest is live for the installed
+        # plugin (manifest.json for a normal install, manifest-beta.json for BRAT).
+        # shellcheck disable=SC2086
+        sed -i 's|\(version":\) "[0-9\.]*"|\1 "'$VERSION'"|' distVersion.json
 
         git add .
         git status
@@ -121,6 +125,20 @@ jobs:
         zip -r "../${ZIP_ARTIFACT}" ./*
         cd ..
 
+    # Verify the packaged distVersion.json matches the release tag -- this is the
+    # check the plugin itself performs at runtime, so a mismatch here means users
+    # get stuck in a perpetual "outdated" re-download loop.
+    - name: Verify version consistency
+      env:
+        RELEASE_VERSION: ${{ steps.build.outputs.version }}
+      run: |
+        DIST_VERSION=$(unzip -p "${ZIP_ARTIFACT}" distVersion.json | grep -o '"[0-9][0-9.]*"' | tr -d '"')
+        echo "release: $RELEASE_VERSION, distVersion: $DIST_VERSION"
+
+        if [ "$DIST_VERSION" != "$RELEASE_VERSION" ]; then
+          echo "🛑 distVersion.json ($DIST_VERSION) does not match release tag ($RELEASE_VERSION)"
+          exit 1
+        fi
 
     # Attest build provenance for release artifacts
     - name: Attest build artifacts
