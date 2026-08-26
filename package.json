@@ -17,7 +17,7 @@
         "@types/mustache": "^4.2.6",
         "@types/node": "^25.8.0",
         "jest": "^30.4.2",
-        "ts-jest": "^29.4.9",
+        "ts-jest": "^29.4.12",
         "typescript": "^5.9.3",
         "@fortawesome/fontawesome-free": "^7.3.1",
         "chart.js": "^4.5.1",
