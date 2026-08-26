@@ -60,6 +60,17 @@ window.ObsidianMarkdown = window.ObsidianMarkdown || {
                         );
                     },
                 },
+                {
+                    // Mermaid needs its raw diagram source untouched, so
+                    // (unlike other fence types) it's never decoded
+                    // server-side — RevealMermaid finds and renders
+                    // .mermaid elements itself, after this plugin runs.
+                    name: "mermaid",
+                    level: "block",
+                    renderer({ meta }) {
+                        return `<div class="mermaid">\n${meta.text}\n</div>`;
+                    },
+                },
             ],
         });
 
@@ -77,13 +88,15 @@ window.ObsidianMarkdown = window.ObsidianMarkdown || {
         }
         const [, type, encoded] = match;
         const fenceText = self.base64ToUtf8(encoded);
+        const content = self.fenceContent(fenceText);
 
-        token.type = "fencedcode";
-        token.meta = {
-            text: self.fenceContent(fenceText),
-            lang: type,
-            escaped: false,
-        };
+        if (type === "mermaid") {
+            token.type = "mermaid";
+            token.meta = { text: content };
+        } else {
+            token.type = "fencedcode";
+            token.meta = { text: content, lang: type, escaped: false };
+        }
         return token;
     },
 
