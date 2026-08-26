@@ -95,7 +95,7 @@ export function restoreFencedCode(markdown: string): string {
  * Replace placeholders of a matching type with `transform`'s result; leave
  * everything else — non-matching types, and unclosed fences regardless of
  * type — untouched as inert fence text. Lets a processor consume only its
- * own well-formed fences (e.g. MermaidProcessor's "mermaid" fences) without
+ * own well-formed fences (e.g. ChartProcessor's "chart" fences) without
  * decoding every placeholder or re-checking closure itself.
  */
 export function transformFencedCodeByType(

@@ -19,7 +19,6 @@ import { IconsProcessor } from "./processors/iconsProcessor";
 import { InternalLinkProcessor } from "./processors/internalLinkProcessor";
 import { LatexProcessor } from "./processors/latexProcessor";
 import { MediaProcessor } from "./processors/mediaProcessor";
-import { MermaidProcessor } from "./processors/mermaidProcessor";
 import { MultipleFileProcessor } from "./processors/multipleFileProcessor";
 import { ReferenceProcessor } from "./processors/referenceProcessor";
 import { SkipSlideProcessor } from "./processors/skipSlideProcessor";
@@ -39,7 +38,6 @@ export class MarkdownProcessor {
     private latexProcessor: LatexProcessor;
     private formatProcessor: FormatProcessor;
     private excalidrawProcessor: ExcalidrawProcessor;
-    private mermaidProcessor: MermaidProcessor;
     private fragmentProcessor: FragmentProcessor;
     private gridProcessor: GridProcessor;
     private commentProcessor: CommentProcessor;
@@ -64,7 +62,6 @@ export class MarkdownProcessor {
         this.latexProcessor = new LatexProcessor();
         this.formatProcessor = new FormatProcessor();
         this.excalidrawProcessor = new ExcalidrawProcessor(utils);
-        this.mermaidProcessor = new MermaidProcessor();
         this.fragmentProcessor = new FragmentProcessor();
         this.gridProcessor = new GridProcessor();
         this.commentProcessor = new CommentProcessor();
@@ -208,11 +205,6 @@ export class MarkdownProcessor {
             { name: "iconsProcessor", processor: this.iconsProcessor },
             // Process formatting
             { name: "formatProcessor", processor: this.formatProcessor },
-            // Convert mermaid code blocks
-            {
-                name: "mermaidProcessor",
-                processor: this.mermaidProcessor,
-            },
             // Process block syntax
             { name: "blockProcessor", processor: this.blockProcessor },
             // Process footnotes

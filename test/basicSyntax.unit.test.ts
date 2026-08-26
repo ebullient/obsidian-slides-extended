@@ -1,4 +1,5 @@
 import { MarkdownProcessor } from '../src/obsidian/markdownProcessor';
+import { restoreFencedCode } from '../src/obsidian/fencedCode';
 import { when } from 'ts-mockito';
 import { MockedObsidianUtils, obsidianUtils as utilsInstance } from './__mocks__/mockObsidianUtils';
 import { prepare } from './testUtils';
@@ -443,7 +444,7 @@ sequenceDiagram
     const { options, markdown } = prepare(input);
     const sut = new MarkdownProcessor(utilsInstance);
 
-    const result = JSON.stringify(sut.process(markdown, options));
+    const result = JSON.stringify(restoreFencedCode(sut.process(markdown, options)));
     return expect(result).toMatchSnapshot();
 });
 
