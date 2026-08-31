@@ -32,6 +32,6 @@
         "reveal.js-mermaid-plugin": "^11.12.3",
         "reveal.js-plugins": "^4.6.0",
         "reveal.js-pointer": "^0.1.4",
-        "sass": "^1.99.0"
+        "sass": "^1.102.0"
     }
 }
