@@ -11,7 +11,7 @@
         "dev": "node esbuild.config.mjs",
         "prebuild": "pnpm exec biome check ./src",
         "build": "node esbuild.config.mjs production",
-        "postbuild": "pnpm run test",
+        "postbuild": "node copy-assets.mjs && pnpm run test",
         "fix": "pnpm exec biome check --write ./src",
         "format": "pnpm exec biome format ./src",
         "eslint": "pnpm exec eslint",

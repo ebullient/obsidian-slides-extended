@@ -138,8 +138,18 @@ export class RevealRenderer {
 
         const settings = this.yaml.getTemplateSettings(options);
 
+        // Add chalkboard configuration to reveal options when enabled
+        if (settings.enableChalkboard) {
+            revealOptions.chalkboard = {
+                penWidth: settings.chalkboardPenWidth,
+                chalkWidth: settings.chalkboardChalkWidth,
+            };
+        }
+
         const {
             enableChalkboard,
+            chalkboardPenWidth,
+            chalkboardChalkWidth,
             enableAudioSlideshow,
             enableCustomControls,
             enableOverview,
@@ -169,6 +179,8 @@ export class RevealRenderer {
             base,
             enableCustomControls,
             enableChalkboard,
+            chalkboardPenWidth,
+            chalkboardChalkWidth,
             enableAudioSlideshow,
             enableOverview,
             enableMenu,

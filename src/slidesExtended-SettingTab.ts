@@ -451,6 +451,40 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
             );
 
         new Setting(containerEl)
+            .setName("Canvas pen width")
+            .setDesc("Set the width of the pen tool for the canvas.")
+            .addText((text) =>
+                text
+                    .setPlaceholder("3")
+                    .setValue(String(this.newSettings.chalkboardPenWidth))
+                    .onChange((value) => {
+                        const numValue = Number(value);
+                        if (!Number.isNaN(numValue) && numValue > 0) {
+                            this.newSettings.chalkboardPenWidth = numValue;
+                        } else {
+                            this.newSettings.chalkboardPenWidth = 3; // Default value
+                        }
+                    }),
+            );
+
+        new Setting(containerEl)
+            .setName("Chalkboard chalk width")
+            .setDesc("Set the width of the chalk tool for the chalkboard.")
+            .addText((text) =>
+                text
+                    .setPlaceholder("7")
+                    .setValue(String(this.newSettings.chalkboardChalkWidth))
+                    .onChange((value) => {
+                        const numValue = Number(value);
+                        if (!Number.isNaN(numValue) && numValue > 0) {
+                            this.newSettings.chalkboardChalkWidth = numValue;
+                        } else {
+                            this.newSettings.chalkboardChalkWidth = 7; // Default value
+                        }
+                    }),
+            );
+
+        new Setting(containerEl)
             .setName("Elapsed time bar")
             .setDesc(
                 "Display an elapsed time bar; set 'timeForPresentation' property in seconds (500), minutes (55m), or hours (1h).",
