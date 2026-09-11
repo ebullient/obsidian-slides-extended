@@ -13,6 +13,8 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     autoStart: true,
     exportDirectory: "/export",
     enableChalkboard: false,
+    chalkboardPenWidth: 3,
+    chalkboardChalkWidth: 7,
     enableOverview: false,
     enableMenu: false,
     enablePointer: false,

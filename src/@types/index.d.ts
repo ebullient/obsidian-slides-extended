@@ -16,6 +16,8 @@ export interface SlidesExtendedSettings {
     exportDirectory: string;
     enableOverview: boolean;
     enableChalkboard: boolean;
+    chalkboardPenWidth: number;
+    chalkboardChalkWidth: number;
     enableMenu: boolean;
     enablePointer: boolean;
     enableTimeBar: boolean;
@@ -73,6 +75,13 @@ export type Options = {
     enableCustomControls: boolean;
     transition: string;
     mathEngine: "katex" | "mathjax";
+    chalkboard?: {
+        penWidth?: number;
+        chalkWidth?: number;
+        [key: string]: unknown;
+    };
+    chalkboardPenWidth?: number;
+    chalkboardChalkWidth?: number;
     [key: string]: unknown;
 };
 
