@@ -14,6 +14,7 @@ import {
 } from "./obsidian/suggesters/ThemeSuggester";
 import { DEFAULT_SETTINGS } from "./slidesExtended-constants";
 import type { SlidesExtendedPlugin } from "./slidesExtended-Plugin";
+import { validateAssetsDirectory } from "./slidesExtended-SettingsData";
 
 /** This is because TypeScript's filters are dumb. */
 function isFolder(file: TAbstractFile): file is TFolder {
@@ -252,7 +253,7 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
         new Setting(containerEl)
             .setName("Assets directory")
             .setDesc(
-                "Specify a vault directory for custom themes, CSS, scripts, and HTML templates. CSS files are searched in css/ and the directory root. Scripts are searched in js/. HTML templates in html/.",
+                "Specify a vault directory for custom themes, CSS, scripts, and HTML templates. CSS files are searched in css/. Scripts are searched in js/. HTML templates in html/.",
             )
             .addSearch((cb) => {
                 const folders: TFolder[] = this.app.vault
@@ -267,6 +268,11 @@ export class SlidesExtendedSettingTab extends PluginSettingTab {
                 cb.setPlaceholder("Folder")
                     .setValue(this.newSettings.assetsDirectory)
                     .onChange((value) => {
+                        const error = validateAssetsDirectory(value);
+                        if (error) {
+                            new Notice(`Slides Extended: ${error}`);
+                            return;
+                        }
                         this.newSettings.assetsDirectory = value;
                         for (const key in themeSettings) {
                             themeSettings[key].setDesc(themeDesc(key, value));

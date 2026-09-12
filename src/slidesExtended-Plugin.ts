@@ -15,6 +15,7 @@ import {
     REFRESH_ICON,
 } from "./slidesExtended-constants";
 import { SlidesExtendedDistribution } from "./slidesExtended-Distribution";
+import { migrateSettings } from "./slidesExtended-SettingsData";
 import { SlidesExtendedSettingTab } from "./slidesExtended-SettingTab";
 
 export class SlidesExtendedPlugin extends Plugin {
@@ -315,10 +316,12 @@ export class SlidesExtendedPlugin extends Plugin {
         const data = (await this.loadData()) as Partial<
             SlidesExtendedSettings & { themeDirectory?: string }
         > | null;
-        this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
-        // Migrate renamed setting
-        if (data?.themeDirectory && !data?.assetsDirectory) {
-            this.settings.assetsDirectory = data.themeDirectory;
+        const { settings, migratedAssetsDirectory } = migrateSettings(data);
+        this.settings = settings;
+        if (migratedAssetsDirectory) {
+            new Notice(
+                `Slides Extended: assets directory was not set — defaulting to "${DEFAULT_SETTINGS.assetsDirectory}"`,
+            );
         }
     }
 

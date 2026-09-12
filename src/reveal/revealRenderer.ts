@@ -1,6 +1,5 @@
-import { existsSync, readdirSync } from "node:fs";
 import { readFile } from "node:fs/promises";
-import path, { basename, extname, join } from "node:path";
+import { join } from "node:path";
 import Mustache from "mustache";
 import type { Options, QueryString } from "../@types";
 import type { MarkdownProcessor } from "../obsidian/markdownProcessor";
@@ -11,6 +10,11 @@ import {
 import { DEFAULTS } from "../slidesExtended-constants";
 import { has, isEmpty } from "../util";
 import { YamlParser } from "../yaml/yamlParser";
+import {
+    NodeFsAssetLookup,
+    resolveAsset,
+    withCssExtension,
+} from "./assetResolver";
 import { md } from "./markdown";
 import { RevealExporter } from "./revealExporter";
 
@@ -86,11 +90,11 @@ export class RevealRenderer {
 
         const { title } = options;
         const themeUrl = this.findAsset(
-            options.theme,
+            withCssExtension(options.theme),
             this.utils.getThemeSearchPath(),
         );
         const highlightThemeUrl = this.findAsset(
-            options.highlightTheme,
+            withCssExtension(options.highlightTheme),
             this.utils.getHighlightSearchPath(),
         );
 
@@ -207,26 +211,8 @@ export class RevealRenderer {
             return name;
         }
 
-        for (const dir of searchPath) {
-            // Direct path match (handles subdirectories like css/custom.css)
-            const directPath = path.join(dir, name);
-            if (existsSync(directPath)) {
-                return this.toExternalPath(directPath);
-            }
-
-            // Basename glob match (existing behavior for short names like "black")
-            const files = existsSync(dir)
-                ? readdirSync(dir).filter((f) => f.endsWith(".css"))
-                : [];
-            const key = basename(name).replace(extname(name), "");
-            const match = files.find(
-                (f) => basename(f).replace(extname(f), "") === key,
-            );
-            if (match) {
-                return this.toExternalPath(path.join(dir, match));
-            }
-        }
-        return name;
+        const resolved = resolveAsset(name, searchPath, NodeFsAssetLookup);
+        return resolved ? this.toExternalPath(resolved) : name;
     }
 
     private toExternalPath(urlPath: string): string {

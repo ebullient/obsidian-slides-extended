@@ -121,7 +121,7 @@ export class ObsidianUtils implements MediaCollector {
         );
 
         this.cssSearchPath = [
-            path.join(this.pluginDir), // relative to plugin dir
+            path.join(this.pluginDir, "css"), // plugin layouts
         ];
         this.highlightSearchPath = [
             path.join(this.pluginDir, "plugin/highlight"),
@@ -139,14 +139,11 @@ export class ObsidianUtils implements MediaCollector {
                 this.settings.assetsDirectory,
             );
             const cssSub = path.join(assetsDir, "css");
-            this.cssSearchPath.unshift(cssSub, assetsDir);
-            this.highlightSearchPath.unshift(cssSub, assetsDir);
-            this.themeSearchPath.unshift(cssSub, assetsDir);
+            this.cssSearchPath.unshift(cssSub);
+            this.highlightSearchPath.unshift(cssSub);
+            this.themeSearchPath.unshift(cssSub);
             this.htmlTemplateSearchPath.unshift(path.join(assetsDir, "html"));
-            this.scriptSearchPath.unshift(
-                path.join(assetsDir, "js"),
-                assetsDir,
-            );
+            this.scriptSearchPath.unshift(path.join(assetsDir, "js"));
         }
 
         setMediaCollector(this);

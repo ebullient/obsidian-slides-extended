@@ -27,7 +27,7 @@ export const DEFAULT_SETTINGS: SlidesExtendedSettings = {
     showGrid: false,
     autoComplete: "inPreview",
     paneMode: "split",
-    assetsDirectory: "",
+    assetsDirectory: "assets",
     center: true,
     mathEngine: "katex",
     scripts: "",
@@ -61,6 +61,8 @@ export const DEFAULTS: Options = {
     width: 960,
     mathEngine: "katex",
 };
+
+export const RESERVED_ASSET_DIRECTORY_NAMES = ["css", "dist", "plugin"];
 
 export const DISABLED_IMAGE_COLLECTOR: MediaCollector = {
     addMedia(_value: string): void {},

@@ -7,6 +7,18 @@ export class EditorSuggest<T> {
     close() {}
 }
 
+// Real ObsidianUtils does `instanceof FileSystemAdapter` to confirm desktop
+// support; tests construct a fake adapter that extends this so that check
+// passes without pulling in the real Obsidian runtime.
+export class FileSystemAdapter {
+    getBasePath(): string {
+        return "";
+    }
+    getFullPath(relativePath: string): string {
+        return relativePath;
+    }
+}
+
 // Obsidian extends String.prototype with .contains()
 declare global {
     interface String {
