@@ -26,6 +26,8 @@ Specify a vault directory for custom themes, CSS, scripts, and HTML templates. T
 
 See [Themes](../themes/) for details on custom themes and CSS, including the new `scripts` and `remoteScripts` options.
 
+`css`, `scripts`, `theme`, and `highlightTheme` also accept a `./`-prefixed value (e.g. `css: ./local.css`) to load a file from the same directory as the current slide deck instead of the assets directory. This deck-relative form never falls back to the assets directory and does not allow `../` traversal — see [Themes](../themes/) for details.
+
 ### Scripts and Remote Scripts
 
 Load additional JavaScript into all presentations. These can be set globally in plugin settings (comma-separated) or per-note via YAML frontmatter. See [Themes](../themes/) for usage details.
