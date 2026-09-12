@@ -18,10 +18,10 @@ Changing the port can be useful if you operate multiple vaults and both have Sli
 
 ### Assets directory
 
-Specify a vault directory for custom themes, CSS, scripts, and HTML templates. When set to a directory like `assets`, the plugin searches for files in organized subdirectories:
+Specify a vault directory for custom themes, CSS, scripts, and HTML templates. This is required and defaults to `assets`; it cannot be set to `css`, `dist`, or `plugin`, since those names collide with the plugin's own bundled directories. The plugin searches for files in organized subdirectories:
 
-- **CSS/Themes**: `assets/css/` and `assets/`
-- **Scripts**: `assets/js/` and `assets/`
+- **CSS/Themes**: `assets/css/`
+- **Scripts**: `assets/js/`
 - **HTML templates**: `assets/html/`
 
 See [Themes](../themes/) for details on custom themes and CSS, including the new `scripts` and `remoteScripts` options.

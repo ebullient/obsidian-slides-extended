@@ -37,5 +37,5 @@ css: [css/layout.css,css/customFonts.css]
 ---
 ```
 
-These files will be found relative to either the configured custom Theme Directory or 
-the Slides Extended plugin folder.
+These files are searched for in the `css/` subdirectory of the configured
+Assets directory, then in the Slides Extended plugin folder.

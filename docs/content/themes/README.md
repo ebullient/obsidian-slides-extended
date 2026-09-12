@@ -39,10 +39,9 @@ This directory is used to find custom themes, CSS, scripts, and HTML templates.
 
 When the assets directory is set (e.g., `assets`), the plugin searches for CSS/theme files in:
 
-1. `assets/css/` (subdirectory)
-2. `assets/` (directory root)
-3. `.obsidian/plugins/slides-extended/css`
-4. `.obsidian/plugins/slides-extended/dist/theme`
+1. `assets/css/`
+2. `.obsidian/plugins/slides-extended/css`
+3. `.obsidian/plugins/slides-extended/dist/theme`
 
 Please keep your customized themes in your assets directory. Do not directly edit themes in the plugin directory, as the changes are easily lost across devices or if the plugin is uninstalled.
 
@@ -105,16 +104,7 @@ highlightTheme: github.highlight.css
 
 ## Additional CSS snippets
 
-You can add additional CSS files to your presentation. Place them in your assets directory (e.g., `assets/css`):
-
-```md
----
-css:
-  - my-talk.css
----
-```
-
-You can also specify multiple files, or use paths relative to the assets directory:
+You can add additional CSS files to your presentation. Place them in the `css/` subdirectory of your assets directory (e.g., `assets/css`).
 
 ```md
 ---
@@ -124,9 +114,11 @@ css:
 ---
 ```
 
+\A redundant `css/` prefix is tolerated.
+
 ## Custom Scripts
 
-You can inject custom JavaScript into your presentations. Scripts are searched in the `js/` subdirectory of your assets directory, or relative to the assets directory root.
+You can inject custom JavaScript into your presentations. Scripts are searched in the `js/` subdirectory of your assets directory.
 
 ```md
 ---
@@ -137,7 +129,7 @@ remoteScripts:
 ---
 ```
 
-- `scripts` — local script files (resolved from `assets/js/` or `assets/`)
+- `scripts` — local script files (resolved from `assets/js/`; a redundant `js/` prefix is also tolerated)
 - `remoteScripts` — external script URLs loaded directly
 
 Scripts are loaded after all built-in Reveal.js plugins but before `Reveal.initialize()`, so custom scripts can define new Reveal.js plugins.
