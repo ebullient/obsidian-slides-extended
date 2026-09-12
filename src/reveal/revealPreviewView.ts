@@ -33,6 +33,18 @@ export class RevealPreviewView extends ItemView {
         this.plugin = plugin;
         this.onCloseListener = onCloseListener;
 
+        if (settings.paneMode !== "tab") {
+            this.addAction("link", "Rebind view to current note", () => {
+                void this.plugin.showView();
+            });
+        }
+
+        if (settings.paneMode === "sidebar") {
+            this.addAction("monitor-x", "Close preview", () => {
+                this.leaf.detach();
+            });
+        }
+
         this.addAction("globe", "Open in browser", () => {
             this.openInBrowser();
         });
@@ -45,12 +57,6 @@ export class RevealPreviewView extends ItemView {
         this.addAction("refresh", "Refresh slides", () => {
             this.reloadIframe();
         });
-
-        if (settings.paneMode === "sidebar") {
-            this.addAction("monitor-x", "Close preview", () => {
-                this.leaf.detach();
-            });
-        }
 
         window.addEventListener("message", this.boundOnMessage);
     }
