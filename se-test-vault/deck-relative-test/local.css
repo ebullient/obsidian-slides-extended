@@ -1,0 +1,7 @@
+/* CSS living next to the deck itself, referenced via a ./-prefixed value */
+.reveal .deck-relative-styled {
+    color: #27ae60;
+    font-style: italic;
+    border-left: 4px solid #27ae60;
+    padding-left: 0.5em;
+}
