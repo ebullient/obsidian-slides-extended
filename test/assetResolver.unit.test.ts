@@ -2,6 +2,7 @@ import path from "node:path";
 import {
     type AssetLookup,
     resolveAsset,
+    resolveDeckRelativeAsset,
     withCssExtension,
 } from "../src/reveal/assetResolver";
 
@@ -186,4 +187,81 @@ test("Asset Resolver > direct match anywhere in search path beats redundant-pref
     expect(resolveAsset("css/file.css", searchPath, lookup)).toBe(
         path.join(assetsRoot, "css", "file.css"),
     );
+});
+
+const deckDirectory = path.join("vaultRoot", "talks");
+
+test("resolveDeckRelativeAsset > ./-prefixed value resolves against the deck directory when the file exists there", () => {
+    const lookup = fakeLookup([path.join(deckDirectory, "local.css")]);
+
+    expect(resolveDeckRelativeAsset("./local.css", deckDirectory, lookup)).toBe(
+        path.join(deckDirectory, "local.css"),
+    );
+});
+
+test("resolveDeckRelativeAsset > nested ./-prefixed value resolves against a subdirectory of the deck directory", () => {
+    const lookup = fakeLookup([
+        path.join(deckDirectory, "nested", "local.css"),
+    ]);
+
+    expect(
+        resolveDeckRelativeAsset("./nested/local.css", deckDirectory, lookup),
+    ).toBe(path.join(deckDirectory, "nested", "local.css"));
+});
+
+// No fallback: a same-named file elsewhere (e.g. under assetsDirectory)
+// must never rescue a miss at the deck-relative candidate path - only the
+// single deck-relative path is ever tried.
+test("resolveDeckRelativeAsset > missing file does not resolve even when a same-named file exists elsewhere", () => {
+    const lookup = fakeLookup([path.join(assetsCss, "missing.css")]);
+
+    expect(
+        resolveDeckRelativeAsset("./missing.css", deckDirectory, lookup),
+    ).toBeNull();
+});
+
+test("resolveDeckRelativeAsset > upward traversal via ../ is rejected regardless of whether the target exists", () => {
+    const lookup = fakeLookup([path.join("vaultRoot", "shared", "local.css")]);
+
+    expect(
+        resolveDeckRelativeAsset(
+            "./../shared/local.css",
+            deckDirectory,
+            lookup,
+        ),
+    ).toBeNull();
+});
+
+// The traversal guard checks the raw string for a ".." segment, not the
+// path.join-normalized result - this value would net-resolve back into the
+// deck directory itself, but it must still be rejected.
+test("resolveDeckRelativeAsset > a value containing .. is rejected even when it would net-normalize into the deck directory", () => {
+    const lookup = fakeLookup([path.join(deckDirectory, "local.css")]);
+
+    expect(
+        resolveDeckRelativeAsset("./sub/../local.css", deckDirectory, lookup),
+    ).toBeNull();
+});
+
+test("resolveDeckRelativeAsset > a value without the ./ prefix returns null immediately", () => {
+    const lookup = fakeLookup([path.join(deckDirectory, "local.css")]);
+
+    expect(
+        resolveDeckRelativeAsset("local.css", deckDirectory, lookup),
+    ).toBeNull();
+});
+
+// Regression guard mirroring the existing separator-normalization tests in
+// this file: the traversal guard must catch ".." segments written with
+// Windows-style backslashes, not just forward slashes.
+test("resolveDeckRelativeAsset > upward traversal written with backslashes is also rejected", () => {
+    const lookup = fakeLookup([path.join("vaultRoot", "shared", "local.css")]);
+
+    expect(
+        resolveDeckRelativeAsset(
+            ".\\..\\shared\\local.css",
+            deckDirectory,
+            lookup,
+        ),
+    ).toBeNull();
 });

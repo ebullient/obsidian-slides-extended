@@ -94,6 +94,38 @@ export function withCssExtension(name: string): string {
     return `${name}.css`;
 }
 
+/**
+ * Resolves a `./`-prefixed asset value against the deck file's own
+ * directory, rather than the plugin's `assetsDirectory` search path used by
+ * resolveAsset. This is an unconditional early escape: there is no fallback
+ * to any other directory, and only the single deck-relative candidate path
+ * is ever tried.
+ *
+ * Returns null if `name` does not start with the literal `./` prefix, if
+ * the remainder contains a `..` path segment on either separator style
+ * (checked against the raw string, not the path.join-normalized result, so
+ * a value that would net-resolve back into the deck directory is still
+ * rejected), or if no file exists at the resulting path.
+ */
+export function resolveDeckRelativeAsset(
+    name: string,
+    deckDirectory: string,
+    lookup: AssetLookup,
+): string | null {
+    if (!name.startsWith("./")) {
+        return null;
+    }
+
+    const remainder = name.slice(2);
+    const normalizedRemainder = remainder.replace(/\\/g, "/");
+    if (normalizedRemainder.split("/").includes("..")) {
+        return null;
+    }
+
+    const candidatePath = path.join(deckDirectory, remainder);
+    return lookup.exists(candidatePath) ? candidatePath : null;
+}
+
 function isValidUrl(input: string): boolean {
     try {
         new URL(input);

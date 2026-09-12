@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import Mustache from "mustache";
 import type { Options, QueryString } from "../@types";
 import type { MarkdownProcessor } from "../obsidian/markdownProcessor";
@@ -13,6 +13,7 @@ import { YamlParser } from "../yaml/yamlParser";
 import {
     NodeFsAssetLookup,
     resolveAsset,
+    resolveDeckRelativeAsset,
     withCssExtension,
 } from "./assetResolver";
 import { md } from "./markdown";
@@ -54,11 +55,13 @@ export class RevealRenderer {
             this.utils.resetImageCollection();
         }
 
+        const deckDirectory = dirname(filePath);
         const content = (await readFile(filePath.toString())).toString().trim();
         let { html, localAssetPaths } = await this.render(
             content,
             renderForPrint,
             renderForEmbed,
+            deckDirectory,
         );
 
         if (renderForExport) {
@@ -73,6 +76,7 @@ export class RevealRenderer {
                 content,
                 renderForPrint,
                 renderForEmbed,
+                deckDirectory,
             ));
         }
 
@@ -83,6 +87,7 @@ export class RevealRenderer {
         input: string,
         renderForPrint: boolean,
         renderEmbedded: boolean,
+        deckDirectory: string,
     ): Promise<{ html: string; localAssetPaths: string[] }> {
         const { yamlOptions, markdown } = this.yaml.parseYamlFrontMatter(input);
         const options = this.yaml.getSlideOptions(yamlOptions, renderForPrint);
@@ -92,10 +97,12 @@ export class RevealRenderer {
         const themeUrl = this.findAsset(
             withCssExtension(options.theme),
             this.utils.getThemeSearchPath(),
+            deckDirectory,
         );
         const highlightThemeUrl = this.findAsset(
             withCssExtension(options.highlightTheme),
             this.utils.getHighlightSearchPath(),
+            deckDirectory,
         );
 
         const slidifyOptions = this.yaml.getSlidifyOptions(options);
@@ -126,18 +133,22 @@ export class RevealRenderer {
         const cssPaths = this.getAssetPaths(
             options.css,
             this.utils.getLocalCssSearchPath(),
+            deckDirectory,
         );
         const remoteCSSPaths = this.getAssetPaths(
             options.remoteCSS,
             this.utils.getLocalCssSearchPath(),
+            deckDirectory,
         );
         const scriptPaths = this.getAssetPaths(
             options.scripts,
             this.utils.getScriptSearchPath(),
+            deckDirectory,
         );
         const remoteScriptPaths = this.getAssetPaths(
             options.remoteScripts,
             this.utils.getScriptSearchPath(),
+            deckDirectory,
         );
 
         const settings = this.yaml.getTemplateSettings(options);
@@ -206,13 +217,38 @@ export class RevealRenderer {
         }
     }
 
-    private findAsset(name: string, searchPath: string[]) {
+    private findAsset(
+        name: string,
+        searchPath: string[],
+        deckDirectory: string,
+    ) {
         if (this.isValidUrl(name)) {
             return name;
         }
 
+        if (name.startsWith("./")) {
+            const resolved = resolveDeckRelativeAsset(
+                name,
+                deckDirectory,
+                NodeFsAssetLookup,
+            );
+            if (!resolved) {
+                console.debug(
+                    `[slides-extended] Could not resolve deck-relative asset "${name}" against deck directory "${deckDirectory}".`,
+                );
+                return name;
+            }
+            return this.toExternalPath(resolved);
+        }
+
         const resolved = resolveAsset(name, searchPath, NodeFsAssetLookup);
-        return resolved ? this.toExternalPath(resolved) : name;
+        if (!resolved) {
+            console.debug(
+                `[slides-extended] Could not resolve asset "${name}" in search path: ${searchPath.join(", ")}.`,
+            );
+            return name;
+        }
+        return this.toExternalPath(resolved);
     }
 
     private toExternalPath(urlPath: string): string {
@@ -267,7 +303,11 @@ export class RevealRenderer {
         return md.slidify(markdown, slidifyOptions);
     }
 
-    private getAssetPaths(assets: string | string[], searchPath: string[]) {
+    private getAssetPaths(
+        assets: string | string[],
+        searchPath: string[],
+        deckDirectory: string,
+    ) {
         let input: string[] = [];
         if (!assets) {
             return input;
@@ -282,7 +322,7 @@ export class RevealRenderer {
             if (this.isValidUrl(asset)) {
                 return asset;
             }
-            return this.findAsset(asset, searchPath);
+            return this.findAsset(asset, searchPath, deckDirectory);
         });
     }
 }
