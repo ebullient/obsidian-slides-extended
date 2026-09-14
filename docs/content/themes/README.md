@@ -131,16 +131,17 @@ css:
 ---
 ```
 
-\A redundant `css/` prefix is tolerated.
+A redundant `css/` prefix is tolerated.
 
 ## Custom Scripts
 
-You can inject custom JavaScript into your presentations. Scripts are searched in the `js/` subdirectory of your assets directory.
+You can inject custom JavaScript into your presentations. Place them in the `js/` subdirectory of your assets directory (e.g., `assets/js`) or use a [deck-relative](#deck-relative-assets) path:
 
 ```md
 ---
 scripts:
   - my-plugin.js
+  - ./local-plugin.js
 remoteScripts:
   - https://d3js.org/d3.v7.min.js
 ---
@@ -155,13 +156,15 @@ Both `scripts` and `remoteScripts` can also be configured globally in the plugin
 
 ## Deck-relative assets
 
-Any of `css`, `scripts`, `theme`, or `highlightTheme` can be prefixed with `./` to load a file that lives next to the deck's own markdown file, instead of your assets directory:
+Any of `css`, `scripts`, `theme`, or `highlightTheme` resources can be prefixed with `./` to load a file that lives next to the deck's own markdown file, instead of your assets directory:
 
 ```md
 ---
 css:
   - ./local.css
   - ./nested/other.css
+scripts:
+  - ./deck-local.js
 ---
 ```
 
