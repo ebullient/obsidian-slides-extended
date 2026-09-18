@@ -37,6 +37,9 @@ export class TemplateProcessor implements Processor {
                     return slidegroup
                         .split(new RegExp(options.verticalSeparator, "gmi"))
                         .map((slide) => {
+                            if (slide.trim().length === 0) {
+                                return slide;
+                            }
                             if (this.slideCommentRegex.test(slide)) {
                                 const [slideAnnotation] =
                                     this.slideCommentRegex.exec(slide);

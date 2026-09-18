@@ -99,6 +99,35 @@ $$\lim_{t \to \infty} (w(t) - y(t)) = 0$$
     return expect(result).toMatchSnapshot();
 });
 
+test('Empty slide between separators does not corrupt the deck (issue #428)', () => {
+
+    when(MockedObsidianUtils.parseFile('template.md', null)).thenCall(arg => {
+        return `
+        <% content %>
+        `;
+    });
+
+    const input = `---
+defaultTemplate: "[[template]]"
+---
+
+# One
+
+---
+
+---
+
+# Three
+`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = sut.process(markdown, options);
+    expect(result.split(/\r?\n---\r?\n/)).toHaveLength(3);
+    return expect(JSON.stringify(result)).toMatchSnapshot();
+});
+
 test('Template with variable in frontmatter', () => {
 
     when(MockedObsidianUtils.parseFile('template.md', null)).thenCall(arg => {
