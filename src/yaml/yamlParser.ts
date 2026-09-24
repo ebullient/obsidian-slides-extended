@@ -4,6 +4,46 @@ import type { Options, SlidesExtendedSettings } from "../@types";
 import { DEFAULTS } from "../slidesExtended-constants";
 import { isEmpty, isNil, omitBy, pick } from "../util";
 
+/**
+ * Reveal.js configuration properties that must be numeric.
+ * YAML frontmatter may supply these as strings (e.g. `margin: "0"`);
+ * passing a string causes reveal.js to misbehave silently.
+ */
+const NUMERIC_REVEAL_PROPS = new Set([
+    "width",
+    "height",
+    "margin",
+    "minScale",
+    "maxScale",
+    "autoAnimateDuration",
+    "autoSlide",
+    "defaultTiming",
+    "viewDistance",
+    "mobileViewDistance",
+    "hideCursorTime",
+    "pdfMaxPagesPerSlide",
+    "pdfPageHeightOffset",
+]);
+
+/**
+ * Coerce string values to numbers for reveal.js properties that expect
+ * numeric types. If coercion produces NaN the original value is kept so
+ * reveal.js can fall back to its own default.
+ */
+function coerceNumericRevealOptions(
+    options: Record<string, unknown>,
+): Record<string, unknown> {
+    for (const key of NUMERIC_REVEAL_PROPS) {
+        if (key in options && typeof options[key] === "string") {
+            const n = Number(options[key]);
+            if (!Number.isNaN(n)) {
+                options[key] = n;
+            }
+        }
+    }
+    return options;
+}
+
 export class YamlParser {
     private settings: SlidesExtendedSettings;
 
@@ -116,7 +156,8 @@ export class YamlParser {
             revealProps,
         );
         const slideSettings = pick(options, revealProps);
-        return Object.assign({}, globalSettings, slideSettings);
+        const merged = Object.assign({}, globalSettings, slideSettings);
+        return coerceNumericRevealOptions(merged);
     }
 
     getTemplateSettings(options: Partial<Options>) {
