@@ -72,6 +72,23 @@ export function isUrl(path: string): boolean {
     return /^.*?:\/\//.test(path);
 }
 
+// Joins path segments with "/" regardless of the host platform, so resolver
+// output is identical on Windows and Linux (e.g. a posix-style search
+// directory like "/vault/assets/css" must not be glued to the Windows drive
+// root). Callers compare the result against the input strings or pass it to
+// APIs that accept forward slashes (Node fs, URL construction).
+//
+// Note: the returned string is a canonical form, not a filesystem path:
+// callers must normalize separators on both sides (or use a lookup that
+// compares normalized strings) before comparing it to platform paths.
+export function posixJoin(...parts: string[]): string {
+    return parts
+        .join("/")
+        .replace(/\\/g, "/")
+        .replace(/\/{2,}/g, "/")
+        .replace(/\/+$/, "");
+}
+
 export function isIcon(path: string) {
     return FONTAWESOME_PREFIXES.some((prefix) => path.startsWith(prefix));
 }

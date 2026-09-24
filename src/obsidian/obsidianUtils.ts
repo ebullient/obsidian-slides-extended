@@ -65,7 +65,7 @@ export function skipCodeBlocks(
     processRemainingText: (markdown: string) => string,
 ): string {
     const codeBlockRegex =
-        /^(\s*)(`{3,})(.*?)[\r\n][\s\S]*?(?:\r|\n|\r\n)\1\2(?=$|[\r\n])/gm;
+        /^(\s*)(`{3,})(.*?)[\r\n][\s\S]*?(?:\r\n|\r|\n)\1\2(?=$|[\r\n])/gm;
     const match = codeBlockRegex.exec(markdown);
     if (match) {
         return (

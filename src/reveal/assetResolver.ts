@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { posixJoin } from "../util";
 
 export interface AssetLookup {
     exists(candidatePath: string): boolean;
@@ -25,7 +26,9 @@ function stripRedundantPrefix(
     searchPath: string[],
 ): string | null {
     const normalizedName = name.replace(/\\/g, "/");
-    const dirSegments = new Set(searchPath.map((dir) => path.basename(dir)));
+    const dirSegments = new Set(
+        searchPath.map((dir) => path.posix.basename(dir.replace(/\\/g, "/"))),
+    );
     const slashIndex = normalizedName.indexOf("/");
     if (slashIndex === -1) {
         return null;
@@ -60,7 +63,7 @@ export function resolveAsset(
     }
 
     for (const dir of searchPath) {
-        const directPath = path.join(dir, name);
+        const directPath = posixJoin(dir, name);
         if (lookup.exists(directPath)) {
             return directPath;
         }
@@ -69,7 +72,7 @@ export function resolveAsset(
     const strippedName = stripRedundantPrefix(name, searchPath);
     if (strippedName !== null && strippedName.trim() !== "") {
         for (const dir of searchPath) {
-            const strippedPath = path.join(dir, strippedName);
+            const strippedPath = posixJoin(dir, strippedName);
             if (lookup.exists(strippedPath)) {
                 return strippedPath;
             }
@@ -122,7 +125,7 @@ export function resolveDeckRelativeAsset(
         return null;
     }
 
-    const candidatePath = path.join(deckDirectory, remainder);
+    const candidatePath = posixJoin(deckDirectory, remainder);
     return lookup.exists(candidatePath) ? candidatePath : null;
 }
 

@@ -11,6 +11,12 @@ import {
     withCssExtension,
 } from "../src/reveal/assetResolver";
 import { DEFAULT_SETTINGS } from "../src/slidesExtended-constants";
+import { posixJoin } from "../src/util";
+
+// The resolver returns canonical "/"-joined paths (posixJoin), so the
+// expectations below use posixJoin against the path.join-built fixture dirs.
+// NodeFsAssetLookup.accepts the canonical form on every platform (forward
+// slashes are valid on Windows), so the real-filesystem assertions hold.
 
 // RevealRenderer.ts can't be imported under Jest (it pulls in reveal.js's
 // markdown.js, an ESM file Jest isn't configured to transform), so these
@@ -90,7 +96,7 @@ describe("ObsidianUtils search paths + resolveAsset end-to-end", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(assetsCss, "custom.css"));
+        expect(resolved).toBe(posixJoin(assetsCss, "custom.css"));
     });
 
     test("redundant css/ prefix reference resolves against assetsDir/css", () => {
@@ -101,7 +107,7 @@ describe("ObsidianUtils search paths + resolveAsset end-to-end", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(assetsCss, "custom.css"));
+        expect(resolved).toBe(posixJoin(assetsCss, "custom.css"));
     });
 
     test("script reference resolves against assetsDir/js", () => {
@@ -112,7 +118,7 @@ describe("ObsidianUtils search paths + resolveAsset end-to-end", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(assetsJs, "custom.js"));
+        expect(resolved).toBe(posixJoin(assetsJs, "custom.js"));
     });
 
     test("redundant js/ prefix script reference resolves against assetsDir/js", () => {
@@ -123,7 +129,7 @@ describe("ObsidianUtils search paths + resolveAsset end-to-end", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(assetsJs, "custom.js"));
+        expect(resolved).toBe(posixJoin(assetsJs, "custom.js"));
     });
 
     test("asset directly under assetsDir root does not resolve - css only searches assetsDir/css", () => {
@@ -156,7 +162,7 @@ describe("ObsidianUtils search paths + resolveAsset end-to-end", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(assetsCss, "black.css"));
+        expect(resolved).toBe(posixJoin(assetsCss, "black.css"));
     });
 
     test("bundled theme still resolves via dist/theme fallback when no vault match exists", () => {
@@ -167,7 +173,7 @@ describe("ObsidianUtils search paths + resolveAsset end-to-end", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(distTheme, "red.css"));
+        expect(resolved).toBe(posixJoin(distTheme, "red.css"));
     });
 
     test("default theme setting ('black', no extension) resolves via dist/theme fallback", () => {
@@ -183,7 +189,7 @@ describe("ObsidianUtils search paths + resolveAsset end-to-end", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(distTheme, "black.css"));
+        expect(resolved).toBe(posixJoin(distTheme, "black.css"));
     });
 
     test("missing asset does not resolve", () => {
@@ -246,7 +252,7 @@ describe("resolveDeckRelativeAsset against a real deck directory", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(deckDir, "local.css"));
+        expect(resolved).toBe(posixJoin(deckDir, "local.css"));
     });
 
     test("./nested/local.css resolves against a subdirectory of the deck", () => {
@@ -256,7 +262,7 @@ describe("resolveDeckRelativeAsset against a real deck directory", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(deckDir, "nested", "local.css"));
+        expect(resolved).toBe(posixJoin(deckDir, "nested", "local.css"));
     });
 
     test("./my-theme.css resolves against the deck's own directory (theme)", () => {
@@ -266,7 +272,7 @@ describe("resolveDeckRelativeAsset against a real deck directory", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(deckDir, "my-theme.css"));
+        expect(resolved).toBe(posixJoin(deckDir, "my-theme.css"));
     });
 
     test("./local.js resolves against the deck's own directory (script)", () => {
@@ -276,7 +282,7 @@ describe("resolveDeckRelativeAsset against a real deck directory", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(deckDir, "local.js"));
+        expect(resolved).toBe(posixJoin(deckDir, "local.js"));
     });
 
     test("./my-highlight.css resolves against the deck's own directory (highlight theme)", () => {
@@ -286,7 +292,7 @@ describe("resolveDeckRelativeAsset against a real deck directory", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(deckDir, "my-highlight.css"));
+        expect(resolved).toBe(posixJoin(deckDir, "my-highlight.css"));
     });
 
     test("./missing.css does not resolve even though a same-named file exists under assetsDirectory", () => {
@@ -307,7 +313,7 @@ describe("resolveDeckRelativeAsset against a real deck directory", () => {
             utils.getLocalCssSearchPath(),
             NodeFsAssetLookup,
         );
-        expect(viaAssetsDirectory).toBe(path.join(assetsCss, "missing.css"));
+        expect(viaAssetsDirectory).toBe(posixJoin(assetsCss, "missing.css"));
     });
 
     test("./../shared/local.css is rejected by the traversal guard regardless of whether the target exists", () => {
@@ -342,7 +348,7 @@ describe("resolveDeckRelativeAsset against a real deck directory", () => {
             NodeFsAssetLookup,
         );
 
-        expect(resolved).toBe(path.join(assetsCss, "custom.css"));
+        expect(resolved).toBe(posixJoin(assetsCss, "custom.css"));
     });
 
     test("a list mixing ./-prefixed and assetsDirectory-relative entries resolves each independently", () => {
@@ -357,7 +363,7 @@ describe("resolveDeckRelativeAsset against a real deck directory", () => {
             deckDir,
             NodeFsAssetLookup,
         );
-        expect(deckRelativeEntry).toBe(path.join(deckDir, "a.js"));
+        expect(deckRelativeEntry).toBe(posixJoin(deckDir, "a.js"));
 
         const utils = buildUtils(vaultRoot, "assets");
         const assetsDirectoryEntry = resolveAsset(
@@ -365,6 +371,6 @@ describe("resolveDeckRelativeAsset against a real deck directory", () => {
             utils.getScriptSearchPath(),
             NodeFsAssetLookup,
         );
-        expect(assetsDirectoryEntry).toBe(path.join(assetsDir, "js", "b.js"));
+        expect(assetsDirectoryEntry).toBe(posixJoin(assetsDir, "js", "b.js"));
     });
 });

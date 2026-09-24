@@ -22,7 +22,7 @@ export class LatexProcessor implements Processor {
         }
 
         const codeBlockRegex =
-            /^(\s*)(`{3,})(.*?)[\r\n][\s\S]*?(?:\r|\n|\r\n)\s*\2(?=$|[\r\n])/gm;
+            /^(\s*)(`{3,})(.*?)[\r\n][\s\S]*?(?:\r\n|\r|\n)\s*\2(?=$|[\r\n])/gm;
         const inlineCodeRegex = /`[^`\n]+?`/g;
 
         const codeBlocks: string[] = [];
@@ -81,7 +81,7 @@ export class LatexProcessor implements Processor {
         processed = processed.replace(
             /\$\$([\s\S]*?)\$\$/g,
             (_, content: string) => {
-                const fixedContent = content.replace(/\n\s*/g, " ");
+                const fixedContent = content.replace(/\r?\n\s*/g, " ");
                 return `%\`%$$${processMathContent(fixedContent)}$$%\`%`;
             },
         );
