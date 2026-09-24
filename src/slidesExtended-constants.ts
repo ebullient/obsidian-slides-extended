@@ -60,6 +60,7 @@ export const DEFAULTS: Options = {
     verticalSeparator: "\r?\n--\r?\n",
     width: 960,
     mathEngine: "katex",
+    slideNumberFormat: "c",
 };
 
 export const RESERVED_ASSET_DIRECTORY_NAMES = ["css", "dist", "plugin"];

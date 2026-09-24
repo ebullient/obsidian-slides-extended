@@ -204,7 +204,60 @@ export class RevealRenderer {
         ];
 
         const template = await this.getPageTemplate(renderEmbedded);
-        const html = Mustache.render(template, context);
+        let html = Mustache.render(template, context);
+
+        const slideVariablesScript = `<script>
+(function () {
+    if (window._slidesExtendedVariablesInitialized) return;
+    window._slidesExtendedVariablesInitialized = true;
+
+    function setSlideVariables() {
+        var total = Reveal.getTotalSlides ? Reveal.getTotalSlides() : (Reveal.getConfig().totalSlides || 0);
+
+        var activeIndices = Reveal.getIndices ? Reveal.getIndices() : { h: 0, v: 0 };
+        var activeCurrent = Reveal.getCurrentSlide ? Reveal.getCurrentSlide() : null;
+        var activeIsVert = Reveal.isVerticalSlide ? Reveal.isVerticalSlide(activeCurrent) : false;
+
+        var curH = (activeIndices ? activeIndices.h : 0) + 1;
+        var curV = activeIsVert ? ((activeIndices ? activeIndices.v : 0) + 1) : 0;
+        var curC = (Reveal.getSlidePastCount ? Reveal.getSlidePastCount(activeCurrent) : 0) + 1;
+
+        var globalVars = {
+            "--slide-number-h": curH,
+            "--slide-number-v": curV,
+            "--slide-number-c": curC,
+            "--slide-number-t": total,
+            "--slide-number": curC,
+            "--slides-total": total,
+            "--total-slides": total
+        };
+
+        for (var key in globalVars) {
+            document.documentElement.style.setProperty(key, globalVars[key]);
+        }
+        var reveal = document.querySelector(".reveal");
+        if (reveal) {
+            for (var key in globalVars) {
+                reveal.style.removeProperty(key);
+            }
+        }
+    }
+
+    if (Reveal.isReady()) {
+        setSlideVariables();
+    } else {
+        Reveal.addEventListener("ready", setSlideVariables);
+    }
+    Reveal.addEventListener("slidechanged", setSlideVariables);
+})();
+</script>`;
+
+        if (html.includes("</body>")) {
+            html = html.replace("</body>", `${slideVariablesScript}\n</body>`);
+        } else {
+            html += `\n${slideVariablesScript}`;
+        }
+
         return { html, localAssetPaths };
     }
 
