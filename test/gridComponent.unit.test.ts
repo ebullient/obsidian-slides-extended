@@ -503,3 +503,43 @@ test('Grid Component > Attributes > Alignment > Stretch > Col', () => {
 
 	return expect(sut.process(markdown, options)).toMatchSnapshot();
 });
+
+test('Grid Component > Floating Point Coordinates and Dimensions', () => {
+	const input = `<grid drag="48.5 95.5" drop="0 0">
+### Left
+</grid>
+
+<grid drag="48.5 95.5" drop="51.5 0">
+### Right
+</grid>
+
+<grid absolute="true" drag="240.5px 350.5px" drop="10.5px 20.5px">
+### Pixels Float Absolute
+</grid>
+
+<grid drag="48.5 50" drop="-5.5 -10.5">
+### Negative Float
+</grid>
+
+<grid drag="48.5x95.5" drop="51.5x0">
+### x Separator Float
+</grid>`;
+
+	const { options, markdown } = prepare(input);
+	const sut = new MarkdownProcessor(utilsInstance);
+	const result = sut.process(markdown, options);
+
+	expect(result).toContain('left: 0%');
+	expect(result).toContain('width: 48.5%');
+	expect(result).toContain('height: 95.5%');
+	expect(result).toContain('left: 51.5%');
+	expect(result).toContain('left: 10.5px');
+	expect(result).toContain('top: 20.5px');
+	expect(result).toContain('width: 240.5px');
+	expect(result).toContain('height: 350.5px');
+	expect(result).toContain('left: 46%');
+	expect(result).toContain('top: 39.5%');
+	expect(result).not.toContain('drag=');
+	expect(result).not.toContain('drop=');
+});
+
