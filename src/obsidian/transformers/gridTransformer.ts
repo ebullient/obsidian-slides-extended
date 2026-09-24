@@ -14,7 +14,7 @@ export class GridTransformer implements AttributeTransformer {
     }
 
     private gridAttributeRegex =
-        /^(?:(-?\d*(?:px)?)(?:\s*|x)(-?\d*(?:px)?)|(center|top|bottom|left|right|topleft|topright|bottomleft|bottomright))$/m;
+        /^(?:(-?\d*(?:\.\d+)?(?:px)?)(?:\s*|x)(-?\d*(?:\.\d+)?(?:px)?)|(center|top|bottom|left|right|topleft|topright|bottomleft|bottomright))$/m;
 
     transform(element: Properties) {
         let defaultDrop: string;
