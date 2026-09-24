@@ -5,12 +5,20 @@ import {
     resolveDeckRelativeAsset,
     withCssExtension,
 } from "../src/reveal/assetResolver";
+import { posixJoin } from "../src/util";
 
+// The resolver returns canonical "/"-joined strings (posixJoin), so the
+// expectations below use posixJoin too and the test is platform-agnostic.
+// The lookup normalizes both sides before comparing, mirroring how
+// NodeFsAssetLookup sees the canonical form in production (forward slashes
+// are valid on Windows too).
 function fakeLookup(existingPaths: string[]): AssetLookup {
-    const normalized = new Set(existingPaths.map((p) => path.normalize(p)));
+    const normalized = new Set(
+        existingPaths.map((p) => posixJoin(path.normalize(p))),
+    );
     return {
         exists: (candidatePath) =>
-            normalized.has(path.normalize(candidatePath)),
+            normalized.has(posixJoin(path.normalize(candidatePath))),
     };
 }
 
@@ -24,7 +32,7 @@ test("Asset Resolver > minimal css reference resolves against assetsDir/css", ()
     const searchPath = [assetsCss, assetsRoot, pluginDir];
 
     expect(resolveAsset("file.css", searchPath, lookup)).toBe(
-        path.join(assetsCss, "file.css"),
+        posixJoin(assetsCss, "file.css"),
     );
 });
 
@@ -33,7 +41,7 @@ test("Asset Resolver > redundant css/ prefix reference resolves against assetsDi
     const searchPath = [assetsCss, assetsRoot, pluginDir];
 
     expect(resolveAsset("css/file.css", searchPath, lookup)).toBe(
-        path.join(assetsCss, "file.css"),
+        posixJoin(assetsCss, "file.css"),
     );
 });
 
@@ -46,10 +54,10 @@ test("Asset Resolver > resolution is not file-type-specific", () => {
     const searchPath = [assetsFonts, assetsRoot];
 
     expect(resolveAsset("file.woff2", searchPath, lookup)).toBe(
-        path.join(assetsFonts, "file.woff2"),
+        posixJoin(assetsFonts, "file.woff2"),
     );
     expect(resolveAsset("fonts/file.woff2", searchPath, lookup)).toBe(
-        path.join(assetsFonts, "file.woff2"),
+        posixJoin(assetsFonts, "file.woff2"),
     );
 });
 
@@ -68,7 +76,7 @@ test("Asset Resolver > theme search path prefers vault asset over bundled dist/t
     const searchPath = [assetsCss, assetsRoot, pluginDir, distTheme];
 
     expect(resolveAsset("file.css", searchPath, lookup)).toBe(
-        path.join(assetsCss, "file.css"),
+        posixJoin(assetsCss, "file.css"),
     );
 });
 
@@ -77,7 +85,7 @@ test("Asset Resolver > bundled theme resolves via dist/theme fallback when no va
     const searchPath = [assetsCss, assetsRoot, pluginDir, distTheme];
 
     expect(resolveAsset("black.css", searchPath, lookup)).toBe(
-        path.join(distTheme, "black.css"),
+        posixJoin(distTheme, "black.css"),
     );
 });
 
@@ -90,7 +98,7 @@ test("withCssExtension > bare theme name resolves once expanded to a filename", 
     const searchPath = [assetsCss, assetsRoot, pluginDir, distTheme];
 
     expect(resolveAsset(withCssExtension("black"), searchPath, lookup)).toBe(
-        path.join(distTheme, "black.css"),
+        posixJoin(distTheme, "black.css"),
     );
 });
 
@@ -125,7 +133,7 @@ test("Asset Resolver > redundant prefix written with backslash still resolves", 
     const searchPath = [assetsCss, assetsRoot, pluginDir];
 
     expect(resolveAsset("css\\file.css", searchPath, lookup)).toBe(
-        path.join(assetsCss, "file.css"),
+        posixJoin(assetsCss, "file.css"),
     );
 });
 
@@ -137,6 +145,9 @@ test("Asset Resolver > posix-style search path and name resolve correctly", () =
     };
 
     expect(resolveAsset("file.css", [posixCss], lookup)).toBe(
+        "/vaultRoot/assets/css/file.css",
+    );
+    expect(resolveAsset("css/file.css", [posixCss], lookup)).toBe(
         "/vaultRoot/assets/css/file.css",
     );
 });
@@ -159,7 +170,7 @@ test("Asset Resolver > redundant prefix resolves even when matching directory is
     const searchPath = [assetsRoot, assetsCss];
 
     expect(resolveAsset("css/file.css", searchPath, lookup)).toBe(
-        path.join(assetsRoot, "file.css"),
+        posixJoin(assetsRoot, "file.css"),
     );
 });
 
@@ -185,7 +196,7 @@ test("Asset Resolver > direct match anywhere in search path beats redundant-pref
     const searchPath = [assetsRoot, assetsCss];
 
     expect(resolveAsset("css/file.css", searchPath, lookup)).toBe(
-        path.join(assetsRoot, "css", "file.css"),
+        posixJoin(assetsRoot, "css", "file.css"),
     );
 });
 
@@ -195,7 +206,7 @@ test("resolveDeckRelativeAsset > ./-prefixed value resolves against the deck dir
     const lookup = fakeLookup([path.join(deckDirectory, "local.css")]);
 
     expect(resolveDeckRelativeAsset("./local.css", deckDirectory, lookup)).toBe(
-        path.join(deckDirectory, "local.css"),
+        posixJoin(deckDirectory, "local.css"),
     );
 });
 
@@ -206,7 +217,7 @@ test("resolveDeckRelativeAsset > nested ./-prefixed value resolves against a sub
 
     expect(
         resolveDeckRelativeAsset("./nested/local.css", deckDirectory, lookup),
-    ).toBe(path.join(deckDirectory, "nested", "local.css"));
+    ).toBe(posixJoin(deckDirectory, "nested", "local.css"));
 });
 
 // No fallback: a same-named file elsewhere (e.g. under assetsDirectory)
