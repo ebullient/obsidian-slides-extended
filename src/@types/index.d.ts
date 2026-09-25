@@ -27,6 +27,7 @@ export interface SlidesExtendedSettings {
     progress: boolean;
     slideNumber: boolean;
     showGrid: boolean;
+    editMode: boolean;
     autoComplete: string;
     paneMode: "split" | "tab" | "sidebar";
     assetsDirectory: string;
@@ -64,6 +65,7 @@ export type Options = {
     remoteScripts: string | string[];
     separator: string;
     showGrid: boolean;
+    editMode: boolean;
     template: string;
     theme: string;
     timeForPresentation: number;

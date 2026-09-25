@@ -38,4 +38,8 @@ div.reveal-preview-view>iframe {
     display: none;
 }
 
+.workspace-leaf-content[data-type="reveal-preview-view"] .view-actions .clickable-icon.is-active {
+    color: var(--interactive-accent);
+}
+
 
