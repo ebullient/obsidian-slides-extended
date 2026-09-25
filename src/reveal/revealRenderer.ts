@@ -62,6 +62,7 @@ export class RevealRenderer {
             renderForPrint,
             renderForEmbed,
             deckDirectory,
+            filePath,
         );
 
         if (renderForExport) {
@@ -77,6 +78,7 @@ export class RevealRenderer {
                 renderForPrint,
                 renderForEmbed,
                 deckDirectory,
+                filePath,
             ));
         }
 
@@ -88,6 +90,7 @@ export class RevealRenderer {
         renderForPrint: boolean,
         renderEmbedded: boolean,
         deckDirectory: string,
+        filePath?: string,
     ): Promise<{ html: string; localAssetPaths: string[] }> {
         const { yamlOptions, markdown } = this.yaml.parseYamlFrontMatter(input);
         const options = this.yaml.getSlideOptions(yamlOptions, renderForPrint);
@@ -182,6 +185,7 @@ export class RevealRenderer {
             scriptPaths,
             remoteScriptPaths,
             base,
+            noteUrl: filePath ? `/${filePath}` : "",
             enableCustomControls,
             enableChalkboard,
             enableAudioSlideshow,

@@ -59,7 +59,7 @@ export class RevealPreviewView extends ItemView {
         });
 
         this.editAction = this.addAction(
-            "edit",
+            "square-dashed-mouse-pointer",
             "Toggle edit mode",
             () => void this.toggleEditMode(),
         );
@@ -168,13 +168,15 @@ export class RevealPreviewView extends ItemView {
         top: number;
         width: number;
         height: number;
+        slidesGrid?: string | number | null;
+        slide?: string | null;
     }) {
         const view = this.app.workspace.getActiveViewOfType(MarkdownView);
         if (!view) {
             return;
         }
 
-        const grid = `<grid drag="${data.width.toFixed(GRID_COORDINATE_PRECISION)} ${data.height.toFixed(GRID_COORDINATE_PRECISION)}" drop="${data.left.toFixed(GRID_COORDINATE_PRECISION)} ${data.top.toFixed(GRID_COORDINATE_PRECISION)}">\n\n</grid>`;
+        const grid = `<grid drag="${data.width.toFixed(GRID_COORDINATE_PRECISION)} ${data.height.toFixed(GRID_COORDINATE_PRECISION)}" drop="${data.left.toFixed(GRID_COORDINATE_PRECISION)} ${data.top.toFixed(GRID_COORDINATE_PRECISION)}">\n\n</grid>\n`;
 
         view.editor.focus();
         const start = view.editor.getCursor();

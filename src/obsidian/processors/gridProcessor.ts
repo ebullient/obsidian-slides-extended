@@ -9,6 +9,7 @@ export class GridProcessor implements Processor {
 
     process(markdown: string, options: Options) {
         let output = markdown;
+        let gridIndex = 0;
 
         markdown
             .split(new RegExp(options.separator, "gmi"))
@@ -17,13 +18,19 @@ export class GridProcessor implements Processor {
                     .split(new RegExp(options.verticalSeparator, "gmi"))
                     .map((slide) => {
                         if (this.gridBlockRegex.test(slide)) {
-                            let before = this.transformSlide(slide);
+                            let before = this.transformSlide(
+                                slide,
+                                () => gridIndex++,
+                            );
                             let after: string;
                             while (after !== before) {
                                 if (after) {
                                     before = after;
                                 }
-                                after = this.transformSlide(before);
+                                after = this.transformSlide(
+                                    before,
+                                    () => gridIndex++,
+                                );
                             }
                             output = output.split(slide).join(after);
                             return after;
@@ -37,7 +44,7 @@ export class GridProcessor implements Processor {
         return output;
     }
 
-    transformSlide(slide: string) {
+    transformSlide(slide: string, nextGridIndex: () => number) {
         const result: Map<string, string> = new Map<string, string>();
         this.gridBlockRegex.lastIndex = 0;
 
@@ -52,7 +59,7 @@ export class GridProcessor implements Processor {
             const gridTag = m[0];
 
             const [match, attr, inner] = this.gridRegex.exec(gridTag);
-            result.set(match, this.transformGrid(attr, inner));
+            result.set(match, this.transformGrid(attr, inner, nextGridIndex()));
         }
 
         for (const [key, value] of result) {
@@ -63,8 +70,9 @@ export class GridProcessor implements Processor {
         return slide;
     }
 
-    transformGrid(attr: string, inner: string): string {
+    transformGrid(attr: string, inner: string, gridIndex: number): string {
         const attributes = this.parseAttributes(attr.trim());
+        attributes.set("data-slides-grid", String(gridIndex));
         const properties = new Properties(attributes);
         return `<div class="${properties.getClasses()}" style="${properties.getStyles()}" ${properties.getAttributes()}>\n${inner}</div>`;
     }

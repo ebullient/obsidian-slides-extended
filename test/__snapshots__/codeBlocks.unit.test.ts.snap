@@ -2,7 +2,7 @@
 
 exports[`Code Block Syntax > ::: block syntax in backtick fence is left verbatim 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 \`\`\`markdown
 ::: {.callout-note}
@@ -14,7 +14,7 @@ Note content
 
 exports[`Code Block Syntax > ::: block syntax in tilde fence is left verbatim 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 ~~~markdown
 ::: {.callout-note}
@@ -26,7 +26,7 @@ Note content
 
 exports[`Code Block Syntax > Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 \`\`\`dockerfile
 FROM ubuntu
@@ -36,7 +36,7 @@ FROM ubuntu
 
 exports[`Code Block Syntax > Code Blocks with $ and underscores 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 \`\`\`dockerfile
 USER $USER_NAME:$USER_NAME
@@ -46,7 +46,7 @@ USER $USER_NAME:$USER_NAME
 
 exports[`Code Block Syntax > Math with Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 $$\\\\begin{vmatrix}a & b\\\\\\\\ c & d \\\\end{vmatrix}=ad-bc$$
 
@@ -60,7 +60,7 @@ You can also do inline math like $s^{-2}\\_{n}\\\\sum\\_{i=1}^{n}$
 
 exports[`Code Block Syntax > Math with Mixed Code Blocks 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 $$\\\\begin{vmatrix}a & b\\\\\\\\ c & d \\\\end{vmatrix}=ad-bc$$
 
@@ -77,7 +77,7 @@ to do inline math like $s^{-2}\\_{n}\\\\sum\\_{i=1}^{n}$
 
 exports[`Code Block Syntax > codeblock-ish, not math 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 \`\`\`
 USER $USER_NAME:$USER_NAME
@@ -90,7 +90,7 @@ Underscores should not be escaped
 
 exports[`Code Block Syntax > fence introduced via embedded file is still protected 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 Top-level content before the embed.
 
@@ -115,7 +115,7 @@ Top-level content after the embed.
 
 exports[`Code Block Syntax > media reference in backtick fence is left verbatim 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 \`\`\`markdown
 ![Example](figs/nonexistent.svg)
@@ -126,7 +126,7 @@ exports[`Code Block Syntax > media reference in backtick fence is left verbatim 
 
 exports[`Code Block Syntax > media reference in tilde fence is left verbatim 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 ~~~markdown
 ![Example](figs/nonexistent.svg)
@@ -137,7 +137,7 @@ exports[`Code Block Syntax > media reference in tilde fence is left verbatim 1`]
 
 exports[`Code Block Syntax > no type 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 \`\`\`
 USER $USER_NAME:$USER_NAME
@@ -149,7 +149,7 @@ The above does not show backticks
 
 exports[`Code Block Syntax > real media and ::: block still transform alongside fenced examples 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 <img src="https://picsum.photos/id/1005/250/250" alt="Real image" style="object-fit: scale-down">
 
@@ -172,7 +172,7 @@ Note content
 
 exports[`Embedded code has extra characters near dollar signs 1`] = `
 "<!-- .slide: class="drop" -->
-<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true" data-slides-grid="0">
 
 \`\`\`javascript
 export class CounterService {
