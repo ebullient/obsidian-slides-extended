@@ -82,11 +82,12 @@ export function isUrl(path: string): boolean {
 // callers must normalize separators on both sides (or use a lookup that
 // compares normalized strings) before comparing it to platform paths.
 export function posixJoin(...parts: string[]): string {
-    return parts
-        .join("/")
-        .replace(/\\/g, "/")
-        .replace(/\/{2,}/g, "/")
-        .replace(/\/+$/, "");
+    const joined = parts.join("/").replaceAll("\\", "/");
+    const isAbsolute = joined.startsWith("/");
+
+    const result = joined.split("/").filter(Boolean).join("/");
+
+    return isAbsolute && result ? `/${result}` : result;
 }
 
 export function isIcon(path: string) {
