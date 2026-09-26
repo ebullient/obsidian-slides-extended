@@ -23,6 +23,7 @@ export class RevealPreviewView extends ItemView {
     private yaml: YamlParser;
     private plugin: SlidesExtendedPlugin;
     private editAction: HTMLElement;
+    private gridAction: HTMLElement;
 
     constructor(
         leaf: WorkspaceLeaf,
@@ -53,10 +54,12 @@ export class RevealPreviewView extends ItemView {
             this.openInBrowser();
         });
 
-        this.addAction("grid", "Show grid", () => {
+        this.gridAction = this.addAction("grid", "Show grid", () => {
             settings.showGrid = !settings.showGrid;
+            this.updateGridIcon();
             this.reloadIframe();
         });
+        this.updateGridIcon();
 
         this.editAction = this.addAction(
             "square-dashed-mouse-pointer",
@@ -114,6 +117,10 @@ export class RevealPreviewView extends ItemView {
                 ? "Disable edit mode"
                 : "Enable edit mode",
         );
+    }
+
+    updateGridIcon() {
+        this.gridAction.toggleClass("is-active", this.plugin.settings.showGrid);
     }
 
     printPresentation() {
