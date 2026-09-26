@@ -139,6 +139,11 @@ export class RevealPreviewView extends ItemView {
             return;
         }
 
+        if (this.isFocusFrameMessage(msg.data)) {
+            this.focusIframe();
+            return;
+        }
+
         const data = String(msg.data);
         if (data.includes("?export")) {
             this.setUrl(data.split("?")[0]);
@@ -170,6 +175,22 @@ export class RevealPreviewView extends ItemView {
         );
     }
 
+    isFocusFrameMessage(data: unknown): boolean {
+        return (
+            typeof data === "object" &&
+            data !== null &&
+            (data as { type?: string }).type === "slides-extended-focus-frame"
+        );
+    }
+
+    focusIframe() {
+        const viewContent = this.containerEl.children[1];
+        const iframe = viewContent.getElementsByTagName("iframe")[0];
+        if (iframe) {
+            iframe.focus();
+        }
+    }
+
     insertGridAtCursor(data: {
         left: number;
         top: number;
@@ -178,17 +199,40 @@ export class RevealPreviewView extends ItemView {
         slidesGrid?: string | number | null;
         slide?: string | null;
     }) {
-        const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+        const view = this.getSourceMarkdownView();
         if (!view) {
             return;
         }
 
         const grid = `<grid drag="${data.width.toFixed(GRID_COORDINATE_PRECISION)} ${data.height.toFixed(GRID_COORDINATE_PRECISION)}" drop="${data.left.toFixed(GRID_COORDINATE_PRECISION)} ${data.top.toFixed(GRID_COORDINATE_PRECISION)}">\n\n</grid>\n`;
 
-        view.editor.focus();
-        const start = view.editor.getCursor();
-        view.editor.replaceSelection(`${grid}\n`);
-        view.editor.setCursor({ line: start.line + 1, ch: 0 });
+        // Defer to a task after the current focus/blur settle, so the
+        // markdown editor is focused only at the moment of insertion and
+        // does not steal focus during edit-mode navigation.
+        window.setTimeout(() => {
+            view.editor.focus();
+            const start = view.editor.getCursor();
+            view.editor.replaceSelection(`${grid}\n`);
+            view.editor.setCursor({ line: start.line + 1, ch: 0 });
+        }, 0);
+    }
+
+    getSourceMarkdownView(): MarkdownView | null {
+        const target = this.plugin.getTargetFile();
+        if (!target) {
+            return null;
+        }
+
+        for (const leaf of this.app.workspace.getLeavesOfType(
+            "markdown",
+        )) {
+            const view = leaf.view as MarkdownView | undefined;
+            if (view?.file && view.file.path === target.path) {
+                return view;
+            }
+        }
+
+        return this.app.workspace.getActiveViewOfType(MarkdownView) ?? null;
     }
 
     onLineChanged(line: number) {
