@@ -223,9 +223,7 @@ export class RevealPreviewView extends ItemView {
             return null;
         }
 
-        for (const leaf of this.app.workspace.getLeavesOfType(
-            "markdown",
-        )) {
+        for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
             const view = leaf.view as MarkdownView | undefined;
             if (view?.file && view.file.path === target.path) {
                 return view;
