@@ -4,16 +4,6 @@ import type { ObsidianUtils } from "../../obsidian/obsidianUtils";
 import { FootnoteProcessor } from "./footNoteProcessor";
 import { MultipleFileProcessor } from "./multipleFileProcessor";
 
-export interface SlideNumberVariables {
-    slideNumber?: string;
-    slidesTotal?: string;
-    slideNumberH?: string;
-    slideNumberV?: string;
-    slideNumberC?: string;
-    slideNumberT?: string;
-    [key: string]: string | undefined;
-}
-
 export class TemplateProcessor implements Processor {
     private multipleFileProcessor: MultipleFileProcessor;
     private footnoteProcessor: FootnoteProcessor;
@@ -27,6 +17,20 @@ export class TemplateProcessor implements Processor {
 
     private variableRegex = /<%\??(.*?)%>/g;
     private optionalRegex = /<%\?.*?%>/g;
+    private slideVariableNames = new Set([
+        "slideNumber",
+        "slidesTotal",
+        "slideNumberH",
+        "slideNumberV",
+        "slideNumberC",
+        "slideNumberT",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+    ]);
 
     private utils: ObsidianUtils;
     private parser = new CommentParser();
@@ -89,54 +93,12 @@ export class TemplateProcessor implements Processor {
 
         let output = input;
 
-        const separatorRegex = new RegExp(options.separator, "gmi");
-        const verticalSeparatorRegex = new RegExp(
-            options.verticalSeparator,
-            "gmi",
-        );
-
-        // Precalculate total slides across all horizontal and vertical slides
-        let totalSlides = 0;
-        const slidegroups = input.split(separatorRegex);
-        for (const slidegroup of slidegroups) {
-            totalSlides += slidegroup.split(verticalSeparatorRegex).length;
-        }
-
-        const format = (options.slideNumberFormat as string) || "c";
-        const slidesTotalStr = String(totalSlides);
-        let currentSlide = 0;
-
         input
-            .split(separatorRegex)
-            .map((slidegroup, hIdx) => {
-                const verticalSlides = slidegroup.split(verticalSeparatorRegex);
-                const h = hIdx + 1;
-                const hasVertical = verticalSlides.length > 1;
-
-                return verticalSlides
-                    .map((slide, vIdx) => {
-                        currentSlide++;
-                        const c = currentSlide;
-                        const v = vIdx + 1;
-
-                        const slideNumberStr = this.formatSlideNumber(
-                            format,
-                            h,
-                            v,
-                            c,
-                            totalSlides,
-                            hasVertical,
-                        );
-
-                        const slideNumbers: SlideNumberVariables = {
-                            slideNumber: slideNumberStr,
-                            slidesTotal: slidesTotalStr,
-                            slideNumberH: String(h),
-                            slideNumberV: hasVertical ? String(v) : "0",
-                            slideNumberC: String(c),
-                            slideNumberT: slidesTotalStr,
-                        };
-
+            .split(new RegExp(options.separator, "gmi"))
+            .map((slidegroup) => {
+                return slidegroup
+                    .split(new RegExp(options.verticalSeparator, "gmi"))
+                    .map((slide) => {
                         if (this.templateCommentRegex.test(slide)) {
                             try {
                                 const [main, notes] = this.extractNotes(
@@ -162,11 +124,7 @@ export class TemplateProcessor implements Processor {
                                     "",
                                 );
                                 md = md.trim();
-                                md = this.computeVariables(
-                                    md,
-                                    options,
-                                    slideNumbers,
-                                );
+                                md = this.computeVariables(md, options);
                                 if (notes.length > 0) {
                                     md += `\n\n${notes}`;
                                 }
@@ -183,11 +141,7 @@ export class TemplateProcessor implements Processor {
                                 slide,
                                 options,
                             );
-                            let md = this.computeVariables(
-                                main,
-                                options,
-                                slideNumbers,
-                            );
+                            let md = this.computeVariables(main, options);
                             if (notes.length > 0) {
                                 md += `\n\n${notes}`;
                             }
@@ -200,32 +154,6 @@ export class TemplateProcessor implements Processor {
             })
             .join(options.separator);
         return output;
-    }
-
-    private formatSlideNumber(
-        format: string,
-        h: number,
-        v: number,
-        c: number,
-        t: number,
-        hasVertical: boolean,
-    ): string {
-        switch (format) {
-            case "c":
-                return String(c);
-            case "c/t":
-                return `${c}/${t}`;
-            case "h.v":
-                return hasVertical ? `${h}.${v}` : String(h);
-            case "h/v":
-                return hasVertical ? `${h}/${v}` : String(h);
-            default:
-                return format
-                    .replace(/\bc\b/g, String(c))
-                    .replace(/\bt\b/g, String(t))
-                    .replace(/\bh\b/g, String(h))
-                    .replace(/\bv\b/g, hasVertical ? String(v) : "0");
-        }
     }
 
     extractNotes(input: string, options: Options): [string, string] {
@@ -267,11 +195,7 @@ export class TemplateProcessor implements Processor {
         return slide;
     }
 
-    computeVariables(
-        slide: string,
-        options: Options,
-        slideNumbers?: SlideNumberVariables,
-    ): string {
+    computeVariables(slide: string, options: Options): string {
         let result = slide;
         this.propertyRegex.lastIndex = 0;
 
@@ -313,9 +237,7 @@ export class TemplateProcessor implements Processor {
                 break;
             }
             const key = m[1].trim();
-            if (slideNumbers && slideNumbers[key] != null) {
-                result = result.replaceAll(m[0], slideNumbers[key] as string);
-            } else if (options[key] != null) {
+            if (options[key] != null) {
                 result = result.replaceAll(m[0], options[key] as string);
             }
         }
@@ -329,7 +251,10 @@ export class TemplateProcessor implements Processor {
             if (m.index === this.optionalRegex.lastIndex) {
                 this.optionalRegex.lastIndex++;
             }
-            result = result.replaceAll(m[0], "");
+            const key = m[0].slice(3, -2).trim();
+            if (!this.slideVariableNames.has(key)) {
+                result = result.replaceAll(m[0], "");
+            }
         }
         return result;
     }
