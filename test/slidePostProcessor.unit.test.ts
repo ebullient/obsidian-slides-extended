@@ -74,6 +74,27 @@ describe("SlidePostProcessor", () => {
         expect(fourth).toContain("--h1: 'Last heading'");
     });
 
+    test("escapes injected markup from obfuscated or nested entities in headings", () => {
+        const processor = new SlidePostProcessor();
+        const options = getSlideOptions({});
+        const result = processor.process(
+            `# &amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;
+<% h1 %>
+---
+# hello &amp;amp;lt;em&amp;amp;gt;world&amp;amp;lt;/em&amp;amp;gt;
+<% h1 %>
+---
+# unclosed <span attr
+<% h1 %>`,
+            options,
+        );
+
+        expect(result).toContain("--h1: 'alert(1)'");
+        expect(result).not.toMatch(/--h1:[^;]*<\s*script/i);
+        expect(result).toContain("--h1: 'hello world'");
+        expect(result).toContain("--h1: 'unclosed '");
+    });
+
     test("does not treat fenced headings as outline context", () => {
         const processor = new SlidePostProcessor();
         const options = getSlideOptions({});

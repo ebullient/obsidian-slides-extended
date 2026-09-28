@@ -222,20 +222,39 @@ export class SlidePostProcessor {
     }
 }
 
-function inlineHtmlToText(value: string): string {
-    return value
-        .replace(/<[^>]*>/g, "")
+function decodeHtmlEntities(value: string): string {
+    let decoded = value
         .replace(/&quot;/g, '"')
         .replace(/&#39;/g, "'")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&amp;/g, "&")
-        .replace(/&#(\d+);/g, (_, value: string) =>
-            String.fromCodePoint(Number(value)),
+        .replace(/&#(\d+);/g, (_, digits: string) =>
+            String.fromCodePoint(Number(digits)),
         )
-        .replace(/&#x([a-f\d]+);/gi, (_, value: string) =>
-            String.fromCodePoint(Number.parseInt(value, 16)),
+        .replace(/&#x([a-f\d]+);/gi, (_, digits: string) =>
+            String.fromCodePoint(Number.parseInt(digits, 16)),
         );
+    let previous: string;
+    do {
+        previous = decoded;
+        decoded = decoded
+            .replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&amp;/g, "&");
+    } while (decoded !== previous);
+    return decoded;
+}
+
+function inlineHtmlToText(value: string): string {
+    let text = decodeHtmlEntities(value);
+    let previous: string;
+    do {
+        previous = text;
+        text = text
+            .replace(/<!--[\s\S]*?(?:-->|$)/g, "")
+            .replace(/<[^>]*>/g, "")
+            .replace(/<[^>]*$/g, "")
+            .replace(/</g, "&lt;");
+    } while (text !== previous);
+    return text;
 }
 
 function cssString(value: string): string {
