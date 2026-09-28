@@ -93,6 +93,9 @@ describe("SlidePostProcessor", () => {
         expect(result).not.toMatch(/--h1:[^;]*<\s*script/i);
         expect(result).toContain("--h1: 'hello world'");
         expect(result).toContain("--h1: 'unclosed '");
+        for (const match of result.matchAll(/--h1: '[^']*'/g)) {
+            expect(match[0]).not.toContain("<");
+        }
     });
 
     test("does not treat fenced headings as outline context", () => {

@@ -244,17 +244,10 @@ function decodeHtmlEntities(value: string): string {
 }
 
 function inlineHtmlToText(value: string): string {
-    let text = decodeHtmlEntities(value);
-    let previous: string;
-    do {
-        previous = text;
-        text = text
-            .replace(/<!--[\s\S]*?(?:-->|$)/g, "")
-            .replace(/<[^>]*>/g, "")
-            .replace(/<[^>]*$/g, "")
-            .replace(/</g, "&lt;");
-    } while (text !== previous);
-    return text;
+    // Single pass: every `<` starts a match (comment, tag, or dangling tail)
+    // that is removed, so the result provably contains no `<` and cannot be
+    // reassembled into markup by further decoding.
+    return decodeHtmlEntities(value).replace(/<[\s\S]*?(?:>|$)/g, "");
 }
 
 function cssString(value: string): string {
