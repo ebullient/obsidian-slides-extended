@@ -150,6 +150,7 @@ export class YamlParser {
             "hideCursorTime",
             "markdown",
             "mermaid",
+            "editMode",
         ];
         const globalSettings = pick(
             omitBy(this.settings, isEmpty),

@@ -198,6 +198,10 @@ export class SlidesExtendedPlugin extends Plugin {
         return this.target ? this.target.name : "";
     }
 
+    getTargetFile(): TAbstractFile | null {
+        return this.target ?? null;
+    }
+
     onChange(file: TAbstractFile) {
         if (!this.settings.autoReload) {
             return;

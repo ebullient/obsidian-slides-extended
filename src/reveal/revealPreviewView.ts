@@ -10,6 +10,9 @@ import { YamlParser } from "../yaml/yamlParser";
 
 export const REVEAL_PREVIEW_VIEW = "reveal-preview-view";
 
+// Change to 1 to emit one-decimal precision once upstream accepts decimals.
+const GRID_COORDINATE_PRECISION = 0;
+
 export class RevealPreviewView extends ItemView {
     url = "about:blank";
     private home: URL;
@@ -19,6 +22,8 @@ export class RevealPreviewView extends ItemView {
     private urlRegex = /#\/(\d*)(?:\/(\d*))?(?:\/(\d*))?/;
     private yaml: YamlParser;
     private plugin: SlidesExtendedPlugin;
+    private editAction: HTMLElement;
+    private gridAction: HTMLElement;
 
     constructor(
         leaf: WorkspaceLeaf,
@@ -49,10 +54,19 @@ export class RevealPreviewView extends ItemView {
             this.openInBrowser();
         });
 
-        this.addAction("grid", "Show grid", () => {
+        this.gridAction = this.addAction("grid", "Show grid", () => {
             settings.showGrid = !settings.showGrid;
+            this.updateGridIcon();
             this.reloadIframe();
         });
+        this.updateGridIcon();
+
+        this.editAction = this.addAction(
+            "square-dashed-mouse-pointer",
+            "Toggle edit mode",
+            () => void this.toggleEditMode(),
+        );
+        this.updateEditModeIcon();
 
         this.addAction("refresh", "Refresh slides", () => {
             this.reloadIframe();
@@ -85,6 +99,30 @@ export class RevealPreviewView extends ItemView {
         window.open(this.home);
     }
 
+    async toggleEditMode() {
+        this.plugin.settings.editMode = !this.plugin.settings.editMode;
+        await this.plugin.saveSettings();
+        this.updateEditModeIcon();
+    }
+
+    updateEditModeIcon() {
+        this.editAction.toggleClass("is-active", this.plugin.settings.editMode);
+        this.editAction.setAttribute(
+            "aria-pressed",
+            this.plugin.settings.editMode ? "true" : "false",
+        );
+        this.editAction.setAttribute(
+            "title",
+            this.plugin.settings.editMode
+                ? "Disable edit mode"
+                : "Enable edit mode",
+        );
+    }
+
+    updateGridIcon() {
+        this.gridAction.toggleClass("is-active", this.plugin.settings.showGrid);
+    }
+
     printPresentation() {
         window.open(`${this.home.toString()}?print-pdf`);
     }
@@ -96,6 +134,16 @@ export class RevealPreviewView extends ItemView {
     }
 
     onMessage(msg: MessageEvent) {
+        if (this.isGridDrawMessage(msg.data)) {
+            this.insertGridAtCursor(msg.data);
+            return;
+        }
+
+        if (this.isFocusFrameMessage(msg.data)) {
+            this.focusIframe();
+            return;
+        }
+
         const data = String(msg.data);
         if (data.includes("?export")) {
             this.setUrl(data.split("?")[0]);
@@ -117,6 +165,72 @@ export class RevealPreviewView extends ItemView {
                 view.editor.setCursor({ line: line, ch: 0 });
             }
         }
+    }
+
+    isGridDrawMessage(data: unknown): boolean {
+        return (
+            typeof data === "object" &&
+            data !== null &&
+            (data as { type?: string }).type === "slides-extended-grid-draw"
+        );
+    }
+
+    isFocusFrameMessage(data: unknown): boolean {
+        return (
+            typeof data === "object" &&
+            data !== null &&
+            (data as { type?: string }).type === "slides-extended-focus-frame"
+        );
+    }
+
+    focusIframe() {
+        const viewContent = this.containerEl.children[1];
+        const iframe = viewContent.getElementsByTagName("iframe")[0];
+        if (iframe) {
+            iframe.focus();
+        }
+    }
+
+    insertGridAtCursor(data: {
+        left: number;
+        top: number;
+        width: number;
+        height: number;
+        slidesGrid?: string | number | null;
+        slide?: string | null;
+    }) {
+        const view = this.getSourceMarkdownView();
+        if (!view) {
+            return;
+        }
+
+        const grid = `<grid drag="${data.width.toFixed(GRID_COORDINATE_PRECISION)} ${data.height.toFixed(GRID_COORDINATE_PRECISION)}" drop="${data.left.toFixed(GRID_COORDINATE_PRECISION)} ${data.top.toFixed(GRID_COORDINATE_PRECISION)}">\n\n</grid>\n`;
+
+        // Defer to a task after the current focus/blur settle, so the
+        // markdown editor is focused only at the moment of insertion and
+        // does not steal focus during edit-mode navigation.
+        window.setTimeout(() => {
+            view.editor.focus();
+            const start = view.editor.getCursor();
+            view.editor.replaceSelection(`${grid}\n`);
+            view.editor.setCursor({ line: start.line + 1, ch: 0 });
+        }, 0);
+    }
+
+    getSourceMarkdownView(): MarkdownView | null {
+        const target = this.plugin.getTargetFile();
+        if (!target) {
+            return null;
+        }
+
+        for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
+            const view = leaf.view as MarkdownView | undefined;
+            if (view?.file && view.file.path === target.path) {
+                return view;
+            }
+        }
+
+        return this.app.workspace.getActiveViewOfType(MarkdownView) ?? null;
     }
 
     onLineChanged(line: number) {
