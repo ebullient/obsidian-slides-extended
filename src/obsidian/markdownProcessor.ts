@@ -22,6 +22,7 @@ import { MediaProcessor } from "./processors/mediaProcessor";
 import { MultipleFileProcessor } from "./processors/multipleFileProcessor";
 import { ReferenceProcessor } from "./processors/referenceProcessor";
 import { SkipSlideProcessor } from "./processors/skipSlideProcessor";
+import { SlidePostProcessor } from "./processors/slidePostProcessor";
 import { TemplateProcessor } from "./processors/templateProcessor";
 
 interface ProcessStep {
@@ -51,6 +52,7 @@ export class MarkdownProcessor {
     private defaultBackgroundProcessor: DefaultBackgroundProcessor;
     private referenceProcessor: ReferenceProcessor;
     private skipSlideProcessor: SkipSlideProcessor;
+    private slidePostProcessor: SlidePostProcessor;
     private stripLatexBackTicks: Processor;
 
     constructor(utils: ObsidianUtils) {
@@ -75,6 +77,7 @@ export class MarkdownProcessor {
         this.defaultBackgroundProcessor = new DefaultBackgroundProcessor();
         this.referenceProcessor = new ReferenceProcessor();
         this.skipSlideProcessor = new SkipSlideProcessor();
+        this.slidePostProcessor = new SlidePostProcessor();
         this.stripLatexBackTicks = {
             process: (markdown: string, _: Options) => {
                 return markdown.replaceAll("%`%", "");
@@ -92,6 +95,12 @@ export class MarkdownProcessor {
 
         // First phase: Template processing
         processedMarkdown = this.processTemplates(processedMarkdown, options);
+
+        // Resolve variables that depend on the parsed presentation structure.
+        processedMarkdown = this.processWithLog(processedMarkdown, options, {
+            name: "slidePostProcessor",
+            processor: this.slidePostProcessor,
+        });
 
         // Second phase: Core processors that modify slide structure
         processedMarkdown = this.processSlideStructure(
