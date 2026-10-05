@@ -10,11 +10,62 @@ This repository has a few distinct codebases with a hard boundary between them:
 |---|---|---|
 | `src/`, `test/`, `se-test-vault/` | `main` | Obsidian plugin — runs inside Obsidian as a Node.js/Electron process |
 | [`reveal-dist/`](reveal-dist/) submodule | `reveal-dist` | reveal.js assets — rendered only by a browser (iframe or exported HTML) |
-| docs source | `docs` | Documentation site (Hugo-based SSG; some translation required for edits) |
+| [`docs/`](docs/) submodule | `docs` | Documentation site (Hugo-based SSG; some translation required for edits) |
 
 - **Plugin code** (UI, settings, markdown processors, the preview panel): `src/` on `main`
 - **Browser-rendered presentation content** (reveal.js plugins, themes, layout CSS, HTML templates): `reveal-dist` submodule
 - **Documentation updates**: `docs` branch (Ex-hugo SSG, now mostly markdown; some translation of content is required for hosting)
+
+The `docs/` and `reveal-dist/` directories are Git submodules. The `main` branch stores
+only a pointer to a commit in each submodule; it does not contain their files or their
+commits.
+
+For a beginner-friendly explanation of how submodules work, see the Git Book's
+[Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) chapter.
+
+> [!WARNING]
+> **Never commit a submodule pointer update yourself.** Open your PR against the
+> branch that owns the files you changed (`docs`, `reveal-dist`, or `main`) and leave
+> the pointer alone — updating it is a separate, maintainer-only step done after your
+> PR merges.
+
+### Where to open your PR
+
+- **Only docs changed** → PR against the `docs` branch. Initialize the `docs/`
+  submodule first (see Setup below) and work inside it.
+- **Only reveal.js assets changed** → PR against the `reveal-dist` branch. Work
+  inside the `reveal-dist/` submodule.
+- **Only plugin code changed** → PR against `main`, containing `src/`/`test/`
+  changes only.
+- **Plugin changes need matching docs or reveal-dist changes** → open separate PRs,
+  one per branch, and reference each other in the PR descriptions so maintainers
+  know the order to merge them in:
+  1. Open the `docs` and/or `reveal-dist` PR(s) first.
+  2. Open the `main` PR for the plugin changes, linking to the submodule PR(s). Do
+     not include submodule contents or a pointer update in this PR.
+  3. After a submodule PR merges, a maintainer bumps the `main` branch's submodule
+     pointer in a separate commit/PR — not something you need to do.
+
+Once the repository is set up, the branching pattern is:
+
+```bash
+# Work on plugin changes in the main repository.
+git checkout -b my-change
+
+# Work on documentation changes in the docs submodule.
+cd docs
+git fetch origin
+git checkout -b my-docs-change origin/docs
+
+# Or work on reveal.js assets in the reveal-dist submodule.
+cd ../reveal-dist
+git fetch origin
+git checkout -b my-reveal-change origin/reveal-dist
+```
+
+Push the submodule branch to your fork and open its PR against the matching upstream
+branch. Push the root-repository branch separately and open its PR against `main`.
+Do not commit submodule pointer changes in the root-repository PR.
 
 ## Getting Started
 
@@ -51,6 +102,14 @@ This repository has a few distinct codebases with a hard boundary between them:
 
    This populates `reveal-dist/build/` with `css/`, `dist/`, `plugin/`, and `template/`
    which the plugin's HTTP server serves at runtime.
+
+The root repository and `reveal-dist/` are built independently. Running `pnpm build`
+from the repository root builds and tests the plugin; it does not build the reveal.js
+distribution. Run `pnpm build` inside `reveal-dist/` whenever its source or dependencies
+change, then run the root build as needed to verify the plugin integration.
+
+When working on documentation, make the changes inside `docs/`. 
+Plain markdown documentation will work without issue, embedded slides can be a bit tricky.
 
 ## Development Workflow
 
