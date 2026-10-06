@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Split Component > even 1`] = `
-"<!-- .slide: class="drop" -->
+"<!-- .slide: style="--slide-number: 1; --slides-total: 1; --slide-number-h: 1; --slide-number-v: 0; --slide-number-c: 1; --slide-number-t: 1; --h1: ''; --h2: ''; --h3: ''; --h4: ''; --h5: ''; --h6: ''" class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
 <split even>
@@ -17,7 +17,7 @@ exports[`Split Component > even 1`] = `
 `;
 
 exports[`Split Component > gap 1`] = `
-"<!-- .slide: class="drop" -->
+"<!-- .slide: style="--slide-number: 1; --slides-total: 1; --slide-number-h: 1; --slide-number-v: 0; --slide-number-c: 1; --slide-number-t: 1; --h1: ''; --h2: ''; --h3: ''; --h4: ''; --h5: ''; --h6: ''" class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
 <split even gap="3">
@@ -32,7 +32,7 @@ into electronic typesetting, remaining essentially unchanged. It was popularised
 `;
 
 exports[`Split Component > left & right 1`] = `
-"<!-- .slide: class="drop" -->
+"<!-- .slide: style="--slide-number: 1; --slides-total: 1; --slide-number-h: 1; --slide-number-v: 0; --slide-number-c: 1; --slide-number-t: 1; --h1: ''; --h2: ''; --h3: ''; --h4: ''; --h5: ''; --h6: ''" class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
 <split left="2" right="1" gap="2">
@@ -46,7 +46,7 @@ into electronic typesetting, remaining essentially unchanged. It was popularised
 `;
 
 exports[`Split Component > no-margin 1`] = `
-"<!-- .slide: class="drop" -->
+"<!-- .slide: style="--slide-number: 1; --slides-total: 1; --slide-number-h: 1; --slide-number-v: 0; --slide-number-c: 1; --slide-number-t: 1; --h1: ''; --h2: ''; --h3: ''; --h4: ''; --h5: ''; --h6: ''" class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
 <split no-margin>
@@ -72,7 +72,7 @@ exports[`Split Component > no-margin 1`] = `
 `;
 
 exports[`Split Component > wrap 1`] = `
-"<!-- .slide: class="drop" -->
+"<!-- .slide: style="--slide-number: 1; --slides-total: 1; --slide-number-h: 1; --slide-number-v: 0; --slide-number-c: 1; --slide-number-t: 1; --h1: ''; --h2: ''; --h3: ''; --h4: ''; --h5: ''; --h6: ''" class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
 <split wrap="4">
