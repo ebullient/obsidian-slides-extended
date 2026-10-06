@@ -54,7 +54,7 @@
         "eslint": "^9.39.4",
         "eslint-plugin-obsidianmd": "^0.4.2",
         "globals": "^17.11.0",
-        "jest": "^30.4.2",
+        "jest": "^30.5.1",
         "obsidian": "^1.13.1",
         "obsidian-utilities": "^1.1.5",
         "reveal.js": "^5.2.1",
