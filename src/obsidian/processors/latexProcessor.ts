@@ -59,8 +59,11 @@ export class LatexProcessor implements Processor {
     }
 
     private transformLatex(markdown: string) {
-        // First, protect escaped $ characters
-        let processed = markdown.replaceAll("\\$", "~~ESCAPED_DOLLAR~~");
+        // First, protect escaped $ characters.
+        // Letters only: escapeUnescapedUnderscores/escapeMarkdownSpecialCharacters
+        // below would otherwise rewrite the placeholder's own characters.
+        const ESCAPED_DOLLAR = "ESCAPEDDOLLARMARK";
+        let processed = markdown.replaceAll("\\$", ESCAPED_DOLLAR);
 
         // Helper to process content inside math delimiters
         const processMathContent = (content: string) => {
@@ -73,6 +76,8 @@ export class LatexProcessor implements Processor {
                 c = this.protectEscapedUnderscoreRuns(c);
                 // 4. Escape markdown specials (*, ~)
                 c = this.escapeMarkdownSpecialCharacters(c);
+                // 5. Restore escaped $, doubled like the rest of math content
+                c = c.replaceAll(ESCAPED_DOLLAR, "\\\\$");
                 return c;
             });
         };
@@ -108,7 +113,7 @@ export class LatexProcessor implements Processor {
             (_: string, encoded: string) => decodeURIComponent(encoded),
         );
 
-        return processed.replaceAll("~~ESCAPED_DOLLAR~~", "\\$");
+        return processed.replaceAll(ESCAPED_DOLLAR, "\\$");
     }
 
     /**

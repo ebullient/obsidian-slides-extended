@@ -426,6 +426,25 @@ $$a*b*c$$`;
     expect(result).toContain('$$a&#42;b&#42;c$$');
 });
 
+test('Basic Markdown Syntax > Escaped dollar sign regression', () => {
+    const input = `Inline: price $\\$5 + x_1$ here.
+
+$$\\begin{bmatrix} 2{,}600 \\text{ ft}^2 \\\\ \\$300{,}000 \\end{bmatrix}$$
+
+Text only: costs \\$7 today.`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = sut.process(markdown, options);
+
+    expect(result).not.toContain('ESCAPED_DOLLAR');
+    expect(result).not.toContain('ESCAPEDDOLLARMARK');
+    expect(result).toContain('\\$5');
+    expect(result).toContain('\\$300{,}000');
+    expect(result).toContain('costs \\$7 today');
+});
+
 test('Basic Markdown Syntax > Mermaid', () => {
     const input = `---
 theme: beige
