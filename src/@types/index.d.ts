@@ -73,6 +73,7 @@ export type Options = {
     enableCustomControls: boolean;
     transition: string;
     mathEngine: "katex" | "mathjax";
+    slideNumberFormat?: string;
     [key: string]: unknown;
 };
 
