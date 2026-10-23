@@ -8,19 +8,19 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     cooldown:
       default-days: 30
   - package-ecosystem: "npm"
     directory: "/"
     target-branch: "reveal-dist"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     cooldown:
       default-days: 30
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     cooldown:
       default-days: 30
