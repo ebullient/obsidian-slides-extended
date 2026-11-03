@@ -213,8 +213,8 @@ importers:
         specifier: ^8.71.0
         version: 8.71.0(eslint@9.39.4(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.9.3)
       auto-changelog:
-        specifier: ^2.6.1
-        version: 2.6.1
+        specifier: ^2.7.0
+        version: 2.7.0
       esbuild:
         specifier: ^0.28.2
         version: 0.28.2
@@ -1481,8 +1481,8 @@ packages:
     resolution: {integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==}
     engines: {node: '>=8.0.0'}
 
-  auto-changelog@2.6.1:
-    resolution: {integrity: sha512-YQJgU1i/qWTk8W/IIE6oUk1DBYr/jiFbksP+LuGRHOzmhviIGhK1otjqSSMUf2aqUdeOW8SUYNSZjiD6Qcun7w==}
+  auto-changelog@2.7.0:
+    resolution: {integrity: sha512-8j2Al8+yObcZDe9dxXS2nvhRBPQW2X98OS0B+GF9VybUfTbDGvJVko3uQRF69HP83a2IK8DKQpZ759LtUc7hMA==}
     engines: {node: '>= 10'}
     hasBin: true
 
@@ -4993,7 +4993,7 @@ snapshots:
 
   atomic-sleep@1.0.0: {}
 
-  auto-changelog@2.6.1:
+  auto-changelog@2.7.0:
     dependencies:
       commander: 7.2.0
       handlebars: 4.7.9
