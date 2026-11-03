@@ -59,7 +59,8 @@ export class CommentParser {
         const styles = comment.getStyles();
         const classes = comment.getClasses();
 
-        const stylesString = styles.length > 0 ? `style="${styles}" ` : "";
+        const stylesString =
+            styles.length > 0 ? `style="${escapeAttribute(styles)}" ` : "";
         const classesString = classes.length > 0 ? `class="${classes}" ` : "";
 
         return `${stylesString}${classesString}${comment.getAttributes()}`.trim();
@@ -77,8 +78,8 @@ export class CommentParser {
             const attributes = this.parseAttributes(properties);
 
             return new Comment(type, attributes);
-        } catch {
-            console.error(`ERROR: Cannot parse comment: ${comment}`);
+        } catch (error) {
+            console.error(`ERROR: Cannot parse comment: ${comment}`, error);
             return null;
         }
     }
@@ -126,9 +127,12 @@ export class CommentParser {
                 if (groupIndex === 1 || groupIndex === 3) {
                     key = match;
                 }
-                if (groupIndex === 2 || groupIndex === 4) {
+                if (
+                    (groupIndex === 2 || groupIndex === 4) &&
+                    match !== undefined
+                ) {
                     value = match;
-                    attributes.set(key, value);
+                    attributes.set(key, decodeAttribute(value));
                 }
                 if (groupIndex === 5) {
                     if (match) {
@@ -141,4 +145,17 @@ export class CommentParser {
         attributes.delete(undefined);
         return attributes;
     }
+}
+
+function escapeAttribute(value: string): string {
+    return value.replaceAll("&", "&amp;").replaceAll('"', "&quot;");
+}
+
+function decodeAttribute(value: string): string {
+    return value
+        .replaceAll("&quot;", '"')
+        .replaceAll("&#39;", "'")
+        .replaceAll("&lt;", "<")
+        .replaceAll("&gt;", ">")
+        .replaceAll("&amp;", "&");
 }

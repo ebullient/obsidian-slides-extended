@@ -154,3 +154,42 @@ footer: "### And then..."
     const result = JSON.stringify(sut.process(markdown, options));
     return expect(result).toMatchSnapshot();
 });
+
+test('Plain slides preserve configured variables and remove unrelated optional variables', () => {
+    const input = `---
+author: "Slides Extended"
+---
+
+<% author %>
+<%? missing %>
+`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = sut.process(markdown, options);
+    expect(result).toContain('Slides Extended');
+    return expect(result).not.toContain('<%? missing %>');
+});
+
+test('Templates defer optional slide context variables until post-processing', () => {
+    when(MockedObsidianUtils.parseFile('template.md', null)).thenReturn(`
+<%? h1 %>
+<% content %>
+`);
+
+    const input = `# Context heading
+
+---
+
+<!-- slide template="[[template]]" -->
+
+Body
+`;
+
+    const { options, markdown } = prepare(input);
+    const sut = new MarkdownProcessor(utilsInstance);
+
+    const result = sut.process(markdown, options);
+    return expect(result).toContain('Context heading');
+});

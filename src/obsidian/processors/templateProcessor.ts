@@ -17,6 +17,20 @@ export class TemplateProcessor implements Processor {
 
     private variableRegex = /<%\??(.*?)%>/g;
     private optionalRegex = /<%\?.*?%>/g;
+    private slideVariableNames = new Set([
+        "slideNumber",
+        "slidesTotal",
+        "slideNumberH",
+        "slideNumberV",
+        "slideNumberC",
+        "slideNumberT",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+    ]);
 
     private utils: ObsidianUtils;
     private parser = new CommentParser();
@@ -122,6 +136,17 @@ export class TemplateProcessor implements Processor {
                                 );
                                 return slide;
                             }
+                        } else if (slide.includes("<%")) {
+                            const [main, notes] = this.extractNotes(
+                                slide,
+                                options,
+                            );
+                            let md = this.computeVariables(main, options);
+                            if (notes.length > 0) {
+                                md += `\n\n${notes}`;
+                            }
+                            output = output.split(slide).join(md);
+                            return md;
                         }
                         return slide;
                     })
@@ -226,7 +251,10 @@ export class TemplateProcessor implements Processor {
             if (m.index === this.optionalRegex.lastIndex) {
                 this.optionalRegex.lastIndex++;
             }
-            result = result.replaceAll(m[0], "");
+            const key = m[0].slice(3, -2).trim();
+            if (!this.slideVariableNames.has(key)) {
+                result = result.replaceAll(m[0], "");
+            }
         }
         return result;
     }
